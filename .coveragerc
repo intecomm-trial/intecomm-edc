@@ -1,0 +1,4 @@
+[run]
+include = intecomm_*
+omit = intecomm_*/tests/*
+branch = 1

@@ -1,0 +1,20 @@
+[tool.black]
+line-length = 95
+target-version = ["py35"]
+
+[tool.isort]
+profile = "black"
+py_version = "35"
+
+[tool.coverage.run]
+parallel = true
+branch = true
+source = ["intecomm_edc"]
+
+[tool.coverage.paths]
+source = ["intecomm_edc", ".tox/*/site-packages"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+omit = ["requirements.txt"]
