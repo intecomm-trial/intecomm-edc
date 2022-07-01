@@ -34,7 +34,7 @@ from edc_export.auth_objects import DATA_EXPORTER_ROLE
 from edc_label.auth_objects import LABELING
 from edc_offstudy.auth_objects import OFFSTUDY
 from edc_pharmacy.auth_objects import PHARMACIST_ROLE, SITE_PHARMACIST_ROLE
-from edc_randomization.auth_objects import RANDO_BLINDED, RANDO_UNBLINDED
+from edc_randomization.auth_objects import RANDO_UNBLINDED, RANDO_VIEW
 from edc_screening.auth_objects import SCREENING, SCREENING_VIEW
 from edc_unblinding.auth_objects import UNBLINDING_REQUESTORS
 
@@ -121,4 +121,4 @@ site_auths.update_role(
 )
 
 site_auths.update_role(RANDO_UNBLINDED, name=PHARMACIST_ROLE)
-site_auths.update_role(RANDO_BLINDED, name=SITE_PHARMACIST_ROLE)
+site_auths.update_role(RANDO_VIEW, name=SITE_PHARMACIST_ROLE)

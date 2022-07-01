@@ -144,20 +144,20 @@ INTECOMM_APPS = [
     "edc_dx.apps.AppConfig",
     "edc_refusal.apps.AppConfig",
     "intecomm_consent.apps.AppConfig",
-    "intecomm_data_manager.apps.AppConfig",
+    # "intecomm_data_manager.apps.AppConfig",
     "intecomm_lists.apps.AppConfig",
     "intecomm_dashboard.apps.AppConfig",
     "intecomm_labs.apps.AppConfig",
-    "intecomm_metadata_rules.apps.AppConfig",
-    "intecomm_reference.apps.AppConfig",
+    # "intecomm_metadata_rules.apps.AppConfig",
+    # "intecomm_reference.apps.AppConfig",
     "intecomm_subject.apps.AppConfig",
     "intecomm_visit_schedule.apps.AppConfig",
     "intecomm_ae.apps.AppConfig",
     "intecomm_auth.apps.AppConfig",
-    "intecomm_rando.apps.AppConfig",
+    # "intecomm_rando.apps.AppConfig",
     "intecomm_prn.apps.AppConfig",
     "intecomm_export.apps.AppConfig",
-    "intecomm_pharmacy.apps.AppConfig",
+    # "intecomm_pharmacy.apps.AppConfig",
     "intecomm_screening.apps.AppConfig",
     "intecomm_sites.apps.AppConfig",
     "intecomm_edc.apps.AppConfig",
@@ -461,7 +461,7 @@ EDC_PROTOCOL = env.str("EDC_PROTOCOL")
 EDC_PROTOCOL_INSTITUTION_NAME = env.str("EDC_PROTOCOL_INSTITUTION_NAME")
 EDC_PROTOCOL_NUMBER = env.str("EDC_PROTOCOL_NUMBER")
 EDC_PROTOCOL_PROJECT_NAME = env.str("EDC_PROTOCOL_PROJECT_NAME")
-EDC_PROTOCOL_PROJECT_NAME = "META3" if META_PHASE == 3 else "META2"
+# EDC_PROTOCOL_PROJECT_NAME = "META3" if META_PHASE == 3 else "META2"
 EDC_PROTOCOL_STUDY_OPEN_DATETIME = get_datetime_from_env(
     *env.list("EDC_PROTOCOL_STUDY_OPEN_DATETIME")
 )
