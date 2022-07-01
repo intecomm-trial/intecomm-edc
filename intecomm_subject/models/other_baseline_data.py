@@ -61,6 +61,49 @@ class OtherBaselineData(CrfModelMixin, edc_models.BaseUuidModel):
         default=NOT_APPLICABLE,
     )
 
+    work_activity = models.CharField(
+        verbose_name="Does your work involve moderate or vigorous-intensity activity that"
+        "causes small to large increases in breathing or heart rate like "
+        "carrying or lifting loads, digging or construction work",
+        max_length=15,
+        choices=YES_NO,
+    )
+    work_activity_days = models.IntegerField(
+        verbose_name="In a typical week, how many days do you do these moderate or "
+        "vigorous-intensity activities as part of your work?",
+        blank=True,
+        null=True,
+        help_text="Give number of days in a 7-day week",
+    )
+
+    work_activity_exercise = models.IntegerField(
+        verbose_name="In addition to the moderate or vigorous-intensity activity above, "
+        "how many days do you do exercise, do sports or fitness activities in a "
+        "typical week?",
+        blank=True,
+        null=True,
+        help_text="Give number of days in a 7-day week",
+    )
+    work_activity_exercise_time = models.IntegerField(
+        verbose_name="On an average day, how long do you spend combined on the moderate or "
+        "vigorous-intensity activities and doing exercise, sports and fitness "
+        "activities?",
+        blank=True,
+        null=True,
+        help_text="Give number of minutes",
+    )
+
+    num_vegetables_eaten = models.IntegerField(
+        verbose_name="On average, how many vegetables do you eat in a day?"
+    )
+
+    use_salt_on_food = models.CharField(
+        verbose_name="Do you add salt to your food in addition to what has been added when "
+        "cooking?",
+        max_length=15,
+        choices=YES_NO,
+    )
+
     def save(self, *args, **kwargs):
         if self.smoker_quit_ago:
             self.smoker_quit_estimated_date = edc_model_utils.duration_to_date(

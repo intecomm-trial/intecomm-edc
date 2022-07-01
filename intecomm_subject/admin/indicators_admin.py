@@ -5,6 +5,7 @@ from edc_form_label.form_label_modeladmin_mixin import FormLabelModelAdminMixin
 from edc_model_admin import SimpleHistoryAdmin
 
 from ..admin_site import intecomm_subject_admin
+
 # from ..forms import IndicatorsForm
 from ..models import Indicators
 from .modeladmin_mixins import CrfModelAdminMixin
@@ -22,8 +23,11 @@ class IndicatorsAdmin(CrfModelAdminMixin, FormLabelModelAdminMixin, SimpleHistor
             },
         ),
         (
-            "Weight and Height",
-            {"description": "Provide if available", "fields": ("weight", "height")},
+            "Weight, Height, Waist and Hip",
+            {
+                "description": "Provide if available",
+                "fields": ("weight", "height", "waist", "hip"),
+            },
         ),
         (
             "Blood Pressure: Reading 1",

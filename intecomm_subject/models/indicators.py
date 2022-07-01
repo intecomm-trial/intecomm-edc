@@ -9,6 +9,7 @@ from edc_vitals.models import (
     DiastolicPressureField,
     HeightField,
     SystolicPressureField,
+    WaistCircumferenceField,
     WeightField,
 )
 
@@ -25,6 +26,20 @@ class Indicators(CrfModelMixin, BaseUuidModel):
     height = HeightField(
         null=True,
         blank=True,
+    )
+
+    waist = WaistCircumferenceField(
+        null=True,
+        blank=True,
+    )
+
+    hip = models.DecimalField(
+        verbose_name="Hip circumference:",
+        decimal_places=1,
+        max_digits=5,
+        null=True,
+        blank=True,
+        help_text="in centimeters",
     )
 
     r1_taken = models.CharField(
