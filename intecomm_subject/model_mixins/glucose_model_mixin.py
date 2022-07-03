@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
 from edc_lab.choices import RESULT_QUANTIFIER_NA
-from edc_model.models import date_not_future
+from edc_model.validators import date_not_future
 
 from intecomm_subject.choices import GLUCOSE_UNITS
 

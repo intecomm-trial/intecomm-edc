@@ -7,6 +7,7 @@ from edc_dx_review.model_mixins.initial_review import InitialReviewModelMixin
 from edc_lab.choices import VL_QUANTIFIER_NA
 from edc_model import models as edc_models
 from edc_model import utils as edc_model_utils
+from edc_model.validators import date_not_future
 from edc_reportable import CELLS_PER_MILLIMETER_CUBED_DISPLAY, COPIES_PER_MILLILITER
 
 from ..choices import CARE_ACCESS
@@ -51,14 +52,14 @@ class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, edc_models.BaseUu
 
     arv_initiation_actual_date = models.DateField(
         verbose_name="Date started antiretroviral therapy (ART)",
-        validators=[edc_models.date_not_future],
+        validators=[date_not_future],
         null=True,
         help_text="If possible, provide the exact date here instead of estimating above.",
     )
 
     arv_initiation_estimated_date = models.DateField(
         verbose_name="Estimated Date started antiretroviral therapy (ART)",
-        validators=[edc_models.date_not_future],
+        validators=[date_not_future],
         null=True,
         editable=False,
         help_text="Calculated based on response to `arv_initiation_ago`",
@@ -96,7 +97,7 @@ class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, edc_models.BaseUu
 
     vl_date = models.DateField(
         verbose_name="Date of most recent viral load",
-        validators=[edc_models.date_not_future],
+        validators=[date_not_future],
         null=True,
         blank=True,
     )
@@ -119,7 +120,7 @@ class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, edc_models.BaseUu
 
     cd4_date = models.DateField(
         verbose_name="Date of most recent CD4",
-        validators=[edc_models.date_not_future],
+        validators=[date_not_future],
         null=True,
         blank=True,
     )

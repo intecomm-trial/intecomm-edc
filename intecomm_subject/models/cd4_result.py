@@ -1,6 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from edc_model import models as edc_models
+from edc_model.validators import date_not_future
 from edc_reportable import CELLS_PER_MILLIMETER_CUBED_DISPLAY
 
 from ..model_mixins import CrfModelMixin
@@ -10,7 +11,7 @@ class Cd4Result(CrfModelMixin, edc_models.BaseUuidModel):
 
     drawn_date = models.DateField(
         verbose_name="Specimen collection date",
-        validators=[edc_models.date_not_future],
+        validators=[date_not_future],
     )
 
     result = models.IntegerField(
