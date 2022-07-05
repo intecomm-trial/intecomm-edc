@@ -83,7 +83,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-    "import_export",
     "defender",
     "multisite",
     "django_crypto_fields.apps.AppConfig",
