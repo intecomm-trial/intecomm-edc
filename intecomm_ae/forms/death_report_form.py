@@ -41,13 +41,6 @@ class DeathReportFormValidator(FormValidator):
 
 
 class DeathReportForm(DeathReportModelFormMixin, forms.ModelForm):
-
-    subject_identifier = forms.CharField(
-        label="Subject identifier",
-        required=False,
-        widget=forms.TextInput(attrs={"readonly": "readonly"}),
-    )
-
-    class Meta:
+    class Meta(DeathReportModelFormMixin.Meta):
         model = DeathReport
         fields = "__all__"

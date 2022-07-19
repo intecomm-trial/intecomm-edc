@@ -3,8 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
 from django.urls.base import reverse
 from django.utils.safestring import mark_safe
-from edc_action_item import action_fieldset_tuple
-from edc_action_item.modeladmin_mixins import ModelAdminActionItemMixin
+from edc_action_item import ActionItemModelAdminMixin, action_fieldset_tuple
 from edc_adverse_event.forms import AeFollowupForm
 from edc_adverse_event.modeladmin_mixins import (
     AdverseEventModelAdminMixin,
@@ -23,7 +22,7 @@ class AeReviewModelAdminMixin(
     ModelAdminSubjectDashboardMixin,
     NonAeInitialModelAdminMixin,
     AdverseEventModelAdminMixin,
-    ModelAdminActionItemMixin,
+    ActionItemModelAdminMixin,
 ):
 
     form = AeFollowupForm
@@ -72,20 +71,21 @@ class AeReviewModelAdminMixin(
         "ae_initial__action_identifier",
     ]
 
-    def description(self, obj):
+    @staticmethod
+    def description(obj=None):
         """Returns a formatted comprehensive description of the SAE
         combining multiple fields.
         """
         context = format_ae_followup_description({}, obj, 80)
         return render_to_string(select_description_template("aefollowup"), context)
 
-    def status(self, obj):
+    def status(self, obj=None):
         follow_up_reports = None
         if obj.followup == YES:
             try:
                 ae_followup = self.model.objects.get(parent_action_item=obj.action_item)
             except ObjectDoesNotExist:
-                ae_followup = None
+                pass
             else:
                 follow_up_reports = self.follow_up_reports(ae_followup)
         elif obj.followup == NO and obj.ae_grade != NOT_APPLICABLE:
@@ -94,10 +94,10 @@ class AeReviewModelAdminMixin(
             return mark_safe(f"{obj.get_outcome_display()}. See {follow_up_reports}.")
         return obj.get_outcome_display()
 
-    def follow_up_reports(self, obj):
+    def follow_up_reports(self, obj=None):
         return super().follow_up_reports(obj.ae_initial)
 
-    def initial_ae(self, obj):
+    def initial_ae(self, obj=None):
         """Returns a shortened action identifier."""
         if obj.ae_initial:
             url_name = "_".join(obj.ae_initial._meta.label_lower.split("."))
