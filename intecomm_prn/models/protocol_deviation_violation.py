@@ -29,7 +29,7 @@ class ProtocolDeviationViolation(
         null=True,
         blank=True,
         on_delete=models.PROTECT,
-        related_name="meta_prn_action_item",
+        related_name="intecomm_prn_action_item",
     )
 
     # not used for PHASE THREE

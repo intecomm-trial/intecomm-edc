@@ -78,7 +78,6 @@ DEFAULT_SETTINGS = DefaultTestSettings(
         "logentry_admin",
         "simple_history",
         "storages",
-        "defender",
         "edc_action_item.apps.AppConfig",
         "edc_appointment.apps.AppConfig",
         "edc_adverse_event.apps.AppConfig",
@@ -92,6 +91,7 @@ DEFAULT_SETTINGS = DefaultTestSettings(
         "edc_data_manager.apps.AppConfig",
         "edc_device.apps.AppConfig",
         "edc_export.apps.AppConfig",
+        "edc_facility.apps.AppConfig",
         "edc_fieldsets.apps.AppConfig",
         "edc_form_validators.apps.AppConfig",
         "edc_identifier.apps.AppConfig",
@@ -119,6 +119,7 @@ DEFAULT_SETTINGS = DefaultTestSettings(
         "edc_sites.apps.AppConfig",
         "edc_subject_dashboard.apps.AppConfig",
         "edc_timepoint.apps.AppConfig",
+        "edc_unblinding.apps.AppConfig",
         "edc_visit_tracking.apps.AppConfig",
         "intecomm_consent.apps.AppConfig",
         "intecomm_lists.apps.AppConfig",
@@ -148,7 +149,7 @@ def main():
     django.setup()
     tags = [t.split("=")[1] for t in sys.argv if t.startswith("--tag")]
     failfast = True if [t for t in sys.argv if t == "--failfast"] else False
-    failures = DiscoverRunner(failfast=failfast, tags=tags).run_tests(["tests"])
+    failures = DiscoverRunner(failfast=failfast, tags=tags).run_tests([])
     sys.exit(bool(failures))
 
 

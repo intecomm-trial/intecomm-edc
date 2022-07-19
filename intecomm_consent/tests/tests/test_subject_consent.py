@@ -1,8 +1,9 @@
 from django.test import TestCase
-from meta_screening.tests.meta_test_case_mixin import MetaTestCaseMixin
+
+from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin
 
 
-class TestSubjectConsent(MetaTestCaseMixin, TestCase):
+class TestSubjectConsent(IntecommTestCaseMixin, TestCase):
     def test_(self):
         subject_screening = self.get_subject_screening()
         subject_consent = self.get_subject_consent(subject_screening)

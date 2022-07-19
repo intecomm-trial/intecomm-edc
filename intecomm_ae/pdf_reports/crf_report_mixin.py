@@ -7,7 +7,7 @@ class CrfReportMixin:
 
     @property
     def unblinded(self):
-        UnblindingRequest = django_apps.get_model("meta_prn.unblindingrequest")
+        UnblindingRequest = django_apps.get_model("intecomm_prn.unblindingrequest")
         try:
             unblinded = UnblindingRequest.objects.get(
                 subject_identifier=self.subject_identifier, approved=True

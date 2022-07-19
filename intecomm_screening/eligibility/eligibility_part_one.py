@@ -13,7 +13,6 @@ class EligibilityPartOne(ScreeningEligibility):
         self.gender = None
         self.hiv_pos = None
         self.lives_nearby = None
-        self.meta_phase_two = None
         self.on_rx_stable = None
         self.vl_undetectable = None
         self.pregnant = None

@@ -10,27 +10,20 @@ from edc_facility.import_holidays import import_holidays
 from edc_list_data.site_list_data import site_list_data
 from edc_metadata import REQUIRED
 from edc_metadata.models import CrfMetadata
+from edc_randomization import Randomizer
 from edc_randomization.site_randomizers import site_randomizers
 from edc_sites import add_or_update_django_sites, get_sites_by_country
 from edc_sites.tests.site_test_case_mixin import SiteTestCaseMixin
 from edc_utils.date import get_utcnow
 from edc_visit_tracking.constants import SCHEDULED
-# from intecomm_edc.meta_version import PHASE_THREE, PHASE_TWO, get_meta_version
-# from intecomm_rando.randomizers import RandomizerPhaseThree, RandomizerPhaseTwo
+from model_bakery import baker
+
 from intecomm_sites import fqdn
 from intecomm_subject.models import SubjectVisit
 from intecomm_visit_schedule.constants import DAY1
-from model_bakery import baker
 
-from ..models import (
-    ScreeningPartOne,
-    ScreeningPartTwo,
-    SubjectScreening,
-)
-from .options import (
-    get_part_one_eligible_options,
-    get_part_two_eligible_options,
-)
+from ..models import ScreeningPartOne, ScreeningPartTwo, SubjectScreening
+from .options import get_part_one_eligible_options, get_part_two_eligible_options
 
 
 class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
@@ -51,16 +44,8 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         add_or_update_django_sites(sites=get_sites_by_country("tanzania"))
         site_randomizers._registry = {}
         if cls.import_randomization_list:
-            if get_meta_version() == PHASE_TWO:
-                site_randomizers.register(RandomizerPhaseTwo)
-                RandomizerPhaseTwo.import_list(
-                    verbose=False, sid_count_for_tests=cls.sid_count
-                )
-            elif get_meta_version() == PHASE_THREE:
-                site_randomizers.register(RandomizerPhaseThree)
-                RandomizerPhaseThree.import_list(
-                    verbose=False, sid_count_for_tests=cls.sid_count
-                )
+            site_randomizers.register(Randomizer)
+            Randomizer.import_list(verbose=False, sid_count_for_tests=cls.sid_count)
         site_list_data.initialize()
         site_list_data.autodiscover()
 
@@ -117,7 +102,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
     @staticmethod
     def get_subject_consent(subject_screening, consent_datetime=None, site_id=None):
         return baker.make_recipe(
-            "meta_consent.subjectconsent",
+            "intecomm_consent.subjectconsent",
             user_created="erikvw",
             user_modified="erikvw",
             screening_identifier=subject_screening.screening_identifier,

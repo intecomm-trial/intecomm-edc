@@ -16,7 +16,7 @@ class EndOfStudyPhaseTwoFormValidator(
     RequiresLtfuFormValidatorMixin,
     FormValidator,
 ):
-    death_report_model = "meta_ae.deathreport"
+    death_report_model = "intecomm_ae.deathreport"
     ltfu_model = None
 
     def clean(self):
@@ -71,7 +71,7 @@ class EndOfStudyPhaseThreeFormValidator(
     RequiresLtfuFormValidatorMixin,
     FormValidator,
 ):
-    death_report_model = "meta_ae.deathreport"
+    death_report_model = "intecomm_ae.deathreport"
     ltfu_model = None
 
     def clean(self):

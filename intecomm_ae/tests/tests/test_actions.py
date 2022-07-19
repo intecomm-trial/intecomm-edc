@@ -9,16 +9,17 @@ from edc_adverse_event.constants import (
 )
 from edc_constants.constants import CLOSED, NEW
 from edc_reportable.constants import GRADE4, GRADE5
-from meta_screening.tests.meta_test_case_mixin import MetaTestCaseMixin
 from model_bakery import baker
 
+from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin
 
-class TestActions(MetaTestCaseMixin, TestCase):
+
+class TestActions(IntecommTestCaseMixin, TestCase):
     def test_ae_initial_creates_action(self):
         subject_screening = self.get_subject_screening()
         subject_consent = self.get_subject_consent(subject_screening)
         ae_initial = baker.make_recipe(
-            "meta_ae.aeinitial", subject_identifier=subject_consent.subject_identifier
+            "intecomm_ae.aeinitial", subject_identifier=subject_consent.subject_identifier
         )
 
         try:
@@ -37,7 +38,7 @@ class TestActions(MetaTestCaseMixin, TestCase):
         subject_screening = self.get_subject_screening()
         subject_consent = self.get_subject_consent(subject_screening)
         ae_initial = baker.make_recipe(
-            "meta_ae.aeinitial", subject_identifier=subject_consent.subject_identifier
+            "intecomm_ae.aeinitial", subject_identifier=subject_consent.subject_identifier
         )
 
         action_item = ActionItem.objects.get(action_identifier=ae_initial.action_identifier)
@@ -57,7 +58,7 @@ class TestActions(MetaTestCaseMixin, TestCase):
         subject_screening = self.get_subject_screening()
         subject_consent = self.get_subject_consent(subject_screening)
         baker.make_recipe(
-            "meta_ae.aeinitial",
+            "intecomm_ae.aeinitial",
             subject_identifier=subject_consent.subject_identifier,
             ae_grade=GRADE4,
         )
@@ -74,7 +75,7 @@ class TestActions(MetaTestCaseMixin, TestCase):
         subject_screening = self.get_subject_screening()
         subject_consent = self.get_subject_consent(subject_screening)
         baker.make_recipe(
-            "meta_ae.aeinitial",
+            "intecomm_ae.aeinitial",
             subject_identifier=subject_consent.subject_identifier,
             ae_grade=GRADE5,
         )
@@ -97,7 +98,7 @@ class TestActions(MetaTestCaseMixin, TestCase):
         subject_screening = self.get_subject_screening()
         subject_consent = self.get_subject_consent(subject_screening)
         baker.make_recipe(
-            "meta_ae.aeinitial",
+            "intecomm_ae.aeinitial",
             subject_identifier=subject_consent.subject_identifier,
             ae_grade=GRADE5,
         )
@@ -107,7 +108,7 @@ class TestActions(MetaTestCaseMixin, TestCase):
         )
 
         baker.make_recipe(
-            "meta_ae.deathreport",
+            "intecomm_ae.deathreport",
             subject_identifier=subject_consent.subject_identifier,
             action_identifier=action_item.action_identifier,
         )

@@ -13,10 +13,10 @@ class AdminSite(DjangoAdminSite):
     site_url = "/administration/"
 
 
-meta_test_admin = AdminSite(name="intecomm_test_admin")
+intecomm_test_admin = AdminSite(name="intecomm_test_admin")
 
-meta_test_admin.register(SubjectScreening)
-meta_test_admin.register(SubjectConsent)
-meta_test_admin.register(SubjectLocator)
-meta_test_admin.register(SubjectVisit)
-meta_test_admin.register(SubjectRequisition)
+intecomm_test_admin.register(SubjectScreening)
+intecomm_test_admin.register(SubjectConsent)
+intecomm_test_admin.register(SubjectLocator)
+intecomm_test_admin.register(SubjectVisit)
+intecomm_test_admin.register(SubjectRequisition)
