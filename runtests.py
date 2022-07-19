@@ -113,7 +113,7 @@ DEFAULT_SETTINGS = DefaultTestSettings(
         "edc_randomization.apps.AppConfig",
         "edc_reference.apps.AppConfig",
         "edc_registration.apps.AppConfig",
-        "edc_reports.apps.AppConfig",
+        "edc_pdf_reports.apps.AppConfig",
         "edc_review_dashboard.apps.AppConfig",
         "edc_screening.apps.AppConfig",
         "edc_sites.apps.AppConfig",
