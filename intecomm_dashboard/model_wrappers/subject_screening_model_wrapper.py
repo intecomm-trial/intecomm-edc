@@ -15,7 +15,6 @@ class SubjectConsentModelWrapper(BaseModelWrapper):
 
 
 class SubjectScreeningModelWrapper(ConsentModelWrapperMixin, ModelWrapper):
-
     consent_model_wrapper_cls = SubjectConsentModelWrapper
     model = "intecomm_screening.subjectscreening"
     next_url_attrs = ["screening_identifier"]
@@ -46,3 +45,23 @@ class SubjectScreeningModelWrapper(ConsentModelWrapperMixin, ModelWrapper):
         if self.screening_identifier:
             human = f"{self.screening_identifier[0:4]}-{self.screening_identifier[4:]}"
         return human or self.screening_identifier
+
+    @property
+    def href_p1(self):
+        return self.href.replace("subjectscreening", "screeningpartone")
+
+    @property
+    def href_p2(self):
+        return self.href.replace("subjectscreening", "screeningparttwo")
+
+
+class ScreeningPartOneModelWrapper(SubjectScreeningModelWrapper):
+    model = "intecomm_screening.screeningpartone"
+
+    @property
+    def href_p1(self):
+        return self.href
+
+    @property
+    def href_p2(self):
+        return self.href.replace("screeningpartone", "screeningparttwo")

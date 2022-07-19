@@ -15,27 +15,25 @@ from edc_sites import add_or_update_django_sites, get_sites_by_country
 from edc_sites.tests.site_test_case_mixin import SiteTestCaseMixin
 from edc_utils.date import get_utcnow
 from edc_visit_tracking.constants import SCHEDULED
-from meta_edc.meta_version import PHASE_THREE, PHASE_TWO, get_meta_version
-from meta_rando.randomizers import RandomizerPhaseThree, RandomizerPhaseTwo
-from meta_sites import fqdn
-from meta_subject.models import SubjectVisit
-from meta_visit_schedule.constants import DAY1
+# from intecomm_edc.meta_version import PHASE_THREE, PHASE_TWO, get_meta_version
+# from intecomm_rando.randomizers import RandomizerPhaseThree, RandomizerPhaseTwo
+from intecomm_sites import fqdn
+from intecomm_subject.models import SubjectVisit
+from intecomm_visit_schedule.constants import DAY1
 from model_bakery import baker
 
 from ..models import (
     ScreeningPartOne,
-    ScreeningPartThree,
     ScreeningPartTwo,
     SubjectScreening,
 )
 from .options import (
     get_part_one_eligible_options,
-    get_part_three_eligible_options,
     get_part_two_eligible_options,
 )
 
 
-class MetaTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
+class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
 
     fqdn = fqdn
 
@@ -74,7 +72,6 @@ class MetaTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
     ):
         part_one_eligible_options = deepcopy(get_part_one_eligible_options())
         part_two_eligible_options = deepcopy(get_part_two_eligible_options())
-        part_three_eligible_options = deepcopy(get_part_three_eligible_options())
         if report_datetime:
             part_one_eligible_options.update(report_datetime=report_datetime)
         part_one_eligible_options["gender"] = gender or part_one_eligible_options["gender"]

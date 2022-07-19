@@ -4,12 +4,12 @@ from django.test import TestCase
 from edc_consent.constants import HOSPITAL_NUMBER
 from edc_constants.constants import FEMALE
 from edc_utils.date import get_utcnow
-from meta_consent.forms import SubjectConsentFormValidator
-from meta_screening.tests.meta_test_case_mixin import MetaTestCaseMixin
+from intecomm_consent.forms import SubjectConsentFormValidator
+from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin
 from pytz import timezone
 
 
-class TestFormValidators(MetaTestCaseMixin, TestCase):
+class TestFormValidators(IntecommTestCaseMixin, TestCase):
     def setUp(self):
         super().setUp()
         self.eligibility_datetime = get_utcnow() - relativedelta(days=1)  # yesterday
