@@ -19,7 +19,7 @@ class Visit(BaseVisit):
         crfs_prn=None,
         requisitions_prn=None,
         allow_unscheduled=None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             allow_unscheduled=True if allow_unscheduled is None else allow_unscheduled,

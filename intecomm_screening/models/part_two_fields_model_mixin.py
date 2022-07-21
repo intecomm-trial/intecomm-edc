@@ -1,5 +1,4 @@
 from django.db import models
-
 from edc_glucose.model_mixins import (
     fasting_model_mixin_factory,
     fbg_model_mixin_factory,

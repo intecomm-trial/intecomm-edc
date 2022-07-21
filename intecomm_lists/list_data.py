@@ -1,4 +1,4 @@
-from edc_constants.constants import DEAD, NONE, OTHER, UNKNOWN
+from edc_constants.constants import DEAD, OTHER
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_transfer.constants import TRANSFERRED
 

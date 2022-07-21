@@ -39,7 +39,7 @@ def subject_consent_on_post_save(sender, instance, raw, created, **kwargs):
 
             # randomize
             site_randomizers.randomize(
-                get_intecomm_version(),
+                # get_intecomm_version(),
                 subject_identifier=instance.subject_identifier,
                 report_datetime=instance.consent_datetime,
                 site=instance.site,

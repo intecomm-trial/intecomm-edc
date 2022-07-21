@@ -1,9 +1,9 @@
 from django.db import models
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE, YES
+from edc_dx_review.model_mixins.initial_review import InitialReviewModelMixin
 from edc_model import models as edc_models
 from edc_model import utils as edc_model_utils
-from edc_dx_review.model_mixins.initial_review import InitialReviewModelMixin
 
 from ..choices import HTN_MANAGEMENT
 from ..model_mixins import CrfModelMixin

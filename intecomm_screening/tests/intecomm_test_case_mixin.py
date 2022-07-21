@@ -76,15 +76,6 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         self.assertEqual(screening_part_two.reasons_ineligible_part_two, None)
         self.assertEqual(screening_part_two.eligible_part_two, YES)
 
-        screening_part_three = ScreeningPartThree.objects.get(
-            screening_identifier=screening_identifier
-        )
-        for k, v in part_three_eligible_options.items():
-            setattr(screening_part_three, k, v)
-        screening_part_three.save()
-        self.assertEqual(screening_part_three.reasons_ineligible_part_three, None)
-        self.assertEqual(screening_part_three.eligible_part_three, YES)
-
         subject_screening = SubjectScreening.objects.get(
             screening_identifier=screening_identifier
         )
@@ -92,8 +83,6 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         self.assertTrue(subject_screening.eligible)
 
         if eligibility_datetime:
-            screening_part_three.eligibility_datetime = eligibility_datetime
-            screening_part_three.save()
             subject_screening = SubjectScreening.objects.get(
                 screening_identifier=screening_identifier
             )

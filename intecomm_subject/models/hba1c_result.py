@@ -4,7 +4,7 @@ from django.utils.html import format_html
 from edc_lab.constants import EQ
 from edc_model import models as edc_models
 from edc_model.validators import date_not_future
-from edc_reportable import CELLS_PER_MILLIMETER_CUBED_DISPLAY, PERCENT
+from edc_reportable import PERCENT
 
 from ..model_mixins import CrfModelMixin
 

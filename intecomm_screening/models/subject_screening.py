@@ -4,9 +4,9 @@ from edc_screening.screening_identifier import (
     ScreeningIdentifier as BaseScreeningIdentifier,
 )
 
+from .eligibility_model_mixin import EligibilityModelMixin
 from .part_one_fields_model_mixin import PartOneFieldsModelMixin
 from .part_two_fields_model_mixin import PartTwoFieldsModelMixin
-from .eligibility_model_mixin import EligibilityModelMixin
 
 
 class SubjectScreeningModelError(Exception):

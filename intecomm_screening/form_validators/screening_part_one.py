@@ -1,6 +1,6 @@
 from django import forms
 from edc_consent.form_validators import ConsentFormValidatorMixin
-from edc_constants.constants import MALE, YES
+from edc_constants.constants import YES
 from edc_form_validators import FormValidator
 
 
@@ -20,4 +20,3 @@ class ScreeningPartOneFormValidator(ConsentFormValidatorMixin, FormValidator):
                     )
                 }
             )
-

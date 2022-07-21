@@ -6,12 +6,7 @@ from edc_lab.choices import RESULT_QUANTIFIER
 from edc_lab.constants import EQ
 from edc_model import models as edc_models
 from edc_reportable.units import COPIES_PER_MILLILITER
-from edc_vitals.models import (
-    DiastolicPressureField,
-    HeightField,
-    SystolicPressureField,
-    WeightField,
-)
+from edc_vitals.models import DiastolicPressureField, SystolicPressureField, WeightField
 
 from intecomm_lists.models import VisitReasons
 

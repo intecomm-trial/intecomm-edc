@@ -5,12 +5,13 @@ from edc_crf.admin import crf_status_fieldset_tuple
 from edc_form_label.form_label_modeladmin_mixin import FormLabelModelAdminMixin
 from edc_model_admin import SimpleHistoryAdmin, TabularInlineMixin
 
-# from intecomm_subject.forms import DrugSupplyHtnForm
-
 from ..admin_site import intecomm_subject_admin
+
 # from ..forms import DrugRefillHtnForm
 from ..models import DrugRefillHtn, DrugSupplyHtn
 from .modeladmin_mixins import CrfModelAdminMixin, DrugSupplyInlineMixin
+
+# from intecomm_subject.forms import DrugSupplyHtnForm
 
 
 class DrugSupplyHtnInline(DrugSupplyInlineMixin, TabularInlineMixin, admin.TabularInline):

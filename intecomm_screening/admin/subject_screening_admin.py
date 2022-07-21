@@ -14,10 +14,7 @@ from ..admin_site import intecomm_screening_admin
 from ..eligibility import IntecommEligibility, format_reasons_ineligible
 from ..forms import SubjectScreeningForm
 from ..models import SubjectScreening
-from .fieldsets import (
-    get_part_one_fieldset,
-    get_part_two_fieldset,
-)
+from .fieldsets import get_part_one_fieldset, get_part_two_fieldset
 
 
 @admin.register(SubjectScreening, site=intecomm_screening_admin)

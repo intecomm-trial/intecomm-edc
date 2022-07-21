@@ -4,9 +4,10 @@ from django.test import TestCase
 from edc_consent.constants import HOSPITAL_NUMBER
 from edc_constants.constants import FEMALE
 from edc_utils.date import get_utcnow
+from pytz import timezone
+
 from intecomm_consent.forms import SubjectConsentFormValidator
 from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin
-from pytz import timezone
 
 
 class TestFormValidators(IntecommTestCaseMixin, TestCase):

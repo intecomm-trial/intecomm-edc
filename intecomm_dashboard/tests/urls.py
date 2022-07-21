@@ -7,10 +7,10 @@ from edc_consent.admin_site import edc_consent_admin
 from edc_dashboard.views import AdministrationView
 from edc_locator.admin_site import edc_locator_admin
 from edc_reference.admin_site import edc_reference_admin
-from intecomm_ae.admin_site import intecomm_ae_admin
-from intecomm_prn.admin_site import intecomm_prn_admin
 
+from intecomm_ae.admin_site import intecomm_ae_admin
 from intecomm_consent.admin_site import intecomm_consent_admin
+from intecomm_prn.admin_site import intecomm_prn_admin
 from intecomm_screening.admin_site import intecomm_screening_admin
 from intecomm_subject.admin_site import intecomm_subject_admin
 

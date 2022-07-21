@@ -18,7 +18,6 @@ all_sites = {
             country="uganda",
             domain=f"kisugu.ug.{fqdn}",
         ),
-
         SingleSite(
             103,
             "kiswa",
@@ -54,7 +53,6 @@ all_sites = {
             country="uganda",
             domain=f"namulonge.ug.{fqdn}",
         ),
-
         SingleSite(
             108,
             "ndejje",

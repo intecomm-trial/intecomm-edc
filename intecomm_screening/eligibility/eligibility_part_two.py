@@ -1,4 +1,3 @@
-from edc_constants.constants import NO, NOT_APPLICABLE, YES
 from edc_screening.screening_eligibility import FC, ScreeningEligibility
 
 
@@ -23,9 +22,7 @@ class EligibilityPartTwo(ScreeningEligibility):
         super().__init__(**kwargs)
 
     def get_required_fields(self) -> dict[str, FC]:
-        return {
-
-        }
+        return {}
 
     def set_eligible_model_field(self):
         setattr(self.model_obj, self.eligible_fld_name, self.eligible)

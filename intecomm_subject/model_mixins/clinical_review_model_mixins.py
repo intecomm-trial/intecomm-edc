@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.safestring import mark_safe
-from edc_constants.choices import POS_NEG_NOTESTED, YES_NO, YES_NO_NA
-from edc_constants.constants import NO, NOT_APPLICABLE, POS, YES
+from edc_constants.choices import YES_NO, YES_NO_NA
+from edc_constants.constants import NOT_APPLICABLE
 from edc_model import models as edc_models
 from edc_model.validators import date_not_future
 

@@ -10,10 +10,8 @@ from edc_constants.constants import (
     NO,
     NOT_APPLICABLE,
     RANDOM_SAMPLING,
-    TBD,
     YES,
 )
-from edc_reportable.units import MICROMOLES_PER_LITER, MILLIMOLES_PER_LITER
 from faker import Faker
 from pyparsing import alphas
 

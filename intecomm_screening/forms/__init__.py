@@ -1,8 +1,8 @@
 from .field_lists import (
     get_part_one_fields,
     get_part_two_fbg_fields,
-    get_part_two_vitals_fields,
     get_part_two_fields,
+    get_part_two_vitals_fields,
 )
 from .screening_part_one_form import ScreeningPartOneForm
 from .screening_part_two_form import ScreeningPartTwoForm

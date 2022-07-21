@@ -5,6 +5,7 @@ from edc_form_label import FormLabelModelAdminMixin
 from edc_model_admin import SimpleHistoryAdmin
 
 from ..admin_site import intecomm_subject_admin
+
 # from ..forms import FamilyHistoryForm
 from ..models import FamilyHistory
 from .modeladmin_mixins import CrfModelAdminMixin

@@ -11,7 +11,6 @@ from .constants import (
     DRUGS,
     GTE_3HRS,
     INSULIN,
-    INTEGRATED,
     NURSE,
     SITTING,
     THIS_CLINIC,

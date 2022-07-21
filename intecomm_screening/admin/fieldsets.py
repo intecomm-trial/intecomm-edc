@@ -1,10 +1,6 @@
-from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
-from ..forms import (
-    get_part_one_fields,
-    get_part_two_fields,
-)
+from ..forms import get_part_one_fields, get_part_two_fields
 
 
 def get_part_one_fieldset(collapse=None):

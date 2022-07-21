@@ -5,6 +5,7 @@ from edc_form_label.form_label_modeladmin_mixin import FormLabelModelAdminMixin
 from edc_model_admin import SimpleHistoryAdmin
 
 from ..admin_site import intecomm_subject_admin
+
 # from ..forms import ClinicalReviewForm
 from ..models import ClinicalReview
 from .fieldsets import treatment_pay_methods_fieldset_tuple

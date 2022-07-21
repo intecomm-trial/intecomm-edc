@@ -16,7 +16,7 @@ class PartOneFieldsModelMixin(models.Model):
 
     patient_conditions = models.CharField(
         verbose_name="The participant has at least one of the following conditions: HIV, "
-                     "diabetes or hypertension?",
+        "diabetes or hypertension?",
         max_length=15,
         null=True,
         choices=YES_NO,
