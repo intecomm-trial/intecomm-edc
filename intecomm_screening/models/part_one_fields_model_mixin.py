@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.safestring import mark_safe
 from edc_constants.choices import YES_NO, YESDEFAULT_NO
 from edc_constants.constants import YES
+from edc_model.validators import date_is_past
 
 
 class PartOneFieldsModelMixin(models.Model):
@@ -41,6 +42,7 @@ class PartOneFieldsModelMixin(models.Model):
 
     appt_datetime = models.DateTimeField(
         verbose_name="Appointment date for second stage of screening (P2)",
+        validators=[date_is_past],
         null=True,
         blank=True,
         help_text="Leave blank if continuing to the second stage today",

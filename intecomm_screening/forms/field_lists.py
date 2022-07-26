@@ -6,6 +6,7 @@ def get_part_one_fields():
         "gender",
         "age_in_years",
         "patient_conditions",
+        "staying_nearby_6",
         "fasted",
         "appt_datetime",
     ]

@@ -9,21 +9,18 @@ class EligibilityPartOne(ScreeningEligibility):
 
     def __init__(self, **kwargs):
         self.age_in_years = None
-        self.art_six_months = None
+        self.patient_conditions = None
         self.gender = None
-        self.hiv_pos = None
-        self.lives_nearby = None
-        self.on_rx_stable = None
-        self.vl_undetectable = None
-        self.pregnant = None
+        self.fasted = None
         self.staying_nearby_6 = None
-        self.staying_nearby_12 = None
         super().__init__(**kwargs)
 
     def get_required_fields(self) -> dict[str, FC]:
         return {
             "age_in_years": FC(range(18, 120), "age<18"),
             "gender": FC([MALE, FEMALE], "gender invalid"),
+            "patient_conditions": FC([YES], "Must have atleast on condition"),
+            "staying_nearby_6": FC(YES, "Unable/Unwilling to stay nearby for 6m"),
         }
 
     def set_fld_attrs_on_model(self) -> None:

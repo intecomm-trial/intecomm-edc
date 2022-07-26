@@ -1,7 +1,7 @@
 from django import forms
 from edc_form_validators import FormValidator
 
-from ..eligibility import EligibilityPartTwo
+from ..eligibility.eligibility_part_two import EligibilityPartTwo
 
 
 class ScreeningPartTwoFormValidator(FormValidator):

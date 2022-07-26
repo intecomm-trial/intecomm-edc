@@ -55,6 +55,7 @@ DEFAULT_SETTINGS = DefaultTestSettings(
     LIVE_SYSTEM=False,
     EDC_RANDOMIZATION_LIST_PATH=join(base_dir, "tests", "etc"),
     EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER=False,
+    EDC_RANDOMIZATION_ASSIGNMENT_MAP=dict(intervention=1, control=2),
     DATABASES={
         # required for tests when acting as a server that deserializes
         "default": {
@@ -144,12 +145,26 @@ DEFAULT_SETTINGS = DefaultTestSettings(
 
 
 def main():
-    if not settings.configured:
+    if not settings.configured:  # noqa
         settings.configure(**DEFAULT_SETTINGS)
     django.setup()
     tags = [t.split("=")[1] for t in sys.argv if t.startswith("--tag")]
     failfast = True if [t for t in sys.argv if t == "--failfast"] else False
-    failures = DiscoverRunner(failfast=failfast, tags=tags).run_tests([])
+    failures = DiscoverRunner(failfast=failfast, tags=tags).run_tests(
+        [
+            "tests",
+            "intecomm_ae.tests",
+            "intecomm_dashboard.tests",
+            "intecomm_edc.tests",
+            "intecomm_labs.tests",
+            "intecomm_lists.tests",
+            "intecomm_prn.tests",
+            "intecomm_rando.tests",
+            "intecomm_screening.tests",
+            "intecomm_subject.tests",
+            "intecomm_visit_schedule.tests",
+        ]
+    )
     sys.exit(bool(failures))
 
 
