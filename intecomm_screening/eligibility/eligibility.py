@@ -6,7 +6,6 @@ from django.utils.html import format_html
 from edc_constants.constants import NO, TBD, YES
 from edc_utils import get_utcnow
 
-from ..constants import EGFR_NOT_CALCULATED
 from .eligibility_part_one import EligibilityPartOne
 from .eligibility_part_two import EligibilityPartTwo
 

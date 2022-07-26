@@ -4,10 +4,10 @@ from secrets import choice
 import arrow
 from dateutil.relativedelta import relativedelta
 from edc_constants.constants import FEMALE, YES
+from edc_reportable import MILLIMOLES_PER_LITER
 from faker import Faker
 from pyparsing import alphas
 
-from edc_reportable import MILLIMOLES_PER_LITER
 from intecomm_screening.forms import get_part_one_fields, get_part_two_fields
 
 fake = Faker()

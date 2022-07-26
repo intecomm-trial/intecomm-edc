@@ -1,6 +1,5 @@
 from copy import deepcopy
 
-from Crypto.SelfTest.Hash.test_cSHAKE import tag
 from django.test import TestCase
 from edc_constants.constants import NO, TBD, YES
 

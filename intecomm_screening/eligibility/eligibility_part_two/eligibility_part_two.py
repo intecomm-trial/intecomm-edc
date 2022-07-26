@@ -2,14 +2,7 @@ from typing import Any
 
 from edc_constants.constants import NO, TBD, YES
 
-from ...constants import (
-    FBG_INCOMPLETE,
-    FBG_LT_13,
-    NOT_STUDY_BP,
-    NOT_STUDY_DM,
-    STUDY_BP,
-    STUDY_DM,
-)
+from ...constants import FBG_INCOMPLETE, FBG_LT_13, NOT_STUDY_DM, STUDY_DM
 from .base_eligibility_part_two import BaseEligibilityPartTwo
 
 
