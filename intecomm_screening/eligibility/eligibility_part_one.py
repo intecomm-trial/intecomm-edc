@@ -1,4 +1,4 @@
-from edc_constants.constants import FEMALE, MALE, NO, TBD, YES
+from edc_constants.constants import FEMALE, MALE, NO, YES
 from edc_screening.screening_eligibility import FC, ScreeningEligibility
 
 
