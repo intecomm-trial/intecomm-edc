@@ -15,10 +15,8 @@ def get_part_one_fields():
 
 def get_part_two_vitals_fields():
     return [
-        "sys_blood_pressure_one",
-        "dia_blood_pressure_one",
-        "sys_blood_pressure_two",
-        "dia_blood_pressure_two",
+        "sys_blood_pressure",
+        "dia_blood_pressure",
     ]
 
 

@@ -12,7 +12,7 @@ options = dict(
 class ScreeningPartOne(SubjectScreening):
     def save(self, *args, **kwargs):
         if self.eligible_part_one == YES:
-            self.continue_part_two = TBD
+            self.continue_part_two = YES
         else:
             self.continue_part_two = NO
         super().save(*args, **kwargs)

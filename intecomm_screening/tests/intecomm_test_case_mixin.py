@@ -3,6 +3,7 @@ from copy import deepcopy
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.test import TestCase
 from edc_appointment.constants import IN_PROGRESS_APPT, INCOMPLETE_APPT
 from edc_appointment.tests.appointment_test_case_mixin import AppointmentTestCaseMixin
 from edc_constants.constants import YES
@@ -26,7 +27,7 @@ from ..models import ScreeningPartOne, ScreeningPartTwo, SubjectScreening
 from .options import get_part_one_eligible_options, get_part_two_eligible_options
 
 
-class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
+class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin, TestCase):
 
     fqdn = fqdn
 

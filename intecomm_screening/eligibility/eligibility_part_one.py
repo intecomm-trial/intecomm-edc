@@ -1,4 +1,4 @@
-from edc_constants.constants import FEMALE, MALE, NO, YES
+from edc_constants.constants import FEMALE, MALE, NO, TBD, YES
 from edc_screening.screening_eligibility import FC, ScreeningEligibility
 
 
@@ -19,7 +19,7 @@ class EligibilityPartOne(ScreeningEligibility):
         return {
             "age_in_years": FC(range(18, 120), "age<18"),
             "gender": FC([MALE, FEMALE], "gender invalid"),
-            "patient_conditions": FC([YES], "Must have atleast on condition"),
+            "patient_conditions": FC([YES], "Must have at-least on condition"),
             "staying_nearby_6": FC(YES, "Unable/Unwilling to stay nearby for 6m"),
         }
 

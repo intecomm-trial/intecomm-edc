@@ -124,12 +124,13 @@ class IntecommEligibility:
         )
         self.reasons_ineligible.update(**self.part_two.reasons_ineligible)
         self.check_eligibility_values_or_raise()
-        self.eligible, self.reasons_ineligible = get_eligible_as_word(
+        opts = dict(
             eligible_part_one=self.part_one.eligible,
             eligible_part_two=self.part_two.eligible,
             reasons_ineligible=self.reasons_ineligible,
             unsuitable_for_study=self.model_obj.unsuitable_for_study,
         )
+        self.eligible, self.reasons_ineligible = get_eligible_as_word(**opts)
 
     def update_model_final(self: Any):
         self.model_obj.reasons_ineligible = "|".join(self.reasons_ineligible)

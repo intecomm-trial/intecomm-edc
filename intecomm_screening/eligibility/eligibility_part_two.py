@@ -1,4 +1,3 @@
-import decimal
 from typing import Any
 
 from edc_constants.constants import NO, TBD, YES
@@ -16,8 +15,8 @@ class EligibilityPartTwo(ScreeningEligibility):
     def __init__(self, **kwargs):
         self.fbg_units = None
         self.fbg_value = None
-        self.sys_blood_pressure_one = None
-        self.dia_blood_pressure_one = None
+        self.sys_blood_pressure = None
+        self.dia_blood_pressure = None
         self.unsuitable_agreed = None
         super().__init__(**kwargs)
 
@@ -30,28 +29,31 @@ class EligibilityPartTwo(ScreeningEligibility):
         elif self.converted_fbg_value <= 13:
             self.eligible = NO
             self.reasons_ineligible.update(fbg_low="fbg_low")
-        if not self.sys_blood_pressure_one:
+        if not self.sys_blood_pressure:
             self.eligible = TBD
             self.reasons_ineligible.update(sys_incomplete="sys_incomplete")
-        elif self.sys_blood_pressure_one < 160:
+        elif self.sys_blood_pressure < 160:
             self.eligible = NO
             self.reasons_ineligible.update(systolic_low="systolic_low")
-        if not self.dia_blood_pressure_one:
+        if not self.dia_blood_pressure:
             self.eligible = TBD
             self.reasons_ineligible.update(diastolic_incomplete="diastolic_incomplete")
-        elif self.dia_blood_pressure_one < 100:
+        elif self.dia_blood_pressure < 100:
             self.eligible = NO
             self.reasons_ineligible.update(diastolic_low="diastolic_low")
 
     def set_fld_attrs_on_model(self) -> None:
         self.model_obj.converted_fbg_value = self.converted_fbg_value
 
+    def set_eligible_model_field(self):
+        setattr(self.model_obj, self.eligible_fld_name, self.eligible)
+
     def get_required_fields(self) -> dict[str, FC]:
         return {
             "fbg_units": FC(ignore_if_missing=True),
             "fbg_value": FC(ignore_if_missing=True),
-            "sys_blood_pressure_one": FC(ignore_if_missing=True),
-            "dia_blood_pressure_one": FC(ignore_if_missing=True),
+            "sys_blood_pressure": FC(ignore_if_missing=True),
+            "dia_blood_pressure": FC(ignore_if_missing=True),
         }
 
     @property
