@@ -26,21 +26,21 @@ class EligibilityPartTwo(ScreeningEligibility):
         if not self.fbg_value:
             self.eligible = TBD
             self.reasons_ineligible.update(fbg_incomplete=FBG_INCOMPLETE)
-        elif self.converted_fbg_value <= 13:
+        elif self.converted_fbg_value > 13:
             self.eligible = NO
-            self.reasons_ineligible.update(fbg_low="fbg_low")
+            self.reasons_ineligible.update(fbg_low="high_fbg")
         if not self.sys_blood_pressure:
             self.eligible = TBD
             self.reasons_ineligible.update(sys_incomplete="sys_incomplete")
-        elif self.sys_blood_pressure < 160:
+        elif self.sys_blood_pressure > 160:
             self.eligible = NO
-            self.reasons_ineligible.update(systolic_low="systolic_low")
+            self.reasons_ineligible.update(systolic_low="high_systolic")
         if not self.dia_blood_pressure:
             self.eligible = TBD
             self.reasons_ineligible.update(diastolic_incomplete="diastolic_incomplete")
-        elif self.dia_blood_pressure < 100:
+        elif self.dia_blood_pressure > 100:
             self.eligible = NO
-            self.reasons_ineligible.update(diastolic_low="diastolic_low")
+            self.reasons_ineligible.update(diastolic_low="high_diastolic")
 
     def set_fld_attrs_on_model(self) -> None:
         self.model_obj.converted_fbg_value = self.converted_fbg_value

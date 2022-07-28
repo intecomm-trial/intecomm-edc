@@ -35,16 +35,16 @@ def get_part_one_eligible_options():
 
 def get_part_two_eligible_options(report_datetime: datetime = None):
     options = dict(
-        dia_blood_pressure=110,
+        dia_blood_pressure=80,
         fasting=YES,
         fasting_duration_str="8h",
         fbg_datetime=now,
         fbg_units=MILLIMOLES_PER_LITER,
-        fbg_value=15.0,
+        fbg_value=11.0,
         part_two_report_datetime=report_datetime or now,
         reasons_ineligible_part_two=None,
         reasons_unsuitable=None,
-        sys_blood_pressure=165,
+        sys_blood_pressure=120,
     )
     if fld := [f for f in get_part_two_fields() if f not in options]:
         raise TypeError(f"Missing part two fields. Got {fld}.")

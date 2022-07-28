@@ -55,33 +55,33 @@ class TestScreeningPartTwo(TestCase):
 
     def test_ineligible_fbg(self):
         part_two_eligible_options = deepcopy(get_part_two_eligible_options())
-        part_two_eligible_options["fbg_value"] = 13.0
+        part_two_eligible_options["fbg_value"] = 14.0
         obj = self.get_screening_part_two_obj()
         for k, v in part_two_eligible_options.items():
             setattr(obj, k, v)
         obj.save()
-        self.assertIn("fbg_low", obj.reasons_ineligible_part_two)
+        self.assertIn("high_fbg", obj.reasons_ineligible_part_two)
         self.assertFalse(obj.eligible)
         self.assertFalse(obj.consented)
 
     def test_ineligible_sys(self):
         part_two_eligible_options = deepcopy(get_part_two_eligible_options())
-        part_two_eligible_options["sys_blood_pressure"] = 120
+        part_two_eligible_options["sys_blood_pressure"] = 165
         obj = self.get_screening_part_two_obj()
         for k, v in part_two_eligible_options.items():
             setattr(obj, k, v)
         obj.save()
-        self.assertIn("systolic_low", obj.reasons_ineligible_part_two)
+        self.assertIn("high_systolic", obj.reasons_ineligible_part_two)
         self.assertFalse(obj.eligible)
         self.assertFalse(obj.consented)
 
     def test_ineligible_dia(self):
         part_two_eligible_options = deepcopy(get_part_two_eligible_options())
-        part_two_eligible_options["dia_blood_pressure"] = 70
+        part_two_eligible_options["dia_blood_pressure"] = 110
         obj = self.get_screening_part_two_obj()
         for k, v in part_two_eligible_options.items():
             setattr(obj, k, v)
         obj.save()
-        self.assertIn("diastolic_low", obj.reasons_ineligible_part_two)
+        self.assertIn("high_diastolic", obj.reasons_ineligible_part_two)
         self.assertFalse(obj.eligible)
         self.assertFalse(obj.consented)
