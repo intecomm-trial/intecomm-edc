@@ -262,10 +262,14 @@ AUTHENTICATION_BACKENDS = ["edc_auth.backends.ModelBackendWithSite"]
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 20},
+    },
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
+
 
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",
@@ -274,21 +278,9 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
 ]
 
-AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-        "OPTIONS": {"min_length": 20},
-    },
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
-]
 # Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
-
-LANGUAGE_CODE = env.str("DJANGO_LANGUAGE_CODE")
-
 LANGUAGES = [x.split(":") for x in env.list("DJANGO_LANGUAGES")] or (("en", "English"),)
+LANGUAGE_CODE = env.str("DJANGO_LANGUAGE_CODE")
 
 TIME_ZONE = env.str("DJANGO_TIME_ZONE")
 
@@ -384,6 +376,7 @@ EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER = env(
     "EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER"
 )
 EDC_RANDOMIZATION_SKIP_VERIFY_CHECKS = True
+EDC_RANDOMIZATION_ASSIGNMENT_MAP = dict(intervention=2, control=1)
 
 # edc-sites
 EDC_SITES_MODULE_NAME = env.str("EDC_SITES_MODULE_NAME")

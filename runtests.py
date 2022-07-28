@@ -8,7 +8,7 @@ import django
 from django.conf import settings
 from django.test.runner import DiscoverRunner
 from edc_test_utils import DefaultTestSettings
-from edc_utils import get_datetime_from_env, get_utcnow
+from edc_utils import get_datetime_from_env
 from multisite import SiteID
 
 app_name = "intecomm_edc"
@@ -19,15 +19,13 @@ DEFAULT_SETTINGS = DefaultTestSettings(
     BASE_DIR=base_dir,
     APP_NAME=app_name,
     SITE_ID=SiteID(default=101),
-    INTE_SCREENING_DCL_REVISION_DATETIME=get_utcnow(),
     EDC_SITES_MODULE_NAME="intecomm_sites.sites",
     SUBJECT_VISIT_MODEL="intecomm_subject.subjectvisit",
     SUBJECT_VISIT_MISSED_MODEL="intecomm_subject.subjectvisitmissed",
     SUBJECT_CONSENT_MODEL="intecomm_consent.subjectconsent",
     SUBJECT_REQUISITION_MODEL="intecomm_subject.subjectrequisition",
-    SUBJECT_APP_LABEL=f"{app_name.replace('edc', 'subject')}",
+    SUBJECT_APP_LABEL="intecomm_subject",
     EDC_DX_LABELS=dict(hiv="HIV", htn="Hypertension", dm="Diabetes"),
-    INTE_SUBJECT_HE_REVISION_DATE=get_datetime_from_env(2021, 4, 26, 0, 0, 0, "UTC"),
     EDC_PROTOCOL_STUDY_OPEN_DATETIME=get_datetime_from_env(2019, 6, 30, 0, 0, 0, "UTC"),
     EDC_PROTOCOL_STUDY_CLOSE_DATETIME=get_datetime_from_env(2024, 12, 31, 23, 59, 59, "UTC"),
     ADVERSE_EVENT_ADMIN_SITE="intecomm_ae_admin",
@@ -55,7 +53,7 @@ DEFAULT_SETTINGS = DefaultTestSettings(
     LIVE_SYSTEM=False,
     EDC_RANDOMIZATION_LIST_PATH=join(base_dir, "tests", "etc"),
     EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER=False,
-    EDC_RANDOMIZATION_ASSIGNMENT_MAP=dict(intervention=1, control=2),
+    EDC_RANDOMIZATION_ASSIGNMENT_MAP=dict(intervention=2, control=1),
     DATABASES={
         # required for tests when acting as a server that deserializes
         "default": {
@@ -134,8 +132,6 @@ DEFAULT_SETTINGS = DefaultTestSettings(
         "intecomm_export.apps.AppConfig",
         "intecomm_screening.apps.AppConfig",
         "intecomm_sites.apps.AppConfig",
-        # "intecomm_edc.apps.EdcFacilityAppConfig",
-        # "intecomm_edc.apps.AppConfigForTests",
         "intecomm_edc.apps.AppConfig",
     ],
     add_dashboard_middleware=True,
