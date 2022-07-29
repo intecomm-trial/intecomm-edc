@@ -19,15 +19,6 @@ class SubjectConsentFormValidator(SubjectConsentFormValidatorMixin, FormValidato
         if self.cleaned_data.get("identity_type") != "hospital_no":
             raise forms.ValidationError({"identity_type": "Expected 'hospital number'."})
 
-        if self.subject_screening.hospital_identifier != self.cleaned_data.get("identity"):
-            raise forms.ValidationError(
-                {
-                    "identity": (
-                        "The hospital identifier does not match that " "reported at screening."
-                    )
-                }
-            )
-
     def validate_consent_datetime(self):
         if getattr(settings, "EDC_CONSENT_BYPASS_CONSENT_DATETIME_VALIDATION", False):
             return None
