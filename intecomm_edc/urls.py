@@ -9,11 +9,6 @@ from edc_utils.paths_for_urlpatterns import paths_for_urlpatterns
 
 from .views import HomeView
 
-
-def trigger_error(request):
-    division_by_zero = 1 / 0  # noqa
-
-
 handler403 = "edc_dashboard.views.edc_handler403"
 handler404 = "edc_dashboard.views.edc_handler404"
 handler500 = "edc_dashboard.views.edc_handler500"
