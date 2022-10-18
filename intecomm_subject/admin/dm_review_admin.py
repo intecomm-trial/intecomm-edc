@@ -14,14 +14,14 @@ class DmReviewAdmin(CrfModelAdmin):
 
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
-        ("Care", {"fields": ("managed_by", "care_delivery", "care_delivery_other")}),
         (
             "Blood Sugar Measurement",
             {
                 "fields": (
-                    "glucose_fasted",
+                    "glucose_fasting",
+                    "glucose_fasting_duration_str",
                     "glucose_date",
-                    "glucose",
+                    "glucose_value",
                     "glucose_quantifier",
                     "glucose_units",
                 ),
@@ -32,10 +32,8 @@ class DmReviewAdmin(CrfModelAdmin):
     )
 
     radio_fields = {
-        "dx": admin.VERTICAL,
         "crf_status": admin.VERTICAL,
-        "care_delivery": admin.VERTICAL,
-        "managed_by": admin.VERTICAL,
-        "glucose_fasted": admin.VERTICAL,
         "glucose_units": admin.VERTICAL,
+        "glucose_quantifier": admin.VERTICAL,
+        "glucose_fasting": admin.VERTICAL,
     }

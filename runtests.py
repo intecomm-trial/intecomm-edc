@@ -141,8 +141,6 @@ project_settings = DefaultTestSettings(
         "intecomm_lists.apps.AppConfig",
         "intecomm_dashboard.apps.AppConfig",
         "intecomm_labs.apps.AppConfig",
-        "intecomm_rando.apps.AppConfig",
-        "intecomm_reference.apps.AppConfig",
         "intecomm_subject.apps.AppConfig",
         "intecomm_visit_schedule.apps.AppConfig",
         "intecomm_ae.apps.AppConfig",

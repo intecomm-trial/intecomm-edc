@@ -150,7 +150,6 @@ INSTALLED_APPS = [
     "intecomm_visit_schedule.apps.AppConfig",
     "intecomm_ae.apps.AppConfig",
     "intecomm_auth.apps.AppConfig",
-    # "intecomm_rando.apps.AppConfig",
     "intecomm_prn.apps.AppConfig",
     "intecomm_export.apps.AppConfig",
     "intecomm_screening.apps.AppConfig",

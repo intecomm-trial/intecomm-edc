@@ -4,6 +4,7 @@ from django.urls.base import reverse
 from django.urls.exceptions import NoReverseMatch
 from django.utils.html import format_html
 from django.utils.translation import gettext as _
+from django_audit_fields import audit_fieldset_tuple
 from edc_constants.constants import YES
 from edc_dashboard.url_names import url_names
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
@@ -29,9 +30,26 @@ class SubjectScreeningAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin)
         "exclusion criteria in order to proceed to the final screening stage"
     )
 
-    # fieldsets = (
-    #     audit_fieldset_tuple,
-    # )
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "report_datetime",
+                    "selection_method",
+                    "hospital_identifier",
+                    "initials",
+                    "gender",
+                    "age_in_years",
+                    "ethnicity",
+                    "qualifying_condition",
+                    "staying_nearby_6",
+                    "consent_ability",
+                )
+            },
+        ),
+        audit_fieldset_tuple,
+    )
 
     list_display = (
         "screening_identifier",
@@ -59,28 +77,10 @@ class SubjectScreeningAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin)
         "reasons_ineligible",
     )
 
-    readonly_fields = (
-        # calculated values
-        # "calculated_bmi_value",
-        # "calculated_egfr_value",
-        # "converted_fbg_value",
-        # "converted_fbg2_value",
-        # "converted_creatinine_value",
-        # "converted_ogtt_value",
-        # "converted_ogtt2_value",
-        # "inclusion_a",
-        # "inclusion_b",
-        # "inclusion_c",
-        # "inclusion_d",
-    )
-
     radio_fields = {
-        "fasted": admin.VERTICAL,
-        "fasting": admin.VERTICAL,
-        "fbg_units": admin.VERTICAL,
         "gender": admin.VERTICAL,
-        "patient_conditions": admin.VERTICAL,
-        "screening_consent": admin.VERTICAL,
+        "qualifying_condition": admin.VERTICAL,
+        "consent_ability": admin.VERTICAL,
         "staying_nearby_6": admin.VERTICAL,
     }
 

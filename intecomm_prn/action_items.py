@@ -1,24 +1,18 @@
-from django.apps import apps as django_apps
 from edc_action_item.action_with_notification import ActionWithNotification
 from edc_action_item.site_action_items import site_action_items
 from edc_adverse_event.constants import DEATH_REPORT_ACTION
-from edc_constants.constants import HIGH_PRIORITY, NOT_SURE, TBD, YES
+from edc_constants.constants import HIGH_PRIORITY, TBD
 from edc_ltfu.constants import LTFU_ACTION
 from edc_offstudy.constants import END_OF_STUDY_ACTION
 from edc_protocol_incident.action_items import (
     ProtocolIncidentAction as BaseProtocolIncidentAction,
 )
 from edc_transfer.action_items import SubjectTransferAction as BaseSubjectTransferAction
-from edc_transfer.constants import SUBJECT_TRANSFER_ACTION
 from edc_visit_schedule.constants import OFFSCHEDULE_ACTION
 
 from intecomm_subject.constants import MISSED_VISIT_ACTION
 
-from .constants import (
-    OFFSTUDY_MEDICATION_ACTION,
-    UNBLINDING_REQUEST_ACTION,
-    UNBLINDING_REVIEW_ACTION,
-)
+from .constants import UNBLINDING_REQUEST_ACTION, UNBLINDING_REVIEW_ACTION
 
 
 class OffscheduleAction(ActionWithNotification):
@@ -35,19 +29,6 @@ class OffscheduleAction(ActionWithNotification):
     admin_site_name = "intecomm_prn_admin"
     priority = HIGH_PRIORITY
     singleton = True
-
-    def get_next_actions(self):
-        pregnancy_notification = (
-            django_apps.get_model("intecomm_prn.pregnancynotification")
-            .objects.filter(subject_identifier=self.subject_identifier)
-            .last()
-        )
-
-        if pregnancy_notification and pregnancy_notification.may_contact in [YES, NOT_SURE]:
-            next_actions = [OFFSTUDY_MEDICATION_ACTION]
-        else:
-            next_actions = [OFFSTUDY_MEDICATION_ACTION, END_OF_STUDY_ACTION]
-        return next_actions
 
 
 class EndOfStudyAction(ActionWithNotification):
@@ -68,24 +49,6 @@ class LossToFollowupAction(ActionWithNotification):
     notification_display_name = " Loss to Follow Up Report"
     parent_action_names = [MISSED_VISIT_ACTION]
     reference_model = "intecomm_prn.losstofollowup"
-    show_link_to_changelist = True
-    show_link_to_add = True
-    admin_site_name = "intecomm_prn_admin"
-    priority = HIGH_PRIORITY
-    singleton = True
-
-
-class OffStudyMedicationAction(ActionWithNotification):
-    name = OFFSTUDY_MEDICATION_ACTION
-    display_name = "Withdrawal Study Medication"
-    notification_display_name = "Withdrawal Study Medication"
-    parent_action_names = [
-        OFFSCHEDULE_ACTION,
-        LTFU_ACTION,
-        SUBJECT_TRANSFER_ACTION,
-        DEATH_REPORT_ACTION,
-    ]
-    reference_model = "intecomm_prn.offstudymedication"
     show_link_to_changelist = True
     show_link_to_add = True
     admin_site_name = "intecomm_prn_admin"
@@ -145,4 +108,3 @@ site_action_items.register(ProtocolIncidentAction)
 site_action_items.register(SubjectTransferAction)
 site_action_items.register(UnblindingRequestAction)
 site_action_items.register(UnblindingReviewAction)
-site_action_items.register(OffStudyMedicationAction)

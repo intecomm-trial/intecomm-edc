@@ -2,7 +2,7 @@ from django.db import models
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE, YES
 from edc_dx_review.model_mixins.initial_review import InitialReviewModelMixin
-from edc_lab_results.model_mixins import GlucoseModelMixin
+from edc_glucose.model_mixins import GlucoseModelMixin
 from edc_model import duration_to_date
 from edc_model.models import BaseUuidModel, DurationYMDField
 

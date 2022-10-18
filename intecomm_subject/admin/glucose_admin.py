@@ -17,9 +17,10 @@ class GlucoseAdmin(CrfModelAdmin):
             "Blood Sugar Measurement",
             {
                 "fields": (
-                    "glucose_fasted",
+                    "glucose_fasting",
+                    "glucose_fasting_duration_str",
                     "glucose_date",
-                    "glucose",
+                    "glucose_value",
                     "glucose_quantifier",
                     "glucose_units",
                 ),
@@ -31,6 +32,6 @@ class GlucoseAdmin(CrfModelAdmin):
 
     radio_fields = {
         "crf_status": admin.VERTICAL,
-        "glucose_fasted": admin.VERTICAL,
         "glucose_units": admin.VERTICAL,
+        "glucose_fasting": admin.VERTICAL,
     }

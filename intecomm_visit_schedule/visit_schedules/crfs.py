@@ -31,7 +31,6 @@ crfs_d1 = FormsCollection(
     Crf(show_order=155, model="intecomm_subject.drugrefillhiv", required=False),
     Crf(show_order=160, model="intecomm_subject.otherbaselinedata"),
     Crf(show_order=165, model="intecomm_subject.complicationsbaseline"),
-    Crf(show_order=170, model="intecomm_subject.nextappointment"),
     name="day1",
 )
 
@@ -53,7 +52,6 @@ crfs_1m = FormsCollection(
     Crf(show_order=195, model="intecomm_subject.htnmedicationadherence", required=False),
     Crf(show_order=200, model="intecomm_subject.complicationsfollowup", required=False),
     Crf(show_order=220, model="intecomm_subject.familyhistory"),
-    Crf(show_order=230, model="intecomm_subject.nextappointment"),
     name="2m",
 )
 crfs_2m = FormsCollection(
@@ -73,7 +71,6 @@ crfs_2m = FormsCollection(
     Crf(show_order=190, model="intecomm_subject.dmmedicationadherence", required=False),
     Crf(show_order=195, model="intecomm_subject.htnmedicationadherence", required=False),
     Crf(show_order=200, model="intecomm_subject.complicationsfollowup", required=False),
-    Crf(show_order=230, model="intecomm_subject.nextappointment"),
     name="2m",
 )
 crfs_3m = FormsCollection(
@@ -93,7 +90,6 @@ crfs_3m = FormsCollection(
     Crf(show_order=190, model="intecomm_subject.dmmedicationadherence", required=False),
     Crf(show_order=195, model="intecomm_subject.htnmedicationadherence", required=False),
     Crf(show_order=200, model="intecomm_subject.complicationsfollowup", required=False),
-    Crf(show_order=230, model="intecomm_subject.nextappointment"),
     name="3m",
 )
 crfs_4m = FormsCollection(
@@ -113,7 +109,6 @@ crfs_4m = FormsCollection(
     Crf(show_order=190, model="intecomm_subject.dmmedicationadherence", required=False),
     Crf(show_order=195, model="intecomm_subject.htnmedicationadherence", required=False),
     Crf(show_order=200, model="intecomm_subject.complicationsfollowup", required=False),
-    Crf(show_order=230, model="intecomm_subject.nextappointment"),
     name="4m",
 )
 crfs_5m = FormsCollection(
@@ -133,7 +128,6 @@ crfs_5m = FormsCollection(
     Crf(show_order=190, model="intecomm_subject.dmmedicationadherence", required=False),
     Crf(show_order=195, model="intecomm_subject.htnmedicationadherence", required=False),
     Crf(show_order=200, model="intecomm_subject.complicationsfollowup", required=False),
-    Crf(show_order=230, model="intecomm_subject.nextappointment"),
     name="5m",
 )
 crfs_6m = FormsCollection(
@@ -153,7 +147,6 @@ crfs_6m = FormsCollection(
     Crf(show_order=190, model="intecomm_subject.dmmedicationadherence", required=False),
     Crf(show_order=195, model="intecomm_subject.htnmedicationadherence", required=False),
     Crf(show_order=200, model="intecomm_subject.complicationsfollowup", required=False),
-    Crf(show_order=230, model="intecomm_subject.nextappointment"),
     name="6m",
 )
 crfs_7m = FormsCollection(
@@ -173,7 +166,6 @@ crfs_7m = FormsCollection(
     Crf(show_order=190, model="intecomm_subject.dmmedicationadherence", required=False),
     Crf(show_order=195, model="intecomm_subject.htnmedicationadherence", required=False),
     Crf(show_order=200, model="intecomm_subject.complicationsfollowup", required=False),
-    Crf(show_order=230, model="intecomm_subject.nextappointment"),
     name="7m",
 )
 crfs_8m = FormsCollection(
@@ -193,7 +185,6 @@ crfs_8m = FormsCollection(
     Crf(show_order=190, model="intecomm_subject.dmmedicationadherence", required=False),
     Crf(show_order=195, model="intecomm_subject.htnmedicationadherence", required=False),
     Crf(show_order=200, model="intecomm_subject.complicationsfollowup", required=False),
-    Crf(show_order=230, model="intecomm_subject.nextappointment"),
     name="8m",
 )
 crfs_9m = FormsCollection(
@@ -213,7 +204,6 @@ crfs_9m = FormsCollection(
     Crf(show_order=190, model="intecomm_subject.dmmedicationadherence", required=False),
     Crf(show_order=195, model="intecomm_subject.htnmedicationadherence", required=False),
     Crf(show_order=200, model="intecomm_subject.complicationsfollowup", required=False),
-    Crf(show_order=230, model="intecomm_subject.nextappointment"),
     name="9m",
 )
 crfs_10m = FormsCollection(
@@ -233,7 +223,6 @@ crfs_10m = FormsCollection(
     Crf(show_order=190, model="intecomm_subject.dmmedicationadherence", required=False),
     Crf(show_order=195, model="intecomm_subject.htnmedicationadherence", required=False),
     Crf(show_order=200, model="intecomm_subject.complicationsfollowup", required=False),
-    Crf(show_order=230, model="intecomm_subject.nextappointment"),
     name="10m",
 )
 crfs_11m = FormsCollection(
@@ -253,7 +242,6 @@ crfs_11m = FormsCollection(
     Crf(show_order=190, model="intecomm_subject.dmmedicationadherence", required=False),
     Crf(show_order=195, model="intecomm_subject.htnmedicationadherence", required=False),
     Crf(show_order=200, model="intecomm_subject.complicationsfollowup", required=False),
-    Crf(show_order=230, model="intecomm_subject.nextappointment"),
     name="11m",
 )
 crfs_12m = FormsCollection(

@@ -26,13 +26,14 @@ class DmInitialReviewAdmin(CrfModelAdmin):
             },
         ),
         (
-            "Blood Sugar Measurement",
+            "Fasting Blood Sugar Measurement",
             {
                 "fields": (
                     "glucose_performed",
-                    "glucose_fasted",
+                    "glucose_fasting",
+                    "glucose_fasting_duration_str",
                     "glucose_date",
-                    "glucose",
+                    "glucose_value",
                     "glucose_quantifier",
                     "glucose_units",
                 ),
@@ -46,6 +47,7 @@ class DmInitialReviewAdmin(CrfModelAdmin):
         "crf_status": admin.VERTICAL,
         "managed_by": admin.VERTICAL,
         "glucose_performed": admin.VERTICAL,
-        "glucose_fasted": admin.VERTICAL,
+        "glucose_quantifier": admin.VERTICAL,
         "glucose_units": admin.VERTICAL,
+        "glucose_fasting": admin.VERTICAL,
     }

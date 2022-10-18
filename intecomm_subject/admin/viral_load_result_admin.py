@@ -16,12 +16,12 @@ class ViralLoadResultAdmin(CrfModelAdmin):
             None,
             {"fields": ("subject_visit", "report_datetime")},
         ),
-        ("Result", {"fields": ("drawn_date", "result", "quantifier")}),
+        ("Result", {"fields": ("drawn_date", "vl_value", "vl_quantifier")}),
         crf_status_fieldset_tuple,
         audit_fieldset_tuple,
     )
 
     radio_fields = {
-        "quantifier": admin.VERTICAL,
+        "vl_quantifier": admin.VERTICAL,
         "crf_status": admin.VERTICAL,
     }

@@ -1,4 +1,4 @@
-from edc_lab_results.model_mixins import GlucoseModelMixin
+from edc_glucose.model_mixins import GlucoseModelMixin
 from edc_model.models import BaseUuidModel
 
 from ..model_mixins import CrfModelMixin

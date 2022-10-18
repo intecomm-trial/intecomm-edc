@@ -7,6 +7,7 @@ from edc_search.model_mixins import SearchSlugManager
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
 from edc_utils import get_utcnow
 
+from ..choices import REFUSAL_REASONS
 from .subject_screening import SubjectScreening
 
 
@@ -27,11 +28,10 @@ class SubjectRefusal(NonUniqueSubjectIdentifierModelMixin, SiteModelMixin, BaseU
         verbose_name="Report Date and Time", default=get_utcnow
     )
 
-    # TODO: get choices for Reason for refusal to join
     reason = models.CharField(
         verbose_name="Reason for refusal to join",
         max_length=25,
-        # choices=REFUSAL_REASONS,
+        choices=REFUSAL_REASONS,
     )
 
     other_reason = OtherCharField()
