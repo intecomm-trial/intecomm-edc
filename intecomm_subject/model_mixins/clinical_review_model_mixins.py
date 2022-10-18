@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.safestring import mark_safe
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
 from edc_model import models as edc_models
@@ -58,9 +57,7 @@ class ClinicalReviewBaselineHivModelMixin(models.Model):
     )
 
     hiv_dx = models.CharField(
-        verbose_name=mark_safe(
-            "Has the patient ever tested <U>positive</U> for HIV infection?"
-        ),
+        verbose_name="Has the patient ever tested positive for HIV infection?",
         max_length=15,
         choices=YES_NO_NA,
         default=NOT_APPLICABLE,
@@ -106,7 +103,7 @@ class ClinicalReviewBaselineHtnModelMixin(models.Model):
     )
 
     htn_dx = models.CharField(
-        verbose_name=mark_safe("Has the patient ever been diagnosed with Hypertension"),
+        verbose_name="Has the patient ever been diagnosed with Hypertension",
         max_length=15,
         choices=YES_NO_NA,
         default=NOT_APPLICABLE,
@@ -152,7 +149,7 @@ class ClinicalReviewBaselineDmModelMixin(models.Model):
     )
 
     dm_dx = models.CharField(
-        verbose_name=mark_safe("Have you ever been diagnosed with Diabetes"),
+        verbose_name="Have you ever been diagnosed with Diabetes",
         max_length=15,
         choices=YES_NO_NA,
         default=NOT_APPLICABLE,

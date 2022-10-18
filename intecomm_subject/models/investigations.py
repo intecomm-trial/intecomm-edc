@@ -1,14 +1,15 @@
 from django.db import models
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
-from edc_model import models as edc_models
+from edc_model.models import BaseUuidModel
+from edc_model_fields.fields import OtherCharField
 
 from intecomm_lists.models import ReasonsForTesting
 
 from ..model_mixins import CrfModelMixin
 
 
-class Investigations(CrfModelMixin, edc_models.BaseUuidModel):
+class Investigations(CrfModelMixin, BaseUuidModel):
 
     """Model not used"""
 
@@ -39,8 +40,8 @@ class Investigations(CrfModelMixin, edc_models.BaseUuidModel):
         ReasonsForTesting, verbose_name="Why was the patient tested?", blank=True
     )
 
-    reason_other = edc_models.OtherCharField()
+    reason_other = OtherCharField()
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Investigations"
         verbose_name_plural = "Investigations"

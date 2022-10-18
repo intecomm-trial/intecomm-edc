@@ -8,3 +8,8 @@
        {% if p2_enabled %}href="{{ href_p2 }}"{% else %} disabled {% endif %}>
     <i class="fas fa-pencil-alt fa-sm"></i> P2
 </a>
+<a id="subjectscreening_change_{{ screening_identifier }}" title="{{ title }}" role="button"
+   class="btn btn-sm btn-{% if p3 == YES %}success{% elif p1 == YES and p2 == YES and p3 == TBD %}warning{% else %}default{% endif %}"
+       {% if p3_enabled %}href="{{ href_p3 }}"{% else %} disabled {% endif %}>
+    <i class="fas fa-pencil-alt fa-sm"></i> P3
+</a>

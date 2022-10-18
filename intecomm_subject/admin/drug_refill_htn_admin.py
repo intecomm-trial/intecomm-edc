@@ -1,24 +1,18 @@
 from django.contrib import admin
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_crf.admin import crf_status_fieldset_tuple
-from edc_form_label.form_label_modeladmin_mixin import FormLabelModelAdminMixin
-from edc_model_admin import SimpleHistoryAdmin, TabularInlineMixin
+from edc_model_admin.mixins import TabularInlineMixin
 
 from ..admin_site import intecomm_subject_admin
-
-# from ..forms import DrugRefillHtnForm
 from ..models import DrugRefillHtn, DrugSupplyHtn
-from .modeladmin_mixins import CrfModelAdminMixin, DrugSupplyInlineMixin
-
-# from intecomm_subject.forms import DrugSupplyHtnForm
+from .modeladmin_mixins import CrfModelAdmin, DrugSupplyInlineMixin
 
 
 class DrugSupplyHtnInline(DrugSupplyInlineMixin, TabularInlineMixin, admin.TabularInline):
     model = DrugSupplyHtn
     # form = DrugSupplyHtnForm
     min_num = 1
-    insert_after = "return_in_days"
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj=None, **kwargs)
@@ -27,10 +21,10 @@ class DrugSupplyHtnInline(DrugSupplyInlineMixin, TabularInlineMixin, admin.Tabul
 
 
 @admin.register(DrugRefillHtn, site=intecomm_subject_admin)
-class DrugRefillHtnAdmin(CrfModelAdminMixin, FormLabelModelAdminMixin, SimpleHistoryAdmin):
+class DrugRefillHtnAdmin(CrfModelAdmin):
     # form = DrugRefillHtnForm
 
-    additional_instructions = mark_safe(
+    additional_instructions = format_html(
         '<span style="color:orange">Note: Medications CRF must be completed first.</span>'
     )
 

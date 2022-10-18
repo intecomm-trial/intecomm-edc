@@ -1,9 +1,10 @@
-from edc_model import models as edc_models
+from edc_lab_results.model_mixins import GlucoseModelMixin
+from edc_model.models import BaseUuidModel
 
-from ..model_mixins import CrfModelMixin, GlucoseModelMixin
+from ..model_mixins import CrfModelMixin
 
 
-class Glucose(GlucoseModelMixin, CrfModelMixin, edc_models.BaseUuidModel):
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+class Glucose(GlucoseModelMixin, CrfModelMixin, BaseUuidModel):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Glucose"
         verbose_name_plural = "Glucose"

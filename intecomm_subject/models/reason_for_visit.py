@@ -1,14 +1,15 @@
 from django.db import models
 from edc_constants.choices import YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
-from edc_model import models as edc_models
+from edc_model.models import BaseUuidModel
+from edc_model_fields.fields import OtherCharField
 
 from intecomm_lists.models import ClinicServices, HealthServices
 
 from ..model_mixins import CrfModelMixin
 
 
-class ReasonForVisit(CrfModelMixin, edc_models.BaseUuidModel):
+class ReasonForVisit(CrfModelMixin, BaseUuidModel):
 
     health_services = models.ManyToManyField(
         HealthServices,
@@ -22,7 +23,7 @@ class ReasonForVisit(CrfModelMixin, edc_models.BaseUuidModel):
         verbose_name="Why is the patient at the clinic?",
     )
 
-    clinic_services_other = edc_models.OtherCharField()
+    clinic_services_other = OtherCharField()
 
     refill_hiv = models.CharField(
         verbose_name="Is the patient refilling HIV medications?",
@@ -45,6 +46,6 @@ class ReasonForVisit(CrfModelMixin, edc_models.BaseUuidModel):
         default=NOT_APPLICABLE,
     )
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Reason for Visit"
         verbose_name_plural = "Reason for Visits"

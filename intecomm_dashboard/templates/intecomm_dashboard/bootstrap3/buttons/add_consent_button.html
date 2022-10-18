@@ -3,7 +3,7 @@
 <a id="subjectconsent_add_{{ screening_identifier }}"
  	title="{{ title }}"
     class="btn btn-warning btn-sm" data-toggle="tooltip"  data-placement="right"
-        {% if perms.intecomm_consent.view_subjectconsent or perms.intecomm_consent.change_subjectconsent %}
+        {% if perms.meta_consent.view_subjectconsent or perms.meta_consent.change_subjectconsent %}
         	href="{{ href }}"
         {% else %}
         	disabled

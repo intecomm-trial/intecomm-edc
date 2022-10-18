@@ -1,12 +1,13 @@
 from django.db import models
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
-from edc_model import models as edc_models
+from edc_model import duration_to_date
+from edc_model.models import BaseUuidModel, DurationYMDField
 
 from ..model_mixins import CrfModelMixin
 
 
-class ComplicationsBaseline(CrfModelMixin, edc_models.BaseUuidModel):
+class ComplicationsBaseline(CrfModelMixin, BaseUuidModel):
 
     # stroke
     stroke = models.CharField(
@@ -17,7 +18,7 @@ class ComplicationsBaseline(CrfModelMixin, edc_models.BaseUuidModel):
         blank=False,
     )
 
-    stroke_ago = edc_models.DurationYMDField(
+    stroke_ago = DurationYMDField(
         verbose_name="If yes, how long ago",
         null=True,
         blank=True,
@@ -39,7 +40,7 @@ class ComplicationsBaseline(CrfModelMixin, edc_models.BaseUuidModel):
         blank=False,
     )
 
-    heart_attack_ago = edc_models.DurationYMDField(
+    heart_attack_ago = DurationYMDField(
         verbose_name="If yes, how long ago",
         null=True,
         blank=True,
@@ -61,7 +62,7 @@ class ComplicationsBaseline(CrfModelMixin, edc_models.BaseUuidModel):
         blank=False,
     )
 
-    renal_disease_ago = edc_models.DurationYMDField(
+    renal_disease_ago = DurationYMDField(
         verbose_name="If yes, how long ago",
         null=True,
         blank=True,
@@ -82,7 +83,7 @@ class ComplicationsBaseline(CrfModelMixin, edc_models.BaseUuidModel):
         blank=False,
     )
 
-    vision_ago = edc_models.DurationYMDField(
+    vision_ago = DurationYMDField(
         verbose_name="If yes, how long ago",
         null=True,
         blank=True,
@@ -104,7 +105,7 @@ class ComplicationsBaseline(CrfModelMixin, edc_models.BaseUuidModel):
         blank=False,
     )
 
-    numbness_ago = edc_models.DurationYMDField(
+    numbness_ago = DurationYMDField(
         verbose_name="If yes, how long ago",
         null=True,
         blank=True,
@@ -126,7 +127,7 @@ class ComplicationsBaseline(CrfModelMixin, edc_models.BaseUuidModel):
         blank=False,
     )
 
-    foot_ulcers_ago = edc_models.DurationYMDField(
+    foot_ulcers_ago = DurationYMDField(
         verbose_name="If yes, how long ago",
         null=True,
         blank=True,
@@ -163,13 +164,13 @@ class ComplicationsBaseline(CrfModelMixin, edc_models.BaseUuidModel):
         ]
         for complication in complications:
             if getattr(self, f"{complication}_ago", None):
-                duration = edc_models.duration_to_date(
+                duration = duration_to_date(
                     getattr(self, f"{complication}_ago", None), self.report_datetime
                 )
                 setattr(self, f"{complication}_estimated_date", duration)
 
         super().save(*args, **kwargs)
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Complications: Baseline"
         verbose_name_plural = "Complications: Baseline"

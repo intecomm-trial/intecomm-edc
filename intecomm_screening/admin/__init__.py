@@ -1,4 +1,2 @@
-from .screening_part_one_admin import ScreeningPartOneAdmin
-from .screening_part_two_admin import ScreeningPartTwoAdmin
 from .subject_refusal_admin import SubjectRefusalAdmin
 from .subject_screening_admin import SubjectScreeningAdmin

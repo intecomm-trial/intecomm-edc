@@ -15,10 +15,6 @@ from .drug_supply_htn import DrugSupplyHtn
 from .family_history import FamilyHistory
 from .glucose import Glucose
 from .hba1c_result import Hba1cResult
-
-# from .health_economics import HealthEconomics
-# from .health_economics_revised import HealthEconomicsRevised
-# from .health_economics_revised_two import HealthEconomicsRevisedTwo
 from .hiv_initial_review import HivInitialReview
 from .hiv_medication_adherence import HivMedicationAdherence
 from .hiv_review import HivReview
@@ -28,11 +24,7 @@ from .htn_review import HtnReview
 from .indicators import Indicators
 from .investigations import Investigations
 from .medications import Medications
-from .next_appointment import NextAppointment
 from .other_baseline_data import OtherBaselineData
-from .proxy_models import ArvRegimens
-
-# from .reason_for_visit import ReasonForVisit
 from .subject_requisition import SubjectRequisition
 from .subject_visit import SubjectVisit
 from .subject_visit_missed import SubjectVisitMissed

@@ -1,12 +1,13 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from edc_model import models as edc_models
+from edc_model.models import BaseUuidModel
+
+from intecomm_lists.models import ArvRegimens
 
 from ..model_mixins import CrfModelMixin, DrugRefillModelMixin
-from .proxy_models import ArvRegimens
 
 
-class DrugRefillHiv(DrugRefillModelMixin, CrfModelMixin, edc_models.BaseUuidModel):
+class DrugRefillHiv(DrugRefillModelMixin, CrfModelMixin, BaseUuidModel):
 
     rx = models.ForeignKey(
         ArvRegimens,
@@ -35,6 +36,6 @@ class DrugRefillHiv(DrugRefillModelMixin, CrfModelMixin, edc_models.BaseUuidMode
         ),
     )
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Drug Refill: HIV"
         verbose_name_plural = "Drug Refills: HIV"

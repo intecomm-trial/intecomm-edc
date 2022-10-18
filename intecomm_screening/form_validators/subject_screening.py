@@ -1,12 +1,12 @@
 from django import forms
-from edc_consent.form_validators import ConsentFormValidatorMixin
+from edc_consent.form_validators import SubjectConsentFormValidatorMixin
 from edc_constants.constants import YES
 from edc_form_validators import FormValidator
 
 
-class SubjectScreeningFormValidator(ConsentFormValidatorMixin, FormValidator):
+class SubjectScreeningFormValidator(SubjectConsentFormValidatorMixin, FormValidator):
     def clean(self):
-        self.get_consent_for_period_or_raise(self.cleaned_data.get("report_datetime"))
+        self.get_consent_for_period_or_raise()
 
         if (
             not self.cleaned_data.get("screening_consent")

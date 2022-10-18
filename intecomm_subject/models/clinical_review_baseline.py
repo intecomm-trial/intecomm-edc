@@ -1,4 +1,4 @@
-from edc_model import models as edc_models
+from edc_model.models import BaseUuidModel
 from edc_visit_schedule.constants import DAY1
 
 from ..model_mixins import (
@@ -22,7 +22,7 @@ class ClinicalReviewBaseline(
     ClinicalReviewBaselineDmModelMixin,
     ClinicalReviewModelMixin,
     CrfModelMixin,
-    edc_models.BaseUuidModel,
+    BaseUuidModel,
 ):
     def save(self, *args, **kwargs):
         if (
@@ -30,10 +30,11 @@ class ClinicalReviewBaseline(
             and self.subject_visit.visit_code_sequence != 0
         ):
             raise ClinicalReviewBaselineError(
-                f"This model is only valid at baseline. Got `{self.subject_visit}`."
+                f"This model is only valid at baseline. Got `{self.subject_visit}`. "
+                "Perhaps cathc this in the form."
             )
         super().save(*args, **kwargs)
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Clinical Review: Baseline"
         verbose_name_plural = "Clinical Review: Baseline"

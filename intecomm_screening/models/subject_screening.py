@@ -1,12 +1,10 @@
 from edc_model.models import BaseUuidModel
-from edc_screening.model_mixins import ScreeningModelMixin
+from edc_screening.model_mixins import EligibilityModelMixin, ScreeningModelMixin
 from edc_screening.screening_identifier import (
     ScreeningIdentifier as BaseScreeningIdentifier,
 )
 
-from .eligibility_model_mixin import EligibilityModelMixin
-from .part_one_fields_model_mixin import PartOneFieldsModelMixin
-from .part_two_fields_model_mixin import PartTwoFieldsModelMixin
+from ..eligibility import ScreeningEligibility
 
 
 class SubjectScreeningModelError(Exception):
@@ -19,14 +17,13 @@ class ScreeningIdentifier(BaseScreeningIdentifier):
 
 
 class SubjectScreening(
-    PartOneFieldsModelMixin,
-    PartTwoFieldsModelMixin,
     EligibilityModelMixin,
     ScreeningModelMixin,
     BaseUuidModel,
 ):
 
     identifier_cls = ScreeningIdentifier
+    eligibility_cls = ScreeningEligibility
 
     class Meta:
         verbose_name = "Subject Screening"

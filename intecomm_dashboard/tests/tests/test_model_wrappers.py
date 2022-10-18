@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, tag  # noqa
 from edc_appointment.models import Appointment
 from edc_model_wrapper.tests import ModelWrapperTestHelper
 from edc_subject_model_wrappers import (
@@ -7,12 +7,12 @@ from edc_subject_model_wrappers import (
     SubjectLocatorModelWrapper,
     SubjectVisitModelWrapper,
 )
+from meta_consent.models import SubjectConsent
+from meta_screening.models import SubjectScreening
+from meta_screening.tests.meta_test_case_mixin import MetaTestCaseMixin
+from meta_subject.models import SubjectVisit
 
-from intecomm_consent.models import SubjectConsent
 from intecomm_dashboard.model_wrappers import SubjectScreeningModelWrapper
-from intecomm_screening.models import SubjectScreening
-from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin
-from intecomm_subject.models import SubjectVisit
 
 
 class SubjectModelWrapperTestHelper(ModelWrapperTestHelper):
@@ -23,7 +23,7 @@ class ScreeningModelWrapperTestHelper(ModelWrapperTestHelper):
     dashboard_url = "/screening_listboard/"
 
 
-class TestModelWrappers(IntecommTestCaseMixin, TestCase):
+class TestModelWrappers(MetaTestCaseMixin, TestCase):
 
     model_wrapper_helper_cls = SubjectModelWrapperTestHelper
 

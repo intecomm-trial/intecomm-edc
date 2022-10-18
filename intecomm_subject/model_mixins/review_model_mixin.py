@@ -7,7 +7,7 @@ class ReviewModelMixin(models.Model):
 
     care_delivery = models.CharField(
         verbose_name=(
-            "Was care for this `condition` delivered " "in an integrated care clinic today?"
+            "Was care for this `condition` delivered in an integrated care clinic today?"
         ),
         max_length=25,
         choices=YES_NO_NA,

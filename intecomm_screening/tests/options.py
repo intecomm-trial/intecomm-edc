@@ -8,15 +8,13 @@ from edc_reportable import MILLIMOLES_PER_LITER
 from faker import Faker
 from pyparsing import alphas
 
-from intecomm_screening.forms import get_part_one_fields, get_part_two_fields
-
 fake = Faker()
 now = arrow.get(datetime(2019, 5, 5), "UTC").datetime
 tomorrow = now + relativedelta(days=1)
 
 
-def get_part_one_eligible_options():
-    options = dict(
+def get_eligible_options() -> dict:
+    return dict(
         age_in_years=25,
         continue_part_two=YES,
         gender=FEMALE,
@@ -27,25 +25,12 @@ def get_part_one_eligible_options():
         appt_datetime=now,
         screening_consent=YES,
         staying_nearby_6=YES,
-    )
-    if fld := [f for f in get_part_one_fields() if f not in options]:
-        raise TypeError(f"Missing part one fields. Got {fld}.")
-    return options
-
-
-def get_part_two_eligible_options(report_datetime: datetime = None):
-    options = dict(
         dia_blood_pressure=80,
         fasting=YES,
         fasting_duration_str="8h",
         fbg_datetime=now,
         fbg_units=MILLIMOLES_PER_LITER,
         fbg_value=11.0,
-        part_two_report_datetime=report_datetime or now,
-        reasons_ineligible_part_two=None,
-        reasons_unsuitable=None,
         sys_blood_pressure=120,
+        reasons_unsuitable=None,
     )
-    if fld := [f for f in get_part_two_fields() if f not in options]:
-        raise TypeError(f"Missing part two fields. Got {fld}.")
-    return options

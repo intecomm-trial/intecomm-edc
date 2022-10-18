@@ -1,11 +1,11 @@
 from django.contrib import admin
-from edc_model_admin import SimpleHistoryAdmin, audit_fieldset_tuple
+from django_audit_fields.admin import audit_fieldset_tuple
+from edc_model_admin.history import SimpleHistoryAdmin
 from edc_visit_schedule.fieldsets import visit_schedule_fieldset_tuple
 from edc_visit_tracking.modeladmin_mixins import VisitModelAdminMixin
 
 from ..admin_site import intecomm_subject_admin
-
-# from ..forms import SubjectVisitForm
+from ..forms import SubjectVisitForm
 from ..models import SubjectVisit
 from .modeladmin_mixins import ModelAdminMixin
 
@@ -15,7 +15,7 @@ class SubjectVisitAdmin(VisitModelAdminMixin, ModelAdminMixin, SimpleHistoryAdmi
 
     show_dashboard_in_list_display_pos = 2
 
-    # form = SubjectVisitForm
+    form = SubjectVisitForm
 
     fieldsets = (
         (
@@ -25,11 +25,8 @@ class SubjectVisitAdmin(VisitModelAdminMixin, ModelAdminMixin, SimpleHistoryAdmi
                     "appointment",
                     "report_datetime",
                     "reason",
-                    # "reason_unscheduled",
-                    # "reason_unscheduled_other",
-                    "clinic_services",
-                    "clinic_services_other",
-                    "health_services",
+                    "reason_unscheduled",
+                    "reason_unscheduled_other",
                     "info_source",
                     "info_source_other",
                     "comments",
@@ -45,8 +42,3 @@ class SubjectVisitAdmin(VisitModelAdminMixin, ModelAdminMixin, SimpleHistoryAdmi
         "reason_unscheduled": admin.VERTICAL,
         "info_source": admin.VERTICAL,
     }
-
-    filter_horizontal = [
-        # "clinic_services",
-        # "health_services",
-    ]

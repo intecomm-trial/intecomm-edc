@@ -1,27 +1,15 @@
-from edc_identifier.managers import SubjectIdentifierManager
-from edc_model.models import BaseUuidModel, HistoricalRecords
-from edc_visit_schedule.model_mixins import CurrentSiteManager, OffScheduleModelMixin
+from edc_action_item.models import ActionModelMixin
+from edc_model.models import BaseUuidModel
+from edc_sites.models import SiteModelMixin
+from edc_visit_schedule.constants import OFFSCHEDULE_ACTION
+from edc_visit_schedule.model_mixins import OffScheduleModelMixin
 
 
-class OffSchedule(OffScheduleModelMixin, BaseUuidModel):
+class OffSchedule(SiteModelMixin, ActionModelMixin, OffScheduleModelMixin, BaseUuidModel):
 
-    on_site = CurrentSiteManager()
+    action_name = OFFSCHEDULE_ACTION
+    offschedule_compare_dates_as_datetimes = False
 
-    objects = SubjectIdentifierManager()
-
-    history = HistoricalRecords()
-
-    class Meta(OffScheduleModelMixin.Meta):
-        pass
-
-
-class OffSchedulePregnancy(OffScheduleModelMixin, BaseUuidModel):
-
-    on_site = CurrentSiteManager()
-
-    objects = SubjectIdentifierManager()
-
-    history = HistoricalRecords()
-
-    class Meta(OffScheduleModelMixin.Meta):
-        pass
+    class Meta(OffScheduleModelMixin.Meta, BaseUuidModel.Meta):
+        verbose_name = "Off-schedule"
+        verbose_name_plural = "Off-schedule"

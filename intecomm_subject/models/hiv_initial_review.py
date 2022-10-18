@@ -1,12 +1,11 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.utils.safestring import mark_safe
 from edc_constants.choices import YES_NO, YES_NO_NA, YES_NO_PENDING_NA
 from edc_constants.constants import NOT_APPLICABLE, YES
 from edc_dx_review.model_mixins.initial_review import InitialReviewModelMixin
 from edc_lab.choices import VL_QUANTIFIER_NA
-from edc_model import models as edc_models
-from edc_model import utils as edc_model_utils
+from edc_model import duration_to_date
+from edc_model.models import BaseUuidModel, DurationYMDField
 from edc_model.validators import date_not_future
 from edc_reportable import CELLS_PER_MILLIMETER_CUBED_DISPLAY, COPIES_PER_MILLILITER
 
@@ -14,7 +13,7 @@ from ..choices import CARE_ACCESS
 from ..model_mixins import CrfModelMixin
 
 
-class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, edc_models.BaseUuidModel):
+class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, BaseUuidModel):
 
     receives_care = models.CharField(
         verbose_name="Is the patient receiving care for HIV?",
@@ -30,7 +29,7 @@ class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, edc_models.BaseUu
     )
 
     clinic_other = models.CharField(
-        verbose_name=mark_safe("If <u>not</u> attending here, where does the patient attend?"),
+        verbose_name="If not attending here, where does the patient attend?",
         max_length=50,
         null=True,
         blank=True,
@@ -43,7 +42,7 @@ class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, edc_models.BaseUu
         default=YES,
     )
 
-    arv_initiation_ago = edc_models.DurationYMDField(
+    arv_initiation_ago = DurationYMDField(
         verbose_name="How long ago did the patient start ART?",
         null=True,
         blank=True,
@@ -127,11 +126,9 @@ class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, edc_models.BaseUu
 
     def save(self, *args, **kwargs):
         if self.dx_ago:
-            self.dx_estimated_date = edc_model_utils.duration_to_date(
-                self.dx_ago, self.report_datetime
-            )
+            self.dx_estimated_date = duration_to_date(self.dx_ago, self.report_datetime)
         if self.arv_initiation_ago:
-            self.arv_initiation_estimated_date = edc_model_utils.duration_to_date(
+            self.arv_initiation_estimated_date = duration_to_date(
                 self.arv_initiation_ago, self.report_datetime
             )
         super().save(*args, **kwargs)
@@ -140,6 +137,6 @@ class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, edc_models.BaseUu
     def best_art_initiation_date(self):
         return self.arv_initiation_actual_date or self.arv_initiation_estimated_date
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "HIV Initial Review"
         verbose_name_plural = "HIV Initial Reviews"

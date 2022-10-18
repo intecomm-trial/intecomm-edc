@@ -1,4 +1,5 @@
 from django.apps import apps as django_apps
+from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
@@ -7,15 +8,11 @@ from edc_action_item.models import ActionModelMixin
 from edc_consent.field_mixins import ReviewFieldsMixin
 from edc_constants.constants import ABNORMAL
 from edc_identifier.managers import SubjectIdentifierManager
-from edc_identifier.model_mixins import (
-    TrackingModelMixin,
-    UniqueSubjectIdentifierModelMixin,
-)
+from edc_identifier.model_mixins import UniqueSubjectIdentifierModelMixin
 from edc_model.models import BaseUuidModel
 from edc_registration.models import RegisteredSubject
 from edc_sites.models import SiteModelMixin
 from edc_utils import get_utcnow
-from edc_visit_tracking.managers import CurrentSiteManager
 
 from ..action_items import RECONSENT_ACTION
 from .model_mixins import SearchSlugModelMixin
@@ -27,7 +24,6 @@ class SubjectReconsent(
     ReviewFieldsMixin,
     SearchSlugModelMixin,
     ActionModelMixin,
-    TrackingModelMixin,
     BaseUuidModel,
 ):
 
@@ -37,9 +33,9 @@ class SubjectReconsent(
 
     subject_identifier_cls = None
 
-    subject_screening_model = "intecomm_screening.subjectscreening"
+    subject_screening_model = "meta_screening.subjectscreening"
 
-    subject_consent_model = "intecomm_consent.subjectconsent"
+    subject_consent_model = "meta_consent.subjectconsent"
 
     tracking_identifier_prefix = "SR"
 
@@ -77,7 +73,10 @@ class SubjectReconsent(
         super().save(*args, **kwargs)
 
     def natural_key(self):
-        return (self.subject_identifier, self.version)
+        return (
+            self.subject_identifier,
+            self.version,
+        )
 
     def get_subject_consent(self, screening_identifier=None):
         """Returns the first subject consent model instance."""

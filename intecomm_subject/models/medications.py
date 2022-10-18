@@ -1,12 +1,12 @@
 from django.db import models
 from edc_constants.choices import YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
-from edc_model import models as edc_models
+from edc_model.models import BaseUuidModel
 
 from ..model_mixins import CrfModelMixin
 
 
-class Medications(CrfModelMixin, edc_models.BaseUuidModel):
+class Medications(CrfModelMixin, BaseUuidModel):
 
     refill_hiv = models.CharField(
         verbose_name="Is the patient filling / refilling HIV medications?",
@@ -41,6 +41,6 @@ class Medications(CrfModelMixin, edc_models.BaseUuidModel):
         ),
     )
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Medications"
         verbose_name_plural = "Medications"

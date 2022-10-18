@@ -1,12 +1,12 @@
 from django.db import models
 from edc_constants.choices import YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
-from edc_model import models as edc_models
+from edc_model.models import BaseUuidModel
 
 from ..model_mixins import CrfModelMixin, ReviewModelMixin
 
 
-class HivReview(ReviewModelMixin, CrfModelMixin, edc_models.BaseUuidModel):
+class HivReview(ReviewModelMixin, CrfModelMixin, BaseUuidModel):
 
     test_date = models.DateField(
         verbose_name="Date tested for HIV",
@@ -35,6 +35,6 @@ class HivReview(ReviewModelMixin, CrfModelMixin, edc_models.BaseUuidModel):
         blank=True,
     )
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "HIV Review"
         verbose_name_plural = "HIV Review"

@@ -4,17 +4,16 @@ from django.urls.base import reverse
 from django.urls.exceptions import NoReverseMatch
 from django.utils.html import format_html
 from django.utils.translation import gettext as _
-from django_audit_fields.admin import audit_fieldset_tuple
 from edc_constants.constants import YES
 from edc_dashboard.url_names import url_names
-from edc_model_admin import SimpleHistoryAdmin
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
+from edc_model_admin.history import SimpleHistoryAdmin
+from edc_screening.utils import format_reasons_ineligible
 
 from ..admin_site import intecomm_screening_admin
-from ..eligibility import IntecommEligibility, format_reasons_ineligible
+from ..eligibility import ScreeningEligibility
 from ..forms import SubjectScreeningForm
 from ..models import SubjectScreening
-from .fieldsets import get_part_one_fieldset, get_part_two_fieldset
 
 
 @admin.register(SubjectScreening, site=intecomm_screening_admin)
@@ -30,11 +29,9 @@ class SubjectScreeningAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin)
         "exclusion criteria in order to proceed to the final screening stage"
     )
 
-    fieldsets = (
-        get_part_one_fieldset(),
-        get_part_two_fieldset(),
-        audit_fieldset_tuple,
-    )
+    # fieldsets = (
+    #     audit_fieldset_tuple,
+    # )
 
     list_display = (
         "screening_identifier",
@@ -107,7 +104,7 @@ class SubjectScreeningAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin)
         return format_reasons_ineligible(obj.reasons_ineligible)
 
     def eligibility_status(self, obj=None):
-        eligibility = IntecommEligibility(obj, update_model=False)
+        eligibility = ScreeningEligibility(obj, update_model=False)
         screening_listboard_url = reverse(
             url_names.get(self.subject_listboard_url_name), args=(obj.screening_identifier,)
         )

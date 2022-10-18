@@ -1,20 +1,14 @@
 from django.contrib import admin
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_crf.admin import crf_status_fieldset_tuple
-from edc_form_label.form_label_modeladmin_mixin import FormLabelModelAdminMixin
-from edc_model_admin import SimpleHistoryAdmin
 
 from ..admin_site import intecomm_subject_admin
-
-# from ..forms import ComplicationsBaselineForm
 from ..models import ComplicationsBaseline
-from .modeladmin_mixins import CrfModelAdminMixin
+from .modeladmin_mixins import CrfModelAdmin
 
 
 @admin.register(ComplicationsBaseline, site=intecomm_subject_admin)
-class ComplicationsBaselineAdmin(
-    CrfModelAdminMixin, FormLabelModelAdminMixin, SimpleHistoryAdmin
-):
+class ComplicationsBaselineAdmin(CrfModelAdmin):
 
     # form = ComplicationsBaselineForm
 

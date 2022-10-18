@@ -1,14 +1,15 @@
 from django.db import models
 from edc_constants.choices import SMOKER_STATUS_SIMPLE, YES_NO
 from edc_constants.constants import NOT_APPLICABLE
-from edc_model import models as edc_models
 from edc_model import utils as edc_model_utils
+from edc_model.models import BaseUuidModel, DurationYMDField
+from edc_model_fields.fields import OtherCharField
 
 from ..choices import ALCOHOL_CONSUMPTION, EDUCATION, EMPLOYMENT_STATUS, MARITAL_STATUS
 from ..model_mixins import CrfModelMixin
 
 
-class OtherBaselineData(CrfModelMixin, edc_models.BaseUuidModel):
+class OtherBaselineData(CrfModelMixin, BaseUuidModel):
 
     employment_status = models.CharField(
         verbose_name="What is the patient's employment status?",
@@ -16,7 +17,7 @@ class OtherBaselineData(CrfModelMixin, edc_models.BaseUuidModel):
         choices=EMPLOYMENT_STATUS,
     )
 
-    employment_status_other = edc_models.OtherCharField()
+    employment_status_other = OtherCharField()
 
     education = models.CharField(
         verbose_name="How much formal education does the patient have?",
@@ -36,7 +37,7 @@ class OtherBaselineData(CrfModelMixin, edc_models.BaseUuidModel):
         choices=SMOKER_STATUS_SIMPLE,
     )
 
-    smoker_quit_ago = edc_models.DurationYMDField(
+    smoker_quit_ago = DurationYMDField(
         verbose_name="If you used to smoke but stopped, how long ago did you stop",
         null=True,
         blank=True,
@@ -111,6 +112,6 @@ class OtherBaselineData(CrfModelMixin, edc_models.BaseUuidModel):
             )
         super().save(*args, **kwargs)
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Other Baseline Data"
         verbose_name_plural = "Other Baseline Data"

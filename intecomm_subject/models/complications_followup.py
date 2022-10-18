@@ -1,12 +1,12 @@
 from django.db import models
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
-from edc_model import models as edc_models
+from edc_model.models import BaseUuidModel
 
 from ..model_mixins import CrfModelMixin
 
 
-class ComplicationsFollowup(CrfModelMixin, edc_models.BaseUuidModel):
+class ComplicationsFollowup(CrfModelMixin, BaseUuidModel):
 
     # stroke
     stroke = models.CharField(verbose_name="Stroke", max_length=25, choices=YES_NO)
@@ -100,6 +100,6 @@ class ComplicationsFollowup(CrfModelMixin, edc_models.BaseUuidModel):
         help_text="Please include dates",
     )
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Complications: Followup"
         verbose_name_plural = "Complications: Followup"

@@ -1,24 +1,18 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.utils.safestring import mark_safe
 from edc_constants.choices import YES_NO
-from edc_lab.choices import RESULT_QUANTIFIER
-from edc_lab.constants import EQ
-from edc_model import models as edc_models
+from edc_glucose.model_mixins import FastingModelMixin, FbgModelMixin
+from edc_model.models import BaseUuidModel
 from edc_reportable.units import COPIES_PER_MILLILITER
+from edc_vitals.model_mixins import BloodPressureModelMixin
 from edc_vitals.models import DiastolicPressureField, SystolicPressureField, WeightField
 
-from intecomm_lists.models import VisitReasons
-
-from ..choices import GLUCOSE_UNITS
 from ..model_mixins import CrfModelMixin
 
 
-class PatientHistory(CrfModelMixin, edc_models.BaseUuidModel):
-    visit_reason = models.ManyToManyField(
-        VisitReasons,
-        verbose_name="Reason for this visit",
-    )
+class PatientHistory(
+    CrfModelMixin, BloodPressureModelMixin, FbgModelMixin, FastingModelMixin, BaseUuidModel
+):
 
     new_complaints = models.CharField(
         verbose_name="Does the patient have any new complaints on this visit?",
@@ -53,48 +47,18 @@ class PatientHistory(CrfModelMixin, edc_models.BaseUuidModel):
     )
 
     sys_blood_pressure = SystolicPressureField(
-        verbose_name="Reading 1: Systolic pressure", null=True, blank=True
+        verbose_name="Systolic pressure", null=True, blank=True
     )
 
     dia_blood_pressure = DiastolicPressureField(
-        verbose_name="Reading 1: Diastolic pressure", null=True, blank=True
+        verbose_name="Diastolic pressure", null=True, blank=True
     )
 
-    glucose_measured = models.CharField(
+    fbg_measured = models.CharField(
         verbose_name="Was the blood sugar measured?",
         max_length=15,
         choices=YES_NO,
         help_text="If yes, indicate below",
-    )
-
-    # IFG
-    fasted = models.CharField(
-        verbose_name="Has the participant fasted?",
-        max_length=15,
-        choices=YES_NO,
-        null=True,
-        blank=False,
-    )
-    fasting_glucose = models.DecimalField(
-        verbose_name=mark_safe("Fasting glucose <u>level</u>"),
-        max_digits=8,
-        decimal_places=2,
-        null=True,
-        blank=True,
-    )
-
-    fasting_glucose_quantifier = models.CharField(
-        max_length=10,
-        choices=RESULT_QUANTIFIER,
-        default=EQ,
-    )
-
-    fasting_glucose_units = models.CharField(
-        verbose_name="Units (fasting glucose)",
-        max_length=15,
-        choices=GLUCOSE_UNITS,
-        blank=True,
-        null=True,
     )
 
     vl_measured = models.CharField(
@@ -104,7 +68,7 @@ class PatientHistory(CrfModelMixin, edc_models.BaseUuidModel):
         help_text="If yes, indicate below",
     )
 
-    viral_load = models.IntegerField(
+    vl_value = models.IntegerField(
         verbose_name="Last viral load",
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         null=True,
@@ -124,6 +88,6 @@ class PatientHistory(CrfModelMixin, edc_models.BaseUuidModel):
         choices=YES_NO,
     )
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "PatientHistory"
         verbose_name_plural = "PatientHistory"

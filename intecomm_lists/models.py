@@ -19,6 +19,12 @@ class ClinicServices(ListModelMixin):
         verbose_name_plural = "Clinic Services"
 
 
+class ClinicalWithdrawalReasons(ListModelMixin):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Clinical Withdrawal Reasons"
+        verbose_name_plural = "Clinical Withdrawal Reasons"
+
+
 class Conditions(ListModelMixin):
     class Meta(ListModelMixin.Meta):
         verbose_name = "Conditions"
@@ -113,6 +119,12 @@ class RefillConditions(ListModelMixin):
     class Meta(ListModelMixin.Meta):
         verbose_name = "Refill Conditions"
         verbose_name_plural = "Refill Conditions"
+
+
+class ToxicityWithdrawalReasons(ListModelMixin):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Toxicity Withdrawal Reasons"
+        verbose_name_plural = "Toxicity Withdrawal Reasons"
 
 
 class VisitReasons(ListModelMixin):

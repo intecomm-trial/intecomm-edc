@@ -1,10 +1,5 @@
 from django.apps import apps as django_apps
 
-INTECOMM_AUDITOR = "INTECOMM_AUDITOR"
-INTECOMM_CLINIC = "INTECOMM_CLINIC"
-INTECOMM_CLINIC_SUPER = "INTECOMM_CLINIC_SUPER"
-INTECOMM_EXPORT = "INTECOMM_EXPORT"
-
 clinic_codenames = []
 autocomplete_models = []
 

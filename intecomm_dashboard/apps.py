@@ -8,6 +8,7 @@ from django.conf import settings
 class AppConfig(DjangoAppConfig):
     name = "intecomm_dashboard"
     verbose_name = "INTECOMM: Dashboard"
+    admin_site_name = "meta_test_admin"
     include_in_administration_section = False
 
 
@@ -20,12 +21,12 @@ if settings.APP_NAME == "intecomm_dashboard":
     from edc_visit_tracking.apps import AppConfig as BaseEdcVisitTrackingAppConfig
 
     class EdcProtocolAppConfig(BaseEdcProtocolAppConfig):
-        protocol = "EDC092"
+        protocol = "EDC093"
         protocol_name = "INTECOMM"
         protocol_number = "093"
         protocol_title = ""
-        study_open_datetime = datetime(2019, 7, 31, 0, 0, 0, tzinfo=gettz("UTC"))
-        study_close_datetime = datetime(2022, 12, 31, 23, 59, 59, tzinfo=gettz("UTC"))
+        study_open_datetime = datetime(2022, 7, 31, 0, 0, 0, tzinfo=gettz("UTC"))
+        study_close_datetime = datetime(2025, 12, 31, 23, 59, 59, tzinfo=gettz("UTC"))
 
     class EdcFacilityAppConfig(BaseEdcFacilityAppConfig):
         country = "tanzania"

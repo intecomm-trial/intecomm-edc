@@ -1,12 +1,12 @@
 from django.contrib import admin
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from django_audit_fields import audit_fieldset_tuple
 from edc_crf.admin import CrfStatusModelAdminMixin, crf_status_fieldset_tuple
-from edc_model_admin import SimpleHistoryAdmin
 from edc_model_admin.dashboard import (
     ModelAdminCrfDashboardMixin,
     ModelAdminSubjectDashboardMixin,
 )
+from edc_model_admin.history import SimpleHistoryAdmin
 
 medication_adherence_description = """
 <H5><B><font color="orange">Interviewer to read</font></B></H5>
@@ -61,7 +61,7 @@ class MedicationAdherenceAdminMixin:
         (
             "Visual Score",
             {
-                "description": mark_safe(medication_adherence_description),
+                "description": format_html(medication_adherence_description),
                 "fields": ("visual_score_slider", "visual_score_confirmed"),
             },
         ),

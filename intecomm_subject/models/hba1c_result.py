@@ -2,14 +2,14 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.html import format_html
 from edc_lab.constants import EQ
-from edc_model import models as edc_models
+from edc_model.models import BaseUuidModel
 from edc_model.validators import date_not_future
 from edc_reportable import PERCENT
 
 from ..model_mixins import CrfModelMixin
 
 
-class Hba1cResult(CrfModelMixin, edc_models.BaseUuidModel):
+class Hba1cResult(CrfModelMixin, BaseUuidModel):
 
     drawn_date = models.DateField(
         verbose_name="Specimen collection date",
@@ -34,6 +34,6 @@ class Hba1cResult(CrfModelMixin, edc_models.BaseUuidModel):
         verbose_name="HbA1c units", max_length=15, default=PERCENT, editable=False
     )
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "HbA1c Result"
         verbose_name_plural = "HbA1c Results"

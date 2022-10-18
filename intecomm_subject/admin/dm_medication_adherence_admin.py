@@ -1,20 +1,12 @@
 from django.contrib import admin
-from edc_form_label.form_label_modeladmin_mixin import FormLabelModelAdminMixin
-from edc_model_admin import SimpleHistoryAdmin
+from edc_adherence.model_admin_mixin import MedicationAdherenceAdminMixin
 
 from ..admin_site import intecomm_subject_admin
-
-# from ..forms import DmMedicationAdherenceForm
 from ..models import DmMedicationAdherence
-from .modeladmin_mixins import CrfModelAdminMixin, MedicationAdherenceAdminMixin
+from .modeladmin_mixins import CrfModelAdmin
 
 
 @admin.register(DmMedicationAdherence, site=intecomm_subject_admin)
-class DmMedicationAdherenceAdmin(
-    MedicationAdherenceAdminMixin,
-    CrfModelAdminMixin,
-    FormLabelModelAdminMixin,
-    SimpleHistoryAdmin,
-):
+class DmMedicationAdherenceAdmin(MedicationAdherenceAdminMixin, CrfModelAdmin):
     pass
     # form = DmMedicationAdherenceForm

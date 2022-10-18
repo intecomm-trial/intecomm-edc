@@ -1,15 +1,23 @@
-from edc_constants.constants import DEAD, OTHER
+from edc_constants.constants import (
+    CLINICAL_ENDPOINT,
+    CLINICAL_WITHDRAWAL,
+    DEAD,
+    NOT_APPLICABLE,
+    OTHER,
+    TOXICITY,
+)
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
+from edc_offstudy.constants import COMPLETED_FOLLOWUP
 from edc_transfer.constants import TRANSFERRED
 
 from intecomm_prn.constants import LATE_EXCLUSION, OTHER_RX_DISCONTINUATION, WITHDRAWAL
 
 list_data = {
     "intecomm_lists.offstudyreasons": [
-        ("completed_followup", "Patient completed 36 months of follow-up"),
-        ("clinical_withdrawal", "Patient is withdrawn on CLINICAL grounds ..."),
-        ("clinical_endpoint", "Patient reached a clinical endpoint"),
-        ("toxicity", "Patient experienced an unacceptable toxicity"),
+        (COMPLETED_FOLLOWUP, "Patient completed 36 months of follow-up"),
+        (CLINICAL_WITHDRAWAL, "Patient is withdrawn on CLINICAL grounds ..."),
+        (CLINICAL_ENDPOINT, "Patient reached a clinical endpoint"),
+        (TOXICITY, "Patient experienced an unacceptable toxicity"),
         (
             "intercurrent_illness",
             "Intercurrent illness which prevents further treatment",
@@ -37,5 +45,30 @@ list_data = {
         ("too_sick", "Too sick or weak to come to the centre"),
         ("lack_of_transport", "Transportation difficulty"),
         (OTHER, "Other reason (specify below)"),
+    ],
+    "intecomm_lists.clinicalwithdrawalreasons": [
+        (
+            ("pregnancy", "Pregnancy"),
+            ("kidney_disease", "Development of chronic kidney disease"),
+            ("liver_disease", "Development of chronic liver disease"),
+            ("intercurrent_illness", "Intercurrent illness which prevents further treatment"),
+            ("investigator_decision", "Investigator decision"),
+            (NOT_APPLICABLE, "Not applicable"),
+            (
+                OTHER,
+                (
+                    "Other condition that justifies the discontinuation of "
+                    "treatment in the clinician’s opinion (specify below)"
+                ),
+            ),
+        )
+    ],
+    "intecomm_lists.toxicitywithdrawalreasons": [
+        (
+            ("lactic_acidosis", "Development of lactic acidosis or hyperlactatemia"),
+            ("hepatomegaly", "Development of hepatomegaly with steatosis"),
+            (NOT_APPLICABLE, "Not applicable"),
+            (OTHER, "Other (specify below)"),
+        )
     ],
 }

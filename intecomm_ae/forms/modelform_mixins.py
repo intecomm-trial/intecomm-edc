@@ -1,7 +1,7 @@
-from edc_action_item.forms import ActionItemFormMixin
-from edc_adverse_event.forms import validate_ae_initial_outcome_date
+from django import forms
+from edc_adverse_event.modelform_mixins import AeModelFormMixin
+from edc_adverse_event.utils import validate_ae_initial_outcome_date
 from edc_form_validators import FormValidator, FormValidatorMixin
-from edc_registration.modelform_mixins import ModelFormSubjectIdentifierMixin
 
 
 class AeReviewFormValidator(FormValidator):
@@ -10,8 +10,7 @@ class AeReviewFormValidator(FormValidator):
 
 
 class AeReviewModelFormMixin(
-    ModelFormSubjectIdentifierMixin,
-    ActionItemFormMixin,
+    AeModelFormMixin,
     FormValidatorMixin,
 ):
     form_validator_cls = AeReviewFormValidator
@@ -21,5 +20,9 @@ class AeReviewModelFormMixin(
         validate_ae_initial_outcome_date(self)
         return cleaned_data
 
-    class Meta(ActionItemFormMixin.Meta):
-        pass
+    class Meta:
+        help_text = {"subject_identifier": "(read-only)", "action_identifier": "(read-only)"}
+        widgets = {
+            "subject_identifier": forms.TextInput(attrs={"readonly": "readonly"}),
+            "action_identifier": forms.TextInput(attrs={"readonly": "readonly"}),
+        }

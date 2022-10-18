@@ -19,7 +19,7 @@ class TestActions(IntecommTestCaseMixin, TestCase):
         subject_screening = self.get_subject_screening()
         subject_consent = self.get_subject_consent(subject_screening)
         ae_initial = baker.make_recipe(
-            "intecomm_ae.aeinitial", subject_identifier=subject_consent.subject_identifier
+            "meta_ae.aeinitial", subject_identifier=subject_consent.subject_identifier
         )
 
         try:
@@ -38,7 +38,7 @@ class TestActions(IntecommTestCaseMixin, TestCase):
         subject_screening = self.get_subject_screening()
         subject_consent = self.get_subject_consent(subject_screening)
         ae_initial = baker.make_recipe(
-            "intecomm_ae.aeinitial", subject_identifier=subject_consent.subject_identifier
+            "meta_ae.aeinitial", subject_identifier=subject_consent.subject_identifier
         )
 
         action_item = ActionItem.objects.get(action_identifier=ae_initial.action_identifier)
@@ -58,7 +58,7 @@ class TestActions(IntecommTestCaseMixin, TestCase):
         subject_screening = self.get_subject_screening()
         subject_consent = self.get_subject_consent(subject_screening)
         baker.make_recipe(
-            "intecomm_ae.aeinitial",
+            "meta_ae.aeinitial",
             subject_identifier=subject_consent.subject_identifier,
             ae_grade=GRADE4,
         )
@@ -75,7 +75,7 @@ class TestActions(IntecommTestCaseMixin, TestCase):
         subject_screening = self.get_subject_screening()
         subject_consent = self.get_subject_consent(subject_screening)
         baker.make_recipe(
-            "intecomm_ae.aeinitial",
+            "meta_ae.aeinitial",
             subject_identifier=subject_consent.subject_identifier,
             ae_grade=GRADE5,
         )
@@ -98,7 +98,7 @@ class TestActions(IntecommTestCaseMixin, TestCase):
         subject_screening = self.get_subject_screening()
         subject_consent = self.get_subject_consent(subject_screening)
         baker.make_recipe(
-            "intecomm_ae.aeinitial",
+            "meta_ae.aeinitial",
             subject_identifier=subject_consent.subject_identifier,
             ae_grade=GRADE5,
         )
@@ -108,7 +108,7 @@ class TestActions(IntecommTestCaseMixin, TestCase):
         )
 
         baker.make_recipe(
-            "intecomm_ae.deathreport",
+            "meta_ae.deathreport",
             subject_identifier=subject_consent.subject_identifier,
             action_identifier=action_item.action_identifier,
         )

@@ -1,6 +1,5 @@
 from django.apps import apps as django_apps
-from django.conf import settings
-from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
 from edc_action_item import ActionWithNotification, site_action_items
 from edc_adverse_event.constants import (
@@ -9,21 +8,13 @@ from edc_adverse_event.constants import (
     AE_SUSAR_ACTION,
     AE_TMG_ACTION,
     DEATH_REPORT_ACTION,
-    DEATH_REPORT_TMG_ACTION,
 )
 from edc_constants.constants import CLOSED, DEAD, HIGH_PRIORITY, NO, YES
-from edc_lab_results.constants import (
-    BLOOD_RESULTS_FBC_ACTION,
-    BLOOD_RESULTS_GLU_ACTION,
-    BLOOD_RESULTS_LFT_ACTION,
-    BLOOD_RESULTS_RFT_ACTION,
-)
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
-from edc_offstudy.constants import END_OF_STUDY_ACTION
+from edc_notification.utils import get_email_contacts
 from edc_reportable import GRADE3, GRADE4, GRADE5
+from edc_visit_schedule.constants import OFFSCHEDULE_ACTION
 from edc_visit_schedule.utils import get_offschedule_models
-
-# from intecomm_subject.constants import FOLLOWUP_EXAMINATION_ACTION
 
 
 class AeFollowupAction(ActionWithNotification):
@@ -37,10 +28,10 @@ class AeFollowupAction(ActionWithNotification):
     create_by_user = False
     show_link_to_changelist = True
     admin_site_name = "intecomm_ae_admin"
-    instructions = mark_safe(
+    instructions = mark_safe(  # nosec B308, B703
         "Upon submission the TMG group will be notified "
-        f'by email at <a href="mailto:{settings.EMAIL_CONTACTS.get("tmg") or "#"}">'
-        f'{settings.EMAIL_CONTACTS.get("tmg") or "unknown"}</a>'
+        f'by email at <a href="mailto:{get_email_contacts("tmg") or "#"}">'
+        f'{get_email_contacts("tmg") or "unknown"}</a>'
     )
     priority = HIGH_PRIORITY
 
@@ -54,7 +45,7 @@ class AeFollowupAction(ActionWithNotification):
             required=self.reference_obj.followup == YES,
         )
 
-        # add Death report to next_actions if G5/Death
+        # add Death Report to next_actions if G5/Death
         next_actions = self.append_to_next_if_required(
             next_actions=next_actions,
             action_name=DEATH_REPORT_ACTION,
@@ -82,13 +73,6 @@ class AeInitialAction(ActionWithNotification):
     name = AE_INITIAL_ACTION
     display_name = "Submit AE Initial Report"
     notification_display_name = "AE Initial Report"
-    parent_action_names = [
-        BLOOD_RESULTS_GLU_ACTION,
-        BLOOD_RESULTS_LFT_ACTION,
-        BLOOD_RESULTS_RFT_ACTION,
-        BLOOD_RESULTS_FBC_ACTION,
-        # FOLLOWUP_EXAMINATION_ACTION,
-    ]
     reference_model = "intecomm_ae.aeinitial"
     show_link_to_changelist = True
     show_link_to_add = True
@@ -175,7 +159,7 @@ class AeTmgAction(ActionWithNotification):
     color_style = "info"
     show_link_to_changelist = True
     admin_site_name = "intecomm_ae_admin"
-    instructions = mark_safe("This report is to be completed by the TMG only.")
+    instructions = "This report is to be completed by the TMG only."
     priority = HIGH_PRIORITY
 
     def close_action_item_on_save(self):
@@ -199,101 +183,15 @@ class DeathReportAction(ActionWithNotification):
         """Adds 1 DEATHReportTMG if not yet created and
         END_OF_STUDY_ACTION if required.
         """
-        # DEATH_REPORT_TMG_ACTION
-        try:
-            self.action_item_model_cls().objects.get(
-                parent_action_item=self.reference_obj.action_item,
-                related_action_item=self.reference_obj.action_item,
-                action_type__name=DEATH_REPORT_TMG_ACTION,
-            )
-        except ObjectDoesNotExist:
-            next_actions = [DEATH_REPORT_TMG_ACTION]
-        else:
-            next_actions = []
-
+        next_actions = []
         off_schedule_cls = django_apps.get_model("intecomm_prn.endofstudy")
         try:
             off_schedule_cls.objects.get(subject_identifier=self.subject_identifier)
         except ObjectDoesNotExist:
-            next_actions.append(END_OF_STUDY_ACTION)
-        return next_actions
-
-
-class DeathReportTmgAction(ActionWithNotification):
-    name = DEATH_REPORT_TMG_ACTION
-    display_name = "TMG Death Report pending"
-    notification_display_name = "TMG Death Report"
-    parent_action_names = [DEATH_REPORT_ACTION, DEATH_REPORT_TMG_ACTION]
-    reference_model = "intecomm_ae.deathreporttmg"
-    related_reference_model = "intecomm_ae.deathreport"
-    related_reference_fk_attr = "death_report"
-    priority = HIGH_PRIORITY
-    create_by_user = False
-    color_style = "info"
-    show_link_to_changelist = True
-    admin_site_name = "intecomm_ae_admin"
-    instructions = mark_safe("This report is to be completed by the TMG only.")
-
-    def reopen_action_item_on_change(self):
-        """Do not reopen if status is CLOSED."""
-        return self.reference_obj.report_status != CLOSED
-
-    @property
-    def matching_cause_of_death(self):
-        """Returns True if cause_of_death on TMG Death Report matches
-        cause_of_death on Death Report.
-        """
-        return (
-            self.reference_obj.death_report.cause_of_death == self.reference_obj.cause_of_death
-        )
-
-    def close_action_item_on_save(self):
-        if self.matching_cause_of_death:
-            self.delete_children_if_new(parent_action_item=self.action_item)
-        return self.reference_obj.report_status == CLOSED
-
-    def get_next_actions(self):
-        """Returns an second DeathReportTmgAction if the
-        submitted report does not match the cause of death
-        of the original death report.
-
-        Also, no more than two DeathReportTmgAction can exist.
-        """
-        next_actions = []
-        try:
-            self.action_item_model_cls().objects.get(
-                parent_action_item=self.related_action_item,
-                related_action_item=self.related_action_item,
-                action_type__name=self.name,
-            )
-        except ObjectDoesNotExist:
-            pass
-        except MultipleObjectsReturned:
-            # because more than one action item has the same
-            # parent_action_item and related_action_item. this
-            # only occurs for older data.
-            pass
-        else:
-            if (
-                self.action_item_model_cls()
-                .objects.filter(
-                    related_action_item=self.related_action_item,
-                    action_type__name=self.name,
-                )
-                .count()
-                < 2
-            ):
-                if (
-                    self.reference_obj.cause_of_death
-                    != self.related_action_item.reference_obj.cause_of_death
-                ):
-                    next_actions = ["self"]
+            next_actions.extend([OFFSCHEDULE_ACTION])
         return next_actions
 
 
 site_action_items.register(DeathReportAction)
-site_action_items.register(DeathReportTmgAction)
 site_action_items.register(AeFollowupAction)
 site_action_items.register(AeInitialAction)
-site_action_items.register(AeSusarAction)
-site_action_items.register(AeTmgAction)
