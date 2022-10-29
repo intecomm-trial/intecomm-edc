@@ -67,6 +67,12 @@ class HealthServices(ListModelMixin):
         verbose_name_plural = "Health Services"
 
 
+class HealthTalks(ListModelMixin):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Health Talk"
+        verbose_name_plural = "Health Talks"
+
+
 class HealthTalkConditions(ListModelMixin):
     class Meta(ListModelMixin.Meta):
         verbose_name = "Health Talk Conditions"

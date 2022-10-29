@@ -1,156 +1,178 @@
-from edc_sites.single_site import SingleSite
+from intecomm_lists.constants import HC_III, HC_IV
+
+from .intecomm_site import IntecommSite
 
 fqdn = "intecomm.clinicedc.org"
 
 all_sites = {
     "uganda": (
-        SingleSite(
+        IntecommSite(
             101,
             "kasangati",
             country_code="ug",
             country="uganda",
+            health_facility_type=HC_IV,
             domain=f"kasangati.ug.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             102,
             "Kisugu",
+            health_facility_type=HC_III,
             country_code="ug",
             country="uganda",
             domain=f"kisugu.ug.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             103,
             "kiswa",
+            health_facility_type=HC_III,
             country_code="ug",
             country="uganda",
             domain=f"kiswa.ug.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             104,
             "kyazanga",
+            health_facility_type=HC_IV,
             country_code="ug",
             country="uganda",
             domain=f"kyazanga.ug.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             105,
             "mpigi",
+            health_facility_type=HC_IV,
             country_code="ug",
             country="uganda",
             domain=f"mpigi.ug.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             106,
             "namayumba",
+            health_facility_type=HC_III,
             country_code="ug",
             country="uganda",
             domain=f"namayumba.ug.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             107,
             "namulonge",
+            health_facility_type=HC_III,
             country_code="ug",
             country="uganda",
             domain=f"namulonge.ug.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             108,
             "ndejje",
+            health_facility_type=HC_IV,
             country_code="ug",
             country="uganda",
             domain=f"ndejje.ug.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             109,
             "sekiwunga",
+            health_facility_type=HC_III,
             country_code="ug",
             country="uganda",
             domain=f"sekiwunga.ug.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             110,
             "wakiso",
+            health_facility_type=HC_IV,
             country_code="ug",
             country="uganda",
             domain=f"wakiso.ug.{fqdn}",
         ),
     ),
     "tanzania": (
-        SingleSite(
+        IntecommSite(
             201,
             "amana",
+            health_facility_type=HC_IV,
             title="Amana Hospital",
             country="tanzania",
             country_code="tz",
             domain=f"amana.tz.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             202,
             "bagamoyo",
+            health_facility_type=HC_IV,
             title="Bagamoyo Regional Hospital",
             country="tanzania",
             country_code="tz",
             domain=f"bagamoyo.tz.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             203,
             "rugambwa",
+            health_facility_type=HC_IV,
             title="Cardinal Rugambwa Hospital",
             country="tanzania",
             country_code="tz",
             domain=f"rugambwa.tz.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             204,
             "hindu_mandal",
+            health_facility_type=HC_IV,
             title="Hindu Mandal Hospital",
             country="tanzania",
             country_code="tz",
             domain=f"hindu-mandal.tz.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             205,
             "kisarawe",
+            health_facility_type=HC_IV,
             title="Kisarawe District Hospital",
             country="tanzania",
             country_code="tz",
             domain=f"kisarawe.tz.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             206,
             "mbagala",
+            health_facility_type=HC_III,
             title="Mbagala Hospital",
             country="tanzania",
             country_code="tz",
             domain=f"mbagala.tz.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             207,
             "mnazi_moja",
+            health_facility_type=HC_III,
             title="Mnazi Moja Hospital",
             country="tanzania",
             country_code="tz",
             domain=f"mnazi.tz.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             208,
             "mwananyamala",
+            health_facility_type=HC_IV,
             title="Mwananyamala Hospital",
             country="tanzania",
             country_code="tz",
             domain=f"mwananyamala.tz.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             209,
             "sinza",
+            health_facility_type=HC_III,
             title="Sinza Hospital",
             country_code="tz",
             country="tanzania",
             domain=f"sinza.tz.{fqdn}",
         ),
-        SingleSite(
+        IntecommSite(
             210,
             "temeke",
+            health_facility_type=HC_IV,
             title="Temeke Hospital",
             country="tanzania",
             country_code="tz",

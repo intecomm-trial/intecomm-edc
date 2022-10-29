@@ -3,17 +3,10 @@ from edc_constants.choices import YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
 from edc_model.models import BaseUuidModel
 
-from ..model_mixins import CrfModelMixin, ReviewModelMixin
+from ..model_mixins import CrfModelMixin, FollowupReviewModelMixin
 
 
-class HivReview(ReviewModelMixin, CrfModelMixin, BaseUuidModel):
-
-    test_date = models.DateField(
-        verbose_name="Date tested for HIV",
-        null=True,
-        blank=True,
-        help_text="QUESTION_RETIRED",
-    )
+class HivReview(FollowupReviewModelMixin, CrfModelMixin, BaseUuidModel):
 
     dx = models.CharField(
         verbose_name="Has the patient been infected with HIV?",

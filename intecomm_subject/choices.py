@@ -7,9 +7,11 @@ from edc_reportable import (
 from edc_visit_tracking.constants import MISSED_VISIT, SCHEDULED, UNSCHEDULED
 
 from .constants import (
+    COMMUNITY_CLINIC,
     DIET_LIFESTYLE,
     DRUGS,
     GTE_3HRS,
+    HEALTH_FACILITY,
     INSULIN,
     NURSE,
     SITTING,
@@ -27,6 +29,13 @@ ALCOHOL_CONSUMPTION = (
 CARE_ACCESS = (
     (THIS_CLINIC, "Patient comes to this facility for their care"),
     (OTHER, "Patient goes to a different clinic"),
+    (NOT_APPLICABLE, "Not applicable"),
+)
+
+CARE_DELIVERY = (
+    (HEALTH_FACILITY, "Health facility"),
+    (COMMUNITY_CLINIC, "Community clinic"),
+    (OTHER, "Other facility, please specify below ..."),
     (NOT_APPLICABLE, "Not applicable"),
 )
 

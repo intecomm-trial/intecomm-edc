@@ -1,9 +1,14 @@
 from bs4 import BeautifulSoup
 from django import template
+from django.core.exceptions import ObjectDoesNotExist
 from edc_constants.constants import NO, TBD, YES
 from edc_dashboard.url_names import url_names
 from edc_dashboard.utils import get_bootstrap_version
 from edc_screening.constants import ELIGIBLE, NOT_ELIGIBLE
+
+from intecomm_screening.models import SubjectRefusal
+
+from ..model_wrappers import SubjectRefusalModelWrapper
 
 register = template.Library()
 
@@ -15,6 +20,12 @@ register = template.Library()
 def screening_button(context, model_wrapper):
     title = "Edit subject's screening form"
     perms = context["perms"]
+    if model_wrapper.object.eligible is False:
+        eligible = NO
+    elif model_wrapper.object.eligible is True:
+        eligible = YES
+    else:
+        eligible = TBD
     enabled = perms.user.has_perm(
         "intecomm_screening.view_subjectscreening"
     ) or perms.user.has_perm("intecomm_screening.change_subjectscreening")
@@ -22,10 +33,12 @@ def screening_button(context, model_wrapper):
         perms=context["perms"],
         screening_identifier=model_wrapper.object.screening_identifier,
         enabled=enabled,
+        eligible=eligible,
         title=title,
         YES=YES,
         NO=NO,
         TBD=TBD,
+        href=model_wrapper.href,
     )
 
 
@@ -69,12 +82,21 @@ def add_consent_button(context, model_wrapper):
     )
 
 
-def refusal_button(context, subject_refusal_model_wrapper):
-    title = ["Capture subject's primary reason for not joining."]
-
+@register.inclusion_tag(
+    f"intecomm_dashboard/bootstrap{get_bootstrap_version()}/" f"buttons/refusal_button.html",
+    takes_context=True,
+)
+def refusal_button(context, model_wrapper):
+    title = ["Capture patient's primary reason for not consenting."]
+    screening_identifier = model_wrapper.object.screening_identifier
+    try:
+        obj = SubjectRefusal.objects.get(screening_identifier=screening_identifier)
+    except ObjectDoesNotExist:
+        obj = SubjectRefusal()
+    model_wrapper = SubjectRefusalModelWrapper(model_obj=obj)
     return dict(
         perms=context["perms"],
-        href=subject_refusal_model_wrapper.href,
+        href=model_wrapper.href,
         title=" ".join(title),
     )
 

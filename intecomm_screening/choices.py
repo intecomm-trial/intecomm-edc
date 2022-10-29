@@ -1,6 +1,6 @@
-from edc_constants.constants import BLACK, NO, NOT_APPLICABLE, OTHER, PENDING, YES
+from edc_constants.constants import COMPLETE, OTHER
 
-ETHNICITY = ((BLACK, "Black"), (OTHER, "Other"))
+GROUP_STATUS_CHOICES = (("recruiting", "Recruiting"), (COMPLETE, "Complete"))
 
 REFUSAL_REASONS = (
     ("dont_have_time", "I don't have time"),
@@ -9,20 +9,4 @@ REFUSAL_REASONS = (
     ("dont_want_to_join", "I don't want to take part"),
     ("need_to_think_about_it", "I haven't had a chance to think about it"),
     (OTHER, "Other, please specify"),
-)
-
-
-YES_NO_NOT_ELIGIBLE = (
-    (YES, YES),
-    (NO, NO),
-    (
-        NOT_APPLICABLE,
-        "Not applicable, subject is not eligible based on the criteria above",
-    ),
-)
-
-YES_PENDING_NA = (
-    (YES, YES),
-    (PENDING, "Decision pending"),
-    (NOT_APPLICABLE, "Not applicable"),
 )

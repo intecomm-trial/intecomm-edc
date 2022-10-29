@@ -4,21 +4,14 @@ from edc_screening.modelform_mixins import AlreadyConsentedFormMixin
 from edc_sites.modelform_mixins import SiteModelFormMixin
 from edc_sites.widgets import SiteField
 
-from ..form_validators import SubjectScreeningFormValidator
-from ..models import SubjectScreening
+from ..models import PatientLog
 
 
-class SubjectScreeningForm(
+class PatientLogForm(
     AlreadyConsentedFormMixin, SiteModelFormMixin, FormValidatorMixin, forms.ModelForm
 ):
-
-    form_validator_cls = SubjectScreeningFormValidator
-
-    site = SiteField()
+    site = SiteField(label="Health facility")
 
     class Meta:
-        model = SubjectScreening
+        model = PatientLog
         fields = "__all__"
-        labels = {
-            "consent_ability": "Is the patient able and willing to give informed consent."
-        }

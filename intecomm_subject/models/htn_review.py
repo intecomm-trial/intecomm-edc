@@ -6,10 +6,10 @@ from edc_vitals.models import DiastolicPressureField, SystolicPressureField
 
 from intecomm_subject.choices import HTN_MANAGEMENT
 
-from ..model_mixins import CrfModelMixin, ReviewModelMixin
+from ..model_mixins import CrfModelMixin, FollowupReviewModelMixin
 
 
-class HtnReview(ReviewModelMixin, CrfModelMixin, BaseUuidModel):
+class HtnReview(FollowupReviewModelMixin, CrfModelMixin, BaseUuidModel):
 
     test_date = models.DateField(
         verbose_name="Date tested for Hypertension",

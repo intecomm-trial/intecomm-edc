@@ -71,4 +71,9 @@ list_data = {
         (NOT_APPLICABLE, "Not applicable"),
         (OTHER, "Other (specify below)"),
     ],
+    "intecomm_lists.healthtalks": [
+        ("study_intro_talk", "INTECOMM study introduction"),
+        ("sensitisation_talk", "INTECOMM Sensitisation"),
+        (OTHER, "Other (specify below)"),
+    ],
 }

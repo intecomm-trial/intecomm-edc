@@ -5,20 +5,21 @@ from django.urls.exceptions import NoReverseMatch
 from django.utils.html import format_html
 from django.utils.translation import gettext as _
 from django_audit_fields import audit_fieldset_tuple
-from edc_constants.constants import YES
 from edc_dashboard.url_names import url_names
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_screening.utils import format_reasons_ineligible
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..admin_site import intecomm_screening_admin
-from ..eligibility import ScreeningEligibility
 from ..forms import SubjectScreeningForm
 from ..models import SubjectScreening
 
 
 @admin.register(SubjectScreening, site=intecomm_screening_admin)
-class SubjectScreeningAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin):
+class SubjectScreeningAdmin(
+    SiteModelAdminMixin, ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin
+):
 
     form = SubjectScreeningForm
     list_per_page = 15
@@ -36,15 +37,107 @@ class SubjectScreeningAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin)
             {
                 "fields": (
                     "report_datetime",
-                    "selection_method",
-                    "hospital_identifier",
+                    "site",
+                )
+            },
+        ),
+        (
+            "Demographics",
+            {
+                "fields": (
                     "initials",
                     "gender",
                     "age_in_years",
-                    "ethnicity",
-                    "qualifying_condition",
+                    "hospital_identifier",
+                )
+            },
+        ),
+        (
+            "Health facility",
+            {
+                "fields": (
+                    "in_care_6m",
+                    "in_care_duration",
+                )
+            },
+        ),
+        (
+            "HIV",
+            {
+                "fields": (
+                    "hiv_dx",
+                    "hiv_dx_6m",
+                    "hiv_dx_ago",
+                    "art_unchanged_3m",
+                    "art_stable",
+                    "art_adherent",
+                )
+            },
+        ),
+        (
+            "Diabetes",
+            {
+                "fields": (
+                    "dm_dx",
+                    "dm_dx_6m",
+                    "dm_dx_ago",
+                    "dm_complications",
+                )
+            },
+        ),
+        (
+            "Hypertension",
+            {
+                "fields": (
+                    "htn_dx",
+                    "htn_dx_6m",
+                    "htn_dx_ago",
+                    "htn_complications",
+                )
+            },
+        ),
+        (
+            "Pregnancy",
+            {"fields": ("pregnant",)},
+        ),
+        (
+            "Other history",
+            {
+                "fields": (
+                    "excluded_by_bp_history",
+                    "excluded_by_gluc_history",
+                    "requires_acute_care",
+                )
+            },
+        ),
+        (
+            "Location",
+            {
+                "fields": (
+                    "lives_nearby",
                     "staying_nearby_6",
+                )
+            },
+        ),
+        (
+            "Blood pressure measurements",
+            {
+                "fields": (
+                    "sys_blood_pressure_one",
+                    "dia_blood_pressure_one",
+                    "sys_blood_pressure_two",
+                    "dia_blood_pressure_two",
+                )
+            },
+        ),
+        (
+            "Other",
+            {
+                "fields": (
                     "consent_ability",
+                    "unsuitable_for_study",
+                    "reasons_unsuitable",
+                    "unsuitable_agreed",
                 )
             },
         ),
@@ -78,10 +171,29 @@ class SubjectScreeningAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin)
     )
 
     radio_fields = {
-        "gender": admin.VERTICAL,
-        "qualifying_condition": admin.VERTICAL,
         "consent_ability": admin.VERTICAL,
+        "dm_dx": admin.VERTICAL,
+        "dm_dx_6m": admin.VERTICAL,
+        "gender": admin.VERTICAL,
+        "hiv_dx": admin.VERTICAL,
+        "hiv_dx_6m": admin.VERTICAL,
+        "htn_dx": admin.VERTICAL,
+        "htn_dx_6m": admin.VERTICAL,
+        "selection_method": admin.VERTICAL,
+        "lives_nearby": admin.VERTICAL,
         "staying_nearby_6": admin.VERTICAL,
+        "in_care_6m": admin.VERTICAL,
+        "art_unchanged_3m": admin.VERTICAL,
+        "art_stable": admin.VERTICAL,
+        "art_adherent": admin.VERTICAL,
+        "dm_complications": admin.VERTICAL,
+        "htn_complications": admin.VERTICAL,
+        "pregnant": admin.VERTICAL,
+        "excluded_by_bp_history": admin.VERTICAL,
+        "excluded_by_gluc_history": admin.VERTICAL,
+        "requires_acute_care": admin.VERTICAL,
+        "unsuitable_for_study": admin.VERTICAL,
+        "unsuitable_agreed": admin.VERTICAL,
     }
 
     def post_url_on_delete_kwargs(self, request, obj):
@@ -94,8 +206,6 @@ class SubjectScreeningAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin)
             f"Initials: {obj.initials.upper()}<BR>",
             f"Hospital ID: {obj.hospital_identifier}",
         ]
-        if obj.repeat_glucose_opinion == YES:
-            data.append(f"Contact #: {obj.contact_number or '--'}")
         return format_html("<BR>".join(data))
 
     def reasons(self, obj=None):
@@ -104,17 +214,18 @@ class SubjectScreeningAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin)
         return format_reasons_ineligible(obj.reasons_ineligible)
 
     def eligibility_status(self, obj=None):
-        eligibility = ScreeningEligibility(obj, update_model=False)
-        screening_listboard_url = reverse(
-            url_names.get(self.subject_listboard_url_name), args=(obj.screening_identifier,)
-        )
-        context = dict(
-            title=_("Go to screening listboard"),
-            url=f"{screening_listboard_url}?q={obj.screening_identifier}",
-            label="Screening",
-        )
-        button = render_to_string("dashboard_button.html", context=context)
-        return format_html(button + "<BR>" + eligibility.eligibility_status(add_urls=True))
+        return None
+        # eligibility = ScreeningEligibility(update_model=False)
+        # screening_listboard_url = reverse(
+        #     url_names.get(self.subject_listboard_url_name), args=(obj.screening_identifier,)
+        # )
+        # context = dict(
+        #     title=_("Go to screening listboard"),
+        #     url=f"{screening_listboard_url}?q={obj.screening_identifier}",
+        #     label="Screening",
+        # )
+        # button = render_to_string("dashboard_button.html", context=context)
+        # return format_html(button + "<BR>" + eligibility.eligibility_status(add_urls=True))
 
     def dashboard(self, obj=None, label=None):
         try:
