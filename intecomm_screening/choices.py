@@ -1,6 +1,8 @@
-from edc_constants.constants import COMPLETE, OTHER
+from edc_constants.constants import COMPLETE, NEW, OTHER
 
-GROUP_STATUS_CHOICES = (("recruiting", "Recruiting"), (COMPLETE, "Complete"))
+from .constants import RECRUITING
+
+GROUP_STATUS_CHOICES = ((NEW, "New"), (RECRUITING, "Recruiting"), (COMPLETE, "Complete"))
 
 REFUSAL_REASONS = (
     ("dont_have_time", "I don't have time"),

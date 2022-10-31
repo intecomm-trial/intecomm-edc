@@ -1,40 +1,18 @@
-from django import forms
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import BLANK_CHOICE_DASH
-from django.http import HttpResponseRedirect
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields import audit_fieldset_tuple
+from edc_constants.constants import UNKNOWN
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..admin_site import intecomm_screening_admin
-from ..constants import RECRUITING
 from ..forms import PatientLogForm
 from ..models import PatientGroup, PatientLog
-
-
-class ActionForm(forms.Form):
-    action = forms.ChoiceField(label="Action:")
-    group = forms.ChoiceField(
-        label="Group:",
-        required=True,
-        choices=(
-            ((None, BLANK_CHOICE_DASH),)
-            + tuple(
-                (o.id, o.name)
-                for o in PatientGroup.objects.filter(status=RECRUITING).order_by("name")
-            )
-        ),
-    )
-    select_across = forms.BooleanField(
-        label="",
-        required=False,
-        initial=0,
-        widget=forms.HiddenInput({"class": "select-across"}),
-    )
+from .list_filters import NextApptListFilter
 
 
 @admin.register(PatientLog, site=intecomm_screening_admin)
@@ -43,19 +21,14 @@ class PatientLogAdmin(
 ):
 
     form = PatientLogForm
-    action_form = ActionForm
     list_per_page = 20
     show_object_tools = True
-
-    # post_url_on_delete_name = "screening_listboard_url"
-    # subject_listboard_url_name = "screening_listboard_url"
+    autocomplete_fields = ["patient_group"]
 
     additional_instructions = (
         "Only include patients that are known to have a qualifying "
         "condition and are stable in-care."
     )
-
-    actions = ["to_group"]
 
     fieldsets = (
         (
@@ -74,22 +47,28 @@ class PatientLogAdmin(
                     "name",
                     "initials",
                     "hf_identifier",
-                    "contact_number",
-                    "alt_contact_number",
                 )
             },
         ),
         (
-            "Location",
-            {"fields": ("location_description",)},
+            "Contact and location",
+            {
+                "fields": (
+                    "contact_number",
+                    "alt_contact_number",
+                    "location_description",
+                    "patient_group",
+                )
+            },
         ),
         (
             "Health",
             {
+                "description": "Select one or more conditions with a documented diagnoses",
                 "fields": (
                     "conditions",
                     "stable",
-                )
+                ),
             },
         ),
         (
@@ -123,12 +102,13 @@ class PatientLogAdmin(
     )
 
     list_display = (
-        "hf_id",
         "patient",
+        "hf_id",
         "group_name",
         "date_logged",
-        "contact_number",
-        "alternate",
+        "next_appt",
+        "last_appt",
+        "contact",
         "ht1",
         "ht2",
         "site_name",
@@ -140,9 +120,12 @@ class PatientLogAdmin(
     )
 
     list_filter = (
+        "report_datetime",
+        "stable",
+        NextApptListFilter,
+        "last_routine_appt_date",
         "first_health_talk",
         "second_health_talk",
-        "report_datetime",
         "site",
     )
 
@@ -151,9 +134,12 @@ class PatientLogAdmin(
     search_fields = (
         "screening_identifier",
         "subject_identifier",
-        "hf_identifier",
-        "initials",
-        "name",
+        "patient_group__name",
+        "hf_identifier__exact",
+        "initials__exact",
+        "name__exact",
+        "contact_number__exact",
+        "alt_contact_number__exact",
     )
 
     radio_fields = {
@@ -171,21 +157,35 @@ class PatientLogAdmin(
     def date_logged(self, obj=None):
         return obj.report_datetime.date()
 
+    @admin.display(description="next_appt", ordering="next_routine_appt_date")
+    def next_appt(self, obj=None):
+        return obj.next_routine_appt_date
+
+    @admin.display(description="last_appt", ordering="last_routine_appt_date")
+    def last_appt(self, obj=None):
+        return obj.last_routine_appt_date
+
     @admin.display(description="HF ID", ordering="hf_identifier")
     def hf_id(self, obj=None):
         return obj.hf_identifier
 
-    @admin.display(description="Alternate", ordering="alt_contact_number")
-    def alternate(self, obj=None):
-        return obj.alt_contact_number
+    @admin.display(description="Contact", ordering="contact_number")
+    def contact(self, obj=None):
+        context = dict(
+            contact_number=obj.contact_number,
+            alt_contact_number=obj.alt_contact_number,
+        )
+        return format_html(
+            render_to_string("intecomm_screening/change_list_contacts.html", context=context)
+        )
 
     @admin.display(description="1st HT", ordering="first_health_talk")
     def ht1(self, obj=None):
-        return obj.first_health_talk
+        return "?" if obj.first_health_talk == UNKNOWN else obj.first_health_talk
 
     @admin.display(description="2nd HT", ordering="second_health_talk")
     def ht2(self, obj=None):
-        return obj.second_health_talk
+        return "?" if obj.second_health_talk == UNKNOWN else obj.second_health_talk
 
     @admin.display(description="Site", ordering="site")
     def site_name(self, obj=None):
@@ -195,42 +195,15 @@ class PatientLogAdmin(
     def patient(self, obj=None):
         return f"{obj.name} ({obj.initials})"
 
-    @admin.display(description="Group")
+    @admin.display(description="Group", ordering="patient_group__name")
     def group_name(self, obj=None):
-        try:
-            patient_group = PatientGroup.objects.get(patients__pk=obj.id)
-        except ObjectDoesNotExist:
-            pass
-        else:
-            group_name = patient_group.name
-            if patient_group:
-                url = reverse(
-                    "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
-                )
-                url = f"{url}?q={group_name}"
-                return format_html(f'<a href="{url}">{group_name}</a>')
-        return None
-
-    @admin.action(description="Add patients to ")
-    def to_group(self, request, queryset):
-        selected = queryset.values_list("pk", flat=True)
-        group_pk = request.POST["group"]
-        if group_pk:
-            try:
-                patient_group = PatientGroup.objects.get(id=group_pk)
-            except ObjectDoesNotExist:
-                patient_group = PatientGroup.objects.create()
-            for pk in selected:
-                patient_log = queryset.model.objects.get(id=pk)
-                if not patient_group.patients.filter(id=pk).exists():
-                    patient_group.patients.add(patient_log)
+        if obj.patient_group:
             url = reverse(
-                "intecomm_screening_admin:intecomm_screening_patientgroup_change",
-                args=(patient_group.id,),
+                "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
             )
-            return HttpResponseRedirect(url)
-        return None
-        # return self.message_user(request, "No group selected", level=messages.WARNING)
+            url = f"{url}?q={obj.patient_group.name}"
+            return format_html(f'<a href="{url}">{obj.patient_group}</a>')
+        return "<available>"
 
     def get_search_results(self, request, queryset, search_term):
         queryset, may_have_duplicates = super().get_search_results(

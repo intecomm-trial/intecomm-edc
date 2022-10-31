@@ -43,7 +43,7 @@ class PatientGroupAdmin(
     )
 
     list_display = (
-        "name",
+        "__str__",
         "opened",
         "status",
         "arm",
@@ -54,6 +54,7 @@ class PatientGroupAdmin(
 
     list_filter = (
         "status",
+        "randomized",
         "report_datetime",
     )
 

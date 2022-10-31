@@ -1,9 +1,10 @@
 from django.contrib.sites.models import Site
 from django.db import models
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
-from edc_constants.choices import YES_NO_TBD, YES_NO_UNKNOWN
-from edc_constants.constants import TBD, UNKNOWN
+from edc_constants.choices import YES_NO_TBD
+from edc_constants.constants import TBD
 from edc_model.models import BaseUuidModel, HistoricalRecords
+from edc_model.validators.phone import phone_number
 from edc_model_fields.fields import InitialsField
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
 from edc_utils import get_utcnow
@@ -53,19 +54,36 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         related_name="+",
     )
 
-    hf_identifier = models.CharField(
-        verbose_name="Health facility identifier", max_length=25, unique=True
+    hf_identifier = EncryptedCharField(
+        verbose_name="Health facility identifier",
+        unique=True,
+        blank=False,
+        help_text="Must be unique",
     )
 
-    contact_number = EncryptedCharField(null=True, blank=True)
+    contact_number = EncryptedCharField(null=True, blank=False, validators=[phone_number])
 
-    alt_contact_number = EncryptedCharField(null=True, blank=True)
+    alt_contact_number = EncryptedCharField(null=True, blank=True, validators=[phone_number])
 
-    location_description = EncryptedTextField(null=True, blank=True)
+    location_description = EncryptedTextField(
+        null=True, blank=True, help_text="Street, landmarks near home, etc"
+    )
+
+    patient_group = models.ForeignKey(
+        "intecomm_screening.PatientGroup",
+        verbose_name="Choose a group (RECOMMENDED)",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        help_text=(
+            "This can be changed at anytime until the group is flagged as COMPLETE. "
+            "It is recommended to choose a group early in the process."
+        ),
+    )
 
     conditions = models.ManyToManyField(
         Conditions,
-        verbose_name="Conditions with a documented diagnosis",
+        verbose_name="Diagnoses",
     )
 
     stable = models.CharField(
@@ -73,13 +91,17 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         max_length=15,
         choices=YES_NO_TBD,
         default=TBD,
+        help_text="Refer to the SOP for the definition of 'stable'.",
     )
 
     last_routine_appt_date = models.DateField(
         verbose_name="When was the patient last seen at this health facility",
         null=True,
         blank=True,
-        help_text="May help to estimate next appt",
+        help_text=(
+            "If known, the last appointment may help to estimate the next appointment or "
+            "the expected frequency of routine appointments"
+        ),
     )
 
     next_routine_appt_date = models.DateField(
@@ -89,22 +111,26 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         ),
         null=True,
         blank=True,
+        help_text="If known, this date will help prioritize efforts to contact the patient",
     )
 
     first_health_talk = models.CharField(
         verbose_name="Attended general INTECOMM health talk",
         max_length=15,
-        choices=YES_NO_UNKNOWN,
-        default=UNKNOWN,
+        choices=YES_NO_TBD,
+        default=TBD,
     )
 
-    first_health_talk_date = models.DateField(null=True, blank=True)
+    first_health_talk_date = models.DateField(
+        null=True,
+        blank=True,
+    )
 
     second_health_talk = models.CharField(
         verbose_name="Attended INTECOMM sensitisation session",
         max_length=15,
-        choices=YES_NO_UNKNOWN,
-        default=UNKNOWN,
+        choices=YES_NO_TBD,
+        default=TBD,
     )
 
     second_health_talk_date = models.DateField(
@@ -118,11 +144,13 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
     history = HistoricalRecords(inherit=True)
 
     def __str__(self):
-        return f"{self.name.title()} ({self.initials.upper()})"
+        grp = " <available>" if not self.patient_group else f" @ {self.patient_group.name}"
+        return f"{self.name.title()} ({self.initials.upper()}){grp}"
 
     def natural_key(self):
         return (self.name,)  # noqa
 
-    class Meta(SiteModelMixin.Meta, BaseUuidModel.Meta):
-        verbose_name = "Patient Log"
-        verbose_name_plural = "Patient Log"
+
+class Meta(SiteModelMixin.Meta, BaseUuidModel.Meta):
+    verbose_name = "Patient Log"
+    verbose_name_plural = "Patient Log"

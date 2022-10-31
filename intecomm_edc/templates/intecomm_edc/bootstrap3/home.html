@@ -32,6 +32,12 @@
       <div class="panel-heading">{{ protocol_name |default:project_name }} {{ site_title|default:request.site.name|title }}</div>
 
       <div class="list-group">
+      {% if perms.intecomm_screening.add_patientlog %}
+        <a id="home_list_group_patientlog" href="{% url 'intecomm_screening_admin:intecomm_screening_patientlog_changelist' %}" class="list-group-item"><i class="fas fa-user-plus fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Patient Log</a>
+      {% endif %}
+      {% if perms.intecomm_screening.add_patientgroup %}
+        <a id="home_list_group_patientgroup" href="{% url 'intecomm_screening_admin:intecomm_screening_patientgroup_changelist' %}" class="list-group-item"><i class="fas fa-user-plus fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Patient Groups</a>
+      {% endif %}
       {% if perms.edc_screening.view_screening_listboard %}
         <a id="home_list_group_screening_listboard" href="{% url screening_listboard_url|default:'screening_listboard_url_cannot_be_none' %}" class="list-group-item"><i class="fas fa-user-plus fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Screening</a>
       {% endif %}

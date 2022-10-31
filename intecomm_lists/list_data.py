@@ -1,6 +1,9 @@
 from edc_constants.constants import (
     CLINICAL_ENDPOINT,
     DEAD,
+    DM,
+    HIV,
+    HTN,
     NOT_APPLICABLE,
     OTHER,
     PREGNANCY,
@@ -75,5 +78,10 @@ list_data = {
         ("study_intro_talk", "INTECOMM study introduction"),
         ("sensitisation_talk", "INTECOMM Sensitisation"),
         (OTHER, "Other (specify below)"),
+    ],
+    "intecomm_lists.conditions": [
+        (HIV, "HIV"),
+        (DM, "Diabetes"),
+        (HTN, "Hypertension"),
     ],
 }
