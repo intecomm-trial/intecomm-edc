@@ -9,7 +9,7 @@ from intecomm_screening.models import SubjectScreening
 from ..options import get_eligible_options
 
 
-class TestSubjectScreeningPartOneModel(TestCase):
+class TestSubjectScreening(TestCase):
     @tag("1")
     def test_defaults(self):
         opts = deepcopy(get_eligible_options())

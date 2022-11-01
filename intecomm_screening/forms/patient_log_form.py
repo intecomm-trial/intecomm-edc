@@ -3,8 +3,8 @@ from edc_form_validators import FormValidatorMixin
 from edc_screening.modelform_mixins import AlreadyConsentedFormMixin
 from edc_sites.modelform_mixins import SiteModelFormMixin
 from edc_sites.widgets import SiteField
+from intecomm_form_validators.screening import PatientLogFormValidator
 
-from ..form_validators import PatientLogFormValidator
 from ..models import PatientLog
 
 

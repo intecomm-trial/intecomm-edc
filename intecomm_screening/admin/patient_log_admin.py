@@ -12,7 +12,7 @@ from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientLogForm
 from ..models import PatientGroup, PatientLog
-from .list_filters import NextApptListFilter
+from .list_filters import InPatientGroup, NextApptListFilter
 
 
 @admin.register(PatientLog, site=intecomm_screening_admin)
@@ -51,11 +51,19 @@ class PatientLogAdmin(
             },
         ),
         (
-            "Contact and location",
+            "Contact",
             {
                 "fields": (
                     "contact_number",
                     "alt_contact_number",
+                    "may_contact",
+                )
+            },
+        ),
+        (
+            "Address / Location",
+            {
+                "fields": (
                     "location_description",
                     "patient_group",
                 )
@@ -121,6 +129,7 @@ class PatientLogAdmin(
 
     list_filter = (
         "report_datetime",
+        InPatientGroup,
         "stable",
         NextApptListFilter,
         "last_routine_appt_date",
@@ -144,6 +153,7 @@ class PatientLogAdmin(
 
     radio_fields = {
         "stable": admin.VERTICAL,
+        "may_contact": admin.VERTICAL,
         "first_health_talk": admin.VERTICAL,
         "second_health_talk": admin.VERTICAL,
     }

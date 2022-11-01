@@ -65,6 +65,13 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
 
     alt_contact_number = EncryptedCharField(null=True, blank=True, validators=[phone_number])
 
+    may_contact = models.CharField(
+        verbose_name="Has the patient agreed to be contacted prior to consent?",
+        max_length=15,
+        choices=YES_NO_TBD,
+        default=TBD,
+    )
+
     location_description = EncryptedTextField(
         null=True, blank=True, help_text="Street, landmarks near home, etc"
     )

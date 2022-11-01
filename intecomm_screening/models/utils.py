@@ -21,9 +21,8 @@ def add_to_group(instance, commit: bool | None = None):
                     "Cannot add patient to group. Already a member of this group"
                 )
     else:
-        raise PatientGroupError(
-            "Cannot add patient to group. Already a member of another group"
-        )
+        if commit:
+            instance.patient_group.patients.add(instance)
 
 
 def remove_from_group(instance, commit: bool | None = None):
