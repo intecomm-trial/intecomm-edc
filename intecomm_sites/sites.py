@@ -16,7 +16,7 @@ all_sites = {
         ),
         IntecommSite(
             102,
-            "Kisugu",
+            "kisugu",
             health_facility_type=HC_III,
             country_code="ug",
             country="uganda",

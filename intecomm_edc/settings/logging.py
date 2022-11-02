@@ -55,7 +55,7 @@ LOGGING = {
         },
         # root logger
         "": {"handlers": ["syslog"], "level": LOGGING_SYSLOG_LEVEL, "disabled": False},
-        "meta-trial": {
+        "intecomm": {
             "handlers": ["syslog"],
             "level": LOGGING_SYSLOG_LEVEL,
             "propagate": False,
