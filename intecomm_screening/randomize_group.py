@@ -20,6 +20,11 @@ class GroupRandomizationError(Exception):
     pass
 
 
+def randomize_group(instance):
+    rando = RandomizeGroup(instance)
+    rando.randomize_group()
+
+
 class RandomizeGroup:
     def __init__(self, instance: PatientGroup):
         self.instance = instance
