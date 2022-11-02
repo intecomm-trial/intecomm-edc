@@ -11,8 +11,16 @@ from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientLogForm
-from ..models import PatientGroup, PatientLog
-from .list_filters import InPatientGroup, NextApptListFilter
+from ..models import PatientLog, SubjectScreening
+from .list_filters import (
+    ConsentedListFilter,
+    DxListFilter,
+    InPatientGroup,
+    LastApptListFilter,
+    NextApptListFilter,
+    ScreenedListFilter,
+    StableListFilter,
+)
 
 
 @admin.register(PatientLog, site=intecomm_screening_admin)
@@ -23,6 +31,8 @@ class PatientLogAdmin(
     form = PatientLogForm
     list_per_page = 20
     show_object_tools = True
+    change_list_template: str = "intecomm_screening/admin/patientlog_change_list.html"
+
     autocomplete_fields = ["patient_group"]
 
     additional_instructions = (
@@ -103,7 +113,12 @@ class PatientLogAdmin(
             "Screening and Consent",
             {
                 "classes": ("collapse",),
-                "fields": ("screening_identifier", "screening_datetime", "subject_identifier"),
+                "fields": (
+                    "screening_identifier",
+                    "screening_datetime",
+                    "subject_identifier",
+                    "consent_datetime",
+                ),
             },
         ),
         audit_fieldset_tuple,
@@ -112,8 +127,10 @@ class PatientLogAdmin(
     list_display = (
         "patient",
         "hf_id",
+        "dx",
         "group_name",
-        "date_logged",
+        "screened",
+        "consented",
         "next_appt",
         "last_appt",
         "contact",
@@ -130,12 +147,14 @@ class PatientLogAdmin(
     list_filter = (
         "report_datetime",
         InPatientGroup,
-        "stable",
+        DxListFilter,
+        StableListFilter,
+        ScreenedListFilter,
+        ConsentedListFilter,
         NextApptListFilter,
-        "last_routine_appt_date",
+        LastApptListFilter,
         "first_health_talk",
         "second_health_talk",
-        "site",
     )
 
     filter_horizontal = ("conditions",)
@@ -158,7 +177,12 @@ class PatientLogAdmin(
         "second_health_talk": admin.VERTICAL,
     }
 
-    readonly_fields = ("screening_identifier", "screening_datetime", "subject_identifier")
+    readonly_fields = (
+        "screening_identifier",
+        "screening_datetime",
+        "subject_identifier",
+        "consent_datetime",
+    )
 
     def post_url_on_delete_kwargs(self, request, obj):
         return {}
@@ -178,6 +202,10 @@ class PatientLogAdmin(
     @admin.display(description="HF ID", ordering="hf_identifier")
     def hf_id(self, obj=None):
         return obj.hf_identifier
+
+    @admin.display(description="DX")
+    def dx(self, obj=None):
+        return [c.name.upper() for c in obj.conditions.all().order_by("name")]
 
     @admin.display(description="Contact", ordering="contact_number")
     def contact(self, obj=None):
@@ -205,6 +233,34 @@ class PatientLogAdmin(
     def patient(self, obj=None):
         return f"{obj.name} ({obj.initials})"
 
+    @admin.display(description="Screened", ordering="screening_datetime")
+    def screened(self, obj=None):
+        if obj.screening_identifier:
+            subject_screening = SubjectScreening.objects.get(
+                screening_identifier=obj.screening_identifier
+            )
+            url = reverse(
+                "intecomm_screening_admin:intecomm_screening_subjectscreening_change",
+                args=(subject_screening.id,),
+            )
+            return format_html(f'<a href="{url}">{obj.screening_identifier}</a>')
+        else:
+            url = reverse("intecomm_screening_admin:intecomm_screening_subjectscreening_add")
+            url = (
+                f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
+                f"&hospital_identifier={obj.hf_identifier}"
+                f"&initials={obj.initials}"
+                f"&site={obj.site.id}"
+                f"&patient_log={obj.id}"
+            )
+        return format_html(f'<a href="{url}">Screen</a>')
+
+    @admin.display(description="Consented", ordering="consent_datetime")
+    def consented(self, obj=None):
+        if obj.subject_identifier:
+            return obj.consent_datetime.date()
+        return None
+
     @admin.display(description="Group", ordering="patient_group__name")
     def group_name(self, obj=None):
         if obj.patient_group:
@@ -222,11 +278,9 @@ class PatientLogAdmin(
             search_term,
         )
         try:
-            patient_group = PatientGroup.objects.get(name=search_term)
+            patient_log = self.model.objects.get(name=search_term)
         except ObjectDoesNotExist:
             pass
         else:
-            queryset |= self.model.objects.filter(
-                id__in=[o.id for o in patient_group.patients.all()]
-            )
+            queryset |= self.model.objects.filter(id=patient_log.id)
         return queryset, may_have_duplicates

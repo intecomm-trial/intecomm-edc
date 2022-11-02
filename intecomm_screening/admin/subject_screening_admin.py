@@ -1,4 +1,7 @@
+from typing import Tuple
+
 from django.contrib import admin
+from django.core.handlers.wsgi import WSGIRequest
 from django.template.loader import render_to_string
 from django.urls.base import reverse
 from django.urls.exceptions import NoReverseMatch
@@ -13,7 +16,7 @@ from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import SubjectScreeningForm
-from ..models import SubjectScreening
+from ..models import PatientLog, SubjectScreening
 
 
 @admin.register(SubjectScreening, site=intecomm_screening_admin)
@@ -38,6 +41,7 @@ class SubjectScreeningAdmin(
                 "fields": (
                     "report_datetime",
                     "site",
+                    "patient_log",
                 )
             },
         ),
@@ -199,6 +203,12 @@ class SubjectScreeningAdmin(
     def post_url_on_delete_kwargs(self, request, obj):
         return {}
 
+    def get_readonly_fields(self, request, obj=None) -> Tuple[str, ...]:
+        readonly_fields = super().get_readonly_fields(request, obj=obj)
+        if obj:
+            readonly_fields = readonly_fields + ("patient_log",)
+        return readonly_fields
+
     @staticmethod
     def demographics(obj=None):
         data = [
@@ -243,3 +253,14 @@ class SubjectScreeningAdmin(
         else:
             context = dict(title=_("Go to subject dashboard"), url=url, label=label)
         return render_to_string("dashboard_button.html", context=context)
+
+    def formfield_for_foreignkey(self, db_field, request: WSGIRequest, **kwargs):
+        db = kwargs.get("using")
+        if db_field.name == "patient_log":
+            if request.GET.get("patient_log"):
+                kwargs["queryset"] = PatientLog.objects.using(db).filter(
+                    id__exact=request.GET.get("patient_log", 0)
+                )
+            else:
+                kwargs["queryset"] = PatientLog.objects.none()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)

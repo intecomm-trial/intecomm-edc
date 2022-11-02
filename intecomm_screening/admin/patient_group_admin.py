@@ -29,6 +29,7 @@ class PatientGroupAdmin(
     form = PatientGroupForm
 
     show_object_tools = True
+    change_list_template: str = "intecomm_screening/admin/patientgroup_change_list.html"
 
     fieldsets = (
         (
@@ -46,6 +47,7 @@ class PatientGroupAdmin(
         "__str__",
         "opened",
         "status",
+        "ratio",
         "arm",
         "members",
         "user_created",

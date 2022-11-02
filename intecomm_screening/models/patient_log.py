@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from django.contrib.sites.models import Site
 from django.db import models
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
@@ -13,11 +15,20 @@ from intecomm_lists.models import Conditions
 
 
 class PatientLogManager(models.Manager):
+
+    use_in_migrations = True
+
     def get_by_natural_key(self, name):
         return self.get(name=name)
 
 
 class PatientLog(SiteModelMixin, BaseUuidModel):
+
+    patient_log_identifier = models.CharField(
+        max_length=36,
+        default=uuid4,
+        unique=True,
+    )
 
     screening_identifier = models.CharField(
         max_length=25,
@@ -34,6 +45,12 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
 
     subject_identifier = models.CharField(
         max_length=25,
+        null=True,
+        blank=True,
+        help_text="Auto populated when consent form is complete",
+    )
+
+    consent_datetime = models.DateTimeField(
         null=True,
         blank=True,
         help_text="Auto populated when consent form is complete",

@@ -12,6 +12,11 @@ from edc_screening.screening_identifier import (
 from edc_vitals.model_mixins import BloodPressureModelMixin
 
 from ..eligibility import ScreeningEligibility
+from .patient_log import PatientLog
+
+
+class SubjectScreeningError(Exception):
+    pass
 
 
 class ScreeningIdentifier(BaseScreeningIdentifier):
@@ -30,6 +35,10 @@ class SubjectScreening(
     eligibility_cls = ScreeningEligibility
 
     site = models.ForeignKey(Site, on_delete=models.PROTECT, null=True, related_name="+")
+
+    patient_log = models.OneToOneField(
+        PatientLog, on_delete=models.PROTECT, null=True, blank=False
+    )
 
     selection_method = models.CharField(
         verbose_name="How was the patient selected for screening?",
@@ -213,6 +222,21 @@ class SubjectScreening(
     pregnant = models.CharField(
         verbose_name="Is the patient pregnant?", max_length=15, choices=PREG_YES_NO_NA
     )
+
+    def save(self, *args, **kwargs):
+        if self.patient_log and self.patient_log.hf_identifier != self.hospital_identifier:
+            raise SubjectScreeningError(
+                "Health facility identifier does not match patient log. "
+                f"Perhaps catch this in the form. Got{self.patient_log.hf_identifier}!="
+                f"{self.hospital_identifier}"
+            )
+        if self.patient_log and self.patient_log.initials != self.initials:
+            raise SubjectScreeningError(
+                "Initials does not match patient log. "
+                f"Perhaps catch this in the form. Got{self.patient_log.initials}!="
+                f"{self.initials}"
+            )
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Subject Screening"
