@@ -64,7 +64,7 @@ ETC_DIR = env.str("DJANGO_ETC_FOLDER")
 TEST_DIR = os.path.join(BASE_DIR, APP_NAME, "tests")
 
 # INTERNAL_IPS = ["127.0.0.1"]
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*"]  # env.list('DJANGO_ALLOWED_HOSTS')
 
 ENFORCE_RELATED_ACTION_ITEM_EXISTS = False
 
@@ -88,6 +88,7 @@ INSTALLED_APPS = [
     "fontawesomefree",
     "django_crypto_fields.apps.AppConfig",
     "django_revision.apps.AppConfig",
+    # "django_extensions",
     "logentry_admin",
     "simple_history",
     "storages",
@@ -104,7 +105,6 @@ INSTALLED_APPS = [
     "edc_device.apps.AppConfig",
     "edc_dashboard.apps.AppConfig",
     "edc_data_manager.apps.AppConfig",
-    "edc_egfr.apps.AppConfig",
     "edc_export.apps.AppConfig",
     "edc_facility.apps.AppConfig",
     "edc_fieldsets.apps.AppConfig",
@@ -185,6 +185,7 @@ MIDDLEWARE.extend(
         "edc_adverse_event.middleware.DashboardMiddleware",
         "edc_listboard.middleware.DashboardMiddleware",
         "edc_review_dashboard.middleware.DashboardMiddleware",
+        # 'simple_history.middleware.HistoryRequestMiddleware'
     ]
 )
 
@@ -407,12 +408,6 @@ if EMAIL_ENABLED:
     MAILGUN_API_KEY = env("MAILGUN_API_KEY")
     MAILGUN_API_URL = env("MAILGUN_API_URL")
 
-TWILIO_ENABLED = False  # env("TWILIO_ENABLED")
-if TWILIO_ENABLED:
-    TWILIO_ACCOUNT_SID = env.str("TWILIO_ACCOUNT_SID")
-    TWILIO_AUTH_TOKEN = env.str("TWILIO_AUTH_TOKEN")
-    TWILIO_SENDER = env.str("TWILIO_SENDER")
-
 # django_revision
 GIT_DIR = BASE_DIR
 
@@ -479,11 +474,13 @@ if env("AWS_ENABLED"):
     STATIC_ROOT = ""
 elif DEBUG:
     STATIC_URL = env.str("DJANGO_STATIC_URL")
-    STATIC_ROOT = os.path.expanduser("~/source/edc_source/meta-edc/static/")
+    STATIC_ROOT = os.path.expanduser("~/source/edc_source/intecomm-edc/static/")
 else:
     # run collectstatic, check nginx LOCATION
     STATIC_URL = env.str("DJANGO_STATIC_URL")
     STATIC_ROOT = env.str("DJANGO_STATIC_ROOT")
+
+# CELERY
 
 if "test" in sys.argv:
 
