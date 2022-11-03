@@ -22,7 +22,7 @@ class IntecommSite(SingleSite):
         return dct
 
     def save(self, force_insert=False, force_update=False):
-        raise NotImplementedError("RequestSite cannot be saved.")
+        raise NotImplementedError("IntecommSite cannot be saved.")
 
     def delete(self):
-        raise NotImplementedError("RequestSite cannot be deleted.")
+        raise NotImplementedError("IntecommSite cannot be deleted.")
