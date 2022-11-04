@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
@@ -271,16 +270,16 @@ class PatientLogAdmin(
             return format_html(f'<a href="{url}">{obj.patient_group}</a>')
         return "<available>"
 
-    def get_search_results(self, request, queryset, search_term):
-        queryset, may_have_duplicates = super().get_search_results(
-            request,
-            queryset,
-            search_term,
-        )
-        try:
-            patient_log = self.model.objects.get(name=search_term)
-        except ObjectDoesNotExist:
-            pass
-        else:
-            queryset |= self.model.objects.filter(id=patient_log.id)
-        return queryset, may_have_duplicates
+    # def get_search_results(self, request, queryset, search_term):
+    #     queryset, may_have_duplicates = super().get_search_results(
+    #         request,
+    #         queryset,
+    #         search_term,
+    #     )
+    #     try:
+    #         patient_log = self.model.objects.get(name=search_term)
+    #     except ObjectDoesNotExist:
+    #         pass
+    #     else:
+    #         queryset |= self.model.objects.filter(id=patient_log.id)
+    #     return queryset, may_have_duplicates
