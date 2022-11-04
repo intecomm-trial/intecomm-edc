@@ -40,7 +40,10 @@ def update_patient_group_membership_on_post_save(sender, instance, raw, **kwargs
 def update_patient_group_ratio_on_post_save(sender, instance, raw, update_fields, **kwargs):
     if not raw and not update_fields:
         ncd, hiv = calculate_ratio(instance.patients.all())
-        instance.ratio = ncd / hiv
+        if not ncd or not hiv:
+            instance.ratio = 0
+        else:
+            instance.ratio = ncd / hiv
         if not (2.0 <= instance.ratio <= 2.7):
             raise PatientGroupRatioError(
                 f"Ratio NDC:HIV not met. Expected at least 2:1. Got {int(ncd)}:{int(hiv)}. "
