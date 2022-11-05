@@ -135,7 +135,6 @@ class PatientLogAdmin(
         "dx",
         "group_name",
         "screened",
-        "consented",
         "appts",
         "contacts",
         "talks",
