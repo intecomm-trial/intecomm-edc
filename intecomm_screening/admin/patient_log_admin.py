@@ -4,15 +4,17 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields import audit_fieldset_tuple
-from edc_constants.constants import UNKNOWN
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+
+from intecomm_consent.models import SubjectConsent
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientLogForm
 from ..models import PatientLog, SubjectScreening
 from .list_filters import (
+    AttendDateListFilter,
     ConsentedListFilter,
     DxListFilter,
     InPatientGroup,
@@ -136,8 +138,7 @@ class PatientLogAdmin(
         "consented",
         "appts",
         "contacts",
-        "ht1",
-        "ht2",
+        "talks",
         "site_name",
         "user_created",
         "created",
@@ -154,6 +155,7 @@ class PatientLogAdmin(
         StableListFilter,
         ScreenedListFilter,
         ConsentedListFilter,
+        AttendDateListFilter,
         NextApptListFilter,
         LastApptListFilter,
         "first_health_talk",
@@ -213,9 +215,13 @@ class PatientLogAdmin(
 
     @admin.display(description="Appts", ordering="next_routine_appt_date")
     def appts(self, obj=None):
+        attend_date = None
+        if patient_call := obj.patientcall_set.all().order_by("report_datetime").last():
+            attend_date = patient_call.attend_date or None
         context = dict(
             last_appt=obj.last_routine_appt_date or "-",
             next_appt=obj.next_routine_appt_date or "-",
+            attend_date=attend_date or "-",
         )
         return format_html(
             render_to_string("intecomm_screening/change_list_appts.html", context=context)
@@ -242,13 +248,15 @@ class PatientLogAdmin(
             render_to_string("intecomm_screening/change_list_contacts.html", context=context)
         )
 
-    @admin.display(description="1st HT", ordering="first_health_talk")
-    def ht1(self, obj=None):
-        return "?" if obj.first_health_talk == UNKNOWN else obj.first_health_talk
-
-    @admin.display(description="2nd HT", ordering="second_health_talk")
-    def ht2(self, obj=None):
-        return "?" if obj.second_health_talk == UNKNOWN else obj.second_health_talk
+    @admin.display(description="Talks")
+    def talks(self, obj=None):
+        context = dict(
+            ht1=obj.get_first_health_talk_display() or "-",
+            ht2=obj.get_second_health_talk_display() or "-",
+        )
+        return format_html(
+            render_to_string("intecomm_screening/change_list_talks.html", context=context)
+        )
 
     @admin.display(description="Site", ordering="site")
     def site_name(self, obj=None):
@@ -258,27 +266,59 @@ class PatientLogAdmin(
     def patient(self, obj=None):
         return f"{obj.name} ({obj.initials})"
 
-    @admin.display(description="Screened", ordering="screening_datetime")
+    @admin.display(description="Screen/Consent", ordering="screening_datetime")
     def screened(self, obj=None):
+        add_screening_url = None
+        change_screening_url = None
+        add_consent_url = None
+        change_consent_url = None
         if obj.screening_identifier:
             subject_screening = SubjectScreening.objects.get(
                 screening_identifier=obj.screening_identifier
             )
-            url = reverse(
+            change_screening_url = reverse(
                 "intecomm_screening_admin:intecomm_screening_subjectscreening_change",
                 args=(subject_screening.id,),
             )
-            return format_html(f'<a href="{url}">{obj.screening_identifier}</a>')
         else:
             url = reverse("intecomm_screening_admin:intecomm_screening_subjectscreening_add")
-            url = (
+            add_screening_url = (
                 f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
                 f"&hospital_identifier={obj.hf_identifier}"
                 f"&initials={obj.initials}"
                 f"&site={obj.site.id}"
                 f"&patient_log={obj.id}"
             )
-        return format_html(f'<a href="{url}">Screen</a>')
+        if obj.subject_identifier:
+            subject_consent = SubjectConsent.objects.get(
+                screening_identifier=obj.subject_identifier
+            )
+            change_consent_url = reverse(
+                "intecomm_consent_admin:intecomm_consent_subjectconsent_change",
+                args=(subject_consent.id,),
+            )
+        else:
+            url = reverse("intecomm_consent_admin:intecomm_consent_subjectconsent_add")
+            add_consent_url = (
+                f"{url}?next=intecomm_consent_admin:intecomm_consent_subjectconsent_changelist"
+                f"&screening_identifier={obj.screening_identifier}"
+                f"&hospital_identifier={obj.hf_identifier}"
+                f"&initials={obj.initials}"
+                f"&site={obj.site.id}"
+            )
+        context = dict(
+            add_screening_url=add_screening_url,
+            change_screening_url=change_screening_url,
+            add_consent_url=add_consent_url,
+            change_consent_url=change_consent_url,
+            screening_identifier=obj.screening_identifier,
+            subject_identifier=obj.subject_identifier,
+        )
+        return format_html(
+            render_to_string(
+                "intecomm_screening/change_list_screen_and_consent.html", context=context
+            )
+        )
 
     @admin.display(description="Consented", ordering="consent_datetime")
     def consented(self, obj=None):

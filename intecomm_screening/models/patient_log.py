@@ -139,19 +139,20 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
     )
 
     first_health_talk = models.CharField(
-        verbose_name="Attended general INTECOMM health talk",
+        verbose_name="Attended general health talk",
         max_length=15,
         choices=YES_NO_TBD,
         default=TBD,
     )
 
     first_health_talk_date = models.DateField(
+        verbose_name="General talk date",
         null=True,
         blank=True,
     )
 
     second_health_talk = models.CharField(
-        verbose_name="Attended INTECOMM sensitisation session",
+        verbose_name="Attended sensitisation session",
         max_length=15,
         choices=YES_NO_TBD,
         default=TBD,

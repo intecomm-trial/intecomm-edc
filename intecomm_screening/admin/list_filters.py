@@ -134,3 +134,10 @@ class DxListFilter(SimpleListFilter):
         if self.value() == HIV:
             qs = queryset.filter(conditions__name__in=[HIV])
         return qs
+
+
+class AttendDateListFilter(FutureDateListFilter):
+    title = "Attend date"
+
+    parameter_name = "attend_date"
+    field_name = "patientcall__attend_date"
