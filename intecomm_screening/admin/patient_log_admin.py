@@ -61,6 +61,7 @@ class PatientLogAdmin(
                 "fields": (
                     "name",
                     "initials",
+                    "gender",
                     "hf_identifier",
                 )
             },
@@ -159,6 +160,7 @@ class PatientLogAdmin(
         LastApptListFilter,
         "first_health_talk",
         "second_health_talk",
+        "gender",
     )
 
     filter_horizontal = ("conditions",)
@@ -176,10 +178,11 @@ class PatientLogAdmin(
     )
 
     radio_fields = {
-        "stable": admin.VERTICAL,
-        "may_contact": admin.VERTICAL,
         "first_health_talk": admin.VERTICAL,
+        "gender": admin.VERTICAL,
+        "may_contact": admin.VERTICAL,
         "second_health_talk": admin.VERTICAL,
+        "stable": admin.VERTICAL,
     }
 
     readonly_fields = (
@@ -286,6 +289,7 @@ class PatientLogAdmin(
                 f"&hospital_identifier={obj.hf_identifier}"
                 f"&initials={obj.initials}"
                 f"&site={obj.site.id}"
+                f"&gender={obj.gender}"
                 f"&patient_log={obj.id}"
             )
         if obj.subject_identifier:

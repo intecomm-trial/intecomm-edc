@@ -29,6 +29,8 @@ class SubjectScreeningAdmin(
     post_url_on_delete_name = "screening_listboard_url"
     subject_listboard_url_name = "screening_listboard_url"
 
+    change_list_template: str = "intecomm_screening/admin/subjectscreening_change_list.html"
+
     additional_instructions = (
         "Patients must meet ALL of the inclusion criteria and NONE of the "
         "exclusion criteria in order to proceed to the final screening stage"

@@ -3,7 +3,7 @@ from uuid import uuid4
 from django.contrib.sites.models import Site
 from django.db import models
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
-from edc_constants.choices import YES_NO_TBD
+from edc_constants.choices import GENDER, YES_NO_TBD
 from edc_constants.constants import TBD
 from edc_model.models import BaseUuidModel, HistoricalRecords
 from edc_model.validators.phone import phone_number
@@ -59,6 +59,8 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
     name = EncryptedCharField(blank=False, unique=True)
 
     initials = InitialsField()
+
+    gender = models.CharField(choices=GENDER, max_length=10, null=True, blank=False)
 
     report_datetime = models.DateTimeField(default=get_utcnow)
 
