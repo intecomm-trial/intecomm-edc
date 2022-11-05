@@ -141,3 +141,11 @@ class AttendDateListFilter(FutureDateListFilter):
 
     parameter_name = "attend_date"
     field_name = "patientcall__attend_date"
+
+    def queryset(self, request, queryset) -> QuerySet | None:
+        qs = super().queryset(request, queryset)
+        if qs:
+            # dedup
+            pk_set = set([obj.pk for obj in qs])
+            return qs.model.objects.filter(pk__in=pk_set)
+        return qs
