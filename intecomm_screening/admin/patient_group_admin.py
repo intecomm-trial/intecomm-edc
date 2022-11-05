@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
@@ -9,6 +11,10 @@ from edc_model_admin.mixins import (
     ModelAdminFormInstructionsMixin,
     ModelAdminInstitutionMixin,
     TemplatesModelAdminMixin,
+)
+from edc_utils.round_up import round_up
+from intecomm_form_validators.screening.patient_group_form_validator import (
+    calculate_ratio,
 )
 
 from ..admin_site import intecomm_screening_admin
@@ -47,7 +53,7 @@ class PatientGroupAdmin(
         "__str__",
         "opened",
         "status",
-        "ratio",
+        "rounded_ratio",
         "arm",
         "members",
         "user_created",
@@ -87,3 +93,8 @@ class PatientGroupAdmin(
     def arm(self, obj=None):
         # site_randomizers.get("intecomm") INTE or COMM
         return None
+
+    @admin.display(description="NCD:HIV", ordering="ratio")
+    def rounded_ratio(self, obj=None):
+        ncd, hiv, ratio = calculate_ratio(obj.patients.all())
+        return f'{ncd}:{hiv} ({round_up(ratio or Decimal("0.00"), Decimal("2.00"))})'

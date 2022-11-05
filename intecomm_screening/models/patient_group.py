@@ -39,7 +39,7 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
         default=RECRUITING,
     )
 
-    ratio = models.FloatField(null=True)
+    ratio = models.DecimalField(max_digits=10, decimal_places=4, null=True)
 
     randomize = models.CharField(
         verbose_name="Randomise now?", max_length=15, choices=YES_NO, default=NO

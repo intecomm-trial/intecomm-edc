@@ -21,6 +21,7 @@ from .list_filters import (
     ScreenedListFilter,
     StableListFilter,
 )
+from .patient_call_inlines import AddPatientCallInline, ViewPatientCallInline
 
 
 @admin.register(PatientLog, site=intecomm_screening_admin)
@@ -34,6 +35,8 @@ class PatientLogAdmin(
     change_list_template: str = "intecomm_screening/admin/patientlog_change_list.html"
 
     autocomplete_fields = ["patient_group"]
+
+    inlines = [AddPatientCallInline, ViewPatientCallInline]
 
     additional_instructions = (
         "Only include patients that are known to have a qualifying "
@@ -90,15 +93,6 @@ class PatientLogAdmin(
             },
         ),
         (
-            "Appointments",
-            {
-                "fields": (
-                    "last_routine_appt_date",
-                    "next_routine_appt_date",
-                )
-            },
-        ),
-        (
             "Health talks",
             {
                 "fields": (
@@ -106,6 +100,15 @@ class PatientLogAdmin(
                     "first_health_talk_date",
                     "second_health_talk",
                     "second_health_talk_date",
+                )
+            },
+        ),
+        (
+            "Appointments",
+            {
+                "fields": (
+                    "last_routine_appt_date",
+                    "next_routine_appt_date",
                 )
             },
         ),
@@ -131,9 +134,8 @@ class PatientLogAdmin(
         "group_name",
         "screened",
         "consented",
-        "next_appt",
-        "last_appt",
-        "contact",
+        "appts",
+        "contacts",
         "ht1",
         "ht2",
         "site_name",
@@ -146,6 +148,7 @@ class PatientLogAdmin(
 
     list_filter = (
         "report_datetime",
+        "call_attempts",
         InPatientGroup,
         DxListFilter,
         StableListFilter,
@@ -160,6 +163,7 @@ class PatientLogAdmin(
     filter_horizontal = ("conditions",)
 
     search_fields = (
+        "id",
         "screening_identifier",
         "subject_identifier",
         "patient_group__name",
@@ -207,11 +211,32 @@ class PatientLogAdmin(
     def dx(self, obj=None):
         return [c.name.upper() for c in obj.conditions.all().order_by("name")]
 
-    @admin.display(description="Contact", ordering="contact_number")
-    def contact(self, obj=None):
+    @admin.display(description="Appts", ordering="next_routine_appt_date")
+    def appts(self, obj=None):
         context = dict(
+            last_appt=obj.last_routine_appt_date or "-",
+            next_appt=obj.next_routine_appt_date or "-",
+        )
+        return format_html(
+            render_to_string("intecomm_screening/change_list_appts.html", context=context)
+        )
+
+    @admin.display(description="Contacts", ordering="contact_number")
+    def contacts(self, obj=None):
+        add_patient_call_url = reverse(
+            "intecomm_screening_admin:intecomm_screening_patientcall_add"
+        )
+        patient_call_url = reverse(
+            "intecomm_screening_admin:intecomm_screening_patientcall_changelist"
+        )
+        patient_call_url = f"{patient_call_url}?q={obj.id}"
+        context = dict(
+            patient_log_id=obj.id,
+            add_patient_call_url=add_patient_call_url,
+            patient_call_url=patient_call_url,
             contact_number=obj.contact_number,
             alt_contact_number=obj.alt_contact_number,
+            call_attempts=obj.call_attempts,
         )
         return format_html(
             render_to_string("intecomm_screening/change_list_contacts.html", context=context)
@@ -270,6 +295,12 @@ class PatientLogAdmin(
             url = f"{url}?q={obj.patient_group.name}"
             return format_html(f'<a href="{url}">{obj.patient_group}</a>')
         return "<available>"
+
+    @admin.display(description="Calls", ordering="contact_attempts")
+    def calls(self, obj):
+        url = reverse("intecomm_screening_admin:intecomm_screening_patientcall_changelist")
+        url = f"{url}?q={obj.patientcall.id}"
+        return format_html(f'<A href="{url}">{obj.contact_attempts}</a>')
 
     def get_search_results(self, request, queryset, search_term):
         queryset, may_have_duplicates = super().get_search_results(

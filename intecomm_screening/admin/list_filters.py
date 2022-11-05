@@ -21,6 +21,13 @@ class LastApptListFilter(PastDateListFilter):
     field_name = "last_routine_appt_date"
 
 
+class AttendDatetListFilter(FutureDateListFilter):
+    title = _("Attend date")
+
+    parameter_name = "attend_date"
+    field_name = "attend_date"
+
+
 class InPatientGroup(SimpleListFilter):
     title = "In a group"
 

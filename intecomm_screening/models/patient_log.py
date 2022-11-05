@@ -161,6 +161,8 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         verbose_name="Sensitisation session date", null=True, blank=True
     )
 
+    call_attempts = models.IntegerField(default=0, help_text="auto-updated", blank=True)
+
     on_site = CurrentSiteManager()
 
     objects = PatientLogManager()

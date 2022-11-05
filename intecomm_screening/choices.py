@@ -1,4 +1,4 @@
-from edc_constants.constants import COMPLETE, NEW, OTHER
+from edc_constants.constants import COMPLETE, NEW, NOT_APPLICABLE, OTHER
 
 from .constants import RECRUITING
 
@@ -11,4 +11,12 @@ REFUSAL_REASONS = (
     ("dont_want_to_join", "I don't want to take part"),
     ("need_to_think_about_it", "I haven't had a chance to think about it"),
     (OTHER, "Other, please specify"),
+)
+
+RESPONDENT_CHOICES = (
+    ("patient", "Patient"),
+    ("family", "Family"),
+    ("friend", "friend"),
+    ("other", "other"),
+    (NOT_APPLICABLE, "Not applicable"),
 )
