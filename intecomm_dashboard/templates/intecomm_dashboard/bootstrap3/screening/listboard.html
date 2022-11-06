@@ -5,6 +5,11 @@
 
 {% block listboard_panel %}
 
+    <a id="patientlog_add"
+        title="{% if perms.intecomm_screening.add_patientlog %}add patient{% else %}check your permissions{% endif %}"
+        class="btn btn-sm btn-default" role="button"  href="{% url 'intecomm_screening_admin:intecomm_screening_patientlog_add' %}?">
+            <i class="fas fa-plus fa-sm"></i> Add Patient Log
+    </a>
     <a id="patientlog_changelist"
         title="{% if perms.intecomm_screening.add_patientlog %}patient logs{% else %}check your permissions{% endif %}"
         class="btn btn-sm btn-default" role="button"
@@ -18,13 +23,6 @@
         {% if not perms.intecomm_screening.add_patientgroup %}disabled{% endif %}
         href="{% if perms.intecomm_screening.add_patientgroup %}{% url "intecomm_screening_admin:intecomm_screening_patientgroup_changelist" %}{% endif %}">
             Patient Groups
-    </a>
-    <a id="subjectscreening_add"
-        title="{% if perms.intecomm_screening.add_subjectscreening %}add screening{% else %}check your permissions{% endif %}"
-        class="btn btn-sm btn-default" role="button"
-        {% if not perms.intecomm_screening.add_subjectscreening %}disabled{% endif %}
-        href="{% if perms.intecomm_screening.add_subjectscreening %}{{ subject_screening_add_url }}?next={{ screening_listboard_url }}{% endif %}">
-            <i class="fas fa-plus fa-sm"></i> Add Patient Screening
     </a>
 
 {% endblock listboard_panel %}
@@ -51,6 +49,7 @@
       {% screening_button result %}
       {% eligibility_button result %}
       {% if result.eligible %}
+        {% patient_group_button result %}
         {% if result.consent %}
             {% dashboard_button result %}
         {% else %}

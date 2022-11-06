@@ -147,6 +147,13 @@ class SubjectScreeningAdmin(
                 )
             },
         ),
+        (
+            "Updates",
+            {
+                "classes": ("collapse",),
+                "fields": ("screening_identifier", "subject_identifier"),
+            },
+        ),
         audit_fieldset_tuple,
     )
 
@@ -175,6 +182,8 @@ class SubjectScreeningAdmin(
         "initials",
         "reasons_ineligible",
     )
+
+    readonly_fields = ("screening_identifier", "subject_identifier")
 
     radio_fields = {
         "consent_ability": admin.VERTICAL,
@@ -248,7 +257,7 @@ class SubjectScreeningAdmin(
         except NoReverseMatch:
             url = reverse(url_names.get("screening_listboard_url"), kwargs={})
             context = dict(
-                title=_("Go to screening listboard"),
+                title=_("Go to screening and consent"),
                 url=f"{url}?q={obj.screening_identifier}",
                 label=label,
             )

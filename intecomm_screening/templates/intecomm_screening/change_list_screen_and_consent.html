@@ -5,7 +5,7 @@
     </tr>
   {% else %}
     <tr>
-      <td colspan="2"><a href="{{ change_screening_url }}">SCR:{{ screening_identifier }}</a></td>
+      <td>Screen</td><td><a href="{{ change_screening_url }}">{{ screening_identifier }}</a></td>
     </tr>
   {% endif  %}
   {% if add_consent_url %}
@@ -14,7 +14,7 @@
     </tr>
   {% else %}
     <tr>
-      <td colspan="2"><a href="{{ change_consent_url }}">CON:{{ subject_identifier }}</a></td>
+      <td>Consent</td><td><a href="{{ change_consent_url }}">{{ subject_identifier }}</a></td>
     </tr>
   {% endif  %}
 </table>

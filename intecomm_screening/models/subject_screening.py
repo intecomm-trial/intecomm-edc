@@ -36,6 +36,13 @@ class SubjectScreening(
 
     site = models.ForeignKey(Site, on_delete=models.PROTECT, null=True, related_name="+")
 
+    screening_identifier = models.CharField(
+        verbose_name="Screening ID",
+        max_length=50,
+        blank=True,
+        unique=True,
+    )
+
     patient_log = models.OneToOneField(
         PatientLog, on_delete=models.PROTECT, null=True, blank=False
     )

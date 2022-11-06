@@ -92,7 +92,7 @@ class MetaTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
     @staticmethod
     def get_subject_consent(subject_screening, consent_datetime=None, site_id=None):
         return baker.make_recipe(
-            "meta_consent.subjectconsent",
+            "intecomm_consent.subjectconsent",
             user_created="erikvw",
             user_modified="erikvw",
             screening_identifier=subject_screening.screening_identifier,

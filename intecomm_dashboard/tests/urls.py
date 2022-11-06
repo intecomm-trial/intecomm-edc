@@ -8,10 +8,11 @@ from edc_dashboard.views import AdministrationView
 from edc_locator.admin_site import edc_locator_admin
 from edc_reference.admin_site import edc_reference_admin
 from meta_ae.admin_site import meta_ae_admin
-from meta_consent.admin_site import meta_consent_admin
 from meta_prn.admin_site import meta_prn_admin
 from meta_screening.admin_site import meta_screening_admin
 from meta_subject.admin_site import meta_subject_admin
+
+from intecomm_consent.admin_site import intecomm_consent_admin
 
 from .admin import meta_test_admin
 
@@ -25,7 +26,7 @@ urlpatterns = [
     path("admin/", meta_prn_admin.urls),
     path("admin/", edc_reference_admin.urls),
     path("admin/", edc_locator_admin.urls),
-    path("admin/", meta_consent_admin.urls),
+    path("admin/", intecomm_consent_admin.urls),
     path("admin/", meta_subject_admin.urls),
     path("admin/", meta_screening_admin.urls),
     path("admin/", edc_action_item_admin.urls),
@@ -34,7 +35,7 @@ urlpatterns = [
     path("meta_ae/", include("meta_ae.urls")),
     path("meta_prn/", include("meta_prn.urls")),
     path("meta_screening/", include("meta_screening.urls")),
-    path("meta_consent/", include("meta_consent.urls")),
+    path("intecomm_consent/", include("intecomm_consent.urls")),
     path("meta_subject/", include("meta_subject.urls")),
     path("edc_action_item/", include("edc_action_item.urls")),
     path("edc_adverse_event/", include("edc_adverse_event.urls")),

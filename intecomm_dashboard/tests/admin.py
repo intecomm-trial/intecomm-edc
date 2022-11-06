@@ -1,8 +1,9 @@
 from django.contrib.admin import AdminSite as DjangoAdminSite
 from edc_locator.models import SubjectLocator
-from meta_consent.models import SubjectConsent
 from meta_screening.models import SubjectScreening
 from meta_subject.models import SubjectRequisition, SubjectVisit
+
+from intecomm_consent.models import SubjectConsent
 
 
 class AdminSite(DjangoAdminSite):

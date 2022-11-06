@@ -11,8 +11,8 @@ navbar = Navbar(name="intecomm_dashboard")
 navbar.append_item(
     NavbarItem(
         name="screened_subject",
-        title="Screening",
-        label="Screening",
+        title="Screening and Consent",
+        label="Screening and Consent",
         fa_icon="fa-solid fa-user-plus",
         codename="edc_screening.view_screening_listboard",
         url_name="screening_listboard_url",

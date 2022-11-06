@@ -5,6 +5,12 @@ from django.db.models import QuerySet
 from django.utils.translation import gettext_lazy as _
 from edc_constants.constants import DM, HIV, HTN, NCD, NO, TBD, YES
 from edc_model_admin.list_filters import FutureDateListFilter, PastDateListFilter
+from edc_protocol import Protocol
+
+HIV_ONLY = "HIV_ONLY"
+NCD_ONLY = "NCD_ONLY"
+HTN_ONLY = "HTN_ONLY"
+DM_ONLY = "DM_ONLY"
 
 
 class NextApptListFilter(FutureDateListFilter):
@@ -76,8 +82,8 @@ class StableListFilter(SimpleListFilter):
 class ScreenedListFilter(SimpleListFilter):
     title = "Screened"
 
-    parameter_name = "screening_datetime"
-    field_name = "screening_datetime"
+    parameter_name = "screening_identifier"
+    field_name = "screening_identifier"
 
     def lookups(self, request, model_admin) -> tuple:
         return (
@@ -88,17 +94,17 @@ class ScreenedListFilter(SimpleListFilter):
     def queryset(self, request, queryset) -> QuerySet | None:
         qs = None
         if self.value() == YES:
-            qs = queryset.filter(screening_datetime__isnull=False)
+            qs = queryset.filter(subjectscreening__screening_identifier__isnull=False)
         if self.value() == NO:
-            qs = queryset.filter(screening_datetime__isnull=True)
+            qs = queryset.filter(subjectscreening__screening_identifier__isnull=True)
         return qs
 
 
 class ConsentedListFilter(SimpleListFilter):
     title = "Consented"
 
-    parameter_name = "consent_datetime"
-    field_name = "consent_datetime"
+    parameter_name = "subject_identifier"
+    field_name = "subject_identifier"
 
     def lookups(self, request, model_admin) -> tuple:
         return (
@@ -109,9 +115,12 @@ class ConsentedListFilter(SimpleListFilter):
     def queryset(self, request, queryset) -> QuerySet | None:
         qs = None
         if self.value() == YES:
-            qs = queryset.filter(consent_datetime__isnull=False)
+            qs = queryset.filter(
+                subjectscreening__subject_identifier__isnull=False,
+                subjectscreening__subject_identifier__startswith=Protocol().protocol_number,
+            )
         if self.value() == NO:
-            qs = queryset.filter(consent_datetime__isnull=True)
+            qs = queryset.filter(subjectscreening__subject_identifier__isnull=True)
         return qs
 
 
@@ -125,6 +134,10 @@ class DxListFilter(SimpleListFilter):
         return (
             (NCD, "NCD"),
             (HIV, "HIV"),
+            (NCD_ONLY, "NCD only"),
+            (DM_ONLY, "DM only"),
+            (HIV_ONLY, "HIV only"),
+            (HTN_ONLY, "HTN only"),
         )
 
     def queryset(self, request, queryset) -> QuerySet | None:
@@ -133,6 +146,22 @@ class DxListFilter(SimpleListFilter):
             qs = queryset.filter(conditions__name__in=[DM, HTN])
         if self.value() == HIV:
             qs = queryset.filter(conditions__name__in=[HIV])
+        if self.value() == NCD_ONLY:
+            qs = queryset.filter(conditions__name__in=[DM, HTN]).exclude(
+                conditions__name__in=[HIV]
+            )
+        if self.value() == HIV_ONLY:
+            qs = queryset.filter(conditions__name__in=[HIV]).exclude(
+                conditions__name__in=[HTN, DM]
+            )
+        if self.value() == HTN_ONLY:
+            qs = queryset.filter(conditions__name__in=[HTN]).exclude(
+                conditions__name__in=[HIV, DM]
+            )
+        if self.value() == DM_ONLY:
+            qs = queryset.filter(conditions__name__in=[DM]).exclude(
+                conditions__name__in=[HIV, HTN]
+            )
         return qs
 
 

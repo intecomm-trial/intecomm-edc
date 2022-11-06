@@ -40,9 +40,11 @@ class PatientLogAdmin(
 
     inlines = [AddPatientCallInline, ViewPatientCallInline]
 
-    additional_instructions = (
+    additional_instructions = format_html(
         "Only include patients that are known to have a qualifying "
-        "condition and are stable in-care."
+        "condition and are stable in-care.<BR>"
+        '<h3 style="color:orange;">Note:</h3> Log calls and call attempts at the bottom '
+        "of this form."
     )
 
     fieldsets = (
@@ -270,56 +272,10 @@ class PatientLogAdmin(
 
     @admin.display(description="Screen/Consent", ordering="screening_datetime")
     def screened(self, obj=None):
-        add_screening_url = None
-        change_screening_url = None
-        add_consent_url = None
-        change_consent_url = None
-        if obj.screening_identifier:
-            subject_screening = SubjectScreening.objects.get(
-                screening_identifier=obj.screening_identifier
-            )
-            change_screening_url = reverse(
-                "intecomm_screening_admin:intecomm_screening_subjectscreening_change",
-                args=(subject_screening.id,),
-            )
-        else:
-            url = reverse("intecomm_screening_admin:intecomm_screening_subjectscreening_add")
-            add_screening_url = (
-                f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
-                f"&hospital_identifier={obj.hf_identifier}"
-                f"&initials={obj.initials}"
-                f"&site={obj.site.id}"
-                f"&gender={obj.gender}"
-                f"&patient_log={obj.id}"
-            )
-        if obj.subject_identifier:
-            subject_consent = SubjectConsent.objects.get(
-                screening_identifier=obj.subject_identifier
-            )
-            change_consent_url = reverse(
-                "intecomm_consent_admin:intecomm_consent_subjectconsent_change",
-                args=(subject_consent.id,),
-            )
-        else:
-            url = reverse("intecomm_consent_admin:intecomm_consent_subjectconsent_add")
-            add_consent_url = (
-                f"{url}?next=intecomm_consent_admin:intecomm_consent_subjectconsent_changelist"
-                f"&screening_identifier={obj.screening_identifier}"
-                f"&hospital_identifier={obj.hf_identifier}"
-                f"&initials={obj.initials}"
-                f"&site={obj.site.id}"
-            )
-        context = dict(
-            add_screening_url=add_screening_url,
-            change_screening_url=change_screening_url,
-            add_consent_url=add_consent_url,
-            change_consent_url=change_consent_url,
-            screening_identifier=obj.screening_identifier,
-            subject_identifier=obj.subject_identifier,
-        )
         return format_html(
             render_to_string(
-                "intecomm_screening/change_list_screen_and_consent.html", context=context
+                "intecomm_screening/change_list_screen_and_consent.html",
+                context=self.get_screening_context(obj),
             )
         )
 
@@ -358,3 +314,65 @@ class PatientLogAdmin(
         else:
             queryset |= self.model.objects.filter(id=patient_log.id)
         return queryset, may_have_duplicates
+
+    @staticmethod
+    def get_screening_context(obj) -> dict:
+        add_screening_url = None
+        change_screening_url = None
+        add_consent_url = None
+        change_consent_url = None
+        subject_identifier = None
+        if obj.screening_identifier:
+            subject_screening = SubjectScreening.objects.get(
+                screening_identifier=obj.screening_identifier
+            )
+            url = reverse(
+                "intecomm_screening_admin:intecomm_screening_subjectscreening_change",
+                args=(subject_screening.id,),
+            )
+            change_screening_url = (
+                f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
+                f"&q={obj.screening_identifier}"
+            )
+        else:
+            url = reverse("intecomm_screening_admin:intecomm_screening_subjectscreening_add")
+            add_screening_url = (
+                f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
+                f"&hospital_identifier={obj.hf_identifier}"
+                f"&initials={obj.initials}"
+                f"&site={obj.site.id}"
+                f"&gender={obj.gender}"
+                f"&patient_log={obj.id}"
+                f"&q={obj.screening_identifier}"
+            )
+        try:
+            subject_consent = SubjectConsent.objects.get(
+                screening_identifier=obj.screening_identifier
+            )
+        except ObjectDoesNotExist:
+            url = reverse("intecomm_consent_admin:intecomm_consent_subjectconsent_add")
+            add_consent_url = (
+                f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
+                f"&screening_identifier={obj.screening_identifier}"
+                f"&hospital_identifier={obj.hf_identifier}"
+                f"&initials={obj.initials}"
+                f"&site={obj.site.id}"
+            )
+        else:
+            subject_identifier = subject_consent.subject_identifier
+            url = reverse(
+                "intecomm_consent_admin:intecomm_consent_subjectconsent_change",
+                args=(subject_consent.id,),
+            )
+            change_consent_url = (
+                f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
+            )
+
+        return dict(
+            add_screening_url=add_screening_url,
+            change_screening_url=change_screening_url,
+            add_consent_url=add_consent_url,
+            change_consent_url=change_consent_url,
+            screening_identifier=obj.screening_identifier,
+            subject_identifier=subject_identifier,
+        )

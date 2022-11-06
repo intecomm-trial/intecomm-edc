@@ -12,7 +12,7 @@ from edc_consent.field_mixins import (
 from edc_consent.managers import ConsentManager
 from edc_consent.model_mixins import ConsentModelMixin
 from edc_constants.choices import YES_NO
-from edc_constants.constants import NO, NOT_APPLICABLE
+from edc_constants.constants import BLACK, NO, NOT_APPLICABLE
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierModelMixin
 from edc_identifier.subject_identifier import SubjectIdentifier as BaseSubjectIdentifier
 from edc_model.models import BaseUuidModel, HistoricalRecords
@@ -70,6 +70,7 @@ class SubjectConsent(
         help_text="fromm screening",
         editable=False,
         null=True,
+        default=BLACK,
     )
 
     completed_by_next_of_kin = models.CharField(
@@ -92,7 +93,6 @@ class SubjectConsent(
         self.screening_datetime = subject_screening.report_datetime
         self.subject_type = "subject"
         self.citizen = NOT_APPLICABLE
-        self.ethnicity = subject_screening.ethnicity
         super().save(*args, **kwargs)
 
     def natural_key(self):
