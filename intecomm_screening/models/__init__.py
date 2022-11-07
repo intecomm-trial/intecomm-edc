@@ -1,3 +1,4 @@
+from .health_talk_log import HealthTalkLog
 from .patient_call import PatientCall
 from .patient_group import PatientGroup
 from .patient_log import PatientLog

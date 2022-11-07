@@ -3,6 +3,11 @@
 
 {% block object-tools-items %}
   <li>
+    <a href="{% url "home_url" %}" class="changelink">
+      Home
+    </a>
+  </li>
+  <li>
     <a href="{% url "intecomm_screening_admin:intecomm_screening_patientgroup_changelist" %}" class="changelink">
       Patient Groups
     </a>

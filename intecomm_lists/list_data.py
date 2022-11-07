@@ -4,6 +4,7 @@ from edc_constants.constants import (
     DM,
     HIV,
     HTN,
+    NCD,
     NOT_APPLICABLE,
     OTHER,
     PREGNANCY,
@@ -18,6 +19,7 @@ from intecomm_prn.constants import (
     LATE_EXCLUSION,
     OTHER_RX_DISCONTINUATION,
 )
+from intecomm_subject.constants import INTEGRATED
 
 list_data = {
     "intecomm_lists.offstudyreasons": [
@@ -83,5 +85,13 @@ list_data = {
         (HIV, "HIV"),
         (DM, "Diabetes"),
         (HTN, "Hypertension"),
+    ],
+    "intecomm_lists.healthfacilities": [
+        (DM, "Diabetes Clinic"),
+        (HIV, "HIV Clinic"),
+        (HTN, "Hypertension Clinic"),
+        (INTEGRATED, "Integrated Clinic (HIV/NCD)"),
+        (NCD, "NCD Clinic"),
+        (OTHER, "Other (specify below)"),
     ],
 }

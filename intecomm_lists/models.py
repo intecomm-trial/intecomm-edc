@@ -161,3 +161,9 @@ class TransportChoices(ListModelMixin):
     class Meta(ListModelMixin.Meta):
         verbose_name = "Transport Choices"
         verbose_name_plural = "Transport Choices"
+
+
+class HealthFacilities(ListModelMixin):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Health Facilities"
+        verbose_name_plural = "Health Facilities"

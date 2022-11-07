@@ -1,3 +1,4 @@
+from .health_talk_log_form import HealthTalkLogForm
 from .patient_call_form import PatientCallForm
 from .patient_group_form import PatientGroupForm
 from .patient_log_form import PatientLogForm
