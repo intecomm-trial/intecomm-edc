@@ -135,11 +135,15 @@ def refusal_button(context, model_wrapper):
 
 
 @register.inclusion_tag(
-    f"intecomm_dashboard/bootstrap{get_bootstrap_version()}/" f"buttons/dashboard_button.html"
+    f"intecomm_dashboard/bootstrap{get_bootstrap_version()}/buttons/dashboard_button.html"
 )
 def dashboard_button(model_wrapper):
     subject_dashboard_url = url_names.get("subject_dashboard_url")
-    randomized = model_wrapper.object.patient_log.patient_group.randomized
+    # get randomized
+    if not model_wrapper.object.patient_log.patient_group:
+        randomized = False
+    else:
+        randomized = model_wrapper.object.patient_log.patient_group.randomized
     subject_dashboard_href = "#"
     if randomized:
         subject_dashboard_href = reverse(
