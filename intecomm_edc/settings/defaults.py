@@ -152,6 +152,7 @@ INSTALLED_APPS = [
     "intecomm_auth.apps.AppConfig",
     "intecomm_prn.apps.AppConfig",
     "intecomm_export.apps.AppConfig",
+    "intecomm_group.apps.AppConfig",
     "intecomm_screening.apps.AppConfig",
     "intecomm_sites.apps.AppConfig",
     "intecomm_edc.apps.AppConfig",

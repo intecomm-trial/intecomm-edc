@@ -1,11 +1,8 @@
-from decimal import Decimal
-
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
 from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
-from edc_constants.constants import COMPLETE, NEW
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_model_admin.mixins import (
     ModelAdminFormAutoNumberMixin,
@@ -13,17 +10,14 @@ from edc_model_admin.mixins import (
     ModelAdminInstitutionMixin,
     TemplatesModelAdminMixin,
 )
-from edc_utils.round_up import round_up
-from intecomm_form_validators import RECRUITING
+from intecomm_form_validators import DISSOLVED, IN_FOLLOWUP
 
-from intecomm_group.utils import calculate_ratio
-
-from ..admin_site import intecomm_screening_admin
+from ..admin_site import intecomm_group_admin
 from ..forms import PatientGroupForm
 from ..models import PatientGroup
 
 
-@admin.register(PatientGroup, site=intecomm_screening_admin)
+@admin.register(PatientGroup, site=intecomm_group_admin)
 class PatientGroupAdmin(
     TemplatesModelAdminMixin,
     ModelAdminFormInstructionsMixin,  # add
@@ -32,20 +26,19 @@ class PatientGroupAdmin(
     ModelAdminInstitutionMixin,  # add
     SimpleHistoryAdmin,
 ):
+    """Modeladmin for patient groups in follow-up or dissolved.
+
+    See `get_queryset`"""
 
     form = PatientGroupForm
 
     show_object_tools = True
-    change_list_template: str = "intecomm_screening/admin/patientgroup_change_list.html"
+    change_list_template: str = "intecomm_group/admin/patientgroup_change_list.html"
 
     fieldsets = (
         (
             None,
-            {"fields": ("report_datetime", "name", "patients", "notes")},
-        ),
-        (
-            "Status",
-            {"fields": ("status", "randomize")},
+            {"fields": ("report_datetime", "name", "patients", "status", "notes")},
         ),
         audit_fieldset_tuple,
     )
@@ -54,8 +47,7 @@ class PatientGroupAdmin(
         "__str__",
         "opened",
         "status",
-        "rounded_ratio",
-        "arm",
+        "meetings",
         "members",
         "user_created",
         "created",
@@ -79,26 +71,31 @@ class PatientGroupAdmin(
         "randomize": admin.VERTICAL,
     }
 
+    readonly_fields = (
+        "report_datetime",
+        "name",
+        "status",
+        "randomized",
+        "patients",
+    )
+
     @admin.display(description="Opened", ordering="report_datetime")
     def opened(self, obj=None):
         return obj.report_datetime.date()
 
+    @admin.display(description="Meetings")
+    def meetings(self, obj=None):
+        name = "+".join(obj.name.split(" "))
+        url = reverse("intecomm_prn_admin:intecomm_group_patientgroupmeeting_changelist")
+        url = f"{url}?q={name}"
+        return format_html(f'<a href="{url}">Meetings</a>')
+
     @admin.display(description="Members")
     def members(self, obj=None):
         cnt = obj.patients.all().count()
-        url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
+        url = reverse("intecomm_prn_admin:intecomm_prn_patientlog_changelist")
         url = f"{url}?q={obj.name}"
         return format_html(f'<a href="{url}">{cnt} patients</a>')
 
-    @admin.display(description="Arm")
-    def arm(self, obj=None):
-        # site_randomizers.get("intecomm") INTE or COMM
-        return None
-
-    @admin.display(description="NCD:HIV", ordering="ratio")
-    def rounded_ratio(self, obj=None):
-        ncd, hiv, ratio = calculate_ratio(obj.patients.all())
-        return f'{ncd}:{hiv} ({round_up(ratio or Decimal("0.00"), Decimal("2.00"))})'
-
     def get_queryset(self, request):
-        return super().get_queryset(request).filter(status__in=[NEW, RECRUITING, COMPLETE])
+        return super().get_queryset(request).filter(status__in=[IN_FOLLOWUP, DISSOLVED])

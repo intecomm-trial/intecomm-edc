@@ -1,0 +1,2 @@
+from .community_care_location_admin import CommunityCareLocationAdmin
+from .patient_group_admin import PatientGroupAdmin

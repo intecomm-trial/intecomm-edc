@@ -141,6 +141,7 @@ project_settings = DefaultTestSettings(
         "intecomm_ae.apps.AppConfig",
         "intecomm_prn.apps.AppConfig",
         "intecomm_export.apps.AppConfig",
+        "intecomm_group.apps.AppConfig",
         "intecomm_screening.apps.AppConfig",
         "intecomm_edc.apps.AppConfig",
     ],

@@ -1,13 +1,4 @@
-from edc_constants.constants import COMPLETE, NEW, NOT_APPLICABLE, OTHER
-from intecomm_form_validators import DISSOLVED, IN_FOLLOWUP, RECRUITING
-
-GROUP_STATUS_CHOICES = (
-    (NEW, "New"),
-    (RECRUITING, "Recruiting"),
-    (COMPLETE, "Complete/Ready"),
-    (IN_FOLLOWUP, "In followup"),
-    (DISSOLVED, "Dissolved"),
-)
+from edc_constants.constants import NOT_APPLICABLE, OTHER
 
 REFUSAL_REASONS = (
     ("dont_have_time", "I don't have time"),
