@@ -15,19 +15,19 @@ from edc_metadata import REQUIRED
 from edc_metadata.models import CrfMetadata
 from edc_randomization.site_randomizers import site_randomizers
 from edc_sites import add_or_update_django_sites, get_sites_by_country
-from edc_sites.tests.site_test_case_mixin import SiteTestCaseMixin
 from edc_visit_tracking.constants import SCHEDULED
-from meta_pharmacy.prepare_meta_pharmacy import prepare_meta_pharmacy
-from meta_sites import fqdn
-from meta_subject.models import SubjectVisit
-from meta_visit_schedule.constants import DAY1
 from model_bakery import baker
+
+from intecomm_sites.sites import fqdn
+from intecomm_sites.tests.site_test_case_mixin import SiteTestCaseMixin
+from intecomm_subject.models import SubjectVisit
+from intecomm_visit_schedule.constants import DAY1
 
 from ..models import SubjectScreening
 from .options import get_eligible_options, now
 
 
-class MetaTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
+class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
 
     fqdn = fqdn
 
@@ -50,7 +50,6 @@ class MetaTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             )
         site_list_data.initialize()
         site_list_data.autodiscover()
-        prepare_meta_pharmacy()
 
     def get_subject_screening(
         self,

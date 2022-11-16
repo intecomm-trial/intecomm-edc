@@ -94,4 +94,8 @@ list_data = {
         (NCD, "NCD Clinic"),
         (OTHER, "Other (specify below)"),
     ],
+    "intecomm_lists.locationtypes": [
+        ("school", "School"),
+        (OTHER, "Other (specify below)"),
+    ],
 }

@@ -5,7 +5,7 @@ from .patient_log import PatientLog
 from .signals import (
     patient_call_on_post_delete,
     patient_call_on_post_save,
-    randomize_group_on_post_save,
+    randomize_patient_group_on_post_save,
     update_patient_group_on_patient_log_post_save,
     update_patient_group_ratio_on_post_save,
     update_patient_log_on_patient_group_m2m_change,

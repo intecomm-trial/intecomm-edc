@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING
 
 from django.core.exceptions import ObjectDoesNotExist
 from edc_consent.utils import get_consent_model_cls
-from edc_constants.constants import COMPLETE
+from edc_constants.constants import COMPLETE, UUID_PATTERN
 from edc_screening.utils import get_subject_screening_model_cls
 from edc_utils import get_utcnow
+
+from .group_identifier import GroupIdentifier
 
 if TYPE_CHECKING:
     from .models import PatientGroup
@@ -32,6 +35,11 @@ class RandomizeGroup:
     def randomize_group(self):
         if self.instance.randomized:
             raise GroupAlreadyRandomized(f"Group is already randomized. Got {self.instance}.")
+        if not re.match(UUID_PATTERN, self.instance.group_identifier):
+            raise GroupAlreadyRandomized(
+                "Randomization failed. Group identifier already set. "
+                f"See {self.instance.group_identifier}."
+            )
         if self.instance.status != COMPLETE:
             raise GroupRandomizationError(f"Group is not complete. Got {self.instance}.")
         for patient_log in self.instance.patients.all():
@@ -56,7 +64,13 @@ class RandomizeGroup:
                 raise GroupRandomizationError(
                     f"Patient has not consented. Got {patient_log} (2)."
                 )
-        return True, get_utcnow(), self.instance.user_modified
+
+        self.randomize()
+
+        return True, get_utcnow(), self.instance.user_modified, self.create_group_identifier()
+
+    def randomize(self):
+        pass
 
     @staticmethod
     def check_eligibility(patient_log):
@@ -71,3 +85,11 @@ class RandomizeGroup:
         else:
             if not obj.eligible:
                 raise GroupRandomizationError(f"Patient is not eligible. Got {obj}.")
+
+    def create_group_identifier(self):
+        # create group identifierf
+        self.instance.group_identifier = GroupIdentifier(
+            identifier_type="patient_group",
+            requesting_model=self.instance._meta.label_lower,
+            site=self.instance.site,
+        ).identifier

@@ -1,18 +1,22 @@
+import re
+
 from django.db import models
 from django.db.models import Manager
 from edc_constants.choices import YES_NO
-from edc_constants.constants import NO
+from edc_constants.constants import NO, UUID_PATTERN
 from edc_model.models import BaseUuidModel, HistoricalRecords
 from edc_model.validators import datetime_not_future
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
 from edc_utils import get_utcnow
+from intecomm_form_validators import RECRUITING
 
 from ..choices import GROUP_STATUS_CHOICES
-from ..constants import RECRUITING
 from .patient_log import PatientLog
 
 
 class PatientGroup(SiteModelMixin, BaseUuidModel):
+
+    # group_identifier = models.CharField(max_length=50, unique=True)
 
     report_datetime = models.DateTimeField(
         default=get_utcnow,
@@ -58,6 +62,21 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
     def __str__(self):
         status = " (R)" if self.randomized else f"<{self.get_status_display()}>"
         return f"{self.name.upper()} {status}" if self.name else f"<new> {self.user_created}"
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.group_identifier = self.update_group_identifier_on_save()
+        super().save(*args, **kwargs)
+
+    def update_group_identifier_on_save(self) -> str:
+        """Returns a subject_identifier if not already set."""
+        if not self.group_identifier or re.match(UUID_PATTERN, self.group_identifier):
+            self.group_identifier = self.group_identifier_cls(
+                identifier_type="patient_group",
+                requesting_model=self._meta.label_lower,
+                site=self.site,
+            ).identifier
+        return self.group_identifier
 
     class Meta(BaseUuidModel.Meta):
         verbose_name = "Patient Group"

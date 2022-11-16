@@ -6,11 +6,11 @@ from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 
 from ..admin_site import intecomm_prn_admin
-from ..models import OnSchedule
+from ..models import OnScheduleFollowup
 
 
-@admin.register(OnSchedule, site=intecomm_prn_admin)
-class OnScheduleAdmin(
+@admin.register(OnScheduleFollowup, site=intecomm_prn_admin)
+class OnScheduleFollowupAdmin(
     DataManagerModelAdminMixin, ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin
 ):
 

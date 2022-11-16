@@ -167,3 +167,9 @@ class HealthFacilities(ListModelMixin):
     class Meta(ListModelMixin.Meta):
         verbose_name = "Health Facilities"
         verbose_name_plural = "Health Facilities"
+
+
+class LocationTypes(ListModelMixin):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Community-care location type"
+        verbose_name_plural = "Community-care location types"

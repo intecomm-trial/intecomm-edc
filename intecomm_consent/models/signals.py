@@ -30,6 +30,14 @@ def subject_consent_on_post_save(sender, instance, raw, created, **kwargs):
             subject_screening.patient_log.save_base(
                 update_fields=["subject_identifier", "consent_datetime"]
             )
+            # put subject on schedule
+            _, schedule = site_visit_schedules.get_by_onschedule_model(
+                "intecomm_prn.onschedulebaseline"
+            )
+            schedule.put_on_schedule(
+                subject_identifier=instance.subject_identifier,
+                onschedule_datetime=instance.consent_datetime,
+            )
 
 
 @receiver(
@@ -45,7 +53,9 @@ def subject_consent_on_post_delete(sender, instance, using, **kwargs):
     if SubjectVisit.objects.filter(subject_identifier=instance.subject_identifier).exists():
         raise ValidationError("Unable to delete consent. Visit data exists.")
 
-    _, schedule = site_visit_schedules.get_by_onschedule_model("intecomm_prn.onschedule")
+    _, schedule = site_visit_schedules.get_by_onschedule_model(
+        "intecomm_prn.onschedulebaseline"
+    )
     schedule.take_off_schedule(
         subject_identifier=instance.subject_identifier,
         offschedule_datetime=instance.consent_datetime,

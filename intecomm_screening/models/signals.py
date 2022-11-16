@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import re
+
 from django.db.models.signals import m2m_changed, post_delete, post_save
 from django.dispatch import receiver
-from edc_constants.constants import COMPLETE, YES
+from edc_constants.constants import COMPLETE, UUID_PATTERN, YES
+from edc_randomization.randomizer import RandomizationError
 
 from ..randomize_group import randomize_group
 from ..utils import calculate_ratio
-from . import PatientCall
+from .patient_call import PatientCall
 from .patient_group import PatientGroup
 from .patient_log import PatientLog
 from .subject_screening import SubjectScreening
@@ -70,13 +73,30 @@ def update_patient_group_ratio_on_post_save(sender, instance, raw, update_fields
     sender=PatientGroup,
     dispatch_uid="randomize_group_on_post_save",
 )
-def randomize_group_on_post_save(sender, instance, raw, **kwargs):
+def randomize_patient_group_on_post_save(sender, instance, raw, **kwargs):
     if not raw:
         if not instance.randomized and instance.randomize == YES:
-            instance.randomized, instance.modified, instance.user_modified = randomize_group(
-                instance
+            if not re.match(UUID_PATTERN, instance.group_identifier):
+                raise RandomizationError(
+                    "Failed to randomize group. Group identifier is not a uuid. "
+                    f"Has this group already been randomized? Got {instance.group_identifier}."
+                )
+            # randomize group
+            (
+                instance.randomized,
+                instance.modified,
+                instance.user_modified,
+                instance.group_identifier,
+            ) = randomize_group(instance)
+            # save to patient group
+            instance.save_base(
+                update_fields=[
+                    "randomized",
+                    "group_identifier",
+                    "modified",
+                    "user_modified",
+                ]
             )
-            instance.save_base(update_fields=["randomized", "modified", "user_modified"])
 
 
 @receiver(

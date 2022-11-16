@@ -4,8 +4,9 @@ from django.views.generic import TemplateView
 from edc_constants.constants import NEW
 from edc_dashboard.view_mixins import EdcViewMixin
 from edc_navbar import NavbarViewMixin
+from intecomm_form_validators import RECRUITING
 
-from intecomm_screening.constants import NEW_GROUP_CHOICE, RECRUITING
+from intecomm_screening.constants import NEW_GROUP_CHOICE
 from intecomm_screening.models import PatientGroup, PatientLog
 
 

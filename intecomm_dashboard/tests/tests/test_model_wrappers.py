@@ -11,7 +11,7 @@ from edc_subject_model_wrappers import (
 from intecomm_consent.models import SubjectConsent
 from intecomm_dashboard.model_wrappers import SubjectScreeningModelWrapper
 from intecomm_screening.models import SubjectScreening
-from intecomm_screening.tests.intecomm_test_case_mixin import MetaTestCaseMixin
+from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin
 from intecomm_subject.models import SubjectVisit
 
 
@@ -23,7 +23,7 @@ class ScreeningModelWrapperTestHelper(ModelWrapperTestHelper):
     dashboard_url = "/screening_listboard/"
 
 
-class TestModelWrappers(MetaTestCaseMixin, TestCase):
+class TestModelWrappers(IntecommTestCaseMixin, TestCase):
 
     model_wrapper_helper_cls = SubjectModelWrapperTestHelper
 

@@ -7,14 +7,14 @@ from edc_prn.modelform_mixins import PrnFormValidatorMixin
 from edc_sites.forms import SiteModelFormMixin
 from edc_visit_schedule.modelform_mixins import OffScheduleModelFormMixin
 
-from ..models import OffSchedule
+from ..models import OffScheduleBaseline
 
 
-class OffScheduleFormValidator(PrnFormValidatorMixin, FormValidator):
+class OffScheduleBaselineFormValidator(PrnFormValidatorMixin, FormValidator):
     pass
 
 
-class OffScheduleForm(
+class OffScheduleBaselineForm(
     OffScheduleModelFormMixin,
     SiteModelFormMixin,
     ActionItemFormMixin,
@@ -23,9 +23,9 @@ class OffScheduleForm(
     forms.ModelForm,
 ):
 
-    form_validator_cls = OffScheduleFormValidator
+    form_validator_cls = OffScheduleBaselineFormValidator
     report_datetime_field_attr = "offschedule_datetime"
 
     class Meta:
-        model = OffSchedule
+        model = OffScheduleBaseline
         fields = "__all__"

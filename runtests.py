@@ -69,7 +69,6 @@ project_settings = DefaultTestSettings(
     EDC_SITES_MODULE_NAME="intecomm_sites",
     EDC_AUTH_SKIP_SITE_AUTHS=True,
     EDC_AUTH_SKIP_AUTH_UPDATER=True,
-    EDC_MNSI_MODEL="intecomm_subject.mnsi",
     INSTALLED_APPS=[
         "django.contrib.admin",
         "django.contrib.auth",
@@ -130,10 +129,6 @@ project_settings = DefaultTestSettings(
         "edc_review_dashboard.apps.AppConfig",
         "edc_refusal.apps.AppConfig",
         "edc_sites.apps.AppConfig",
-        "edc_mnsi.apps.AppConfig",
-        "edc_unblinding.apps.AppConfig",
-        "edc_qol.apps.AppConfig",
-        "edc_dx_review.apps.AppConfig",
         "edc_dx.apps.AppConfig",
         "canned_views.apps.AppConfig",
         "intecomm_auth.apps.AppConfig",
@@ -157,14 +152,12 @@ project_settings = DefaultTestSettings(
 
 def main():
     tests = [
-        "tests",
         "intecomm_ae.tests",
         "intecomm_dashboard.tests",
         "intecomm_edc.tests",
         "intecomm_labs.tests",
         "intecomm_lists.tests",
         "intecomm_prn.tests",
-        "intecomm_rando.tests",
         "intecomm_screening.tests",
         "intecomm_subject.tests",
         "intecomm_visit_schedule.tests",

@@ -3,7 +3,7 @@ from edc_sites.models import SiteModelMixin
 from edc_visit_schedule.model_mixins import OnScheduleModelMixin
 
 
-class OnSchedule(SiteModelMixin, OnScheduleModelMixin, BaseUuidModel):
+class OnScheduleBaseline(SiteModelMixin, OnScheduleModelMixin, BaseUuidModel):
 
     """A model used by the system. Auto-completed by subject_consent."""
 

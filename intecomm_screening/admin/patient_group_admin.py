@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
 from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
+from edc_constants.constants import COMPLETE, NEW
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_model_admin.mixins import (
     ModelAdminFormAutoNumberMixin,
@@ -13,13 +14,12 @@ from edc_model_admin.mixins import (
     TemplatesModelAdminMixin,
 )
 from edc_utils.round_up import round_up
-from intecomm_form_validators.screening.patient_group_form_validator import (
-    calculate_ratio,
-)
+from intecomm_form_validators import RECRUITING
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientGroupForm
 from ..models import PatientGroup
+from ..utils import calculate_ratio
 
 
 @admin.register(PatientGroup, site=intecomm_screening_admin)
@@ -98,3 +98,6 @@ class PatientGroupAdmin(
     def rounded_ratio(self, obj=None):
         ncd, hiv, ratio = calculate_ratio(obj.patients.all())
         return f'{ncd}:{hiv} ({round_up(ratio or Decimal("0.00"), Decimal("2.00"))})'
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).filter(status__in=[NEW, RECRUITING, COMPLETE])

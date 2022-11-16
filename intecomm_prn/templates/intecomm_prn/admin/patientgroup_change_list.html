@@ -1,0 +1,30 @@
+{% extends "edc_model_admin/admin/change_list.html" %}
+{% load i18n admin_urls static admin_list edc_admin_modify %}
+
+{% block object-tools-items %}
+  <li>
+    <a href="{% url "home_url" %}" class="changelink">
+      Home
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_dashboard:subject_listboard_url" %}" class="changelink">
+      Subjects
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_prn_admin:intecomm_prn_communitycarelocation_changelist" %}" class="changelink">
+      Locations
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_prn_admin:intecomm_prn_patientgroupappointment_changelist" %}" class="changelink">
+      Patient Group Appointments
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_prn_admin:intecomm_prn_patientgroupmeeting_changelist" %}" class="changelink">
+      Patient Group Meetings
+    </a>
+  </li>
+{% endblock %}

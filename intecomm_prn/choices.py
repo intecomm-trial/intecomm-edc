@@ -1,6 +1,21 @@
-from edc_constants.constants import NOT_APPLICABLE, OTHER, PATIENT, PREGNANCY, UNKNOWN
+from edc_appointment.constants import (
+    CANCELLED_APPT,
+    COMPLETE_APPT,
+    IN_PROGRESS_APPT,
+    NEW_APPT,
+)
+from edc_constants.constants import (
+    CLOSED,
+    NOT_APPLICABLE,
+    OPEN,
+    OTHER,
+    PATIENT,
+    PREGNANCY,
+    UNKNOWN,
+)
+from edc_visit_tracking.constants import SCHEDULED
 
-from .constants import CLINICIAN, INVESTIGATOR, SAE
+from .constants import ATTENDED, CLINICIAN, INVESTIGATOR, SAE
 
 CLINICAL_WITHDRAWAL_REASONS = (
     ("kidney_disease", "Development of chronic kidney disease"),
@@ -97,4 +112,18 @@ WITHDRAWAL_STUDY_MEDICATION_REASONS = (
     (INVESTIGATOR, " Investigator decision"),
     (PATIENT, "Patient decision"),
     (OTHER, "Other reason (specify below)"),
+)
+
+LOCATION_STATUS = ((OPEN, "Open"), (CLOSED, "Closed"))
+
+MEETING_STATUS = (
+    (SCHEDULED, "Scheduled"),
+    (ATTENDED, "Attended"),
+)
+
+APPT_STATUS = (
+    (NEW_APPT, "Scheduled"),
+    (IN_PROGRESS_APPT, "In Progress"),
+    (COMPLETE_APPT, "Done"),
+    (CANCELLED_APPT, "Cancelled"),
 )

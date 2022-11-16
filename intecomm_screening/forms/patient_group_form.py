@@ -1,6 +1,6 @@
 from django import forms
 from edc_form_validators import FormValidatorMixin
-from intecomm_form_validators.screening import PatientGroupFormValidator
+from intecomm_form_validators import PatientGroupFormValidator
 
 from ..models import PatientGroup
 
