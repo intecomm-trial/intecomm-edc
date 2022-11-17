@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from copy import deepcopy
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -16,6 +16,7 @@ from edc_metadata.models import CrfMetadata
 from edc_randomization.site_randomizers import site_randomizers
 from edc_sites import add_or_update_django_sites, get_sites_by_country
 from edc_visit_tracking.constants import SCHEDULED
+from faker import Faker
 from model_bakery import baker
 
 from intecomm_sites.sites import fqdn
@@ -24,7 +25,10 @@ from intecomm_subject.models import SubjectVisit
 from intecomm_visit_schedule.constants import DAY1
 
 from ..models import SubjectScreening
-from .options import get_eligible_options, now
+
+fake = Faker()
+now = datetime(2019, 5, 1).astimezone(ZoneInfo("UTC"))
+tomorrow = now + relativedelta(days=1)
 
 
 class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
@@ -59,7 +63,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         ethnicity: str | None = None,
         age_in_years: int | None = None,
     ):
-        eligible_options = deepcopy(get_eligible_options())
+        eligible_options = {}
         if report_datetime:
             eligible_options.update(report_datetime=report_datetime)
         eligible_options["age_in_years"] = age_in_years or eligible_options["age_in_years"]

@@ -1,9 +1,9 @@
-import re
+from uuid import uuid4
 
 from django.db import models
 from django.db.models import Manager
 from edc_constants.choices import YES_NO
-from edc_constants.constants import NO, UUID_PATTERN
+from edc_constants.constants import NO
 from edc_model.models import BaseUuidModel, HistoricalRecords
 from edc_model.validators import datetime_not_future
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
@@ -16,7 +16,7 @@ from .proxy_models import PatientLog
 
 class PatientGroup(SiteModelMixin, BaseUuidModel):
 
-    # group_identifier = models.CharField(max_length=50, unique=True)
+    group_identifier = models.CharField(max_length=36, unique=True, default=uuid4)
 
     report_datetime = models.DateTimeField(
         default=get_utcnow,
@@ -45,11 +45,13 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
 
     ratio = models.DecimalField(max_digits=10, decimal_places=4, null=True)
 
-    randomize = models.CharField(
+    randomize_now = models.CharField(
         verbose_name="Randomise now?", max_length=15, choices=YES_NO, default=NO
     )
 
     randomized = models.BooleanField(default=False, blank=True)
+
+    randomized_datetime = models.DateTimeField(null=True, blank=True)
 
     notes = models.TextField(null=True, blank=True)
 
@@ -62,21 +64,6 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
     def __str__(self):
         status = " (R)" if self.randomized else f"<{self.get_status_display()}>"
         return f"{self.name.upper()} {status}" if self.name else f"<new> {self.user_created}"
-
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.group_identifier = self.update_group_identifier_on_save()
-        super().save(*args, **kwargs)
-
-    def update_group_identifier_on_save(self) -> str:
-        """Returns a subject_identifier if not already set."""
-        if not self.group_identifier or re.match(UUID_PATTERN, self.group_identifier):
-            self.group_identifier = self.group_identifier_cls(
-                identifier_type="patient_group",
-                requesting_model=self._meta.label_lower,
-                site=self.site,
-            ).identifier
-        return self.group_identifier
 
     class Meta(BaseUuidModel.Meta):
         verbose_name = "Patient Group"

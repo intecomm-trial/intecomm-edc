@@ -4,15 +4,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
-from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
 from edc_constants.constants import COMPLETE, NEW
-from edc_model_admin.history import SimpleHistoryAdmin
-from edc_model_admin.mixins import (
-    ModelAdminFormAutoNumberMixin,
-    ModelAdminFormInstructionsMixin,
-    ModelAdminInstitutionMixin,
-    TemplatesModelAdminMixin,
-)
 from edc_utils.round_up import round_up
 from intecomm_form_validators import RECRUITING
 
@@ -21,17 +13,11 @@ from intecomm_group.utils import calculate_ratio
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientGroupForm
 from ..models import PatientGroup
+from .modeladmin_mixins import BaseModelAdminMixin
 
 
 @admin.register(PatientGroup, site=intecomm_screening_admin)
-class PatientGroupAdmin(
-    TemplatesModelAdminMixin,
-    ModelAdminFormInstructionsMixin,  # add
-    ModelAdminFormAutoNumberMixin,
-    ModelAdminRevisionMixin,  # add
-    ModelAdminInstitutionMixin,  # add
-    SimpleHistoryAdmin,
-):
+class PatientGroupAdmin(BaseModelAdminMixin):
 
     form = PatientGroupForm
 
@@ -45,7 +31,7 @@ class PatientGroupAdmin(
         ),
         (
             "Status",
-            {"fields": ("status", "randomize")},
+            {"fields": ("status", "randomize_now")},
         ),
         audit_fieldset_tuple,
     )
@@ -76,7 +62,7 @@ class PatientGroupAdmin(
 
     radio_fields = {
         "status": admin.VERTICAL,
-        "randomize": admin.VERTICAL,
+        "randomize_now": admin.VERTICAL,
     }
 
     @admin.display(description="Opened", ordering="report_datetime")

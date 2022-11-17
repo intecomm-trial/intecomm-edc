@@ -1,13 +1,12 @@
 from django.conf import settings
 from django.urls.conf import include, path, re_path
-from django.views.defaults import page_not_found, server_error  # noqa
 from django.views.generic import RedirectView
 from edc_auth.views import LogoutView
 from edc_dashboard.utils import get_index_page
 from edc_dashboard.views import AdministrationView
 from edc_utils.paths_for_urlpatterns import paths_for_urlpatterns
 
-from .views import HomeView
+from .views import FollowupCommView, FollowupInteView, GroupingView, HomeView
 
 handler403 = "edc_dashboard.views.edc_handler403"
 handler404 = "edc_dashboard.views.edc_handler404"
@@ -55,6 +54,7 @@ urlpatterns = [
     *paths_for_urlpatterns("intecomm_export"),
     *paths_for_urlpatterns("intecomm_lists"),
     *paths_for_urlpatterns("intecomm_prn"),
+    *paths_for_urlpatterns("intecomm_group"),
     *paths_for_urlpatterns("intecomm_screening"),
     *paths_for_urlpatterns("intecomm_subject"),
 ]
@@ -65,13 +65,15 @@ if settings.DEFENDER_ENABLED:
     )
 
 urlpatterns += [
-    # path("__debug__/", include("debug_toolbar.urls")),
     path("admin/", RedirectView.as_view(url="/")),
     path(
         "switch_sites/",
         LogoutView.as_view(next_page=get_index_page()),
         name="switch_sites_url",
     ),
+    path("grouping/", GroupingView.as_view(), name="grouping_url"),
+    path("followup_comm/", FollowupCommView.as_view(), name="followup_comm_url"),
+    path("followup_inte/", FollowupInteView.as_view(), name="followup_inte_url"),
     path("home/", HomeView.as_view(), name="home_url"),
     re_path(".", RedirectView.as_view(url="/"), name="home_url"),
     re_path("", HomeView.as_view(), name="home_url"),

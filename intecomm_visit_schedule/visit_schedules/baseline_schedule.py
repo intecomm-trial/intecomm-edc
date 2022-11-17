@@ -36,8 +36,8 @@ class Visit(BaseVisit):
 baseline_schedule = Schedule(
     name=BASELINE_SCHEDULE,
     verbose_name="baseline",
-    onschedule_model="intecomm_prn.onschedule_baseline",
-    offschedule_model="intecomm_prn.offschedule_baseline",
+    onschedule_model="intecomm_prn.onschedulebaseline",
+    offschedule_model="intecomm_prn.offschedulebaseline",
     consent_model="intecomm_consent.subjectconsent",
     appointment_model="edc_appointment.appointment",
 )

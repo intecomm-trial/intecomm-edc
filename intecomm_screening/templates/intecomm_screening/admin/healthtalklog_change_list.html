@@ -3,9 +3,11 @@
 
 {% block object-tools-items %}
   <li>
-    <a href="{% url "home_url" %}" class="changelink">
-      Home
+    <a href="{% url "grouping_url" %}" class="changelink">Home</a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_healthtalklog_add" %}" class="addlink" style="background-color: darkorange;">
+      Add
     </a>
   </li>
-  {{   block.super }}
 {% endblock %}

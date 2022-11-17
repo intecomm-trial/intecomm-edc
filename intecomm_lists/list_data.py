@@ -76,7 +76,7 @@ list_data = {
         (NOT_APPLICABLE, "Not applicable"),
         (OTHER, "Other (specify below)"),
     ],
-    "intecomm_lists.healthtalks": [
+    "intecomm_lists.healthtalktypes": [
         ("study_intro_talk", "INTECOMM study introduction"),
         ("sensitisation_talk", "INTECOMM Sensitisation"),
         (OTHER, "Other (specify below)"),
@@ -86,7 +86,7 @@ list_data = {
         (DM, "Diabetes"),
         (HTN, "Hypertension"),
     ],
-    "intecomm_lists.healthfacilities": [
+    "intecomm_lists.healthfacilitytypes": [
         (DM, "Diabetes Clinic"),
         (HIV, "HIV Clinic"),
         (HTN, "Hypertension Clinic"),

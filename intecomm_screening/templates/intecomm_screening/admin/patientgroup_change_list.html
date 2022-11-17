@@ -3,19 +3,21 @@
 
 {% block object-tools-items %}
   <li>
-    <a href="{% url "home_url" %}" class="changelink">
-      Home
-    </a>
+    <a href="{% url "grouping_url" %}" class="changelink">Home</a>
   </li>
   <li>
     <a href="{% url "intecomm_dashboard:screening_listboard_url" %}" class="changelink">
-      Screening and Consent
+      Screening to Consent
     </a>
   </li>
   <li>
     <a href="{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist" %}" class="changelink">
-      Patient Logs
+      Patient Log
     </a>
   </li>
-  {{   block.super }}
+  <li>
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_patientgroup_add" %}" class="addlink" style="background-color: darkorange;">
+      Add
+    </a>
+  </li>
 {% endblock %}

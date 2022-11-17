@@ -37,9 +37,7 @@ class SubjectRefusal(NonUniqueSubjectIdentifierModelMixin, SiteModelMixin, BaseU
     other_reason = OtherCharField()
 
     on_site = CurrentSiteManager()
-
     objects = SubjectRefusalManager()
-
     history = HistoricalRecords()
 
     def save(self, *args, **kwargs):

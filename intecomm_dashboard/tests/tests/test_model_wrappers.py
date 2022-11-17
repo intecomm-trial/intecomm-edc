@@ -1,4 +1,4 @@
-from django.test import TestCase, tag  # noqa
+from django.test import TestCase
 from edc_appointment.models import Appointment
 from edc_model_wrapper.tests import ModelWrapperTestHelper
 from edc_subject_model_wrappers import (

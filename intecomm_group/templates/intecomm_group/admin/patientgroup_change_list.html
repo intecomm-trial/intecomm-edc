@@ -3,28 +3,28 @@
 
 {% block object-tools-items %}
   <li>
-    <a href="{% url "home_url" %}" class="changelink">
+    <a href="{% url "followup_comm_url" %}" class="changelink">
       Home
     </a>
   </li>
   <li>
-    <a href="{% url "intecomm_dashboard:subject_listboard_url" %}" class="changelink">
+    <a href="{% url "intecomm_dashboard:comm_subject_listboard_url" %}" class="changelink">
       Subjects
     </a>
   </li>
   <li>
-    <a href="{% url "intecomm_prn_admin:intecomm_prn_communitycarelocation_changelist" %}" class="changelink">
+    <a href="{% url "intecomm_group_admin:intecomm_group_communitycarelocation_changelist" %}" class="changelink">
       Locations
     </a>
   </li>
   <li>
-    <a href="{% url "intecomm_prn_admin:intecomm_prn_patientgroupappointment_changelist" %}" class="changelink">
-      Patient Group Appointments
+    <a href="{% url "intecomm_group_admin:intecomm_group_patientgroupappointment_changelist" %}" class="changelink">
+      Appointments
     </a>
   </li>
   <li>
-    <a href="{% url "intecomm_prn_admin:intecomm_prn_patientgroupmeeting_changelist" %}" class="changelink">
-      Patient Group Meetings
+    <a href="{% url "intecomm_group_admin:intecomm_group_patientgroupmeeting_changelist" %}" class="changelink">
+      Meetings
     </a>
   </li>
 {% endblock %}

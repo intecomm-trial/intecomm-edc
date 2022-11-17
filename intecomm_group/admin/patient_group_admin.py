@@ -1,13 +1,14 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-from django_audit_fields.admin import audit_fieldset_tuple
+from django_audit_fields.admin import ModelAdminAuditFieldsMixin, audit_fieldset_tuple
 from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_model_admin.mixins import (
     ModelAdminFormAutoNumberMixin,
     ModelAdminFormInstructionsMixin,
     ModelAdminInstitutionMixin,
+    ModelAdminNextUrlRedirectMixin,
     TemplatesModelAdminMixin,
 )
 from intecomm_form_validators import DISSOLVED, IN_FOLLOWUP
@@ -20,10 +21,12 @@ from ..models import PatientGroup
 @admin.register(PatientGroup, site=intecomm_group_admin)
 class PatientGroupAdmin(
     TemplatesModelAdminMixin,
-    ModelAdminFormInstructionsMixin,  # add
+    ModelAdminFormInstructionsMixin,
     ModelAdminFormAutoNumberMixin,
-    ModelAdminRevisionMixin,  # add
-    ModelAdminInstitutionMixin,  # add
+    ModelAdminRevisionMixin,
+    ModelAdminInstitutionMixin,
+    ModelAdminNextUrlRedirectMixin,
+    ModelAdminAuditFieldsMixin,
     SimpleHistoryAdmin,
 ):
     """Modeladmin for patient groups in follow-up or dissolved.
@@ -34,6 +37,8 @@ class PatientGroupAdmin(
 
     show_object_tools = True
     change_list_template: str = "intecomm_group/admin/patientgroup_change_list.html"
+    show_save_next = False
+    show_cancel = True
 
     fieldsets = (
         (
@@ -57,6 +62,7 @@ class PatientGroupAdmin(
         "status",
         "randomized",
         "report_datetime",
+        "randomized_datetime",
     )
 
     search_fields = (
@@ -68,7 +74,6 @@ class PatientGroupAdmin(
 
     radio_fields = {
         "status": admin.VERTICAL,
-        "randomize": admin.VERTICAL,
     }
 
     readonly_fields = (
@@ -76,6 +81,7 @@ class PatientGroupAdmin(
         "name",
         "status",
         "randomized",
+        "randomized_datetime",
         "patients",
     )
 

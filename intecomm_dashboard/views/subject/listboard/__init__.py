@@ -1,1 +1,2 @@
-from .listboard_view import SubjectListboardView
+from .comm_listboard_view import CommSubjectListboardView
+from .inte_listboard_view import InteSubjectListboardView

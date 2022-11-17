@@ -10,24 +10,36 @@ navbar = Navbar(name="intecomm_dashboard")
 
 navbar.append_item(
     NavbarItem(
-        name="screened_subject",
-        title="Screening and Consent",
-        label="Screening and Consent",
+        name="screen_group",
+        title="Screen/Group",
+        label="Screen/Group",
         fa_icon="fa-solid fa-user-plus",
         codename="edc_screening.view_screening_listboard",
-        url_name="screening_listboard_url",
+        url_name="grouping_url",
         no_url_namespace=no_url_namespace,
     )
 )
 
 navbar.append_item(
     NavbarItem(
-        name="consented_subject",
-        title="Subjects",
-        label="Subjects",
+        name="comm_followup",
+        title="COMM",
+        label="COMM",
+        fa_icon="fa-solid fa-users-between-lines",
+        codename="edc_subject_dashboard.view_subject_listboard",
+        url_name="followup_comm_url",
+        no_url_namespace=no_url_namespace,
+    )
+)
+
+navbar.append_item(
+    NavbarItem(
+        name="inte_followup",
+        title="INTE",
+        label="INTE",
         fa_icon="fa-solid fa-user-circle",
         codename="edc_subject_dashboard.view_subject_listboard",
-        url_name="subject_listboard_url",
+        url_name="followup_inte_url",
         no_url_namespace=no_url_namespace,
     )
 )

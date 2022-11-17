@@ -8,13 +8,12 @@ from django.dispatch import receiver
 from edc_constants.constants import COMPLETE, UUID_PATTERN, YES
 from edc_randomization.randomizer import RandomizationError
 
-from intecomm_screening.models import PatientLog
-
 from ..randomize_group import randomize_group
 from ..utils import calculate_ratio
 from .patient_group import PatientGroup
 from .patient_group_appointment import PatientGroupAppointment
 from .patient_group_meeting import PatientGroupMeeting
+from .proxy_models import PatientLog
 from .utils import add_to_group, remove_from_group
 
 
@@ -77,7 +76,7 @@ def update_patient_group_ratio_on_post_save(sender, instance, raw, update_fields
 )
 def randomize_patient_group_on_post_save(sender, instance, raw, **kwargs):
     if not raw:
-        if not instance.randomized and instance.randomize == YES:
+        if not instance.randomized and instance.randomize_now == YES:
             if not re.match(UUID_PATTERN, instance.group_identifier):
                 raise RandomizationError(
                     "Failed to randomize group. Group identifier is not a uuid. "

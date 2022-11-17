@@ -24,7 +24,7 @@ class PatientGroupMeeting(BaseUuidModel):
 
     meeting_datetime = models.DateTimeField(null=True, blank=True)
 
-    patients = models.ManyToManyField(PatientLog, verbose_name="Attendance")
+    patients = models.ManyToManyField(PatientLog, verbose_name="Patients")
 
     notes = models.TextField(null=True, blank=True)
 

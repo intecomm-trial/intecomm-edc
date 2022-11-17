@@ -11,7 +11,7 @@ class ListboardView(ScreeningListboardView):
 
     listboard_model = "intecomm_screening.subjectscreening"
     model_wrapper_cls = SubjectScreeningModelWrapper
-    navbar_selected_item = "screened_subject"
+    navbar_selected_item = "screen_group"
 
     def get_context_data(self, **kwargs) -> dict:
         context_data = super().get_context_data(**kwargs)

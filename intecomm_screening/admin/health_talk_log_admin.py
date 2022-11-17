@@ -25,6 +25,8 @@ class HealthTalkLogAdmin(
     show_object_tools = True
     change_list_template: str = "intecomm_screening/admin/healthtalklog_change_list.html"
 
+    autocomplete_fields = ["health_facility"]
+
     fieldsets = (
         (
             None,
@@ -34,9 +36,9 @@ class HealthTalkLogAdmin(
             "Details of talk",
             {
                 "fields": (
-                    "health_facility_name",
                     "health_facility",
-                    "health_facility_other",
+                    "health_facility_type",
+                    "health_facility_type_other",
                     "health_talk_type",
                     "health_talk_type_other",
                     "number_attended",
@@ -48,29 +50,31 @@ class HealthTalkLogAdmin(
 
     list_display = (
         "report_date",
-        "site",
-        "health_facility_name",
+        "site_name",
         "health_facility",
+        "health_facility_type",
         "health_talk_type",
         "number_attended",
     )
 
     list_filter = (
         "report_date",
-        "health_facility",
+        "health_facility_type",
         "health_talk_type",
     )
 
     radio_fields = {
-        "health_facility": admin.VERTICAL,
+        "health_facility_type": admin.VERTICAL,
         "health_talk_type": admin.VERTICAL,
     }
 
     search_fields = (
         "health_facility__name",
+        "health_facility_type__name",
         "patient_log__name__exact",
     )
 
-    def site_name(self, obj=None):
-        get_site_name.get(obj.site.id, all_sites)
+    @staticmethod
+    def site_name(obj=None):
+        get_site_name(obj.site.id, all_sites)
         return obj.name

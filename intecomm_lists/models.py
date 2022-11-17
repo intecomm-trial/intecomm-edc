@@ -67,10 +67,10 @@ class HealthServices(ListModelMixin):
         verbose_name_plural = "Health Services"
 
 
-class HealthTalks(ListModelMixin):
+class HealthTalkTypes(ListModelMixin):
     class Meta(ListModelMixin.Meta):
-        verbose_name = "Health Talk"
-        verbose_name_plural = "Health Talks"
+        verbose_name = "Health Talk Type"
+        verbose_name_plural = "Health Talk Types"
 
 
 class HealthTalkConditions(ListModelMixin):
@@ -163,10 +163,10 @@ class TransportChoices(ListModelMixin):
         verbose_name_plural = "Transport Choices"
 
 
-class HealthFacilities(ListModelMixin):
+class HealthFacilityTypes(ListModelMixin):
     class Meta(ListModelMixin.Meta):
-        verbose_name = "Health Facilities"
-        verbose_name_plural = "Health Facilities"
+        verbose_name = "Health Facility Type"
+        verbose_name_plural = "Health Facility Types"
 
 
 class LocationTypes(ListModelMixin):

@@ -1,0 +1,21 @@
+{% extends "edc_model_admin/admin/change_list.html" %}
+{% load i18n admin_urls static admin_list edc_admin_modify %}
+
+{% block object-tools-items %}
+  <li>
+    <a href="{% url "followup_comm_url" %}" class="changelink">
+      Home
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_dashboard:screening_listboard_url" %}" class="changelink">
+      Screening and Consent
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_group_admin:intecomm_group_patientgroup_changelist" %}" class="changelink">
+      Groups
+    </a>
+  </li>
+  {{   block.super }}
+{% endblock %}

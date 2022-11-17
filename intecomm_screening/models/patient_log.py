@@ -60,7 +60,7 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
 
     initials = InitialsField()
 
-    gender = models.CharField(choices=GENDER, max_length=10, null=True, blank=False)
+    gender = models.CharField(choices=GENDER, max_length=10, blank=False)
 
     report_datetime = models.DateTimeField(default=get_utcnow)
 
@@ -68,7 +68,6 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         Site,
         verbose_name="Health facility",
         on_delete=models.PROTECT,
-        null=True,
         blank=False,
         related_name="+",
     )
@@ -80,7 +79,9 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         help_text="Must be unique",
     )
 
-    contact_number = EncryptedCharField(null=True, blank=False, validators=[phone_number])
+    contact_number = EncryptedCharField(
+        blank=False, validators=[phone_number], help_text="If unknown, type 'UNKNOWN'"
+    )
 
     alt_contact_number = EncryptedCharField(null=True, blank=True, validators=[phone_number])
 
@@ -131,13 +132,8 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
     )
 
     next_routine_appt_date = models.DateField(
-        verbose_name=(
-            "When is the patient next scheduled for a routine "
-            "appointment at this health facility"
-        ),
-        null=True,
-        blank=True,
-        help_text="If known, this date will help prioritize efforts to contact the patient",
+        verbose_name="Next scheduled routine appointment at this health facility",
+        help_text="This date will help prioritize efforts to contact the patient",
     )
 
     first_health_talk = models.CharField(
@@ -167,10 +163,8 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
     call_attempts = models.IntegerField(default=0, help_text="auto-updated", blank=True)
 
     on_site = CurrentSiteManager()
-
     objects = PatientLogManager()
-
-    history = HistoricalRecords(inherit=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         grp = " <available>" if not self.patient_group else f" @ {self.patient_group.name}"

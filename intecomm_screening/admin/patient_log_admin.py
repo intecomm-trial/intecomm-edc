@@ -34,6 +34,7 @@ class PatientLogAdmin(
     form = PatientLogForm
     list_per_page = 20
     show_object_tools = True
+    show_cancel = True
     change_list_template: str = "intecomm_screening/admin/patientlog_change_list.html"
 
     autocomplete_fields = ["patient_group"]
