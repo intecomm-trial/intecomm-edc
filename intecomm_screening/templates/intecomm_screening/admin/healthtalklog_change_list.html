@@ -1,0 +1,13 @@
+{% extends "edc_model_admin/admin/change_list.html" %}
+{% load i18n admin_urls static admin_list edc_admin_modify %}
+
+{% block object-tools-items %}
+  <li>
+    <a href="{% url "grouping_url" %}" class="changelink">Home</a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_healthtalklog_add" %}" class="addlink" style="background-color: darkorange;">
+      Add
+    </a>
+  </li>
+{% endblock %}

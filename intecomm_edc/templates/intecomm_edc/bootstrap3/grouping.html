@@ -1,0 +1,52 @@
+{% extends 'intecomm_edc/bootstrap3/base.html' %}
+{% load static edc_dashboard_extras %}
+
+{% block main %}
+
+<style>
+
+.bg-1 {
+    background-color: #428bca; /* dark blue */
+    color: #ffffff;
+}
+.bg-2 {
+    background-color: #5bc0de; /* light Blue */
+    color: #ffffff;
+}
+.bg-3 {
+    background-color: #f9f9f9; /* White */
+    color: #555555;
+}
+
+</style>
+
+{{ block.super }}
+
+<div class="row">
+
+  <div class="col-sm-4">&nbsp;</div>
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">Screen / Group</div>
+      <div class="list-group">
+        <a id="home_list_group_home" href="{% url 'home_url' %}" class="list-group-item"><i class="fas fa-reply fa-1x fa-fw" aria-hidden="true"></i> Home</a>
+      {% if perms.intecomm_screening.add_healthtalklog %}
+        <a id="home_list_group_healthtalklog" href="{% url 'intecomm_screening_admin:intecomm_screening_healthtalklog_changelist' %}" class="list-group-item"><i class="fas fa-users-between-lines fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Health Talk Log</a>
+      {% endif %}
+      {% if perms.intecomm_screening.add_patientlog %}
+        <a id="home_list_group_patientlog" href="{% url 'intecomm_screening_admin:intecomm_screening_patientlog_changelist' %}" class="list-group-item"><i class="fas fa-person-circle-plus fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Patient Log</a>
+      {% endif %}
+      {% if perms.intecomm_screening.add_patientgroup %}
+        <a id="home_list_group_patientgroup" href="{% url 'intecomm_screening_admin:intecomm_screening_patientgroup_changelist' %}" class="list-group-item"><i class="fas fa-users fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Manage Patient Groups</a>
+      {% endif %}
+      {% if perms.edc_screening.view_screening_listboard %}
+        <a id="home_list_group_screening_listboard" href="{% url screening_listboard_url|default:'screening_listboard_url_cannot_be_none' %}" class="list-group-item"><i class="fas fa-user-plus fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Screening to Consent</a>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">&nbsp;
+  </div>
+</div>
+
+{% endblock main %}

@@ -1,0 +1,22 @@
+<table>
+  {% if add_screening_url %}
+    <tr>
+      <td colspan="2"><a href="{{ add_screening_url }}">Screen</a></td>
+    </tr>
+  {% else %}
+    <tr>
+      <td>Screen</td><td><a href="{{ change_screening_url }}">{{ screening_identifier }}</a></td>
+    </tr>
+  {% endif  %}
+  {% if screening_identifier %}
+    {% if add_consent_url %}
+      <tr>
+        <td colspan="2"><a href="{{ add_consent_url }}">Consent</a></td>
+      </tr>
+    {% else %}
+      <tr>
+        <td>Consent</td><td><a href="{{ change_consent_url }}">{{ subject_identifier }}</a></td>
+      </tr>
+    {% endif  %}
+  {% endif  %}
+</table>

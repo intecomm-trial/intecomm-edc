@@ -1,4 +1,6 @@
+BASELINE_SCHEDULE = "baseline_schedule"
 DAY1 = "1000"
+FOLLOWUP_SCHEDULE = "followup_schedule"
 MONTH1 = "1010"
 MONTH12 = "1120"
 MONTH15 = "1150"

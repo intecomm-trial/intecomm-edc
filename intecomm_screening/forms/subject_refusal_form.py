@@ -4,8 +4,8 @@ from django.utils.safestring import mark_safe
 from edc_dashboard.url_names import url_names
 from edc_form_validators import FormValidatorMixin
 from edc_screening.modelform_mixins import AlreadyConsentedFormMixin
+from intecomm_form_validators import SubjectRefusalFormValidator
 
-from ..form_validators import SubjectRefusalFormValidator
 from ..models import SubjectRefusal, SubjectScreening
 
 
@@ -23,7 +23,7 @@ class ScreeningFormMixin:
                     url_name,
                     kwargs={"screening_identifier": self.instance.screening_identifier},
                 )
-                msg = mark_safe(
+                msg = mark_safe(  # nosec B308 B703
                     "Not allowed. Subject is not eligible. "
                     f'See subject <A href="{url}?q={screening_identifier}">'
                     f"{screening_identifier}</A>"

@@ -7,11 +7,11 @@ from .constants import RECONSENT_ACTION
 class ReconsentAction(Action):
     name = RECONSENT_ACTION
     display_name = "Re-consent participant"
-    reference_model = "meta_consent.subjectreconsent"
+    reference_model = "intecomm_consent.subjectreconsent"
     priority = HIGH_PRIORITY
     show_on_dashboard = True
     show_link_to_changelist = True
-    admin_site_name = "meta_consent_admin"
+    admin_site_name = "intecomm_consent_admin"
     create_by_user = False
     singleton = True
     instructions = (

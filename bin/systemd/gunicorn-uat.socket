@@ -1,0 +1,10 @@
+#!/bin/sh
+
+[Unit]
+Description=gunicorn uat socket
+
+[Socket]
+ListenStream=/run/gunicorn-uat.sock
+
+[Install]
+WantedBy=sockets.target

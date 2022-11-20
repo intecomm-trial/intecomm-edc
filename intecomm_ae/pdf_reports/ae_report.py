@@ -1,8 +1,8 @@
 from edc_adverse_event.pdf_reports import AeReport as BaseAeReport
 
-from .crf_report_mixin import CrfReportMixin
+from .pdf_report_mixin import ProtocolCrfReportMixin
 
 
-class AeReport(CrfReportMixin, BaseAeReport):
+class AeReport(ProtocolCrfReportMixin, BaseAeReport):
 
     pass

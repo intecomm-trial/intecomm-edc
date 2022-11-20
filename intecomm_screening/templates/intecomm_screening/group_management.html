@@ -1,0 +1,48 @@
+{% extends 'intecomm_edc/bootstrap3/base.html' %}
+{% load static edc_dashboard_extras %}
+
+{% block extrastyle %}
+  <!-- begin group management extrastyle -->
+  <link rel="stylesheet" href="/static/admin/css/base.css">
+  <link rel="stylesheet" type="text/css" href="/static/edc_model_admin/css/dark_mode.css">
+  <link rel="stylesheet" href="/static/admin/css/forms.css">
+  <link rel='stylesheet' type="text/css" href='/static/edc_model_admin/admin/css/edc_model_admin.css'>
+  <link rel='stylesheet' type="text/css" href='/static/edc_model_admin/admin/css/themes/edc_purple.css'>
+  <!-- end group management extrastyle -->
+  {{ block.super }}
+{% endblock %}
+
+{% block main %}
+
+    {{ block.super }}
+
+<div class="row">
+  <div class="col-sm-2">&nbsp;</div>
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">Add patients to group</h4>
+    </div>
+
+
+      <div id="content-main">
+
+      {% for patient_log in patient_logs %}{{patient_log}}{% endfor %}
+
+      <fieldset class="module aligned ">
+
+        <form action="" method="post">
+        {% csrf_token %}
+          {{ add_form.as_div }}
+        <input type="submit" value="Add to group">
+        </form>
+
+      </fieldset>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-sm-2">&nbsp;</div>
+</div>
+
+{% endblock main %}

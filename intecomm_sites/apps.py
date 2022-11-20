@@ -27,7 +27,7 @@ def post_migrate_update_sites(sender=None, **kwargs):
 class AppConfig(DjangoAppConfig):
     name = "intecomm_sites"
     default_auto_field = "django.db.models.BigAutoField"
-    verbose_name = f"INTECOMM: Sites"
+    verbose_name = "INTECOMM: Sites"
 
     def ready(self):
         post_migrate.connect(post_migrate_update_sites, sender=self)

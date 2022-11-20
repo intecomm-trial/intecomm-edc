@@ -1,19 +1,29 @@
 from django import forms
 from edc_form_validators import FormValidatorMixin
 from edc_screening.modelform_mixins import AlreadyConsentedFormMixin
+from edc_sites.modelform_mixins import SiteModelFormMixin
+from edc_sites.widgets import SiteField
+from intecomm_form_validators import SubjectScreeningFormValidator
 
-from ..form_validators import SubjectScreeningFormValidator
 from ..models import SubjectScreening
 
 
-class SubjectScreeningForm(AlreadyConsentedFormMixin, FormValidatorMixin, forms.ModelForm):
+class SubjectScreeningForm(
+    AlreadyConsentedFormMixin, SiteModelFormMixin, FormValidatorMixin, forms.ModelForm
+):
 
     form_validator_cls = SubjectScreeningFormValidator
 
-    def clean(self):
-        cleaned_data = super().clean()
-        return cleaned_data
+    site = SiteField()
 
     class Meta:
         model = SubjectScreening
         fields = "__all__"
+        labels = {
+            "consent_ability": "Is the patient able and willing to give informed consent."
+        }
+        widgets = {
+            # "gender": forms.TextInput(attrs={"readonly": "readonly"}),
+            "initials": forms.TextInput(attrs={"readonly": "readonly"}),
+            "hospital_identifier": forms.TextInput(attrs={"readonly": "readonly"}),
+        }

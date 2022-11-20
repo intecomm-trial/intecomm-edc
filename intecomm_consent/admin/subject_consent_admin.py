@@ -1,12 +1,12 @@
 from django.contrib import admin
-from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django_audit_fields.admin import audit_fieldset_tuple
+from edc_consent.actions import (
+    flag_as_verified_against_paper,
+    unflag_as_verified_against_paper,
+)
 from edc_consent.modeladmin_mixins import ModelAdminConsentMixin
-from edc_identifier import SubjectIdentifierError, is_subject_identifier_or_raise
-from edc_model_admin import SimpleHistoryAdmin, audit_fieldset_tuple
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
-
-from intecomm_screening.models.subject_screening import SubjectScreening
-from intecomm_subject.models import SubjectVisit
+from edc_model_admin.history import SimpleHistoryAdmin
 
 from ..admin_site import intecomm_consent_admin
 from ..forms import SubjectConsentForm
@@ -19,6 +19,15 @@ class SubjectConsentAdmin(
 ):
 
     form = SubjectConsentForm
+
+    show_object_tools = False
+    show_cancel = True
+    change_list_template: str = "intecomm_consent/admin/subjectconsent_change_list.html"
+
+    actions = [
+        flag_as_verified_against_paper,
+        unflag_as_verified_against_paper,
+    ]
 
     fieldsets = (
         (
@@ -36,7 +45,6 @@ class SubjectConsentAdmin(
                     "witness_name",
                     "consent_datetime",
                     "dob",
-                    "guardian_name",
                     "is_dob_estimated",
                     "identity",
                     "identity_type",
@@ -76,31 +84,3 @@ class SubjectConsentAdmin(
         "language": admin.VERTICAL,
         "study_questions": admin.VERTICAL,
     }
-
-    def delete_view(self, request, object_id, extra_context=None):
-        """Prevent deletion if SubjectVisit objects exist."""
-        extra_context = extra_context or {}
-        obj = SubjectConsent.objects.get(id=object_id)
-        try:
-            protected = [SubjectVisit.objects.get(subject_identifier=obj.subject_identifier)]
-        except ObjectDoesNotExist:
-            protected = None
-        except MultipleObjectsReturned:
-            protected = SubjectVisit.objects.filter(subject_identifier=obj.subject_identifier)
-        extra_context.update({"protected": protected})
-        return super().delete_view(request, object_id, extra_context)
-
-    def get_next_options(self, request=None, **kwargs):
-        """Returns the key/value pairs from the "next" querystring
-        as a dictionary.
-        """
-        next_options = super().get_next_options(request=request, **kwargs)
-        try:
-            is_subject_identifier_or_raise(next_options["subject_identifier"])
-        except SubjectIdentifierError:
-            next_options["subject_identifier"] = SubjectScreening.objects.get(
-                subject_identifier_as_pk=next_options["subject_identifier"]
-            ).subject_identifier
-        except KeyError:
-            pass
-        return next_options

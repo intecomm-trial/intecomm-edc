@@ -1,7 +1,7 @@
 from edc_visit_schedule import VisitSchedule
 
 from ..constants import VISIT_SCHEDULE
-from .schedule import schedule
+from .baseline_schedule import baseline_schedule
 
 visit_schedule = VisitSchedule(
     name=VISIT_SCHEDULE,
@@ -12,4 +12,4 @@ visit_schedule = VisitSchedule(
     previous_visit_schedule=None,
 )
 
-visit_schedule.add_schedule(schedule)
+visit_schedule.add_schedule(baseline_schedule)

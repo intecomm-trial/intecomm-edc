@@ -1,32 +1,22 @@
 from django.conf import settings
-from django.contrib import admin
-from django.contrib.auth.views import LogoutView
 from django.urls.conf import include, path, re_path
-from django.views.defaults import page_not_found, server_error  # noqa
 from django.views.generic import RedirectView
+from edc_auth.views import LogoutView
+from edc_dashboard.utils import get_index_page
 from edc_dashboard.views import AdministrationView
 from edc_utils.paths_for_urlpatterns import paths_for_urlpatterns
 
-from .views import HomeView
-
-
-def trigger_error(request):
-    division_by_zero = 1 / 0  # noqa
-
+from .views import FollowupCommView, FollowupInteView, GroupingView, HomeView
 
 handler403 = "edc_dashboard.views.edc_handler403"
 handler404 = "edc_dashboard.views.edc_handler404"
-
-if settings.SENTRY_ENABLED:
-    handler500 = "edc_dashboard.views.error_handlers.sentry.handler500"
-else:
-    handler500 = "edc_dashboard.views.edc_handler500"
+handler500 = "edc_dashboard.views.edc_handler500"
 
 urlpatterns = [
-    path("sentry-debug/", trigger_error),
-    path("accounts/", include("edc_auth.urls")),
+    path("accounts/", include("edc_auth.urls_for_accounts", namespace="auth")),
     path("administration/", AdministrationView.as_view(), name="administration_url"),
     path("subject/", include("intecomm_dashboard.urls")),
+    *paths_for_urlpatterns("edc_auth"),
     *paths_for_urlpatterns("edc_action_item"),
     *paths_for_urlpatterns("edc_adverse_event"),
     *paths_for_urlpatterns("edc_appointment"),
@@ -48,20 +38,23 @@ urlpatterns = [
     *paths_for_urlpatterns("edc_pdutils"),
     *paths_for_urlpatterns("edc_pharmacy"),
     *paths_for_urlpatterns("edc_protocol"),
-    *paths_for_urlpatterns("edc_protocol_violation"),
+    *paths_for_urlpatterns("edc_protocol_incident"),
     *paths_for_urlpatterns("edc_randomization"),
     *paths_for_urlpatterns("edc_reference"),
     *paths_for_urlpatterns("edc_refusal"),
     *paths_for_urlpatterns("edc_registration"),
     *paths_for_urlpatterns("edc_review_dashboard"),
+    *paths_for_urlpatterns("edc_sites"),
     *paths_for_urlpatterns("edc_subject_dashboard"),
     *paths_for_urlpatterns("edc_unblinding"),
     *paths_for_urlpatterns("edc_visit_schedule"),
+    *paths_for_urlpatterns("canned_views"),
     *paths_for_urlpatterns("intecomm_ae"),
     *paths_for_urlpatterns("intecomm_consent"),
     *paths_for_urlpatterns("intecomm_export"),
     *paths_for_urlpatterns("intecomm_lists"),
     *paths_for_urlpatterns("intecomm_prn"),
+    *paths_for_urlpatterns("intecomm_group"),
     *paths_for_urlpatterns("intecomm_screening"),
     *paths_for_urlpatterns("intecomm_subject"),
 ]
@@ -72,12 +65,15 @@ if settings.DEFENDER_ENABLED:
     )
 
 urlpatterns += [
-    path("admin/", admin.site.urls),
+    path("admin/", RedirectView.as_view(url="/")),
     path(
         "switch_sites/",
-        LogoutView.as_view(next_page=settings.INDEX_PAGE),
+        LogoutView.as_view(next_page=get_index_page()),
         name="switch_sites_url",
     ),
+    path("grouping/", GroupingView.as_view(), name="grouping_url"),
+    path("followup_comm/", FollowupCommView.as_view(), name="followup_comm_url"),
+    path("followup_inte/", FollowupInteView.as_view(), name="followup_inte_url"),
     path("home/", HomeView.as_view(), name="home_url"),
     re_path(".", RedirectView.as_view(url="/"), name="home_url"),
     re_path("", HomeView.as_view(), name="home_url"),

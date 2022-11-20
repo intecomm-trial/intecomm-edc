@@ -1,0 +1,5 @@
+<a id="patientlog_change_{{ patient_log_identifier }}" title="{{ title }}" role="button"
+   class="btn btn-sm btn-{% if eligible == YES %}success{% elif eligible == TBD %}warning{% else %}default{% endif %}"
+       {% if enabled %}href="{{ href }}"{% else %} disabled {% endif %}>
+    <i class="fas fa-pencil-alt fa-sm"></i> pLog
+</a>

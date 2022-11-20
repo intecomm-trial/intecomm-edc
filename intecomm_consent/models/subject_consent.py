@@ -1,4 +1,5 @@
 from django.apps import apps as django_apps
+from django.contrib.sites.managers import CurrentSiteManager
 from django.db import models
 from edc_consent.field_mixins import (
     CitizenFieldsMixin,
@@ -11,14 +12,13 @@ from edc_consent.field_mixins import (
 from edc_consent.managers import ConsentManager
 from edc_consent.model_mixins import ConsentModelMixin
 from edc_constants.choices import YES_NO
-from edc_constants.constants import NO, NOT_APPLICABLE
+from edc_constants.constants import BLACK, NO, NOT_APPLICABLE
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierModelMixin
 from edc_identifier.subject_identifier import SubjectIdentifier as BaseSubjectIdentifier
 from edc_model.models import BaseUuidModel, HistoricalRecords
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 from edc_search.model_mixins import SearchSlugManager
 from edc_sites.models import SiteModelMixin
-from edc_visit_tracking.managers import CurrentSiteManager
 
 from .model_mixins import SearchSlugModelMixin
 
@@ -29,6 +29,9 @@ class SubjectIdentifier(BaseSubjectIdentifier):
 
 
 class SubjectConsentManager(SearchSlugManager, models.Manager):
+
+    use_in_migrations = True
+
     def get_by_natural_key(self, subject_identifier, version):
         return self.get(subject_identifier=subject_identifier, version=version)
 
@@ -60,6 +63,14 @@ class SubjectConsent(
 
     screening_datetime = models.DateTimeField(
         verbose_name="Screening datetime", null=True, editable=False
+    )
+
+    ethnicity = models.CharField(
+        max_length=15,
+        help_text="fromm screening",
+        editable=False,
+        null=True,
+        default=BLACK,
     )
 
     completed_by_next_of_kin = models.CharField(

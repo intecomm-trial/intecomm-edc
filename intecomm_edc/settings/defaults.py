@@ -1,14 +1,14 @@
 import os
 import sys
+from importlib.metadata import version
 from pathlib import Path
 
 import environ
 from edc_appointment.constants import SCHEDULED_APPT, UNSCHEDULED_APPT
 from edc_constants.constants import COMPLETE
+from edc_protocol_incident.constants import PROTOCOL_INCIDENT
 from edc_utils import get_datetime_from_env
 
-BASE_DIR = str(Path(os.path.dirname(os.path.abspath(__file__))).parent.parent)
-ENV_DIR = str(Path(os.path.dirname(os.path.abspath(__file__))).parent.parent)
 env = environ.Env(
     AWS_ENABLED=(bool, False),
     CDN_ENABLED=(bool, False),
@@ -24,18 +24,21 @@ env = environ.Env(
     DJANGO_LIVE_SYSTEM=(bool, False),
     DJANGO_LOGGING_ENABLED=(bool, True),
     DJANGO_SESSION_COOKIE_SECURE=(bool, True),
-    DJANGO_USE_I18N=(bool, True),
-    DJANGO_USE_L10N=(bool, False),
+    DJANGO_USE_I18N=(bool, False),
     DJANGO_USE_TZ=(bool, True),
     DEFENDER_ENABLED=(bool, False),
-    EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER=(bool, True),
+    # EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER=(bool, True),
     EDC_LABEL_BROWSER_PRINT_PAGE_AUTO_BACK=(bool, True),
-    SAUCE_ENABLED=(bool, False),
-    SENTRY_ENABLED=(bool, False),
-    SIMPLE_HISTORY_PERMISSIONS_ENABLED=(bool, False),
-    SIMPLE_HISTORY_REVERT_DISABLED=(bool, False),
     TWILIO_ENABLED=(bool, False),
 )
+
+DEBUG = env("DJANGO_DEBUG")
+
+if LOGGING_ENABLED := env("DJANGO_LOGGING_ENABLED"):
+    from .logging import *  # noqa
+
+BASE_DIR = str(Path(os.path.dirname(os.path.abspath(__file__))).parent.parent)
+ENV_DIR = str(Path(os.path.dirname(os.path.abspath(__file__))).parent.parent)
 
 # copy your .env file from .envs/ to BASE_DIR
 if "test" in sys.argv:
@@ -47,7 +50,6 @@ else:
             f"Environment file does not exist. Got `{os.path.join(ENV_DIR, '.env')}`"
         )
     env.read_env(os.path.join(ENV_DIR, ".env"))
-
 
 DEBUG = env("DJANGO_DEBUG")
 
@@ -61,21 +63,19 @@ ETC_DIR = env.str("DJANGO_ETC_FOLDER")
 
 TEST_DIR = os.path.join(BASE_DIR, APP_NAME, "tests")
 
+# INTERNAL_IPS = ["127.0.0.1"]
 ALLOWED_HOSTS = ["*"]  # env.list('DJANGO_ALLOWED_HOSTS')
 
 ENFORCE_RELATED_ACTION_ITEM_EXISTS = False
 
 DEFAULT_APPOINTMENT_TYPE = "hospital"
 
-# LOGIN_REDIRECT_URL = env.str("DJANGO_LOGIN_REDIRECT_URL")
 LOGIN_URL = "/accounts/login/"
 LOGOUT_REDIRECT_URL = "/accounts/login/"
 
-SENTRY_ENABLED = env("SENTRY_ENABLED")
 DEFENDER_ENABLED = env("DEFENDER_ENABLED")
 
 INSTALLED_APPS = [
-    # "django.contrib.admin",
     "intecomm_edc.apps.AdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -83,19 +83,18 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-    "import_export",
     "defender",
     "multisite",
+    "fontawesomefree",
     "django_crypto_fields.apps.AppConfig",
     "django_revision.apps.AppConfig",
-    "django_extensions",
-    "django_celery_results",
-    "django_celery_beat",
+    # "django_extensions",
     "logentry_admin",
     "simple_history",
     "storages",
     "edc_action_item.apps.AppConfig",
     "edc_appointment.apps.AppConfig",
+    "edc_auth.apps.AppConfig",
     "edc_adverse_event.apps.AppConfig",
     "edc_consent.apps.AppConfig",
     "edc_crf.apps.AppConfig",
@@ -113,6 +112,7 @@ INSTALLED_APPS = [
     "edc_lab_dashboard.apps.AppConfig",
     "edc_label.apps.AppConfig",
     "edc_list_data.apps.AppConfig",
+    "edc_listboard.apps.AppConfig",
     "edc_identifier.apps.AppConfig",
     "edc_locator.apps.AppConfig",
     "edc_metadata.apps.AppConfig",
@@ -125,12 +125,13 @@ INSTALLED_APPS = [
     "edc_pharmacy.apps.AppConfig",
     "edc_pdutils.apps.AppConfig",
     "edc_protocol.apps.AppConfig",
-    "edc_protocol_violation.apps.AppConfig",
+    "edc_protocol_incident.apps.AppConfig",
     "edc_prn.apps.AppConfig",
     "edc_randomization.apps.AppConfig",
     "edc_reference.apps.AppConfig",
+    "edc_refusal.apps.AppConfig",
     "edc_registration.apps.AppConfig",
-    "edc_reports.apps.AppConfig",
+    "edc_pdf_reports.apps.AppConfig",
     "edc_review_dashboard.apps.AppConfig",
     "edc_screening.apps.AppConfig",
     "edc_sites.apps.AppConfig",
@@ -138,37 +139,28 @@ INSTALLED_APPS = [
     "edc_timepoint.apps.AppConfig",
     "edc_unblinding.apps.AppConfig",
     "edc_form_describer.apps.AppConfig",
-]
-INTECOMM_APPS = [
     "edc_adherence.apps.AppConfig",
     "edc_dx.apps.AppConfig",
-    "edc_refusal.apps.AppConfig",
+    "canned_views.apps.AppConfig",
+    "intecomm_rando.apps.AppConfig",
     "intecomm_consent.apps.AppConfig",
-    "intecomm_data_manager.apps.AppConfig",
     "intecomm_lists.apps.AppConfig",
     "intecomm_dashboard.apps.AppConfig",
     "intecomm_labs.apps.AppConfig",
-    "intecomm_metadata_rules.apps.AppConfig",
-    "intecomm_reference.apps.AppConfig",
     "intecomm_subject.apps.AppConfig",
     "intecomm_visit_schedule.apps.AppConfig",
     "intecomm_ae.apps.AppConfig",
     "intecomm_auth.apps.AppConfig",
-    "intecomm_rando.apps.AppConfig",
     "intecomm_prn.apps.AppConfig",
     "intecomm_export.apps.AppConfig",
-    "intecomm_pharmacy.apps.AppConfig",
+    "intecomm_group.apps.AppConfig",
     "intecomm_screening.apps.AppConfig",
     "intecomm_sites.apps.AppConfig",
     "intecomm_edc.apps.AppConfig",
 ]
-INSTALLED_APPS.extend(INTECOMM_APPS)
-INSTALLED_APPS.append("edc_auth.apps.AppConfig")
 
 if not DEFENDER_ENABLED:
     INSTALLED_APPS.pop(INSTALLED_APPS.index("defender"))
-# if env("SENTRY_ENABLED"):
-#     INSTALLED_APPS.append("raven.contrib.django.raven_compat")
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -188,10 +180,13 @@ if not DEFENDER_ENABLED:
 
 MIDDLEWARE.extend(
     [
+        "edc_protocol.middleware.ProtocolMiddleware",
         "edc_dashboard.middleware.DashboardMiddleware",
         "edc_subject_dashboard.middleware.DashboardMiddleware",
         "edc_lab_dashboard.middleware.DashboardMiddleware",
         "edc_adverse_event.middleware.DashboardMiddleware",
+        "edc_listboard.middleware.DashboardMiddleware",
+        "edc_review_dashboard.middleware.DashboardMiddleware",
         # 'simple_history.middleware.HistoryRequestMiddleware'
     ]
 )
@@ -209,6 +204,10 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "edc_model_admin.context_processors.admin_theme",
+                "edc_constants.context_processor.constants",
+                "edc_appointment.context_processors.constants",
+                "edc_visit_tracking.context_processors.constants",
             ]
         },
     }
@@ -244,7 +243,6 @@ if env.str("DJANGO_CACHE") == "redis":
     SESSION_CACHE_ALIAS = "default"
     DJANGO_REDIS_IGNORE_EXCEPTIONS = True
     DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
-
 elif env.str("DJANGO_CACHE") == "memcached":
     CACHES = {
         "default": {
@@ -260,13 +258,6 @@ WSGI_APPLICATION = f"{APP_NAME}.wsgi.application"
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
 AUTHENTICATION_BACKENDS = ["edc_auth.backends.ModelBackendWithSite"]
-
-AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
-]
 
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",
@@ -287,19 +278,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = env.str("DJANGO_LANGUAGE_CODE")
-
+USE_I18N = False  # disable trans
+USE_L10N = False  # set to False so DATE formats below are used
+USE_TZ = True
+LANGUAGE_CODE = env.str("DJANGO_LANGUAGE_CODE")  # ignored if USE_L10N = False
 LANGUAGES = [x.split(":") for x in env.list("DJANGO_LANGUAGES")] or (("en", "English"),)
-
 TIME_ZONE = env.str("DJANGO_TIME_ZONE")
-
-USE_I18N = env("DJANGO_USE_I18N")
-
-# set to False so DATE formats below are used
-USE_L10N = env("DJANGO_USE_L10N")
-
-USE_TZ = env("DJANGO_USE_TZ")
-
 DATE_INPUT_FORMATS = ["%Y-%m-%d", "%d/%m/%Y"]
 DATETIME_INPUT_FORMATS = [
     "%Y-%m-%d %H:%M:%S",  # '2006-10-25 14:30:59'
@@ -319,14 +303,17 @@ SHORT_DATETIME_FORMAT = "d/m/Y H:i"
 # See also any inte_* or edc_* apps.py
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# edc-appointment
+EDC_APPOINTMENT_APPT_REASON_CHOICES = (
+    (SCHEDULED_APPT, "Scheduled visit (study)"),
+    (UNSCHEDULED_APPT, "Routine / Unscheduled (non-study)"),
+)
+
 # edc-pdutils
 EXPORT_FILENAME_TIMESTAMP_FORMAT = "%Y%m%d"
 
 # django_revision
-with open(os.path.join(os.path.dirname(os.path.join(BASE_DIR, APP_NAME)), "VERSION")) as f:
-    REVISION = f.read().strip()
-
-# EDC_AUTH_SKIP_AUTH_UPDATER = True
+REVISION = version(APP_NAME)
 
 # enforce https if DEBUG=False!
 # Note: will cause "CSRF verification failed. Request aborted"
@@ -336,7 +323,6 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = env.str("DJANGO_CSRF_COOKIE_SECURE")
     SECURE_PROXY_SSL_HEADER = env.tuple("DJANGO_SECURE_PROXY_SSL_HEADER")
     SESSION_COOKIE_SECURE = env.str("DJANGO_SESSION_COOKIE_SECURE")
-
     # other security defaults
     SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 31_536_000
@@ -372,25 +358,29 @@ LAB_DASHBOARD_URL_NAMES = env.dict("DJANGO_LAB_DASHBOARD_URL_NAMES")
 
 # edc-diagnosis
 EDC_DX_LABELS = dict(hiv="HIV", dm="Diabetes", htn="Hypertension", chol="High Cholesterol")
-# edc-label
-EDC_LABEL_BROWSER_PRINT_PAGE_AUTO_BACK = env("EDC_LABEL_BROWSER_PRINT_PAGE_AUTO_BACK")
 
 # edc_facility
 HOLIDAY_FILE = env.str("DJANGO_HOLIDAY_FILE")
 
+# edc-label
+EDC_LABEL_BROWSER_PRINT_PAGE_AUTO_BACK = env("EDC_LABEL_BROWSER_PRINT_PAGE_AUTO_BACK")
+
+# edc_model_admin
+EDC_MODEL_ADMIN_CSS_THEME = "edc_indigo"
+
+EDC_OFFSTUDY_OFFSTUDY_MODEL = "intecomm_prn.endofstudy"
+
+# edc-protocol-incident
+EDC_PROTOCOL_VIOLATION_TYPE = PROTOCOL_INCIDENT
+
 # edc_randomization
 EDC_RANDOMIZATION_LIST_PATH = env.str("EDC_RANDOMIZATION_LIST_PATH")
 EDC_RANDOMIZATION_UNBLINDED_USERS = env.list("EDC_RANDOMIZATION_UNBLINDED_USERS")
-EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER = env(
-    "EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER"
-)
+EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER = False
 EDC_RANDOMIZATION_SKIP_VERIFY_CHECKS = True
 
 # edc-sites
 EDC_SITES_MODULE_NAME = env.str("EDC_SITES_MODULE_NAME")
-
-# django-simple-history
-SIMPLE_HISTORY_REVERT_ENABLED = False
 
 # django-multisite
 CACHE_MULTISITE_KEY_PREFIX = APP_NAME
@@ -418,12 +408,6 @@ if EMAIL_ENABLED:
     MAILGUN_API_KEY = env("MAILGUN_API_KEY")
     MAILGUN_API_URL = env("MAILGUN_API_URL")
 
-TWILIO_ENABLED = False  # env("TWILIO_ENABLED")
-if TWILIO_ENABLED:
-    TWILIO_ACCOUNT_SID = env.str("TWILIO_ACCOUNT_SID")
-    TWILIO_AUTH_TOKEN = env.str("TWILIO_AUTH_TOKEN")
-    TWILIO_SENDER = env.str("TWILIO_SENDER")
-
 # django_revision
 GIT_DIR = BASE_DIR
 
@@ -434,13 +418,11 @@ AUTO_CREATE_KEYS = env("DJANGO_AUTO_CREATE_KEYS")
 EXPORT_FOLDER = env.str("DJANGO_EXPORT_FOLDER") or os.path.expanduser("~/")
 
 # django_simple_history
-SIMPLE_HISTORY_PERMISSIONS_ENABLED = env.str("SIMPLE_HISTORY_PERMISSIONS_ENABLED")
-SIMPLE_HISTORY_REVERT_DISABLED = env.str("SIMPLE_HISTORY_REVERT_DISABLED")
+SIMPLE_HISTORY_ENFORCE_HISTORY_MODEL_PERMISSIONS = True
 
 FQDN = env.str("DJANGO_FQDN")  # ???
 INDEX_PAGE = env.str("DJANGO_INDEX_PAGE")
 INDEX_PAGE_LABEL = env.str("DJANGO_INDEX_PAGE_LABEL")
-DJANGO_LOG_FOLDER = env.str("DJANGO_LOG_FOLDER")
 
 # edc_adverse_event
 ADVERSE_EVENT_ADMIN_SITE = env.str("EDC_ADVERSE_EVENT_ADMIN_SITE")
@@ -454,14 +436,16 @@ DATA_DICTIONARY_APP_LABELS = [
     "intecomm_screening",
     "intecomm_ae",
     "edc_appointment",
+    "edc_locator",
+    "edc_offstudy",
 ]
 
 # edc_protocol
 EDC_PROTOCOL = env.str("EDC_PROTOCOL")
 EDC_PROTOCOL_INSTITUTION_NAME = env.str("EDC_PROTOCOL_INSTITUTION_NAME")
 EDC_PROTOCOL_NUMBER = env.str("EDC_PROTOCOL_NUMBER")
-EDC_PROTOCOL_PROJECT_NAME = env.str("EDC_PROTOCOL_PROJECT_NAME")
-EDC_PROTOCOL_PROJECT_NAME = "META3" if META_PHASE == 3 else "META2"
+# EDC_PROTOCOL_PROJECT_NAME = env.str("EDC_PROTOCOL_PROJECT_NAME")
+EDC_PROTOCOL_PROJECT_NAME = "INTECOMM"
 EDC_PROTOCOL_STUDY_OPEN_DATETIME = get_datetime_from_env(
     *env.list("EDC_PROTOCOL_STUDY_OPEN_DATETIME")
 )
@@ -470,10 +454,7 @@ EDC_PROTOCOL_STUDY_CLOSE_DATETIME = get_datetime_from_env(
 )
 EDC_PROTOCOL_TITLE = env.str("EDC_PROTOCOL_TITLE")
 
-
-SARSCOV2_REDIRECT_URL_NAME = "screening_listboard_url"
-
-# static
+# static / AWS
 if env("AWS_ENABLED"):
     # see
     # https://www.digitalocean.com/community/tutorials/
@@ -491,64 +472,15 @@ if env("AWS_ENABLED"):
     STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
     STATIC_URL = f"{os.path.join(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)}/"
     STATIC_ROOT = ""
+elif DEBUG:
+    STATIC_URL = env.str("DJANGO_STATIC_URL")
+    STATIC_ROOT = os.path.expanduser("~/source/edc_source/intecomm-edc/static/")
 else:
     # run collectstatic, check nginx LOCATION
     STATIC_URL = env.str("DJANGO_STATIC_URL")
     STATIC_ROOT = env.str("DJANGO_STATIC_ROOT")
 
-SENTRY_DSN = env("SENTRY_DSN")
-
-if SENTRY_ENABLED and SENTRY_DSN:
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
-
-    sentry_sdk.init(
-        dsn=SENTRY_DSN,
-        integrations=[DjangoIntegration()],
-        traces_sample_rate=1.0,
-        send_default_pii=True,
-    )
-
-if env("DJANGO_LOGGING_ENABLED"):
-    from .logging import LOGGING  # noqa
-
 # CELERY
-# see docs on setting up the broker
-CELERY_ENABLED = env("CELERY_ENABLED")
-if CELERY_ENABLED:
-    CELERY_BROKER_USER = env.str("CELERY_BROKER_USER")
-    CELERY_BROKER_PASSWORD = env.str("CELERY_BROKER_PASSWORD")
-    CELERY_BROKER_HOST = env.str("CELERY_BROKER_HOST")
-    CELERY_BROKER_PORT = env.str("CELERY_BROKER_PORT")
-    if DEBUG:
-        CELERY_BROKER_VHOST = f"{APP_NAME}_debug"
-    elif LIVE_SYSTEM:
-        CELERY_BROKER_VHOST = f"{APP_NAME}_production"
-    else:
-        CELERY_BROKER_VHOST = f"{APP_NAME}_uat"
-        CELERY_BROKER_URL = (
-            f"amqp://{CELERY_BROKER_USER}:{CELERY_BROKER_PASSWORD}@"
-            f"{CELERY_BROKER_HOST}:{CELERY_BROKER_PORT}/{CELERY_BROKER_VHOST}"
-        )
-        DJANGO_CELERY_RESULTS_TASK_ID_MAX_LENGTH = 191
-        CELERY_RESULT_BACKEND = "django-db"
-        #     CELERY_QUEUES = (
-        #         Queue('high', Exchange('high'), routing_key='high'),
-        #         Queue('normal', Exchange('normal'), routing_key='normal'),
-        #         Queue('low', Exchange('low'), routing_key='low'),
-        #     )
-        #     CELERY_DEFAULT_QUEUE = 'normal'
-        #     CELERY_DEFAULT_EXCHANGE = 'normal'
-        #     CELERY_DEFAULT_ROUTING_KEY = 'normal'
-        #     CELERY_ROUTES = {
-        #         'edc_data_manager.tasks.*': {'queue': 'normal'},
-        #     }
-
-EDC_APPOINTMENT_APPT_REASON_CHOICES = (
-    (SCHEDULED_APPT, "Scheduled visit (study)"),
-    (UNSCHEDULED_APPT, "Routine / Unscheduled (non-study)"),
-)
-
 
 if "test" in sys.argv:
 
@@ -562,7 +494,3 @@ if "test" in sys.argv:
     MIGRATION_MODULES = DisableMigrations()
     PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
     DEFAULT_FILE_STORAGE = "inmemorystorage.InMemoryStorage"
-
-    if env("SAUCE_ENABLED"):
-        SAUCE_USERNAME = env.str("SAUCE_USERNAME")
-        SAUCE_ACCESS_KEY = env.str("SAUCE_ACCESS_KEY")

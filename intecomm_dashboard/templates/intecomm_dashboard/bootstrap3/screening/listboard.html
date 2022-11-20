@@ -1,16 +1,28 @@
 {% extends edc_listboard_template %}
 {% load admin_urls %}
 {% load edc_dashboard_extras %}
-{% load intecomm_dashboard_extras %}
+{% load protocol_dashboard_extras %}
 
 {% block listboard_panel %}
 
-    <a id="subjectscreening_add"
-        title="{% if perms.intecomm_screening.add_screeningpartone %}add screening{% else %}check your permissions{% endif %}"
+    <a id="patientlog_add"
+        title="{% if perms.intecomm_screening.add_patientlog %}add patient{% else %}check your permissions{% endif %}"
+        class="btn btn-sm btn-default" role="button"  href="{% url 'intecomm_screening_admin:intecomm_screening_patientlog_add' %}?">
+            <i class="fas fa-plus fa-sm"></i> Add Patient Log
+    </a>
+    <a id="patientlog_changelist"
+        title="{% if perms.intecomm_screening.add_patientlog %}patient logs{% else %}check your permissions{% endif %}"
         class="btn btn-sm btn-default" role="button"
-        {% if not perms.intecomm_screening.add_screeningpartone %}disabled{% endif %}
-        href="{% if perms.intecomm_screening.add_screeningpartone %}{{ subject_screening_add_url }}?next={{ screening_listboard_url }}{% endif %}">
-            <i class="fas fa-plus fa-sm"></i> Add Subject Screening
+        {% if not perms.intecomm_screening.add_patientlog %}disabled{% endif %}
+        href="{% if perms.intecomm_screening.add_patientlog %}{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist" %}{% endif %}">
+            Patient Logs
+    </a>
+    <a id="patientgroup_changelist"
+        title="{% if perms.intecomm_screening.add_patientlog %}patient groups{% else %}check your permissions{% endif %}"
+        class="btn btn-sm btn-default" role="button"
+        {% if not perms.intecomm_screening.add_patientgroup %}disabled{% endif %}
+        href="{% if perms.intecomm_screening.add_patientgroup %}{% url "intecomm_screening_admin:intecomm_screening_patientgroup_changelist" %}{% endif %}">
+            Patient Groups
     </a>
 
 {% endblock listboard_panel %}
@@ -20,10 +32,11 @@
     <!-- begin results header -->
     <th>#</th>
     <th></th>
-    <th>Screening ID</th>
-    <th>Initials</th>
-    <th>Age/Gender</th>
-    <th>Study ID</th>
+    <th>ScreenID</th>
+    <th>Grouping</th>
+    <th>Init</th>
+    <th>Age</th>
+    <th>StudyID</th>
     <th>User</th>
     <th>Modified</th>
     <!-- end results header -->
@@ -33,23 +46,25 @@
 {% block listboard_table_button_column %}
     <td style="white-space: nowrap">
     <div class="btn-group">
-    {% screening_button result %}
-    {% eligibility_button result %}
-    {% if result.eligible %}
+      {% screening_button result %}
+      {% eligibility_button result %}
+      {% if result.eligible %}
+        {% patient_group_button result %}
         {% if result.consent %}
             {% dashboard_button result %}
         {% else %}
+            {% refusal_button result %}
             {% add_consent_button result %}
         {% endif %}
-    {% endif %}
+      {% endif %}
     </div>
     </td>
 {% endblock listboard_table_button_column %}
 
 
 {% block listboard_table_columns %}
-
     <td>{{ result.human_screening_identifier }} </td>
+    <td>{{ result.grouping }}</td>
     <td nowrap>{{ result.initials }}</td>
     <td nowrap>{{ result.age_in_years }} yrs {{ result.gender }}</td>
     <td nowrap>{% if result.consent %}{{ result.consent.subject_identifier }}{% else %} -- {% endif %}</td>

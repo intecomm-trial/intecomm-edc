@@ -1,0 +1,2 @@
+class PatientGroupError(Exception):
+    pass

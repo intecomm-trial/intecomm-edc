@@ -3,6 +3,8 @@ import os
 
 import environ
 
+__all__ = ["LOG_FOLDER", "LOGGING_FILE_LEVEL", "LOGGING_SYSLOG_LEVEL", "LOGGING"]
+
 env = environ.Env()
 env.read_env(".env")
 
@@ -53,7 +55,7 @@ LOGGING = {
         },
         # root logger
         "": {"handlers": ["syslog"], "level": LOGGING_SYSLOG_LEVEL, "disabled": False},
-        "meta-trial": {
+        "intecomm": {
             "handlers": ["syslog"],
             "level": LOGGING_SYSLOG_LEVEL,
             "propagate": False,

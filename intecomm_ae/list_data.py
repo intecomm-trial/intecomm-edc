@@ -5,9 +5,6 @@ list_data = {
         ("lactic_acidosis", "Lactic acidosis"),
         ("hepatomegaly_steatosis", "Hepatomegaly with steatosis"),
         ("gastrointestinal_metformin", "Gastrointestinal effects of metformin"),
-        # ("anaemia", "Anaemia"),
-        # ("diarrhoea", "Diarrhoea"),
-        # ("renal_impairment", "Renal impairment"),
         (OTHER, "Other"),
     ],
     "edc_adverse_event.saereason": [

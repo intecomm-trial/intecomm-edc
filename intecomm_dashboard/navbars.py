@@ -3,30 +3,43 @@ from edc_data_manager.navbar_item import dm_navbar_item
 from edc_navbar import Navbar, NavbarItem, site_navbars
 from edc_review_dashboard.navbars import navbar_item as review_navbar_item
 
-no_url_namespace = False
+no_url_namespace = False  # True if settings.APP_NAME == "intecomm_dashboard" else False
 
 navbar = Navbar(name="intecomm_dashboard")
 
+
 navbar.append_item(
     NavbarItem(
-        name="screened_subject",
-        title="Screening",
-        label="Screening",
-        fa_icon="fas fa-user-plus",
-        codename="edc_navbar.nav_screening_section",
-        url_name="screening_listboard_url",
+        name="screen_group",
+        title="Screen/Group",
+        label="Screen/Group",
+        fa_icon="fa-solid fa-user-plus",
+        codename="edc_screening.view_screening_listboard",
+        url_name="grouping_url",
         no_url_namespace=no_url_namespace,
     )
 )
 
 navbar.append_item(
     NavbarItem(
-        name="consented_subject",
-        title="Subjects",
-        label="Subjects",
-        fa_icon="far fa-user-circle",
-        codename="edc_navbar.nav_subject_section",
-        url_name="subject_listboard_url",
+        name="comm_followup",
+        title="COMM",
+        label="COMM",
+        fa_icon="fa-solid fa-users-between-lines",
+        codename="edc_subject_dashboard.view_subject_listboard",
+        url_name="followup_comm_url",
+        no_url_namespace=no_url_namespace,
+    )
+)
+
+navbar.append_item(
+    NavbarItem(
+        name="inte_followup",
+        title="INTE",
+        label="INTE",
+        fa_icon="fa-solid fa-user-circle",
+        codename="edc_subject_dashboard.view_subject_listboard",
+        url_name="followup_inte_url",
         no_url_namespace=no_url_namespace,
     )
 )

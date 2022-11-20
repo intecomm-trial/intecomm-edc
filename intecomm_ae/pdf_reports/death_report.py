@@ -1,8 +1,8 @@
 from edc_adverse_event.pdf_reports import DeathReport as BaseDeathReport
 
-from .crf_report_mixin import CrfReportMixin
+from .pdf_report_mixin import ProtocolCrfReportMixin
 
 
-class DeathReport(CrfReportMixin, BaseDeathReport):
+class DeathReport(ProtocolCrfReportMixin, BaseDeathReport):
 
     pass
