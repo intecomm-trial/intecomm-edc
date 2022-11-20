@@ -4,12 +4,13 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
 from edc_constants.choices import GENDER, YES_NO_TBD
-from edc_constants.constants import TBD
+from edc_constants.constants import NEW, TBD
 from edc_model.models import BaseUuidModel, HistoricalRecords
 from edc_model.validators.phone import phone_number
 from edc_model_fields.fields import InitialsField
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
 from edc_utils import get_utcnow
+from intecomm_form_validators import RECRUITING
 
 from intecomm_lists.models import Conditions
 
@@ -102,6 +103,7 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         on_delete=models.PROTECT,
         null=True,
         blank=True,
+        limit_choices_to=dict(status__in=[NEW, RECRUITING], randomized=False),
         help_text=(
             "This can be changed at anytime until the group is flagged as COMPLETE. "
             "It is recommended to choose a group early in the process."

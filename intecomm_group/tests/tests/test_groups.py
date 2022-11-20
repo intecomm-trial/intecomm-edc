@@ -6,8 +6,8 @@ from edc_constants.constants import DM, HIV, HTN, NO, UUID_PATTERN
 from intecomm_form_validators import RECRUITING
 from model_bakery.baker import make_recipe
 
-from intecomm_group.models import PatientLog
 from intecomm_lists.models import Conditions
+from intecomm_screening.models import PatientLog
 
 
 class TestPatientGroup(TestCase):
@@ -22,12 +22,12 @@ class TestPatientGroup(TestCase):
         self.assertFalse(obj.randomized)
         self.assertEqual(obj.patients.all().count(), 0)
 
-    @tag("grp")
+    @tag("grp2")
     def test_with_patients_ok(self):
         initials = "ABCDEFGHIJKLMNOP"
         for i in range(0, 4):
             make_recipe(
-                "intecomm_group.patientlog",
+                "intecomm_screening.patientlog",
                 name=f"NAME{i} AAA{i}",
                 initials=f"N{initials[i]}A",
                 hf_identifier=uuid4().hex,
@@ -36,7 +36,7 @@ class TestPatientGroup(TestCase):
             )
         for i in range(0, 5):
             make_recipe(
-                "intecomm_group.patientlog",
+                "intecomm_screening.patientlog",
                 name=f"NAME{i} BBB{i}",
                 initials=f"N{initials[i]}B",
                 hf_identifier=uuid4().hex,
@@ -45,7 +45,7 @@ class TestPatientGroup(TestCase):
             )
         for i in range(0, 5):
             make_recipe(
-                "intecomm_group.patientlog",
+                "intecomm_screening.patientlog",
                 name=f"NAME{i} CCC{i}",
                 initials=f"N{initials[i]}C",
                 hf_identifier=uuid4().hex,

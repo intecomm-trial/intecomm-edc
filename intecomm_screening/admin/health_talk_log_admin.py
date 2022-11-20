@@ -1,10 +1,4 @@
 from django.contrib import admin
-from edc_model_admin.history import SimpleHistoryAdmin
-from edc_model_admin.mixins import (
-    ModelAdminFormAutoNumberMixin,
-    ModelAdminFormInstructionsMixin,
-    TemplatesModelAdminMixin,
-)
 from edc_sites import get_site_name
 
 from intecomm_sites import all_sites
@@ -12,15 +6,11 @@ from intecomm_sites import all_sites
 from ..admin_site import intecomm_screening_admin
 from ..forms import HealthTalkLogForm
 from ..models import HealthTalkLog
+from .modeladmin_mixins import BaseModelAdminMixin
 
 
 @admin.register(HealthTalkLog, site=intecomm_screening_admin)
-class HealthTalkLogAdmin(
-    TemplatesModelAdminMixin,
-    ModelAdminFormAutoNumberMixin,
-    ModelAdminFormInstructionsMixin,
-    SimpleHistoryAdmin,
-):
+class HealthTalkLogAdmin(BaseModelAdminMixin):
     form = HealthTalkLogForm
     show_object_tools = True
     change_list_template: str = "intecomm_screening/admin/healthtalklog_change_list.html"

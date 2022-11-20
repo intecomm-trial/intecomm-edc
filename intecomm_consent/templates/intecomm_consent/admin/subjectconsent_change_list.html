@@ -15,9 +15,5 @@
       Groups
     </a>
   </li>
-  <li>
-    <a href="{% url "intecomm_screening_admin:intecomm_screening_patientlog_add" %}" class="addlink" style="background-color: darkorange;">
-      Add
-    </a>
-  </li>
+  {{ block.super }}
 {% endblock %}

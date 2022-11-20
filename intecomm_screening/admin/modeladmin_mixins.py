@@ -21,3 +21,5 @@ class BaseModelAdminMixin(
     SimpleHistoryAdmin,
 ):
     show_cancel = True
+    view_on_site = False
+    save_on_top = True

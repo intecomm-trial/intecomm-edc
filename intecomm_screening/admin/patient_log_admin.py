@@ -4,9 +4,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields import audit_fieldset_tuple
-from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
-from edc_model_admin.history import SimpleHistoryAdmin
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from intecomm_consent.models import SubjectConsent
 
@@ -23,13 +20,12 @@ from .list_filters import (
     ScreenedListFilter,
     StableListFilter,
 )
+from .modeladmin_mixins import BaseModelAdminMixin
 from .patient_call_inlines import AddPatientCallInline, ViewPatientCallInline
 
 
 @admin.register(PatientLog, site=intecomm_screening_admin)
-class PatientLogAdmin(
-    SiteModelAdminMixin, ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin
-):
+class PatientLogAdmin(BaseModelAdminMixin):
 
     form = PatientLogForm
     list_per_page = 20

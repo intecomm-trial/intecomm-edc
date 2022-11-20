@@ -11,12 +11,15 @@ from edc_utils import get_utcnow
 from intecomm_form_validators import RECRUITING
 
 from ..choices import GROUP_STATUS_CHOICES
-from .proxy_models import PatientLog
 
 
 class PatientGroup(SiteModelMixin, BaseUuidModel):
 
     group_identifier = models.CharField(max_length=36, unique=True, default=uuid4)
+
+    group_identifier_as_pk = models.UUIDField(
+        max_length=36, default=uuid4, unique=True, editable=False
+    )
 
     report_datetime = models.DateTimeField(
         default=get_utcnow,
@@ -32,7 +35,7 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
     )
 
     patients = models.ManyToManyField(
-        PatientLog,
+        "intecomm_screening.PatientLog",
         verbose_name="Membership",
         blank=True,
     )
@@ -45,8 +48,25 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
 
     ratio = models.DecimalField(max_digits=10, decimal_places=4, null=True)
 
+    enforce_group_size_min = models.BooleanField(
+        verbose_name="Enforce group size minimum",
+        default=True,
+    )
+
+    enforce_ratio = models.BooleanField(
+        verbose_name="Enforce 2:1 NCD:HIV ratio",
+        default=True,
+    )
+
     randomize_now = models.CharField(
-        verbose_name="Randomise now?", max_length=15, choices=YES_NO, default=NO
+        verbose_name="Randomize now?", max_length=15, choices=YES_NO, default=NO
+    )
+
+    confirm_randomize_now = models.CharField(
+        verbose_name="If YES, please confirm by typing the wors RANDOMIZE here",
+        max_length=15,
+        null=True,
+        blank=True,
     )
 
     randomized = models.BooleanField(default=False, blank=True)

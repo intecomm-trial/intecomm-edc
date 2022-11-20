@@ -27,7 +27,7 @@ env = environ.Env(
     DJANGO_USE_I18N=(bool, False),
     DJANGO_USE_TZ=(bool, True),
     DEFENDER_ENABLED=(bool, False),
-    EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER=(bool, True),
+    # EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER=(bool, True),
     EDC_LABEL_BROWSER_PRINT_PAGE_AUTO_BACK=(bool, True),
     TWILIO_ENABLED=(bool, False),
 )
@@ -142,6 +142,7 @@ INSTALLED_APPS = [
     "edc_adherence.apps.AppConfig",
     "edc_dx.apps.AppConfig",
     "canned_views.apps.AppConfig",
+    "intecomm_rando.apps.AppConfig",
     "intecomm_consent.apps.AppConfig",
     "intecomm_lists.apps.AppConfig",
     "intecomm_dashboard.apps.AppConfig",
@@ -375,9 +376,7 @@ EDC_PROTOCOL_VIOLATION_TYPE = PROTOCOL_INCIDENT
 # edc_randomization
 EDC_RANDOMIZATION_LIST_PATH = env.str("EDC_RANDOMIZATION_LIST_PATH")
 EDC_RANDOMIZATION_UNBLINDED_USERS = env.list("EDC_RANDOMIZATION_UNBLINDED_USERS")
-EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER = env(
-    "EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER"
-)
+EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER = False
 EDC_RANDOMIZATION_SKIP_VERIFY_CHECKS = True
 
 # edc-sites

@@ -4,26 +4,16 @@ from django.apps import apps as django_apps
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-from edc_model_admin.history import SimpleHistoryAdmin
-from edc_model_admin.mixins import (
-    ModelAdminFormAutoNumberMixin,
-    ModelAdminFormInstructionsMixin,
-    TemplatesModelAdminMixin,
-)
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientCallForm
 from ..models import PatientCall
 from .list_filters import AttendDatetListFilter
+from .modeladmin_mixins import BaseModelAdminMixin
 
 
 @admin.register(PatientCall, site=intecomm_screening_admin)
-class PatientCallAdmin(
-    TemplatesModelAdminMixin,
-    ModelAdminFormAutoNumberMixin,
-    ModelAdminFormInstructionsMixin,
-    SimpleHistoryAdmin,
-):
+class PatientCallAdmin(BaseModelAdminMixin):
     form = PatientCallForm
     show_object_tools = False
     change_list_template: str = "intecomm_screening/admin/patientcall_change_list.html"

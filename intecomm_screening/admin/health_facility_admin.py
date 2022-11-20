@@ -1,11 +1,5 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from edc_model_admin.history import SimpleHistoryAdmin
-from edc_model_admin.mixins import (
-    ModelAdminFormAutoNumberMixin,
-    ModelAdminFormInstructionsMixin,
-    TemplatesModelAdminMixin,
-)
 from edc_sites import get_site_name
 
 from intecomm_sites import all_sites
@@ -13,15 +7,11 @@ from intecomm_sites import all_sites
 from ..admin_site import intecomm_screening_admin
 from ..forms import HealthFacilityForm
 from ..models import HealthFacility
+from .modeladmin_mixins import BaseModelAdminMixin
 
 
 @admin.register(HealthFacility, site=intecomm_screening_admin)
-class HealthFacilityAdmin(
-    TemplatesModelAdminMixin,
-    ModelAdminFormAutoNumberMixin,
-    ModelAdminFormInstructionsMixin,
-    SimpleHistoryAdmin,
-):
+class HealthFacilityAdmin(BaseModelAdminMixin):
     form = HealthFacilityForm
     show_object_tools = True
 

@@ -3,11 +3,11 @@ from edc_model.models import BaseUuidModel
 from edc_utils import get_utcnow
 from edc_visit_tracking.constants import SCHEDULED
 
-from intecomm_screening.models import PatientLog
-
 from ..choices import MEETING_STATUS
 from ..constants import ATTENDED
 from .patient_group_appointment import PatientGroupAppointment
+
+# from intecomm_screening.models import PatientLog
 
 
 class PatientGroupMeeting(BaseUuidModel):
@@ -24,7 +24,7 @@ class PatientGroupMeeting(BaseUuidModel):
 
     meeting_datetime = models.DateTimeField(null=True, blank=True)
 
-    patients = models.ManyToManyField(PatientLog, verbose_name="Patients")
+    patients = models.ManyToManyField("intecomm_screening.PatientLog", verbose_name="Patients")
 
     notes = models.TextField(null=True, blank=True)
 

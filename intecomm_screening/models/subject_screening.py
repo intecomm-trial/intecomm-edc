@@ -10,8 +10,8 @@ from edc_screening.screening_identifier import (
     ScreeningIdentifier as BaseScreeningIdentifier,
 )
 from edc_vitals.model_mixins import BloodPressureModelMixin
+from intecomm_eligibility import ScreeningEligibility
 
-from ..eligibility import ScreeningEligibility
 from .patient_log import PatientLog
 
 

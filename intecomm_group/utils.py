@@ -8,7 +8,9 @@ class PatientGroupRatioError(Exception):
     pass
 
 
-def calculate_ratio(patients, raise_on_outofrange=None) -> Tuple[int, int, Decimal]:
+def verify_patient_group_ratio_raise(
+    patients, raise_on_outofrange=None
+) -> Tuple[int, int, Decimal]:
     ncd = 0.0
     hiv = 0.0
     for patient_log in patients:

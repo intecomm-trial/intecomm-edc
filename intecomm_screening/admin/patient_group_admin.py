@@ -8,7 +8,7 @@ from edc_constants.constants import COMPLETE, NEW
 from edc_utils.round_up import round_up
 from intecomm_form_validators import RECRUITING
 
-from intecomm_group.utils import calculate_ratio
+from intecomm_group.utils import verify_patient_group_ratio_raise
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientGroupForm
@@ -30,8 +30,28 @@ class PatientGroupAdmin(BaseModelAdminMixin):
             {"fields": ("report_datetime", "name", "patients", "notes")},
         ),
         (
-            "Status",
-            {"fields": ("status", "randomize_now")},
+            "Status and rules",
+            {
+                "description": format_html(
+                    "Please consult with your study coordinator before you "
+                    "choose to override the minimum group size and/or the ratio of "
+                    "NCD to HIV patients."
+                ),
+                "fields": ("status", "enforce_group_size_min", "enforce_ratio"),
+            },
+        ),
+        (
+            "Randomize",
+            {
+                "description": format_html(
+                    "Complete this section when the group is COMPLETE and ready to "
+                    "RANDOMIZE. <BR>Please consult with your study coordinator before "
+                    "randomizing a group that does not meet the minimum group size and/or "
+                    "the ratio of NCD to HIV patients. <BR>"
+                    "<B>Important: THIS STEP CANNOT BE UNDONE</B"
+                ),
+                "fields": ("randomize_now", "confirm_randomize_now"),
+            },
         ),
         audit_fieldset_tuple,
     )
@@ -83,8 +103,12 @@ class PatientGroupAdmin(BaseModelAdminMixin):
 
     @admin.display(description="NCD:HIV", ordering="ratio")
     def rounded_ratio(self, obj=None):
-        ncd, hiv, ratio = calculate_ratio(obj.patients.all())
+        ncd, hiv, ratio = verify_patient_group_ratio_raise(obj.patients.all())
         return f'{ncd}:{hiv} ({round_up(ratio or Decimal("0.00"), Decimal("2.00"))})'
 
     def get_queryset(self, request):
-        return super().get_queryset(request).filter(status__in=[NEW, RECRUITING, COMPLETE])
+        return (
+            super()
+            .get_queryset(request)
+            .filter(status__in=[NEW, RECRUITING, COMPLETE], randomized=False)
+        )

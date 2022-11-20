@@ -20,6 +20,10 @@ class SubjectConsentAdmin(
 
     form = SubjectConsentForm
 
+    show_object_tools = False
+    show_cancel = True
+    change_list_template: str = "intecomm_consent/admin/subjectconsent_change_list.html"
+
     actions = [
         flag_as_verified_against_paper,
         unflag_as_verified_against_paper,
@@ -41,7 +45,6 @@ class SubjectConsentAdmin(
                     "witness_name",
                     "consent_datetime",
                     "dob",
-                    "guardian_name",
                     "is_dob_estimated",
                     "identity",
                     "identity_type",
