@@ -49,9 +49,9 @@ class InPatientGroup(SimpleListFilter):
     def queryset(self, request, queryset) -> QuerySet | None:
         qs = None
         if self.value() == YES:
-            qs = queryset.filter(patient_group__isnull=False)
+            qs = queryset.filter(patientgroup__isnull=False)
         if self.value() == NO:
-            qs = queryset.filter(patient_group__isnull=True)
+            qs = queryset.filter(patientgroup__isnull=True)
         return qs
 
 

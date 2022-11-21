@@ -15,7 +15,7 @@ from ..choices import GROUP_STATUS_CHOICES
 
 class PatientGroup(SiteModelMixin, BaseUuidModel):
 
-    group_identifier = models.CharField(max_length=36, unique=True, default=uuid4)
+    group_identifier = models.CharField(max_length=36, null=True)
 
     group_identifier_as_pk = models.UUIDField(
         max_length=36, default=uuid4, unique=True, editable=False
@@ -36,7 +36,7 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
 
     patients = models.ManyToManyField(
         "intecomm_screening.PatientLog",
-        verbose_name="Membership",
+        verbose_name="Patients",
         blank=True,
     )
 
@@ -84,6 +84,11 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
     def __str__(self):
         status = " (R)" if self.randomized else f"<{self.get_status_display()}>"
         return f"{self.name.upper()} {status}" if self.name else f"<new> {self.user_created}"
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.group_identifier = self.group_identifier_as_pk
+        super().save(*args, **kwargs)
 
     class Meta(BaseUuidModel.Meta):
         verbose_name = "Patient Group"

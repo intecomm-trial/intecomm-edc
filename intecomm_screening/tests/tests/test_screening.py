@@ -52,14 +52,24 @@ class TestScreening(TestCase):
                 contact_number=f"1234567{i}89",
                 conditions=Conditions.objects.filter(name=HTN),
             )
-
-        obj = make_recipe("intecomm_screening.patientgroup")
-        self.assertEqual(PatientLog.objects.all().count(), 14)
         for patient_log in PatientLog.objects.all():
+            self.assertIsNone(patient_log.patient_group)
+        self.assertEqual(PatientLog.objects.all().count(), 14)
+
+        # create patient_group
+        obj = make_recipe("intecomm_screening.patientgroup")
+
+        # add patient_logs to patient_group
+        for index, patient_log in enumerate(PatientLog.objects.all()):
             obj.patients.add(patient_log)
+            print(obj.patients.all())
+        for patient_log in PatientLog.objects.all():
+            self.assertIsNotNone(patient_log.patient_group)
+            self.assertEqual(patient_log.patient_group, obj)
+
+        obj.refresh_from_db()
 
         for patient_log in PatientLog.objects.all():
             self.assertEqual(patient_log.patient_group.name, obj.name)
 
-        obj.refresh_from_db()
         self.assertEqual(obj.patients.all().count(), 14)

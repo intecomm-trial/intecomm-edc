@@ -1,26 +1,26 @@
 from uuid import uuid4
 
-from django.contrib.sites.models import Site
 from django.db import models
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
 from edc_constants.choices import GENDER, YES_NO_TBD
-from edc_constants.constants import NEW, TBD
+from edc_constants.constants import TBD
 from edc_model.models import BaseUuidModel, HistoricalRecords
 from edc_model.validators.phone import phone_number
 from edc_model_fields.fields import InitialsField
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
 from edc_utils import get_utcnow
-from intecomm_form_validators import RECRUITING
 
 from intecomm_lists.models import Conditions
+
+from .proxy_models import Site
 
 
 class PatientLogManager(models.Manager):
 
     use_in_migrations = True
 
-    def get_by_natural_key(self, name):
-        return self.get(name=name)
+    def get_by_natural_key(self, legal_name):
+        return self.get(legal_name=legal_name)
 
 
 class PatientLog(SiteModelMixin, BaseUuidModel):
@@ -57,7 +57,12 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         help_text="Auto populated when consent form is complete",
     )
 
-    name = EncryptedCharField(blank=False, unique=True)
+    legal_name = EncryptedCharField(blank=False, unique=True)
+
+    familiar_name = EncryptedCharField(
+        verbose_name="How should we refer to you? (if we speak to you)",
+        blank=False,
+    )
 
     initials = InitialsField()
 
@@ -67,14 +72,14 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
 
     site = models.ForeignKey(
         Site,
-        verbose_name="Health facility",
+        verbose_name="Health center",
         on_delete=models.PROTECT,
         blank=False,
         related_name="+",
     )
 
     hf_identifier = EncryptedCharField(
-        verbose_name="Health facility identifier",
+        verbose_name="Health center identifier",
         unique=True,
         blank=False,
         help_text="Must be unique",
@@ -97,18 +102,12 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         null=True, blank=True, help_text="Street, landmarks near home, etc"
     )
 
-    patient_group = models.ForeignKey(
-        "intecomm_screening.PatientGroup",
-        verbose_name="Choose a group (RECOMMENDED)",
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
-        limit_choices_to=dict(status__in=[NEW, RECRUITING], randomized=False),
-        help_text=(
-            "This can be changed at anytime until the group is flagged as COMPLETE. "
-            "It is recommended to choose a group early in the process."
-        ),
-    )
+    # patient_group_hint = models.CharField(
+    #     max_length=10,
+    #     null=True,
+    #     blank=True,
+    #     help_text="If needed, add a hint to help search for patients to add to a group",
+    # )
 
     conditions = models.ManyToManyField(
         Conditions,
@@ -169,11 +168,18 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
     history = HistoricalRecords()
 
     def __str__(self):
-        grp = " <available>" if not self.patient_group else f" @ {self.patient_group.name}"
-        return f"{self.name.title()} ({self.initials.upper()}){grp}"
+        return (
+            f"{self.familiar_name.upper()}-{self.initials.upper()}-{self.contact_number[-4:]}"
+        )
+
+    def save(self, *args, **kwargs):
+        self.legal_name = self.legal_name.upper()
+        self.familiar_name = self.familiar_name.upper()
+        self.initials = self.initials.upper()
+        super().save(*args, **kwargs)
 
     def natural_key(self):
-        return (self.name,)  # noqa
+        return (self.legal_name,)  # noqa
 
 
 class Meta(SiteModelMixin.Meta, BaseUuidModel.Meta):

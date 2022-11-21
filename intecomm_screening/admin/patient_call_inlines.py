@@ -13,7 +13,8 @@ class PatientCallInlineMixin:
     radio_fields = {
         "answered": admin.VERTICAL,
         "respondent": admin.VERTICAL,
-        "willing_to_attend": admin.VERTICAL,
+        "survival_status": admin.VERTICAL,
+        "catchment_area": admin.VERTICAL,
         "call_again": admin.VERTICAL,
     }
 
@@ -29,7 +30,8 @@ class AddPatientCallInline(
                 "fields": (
                     "answered",
                     "respondent",
-                    "willing_to_attend",
+                    "survival_status",
+                    "catchment_area",
                     "attend_date",
                     "call_again",
                     "comment",
@@ -59,7 +61,8 @@ class ViewPatientCallInline(
                 "fields": (
                     "report_datetime",
                     "respondent",
-                    "willing_to_attend",
+                    "survival_status",
+                    "catchment_area",
                     "attend_date",
                     "comment",
                 ),

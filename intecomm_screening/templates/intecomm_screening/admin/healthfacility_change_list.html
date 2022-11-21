@@ -1,8 +1,8 @@
 {% extends "edc_model_admin/admin/change_list.html" %}
 {% load i18n admin_urls static admin_list edc_admin_modify %}
 
-{% block content_title %}<h1>Health Talks</h1>{% endblock %}
-{% block content_subtitle %}<h5><span style="color:orange;">Note:</span>Searches on encrypted data work on exact uppercase matches only</h5>{% endblock %}
+{% block content_title %}<h1>Health Facilities</h1>{% endblock %}
+{% block content_subtitle %}<h5><span style="color:orange;">Note:</span>These are health facilites within a health center</h5>{% endblock %}
 
 {% block object-tools-items %}
   <li>
@@ -24,17 +24,17 @@
     </a>
   </li>
   <li>
-    <a href="#" class="changelink"  style="background-color: black;">
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_healthtalklog_changelist" %}" class="changelink">
       Talks
     </a>
   </li>
   <li>
-    <a href="{% url "intecomm_screening_admin:intecomm_screening_healthfacility_changelist" %}" class="changelink">
+    <a href="#" class="changelink" style="background-color: black;">
       Facilities
     </a>
   </li>
   <li>
-    <a href="{% url "intecomm_screening_admin:intecomm_screening_healthtalklog_add" %}" class="addlink" style="background-color: darkorange;">
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_healthfacility_add" %}" class="addlink" style="background-color: darkorange;">
       Add
     </a>
   </li>

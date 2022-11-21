@@ -14,6 +14,7 @@ from .modeladmin_mixins import BaseModelAdminMixin
 class HealthFacilityAdmin(BaseModelAdminMixin):
     form = HealthFacilityForm
     show_object_tools = True
+    change_list_template: str = "intecomm_screening/admin/healthfacility_change_list.html"
 
     fieldsets = (
         (
@@ -50,7 +51,6 @@ class HealthFacilityAdmin(BaseModelAdminMixin):
     list_display = (
         "name",
         "health_facility_type",
-        "site_name",
         "distance",
         "map",
     )

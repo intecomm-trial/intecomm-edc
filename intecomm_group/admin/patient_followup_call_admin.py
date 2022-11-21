@@ -5,18 +5,18 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
-from ..admin_site import intecomm_screening_admin
-from ..forms import PatientCallForm
-from ..models import PatientCall
-from .list_filters import AttendDatetListFilter
-from .modeladmin_mixins import BaseModelAdminMixin
+from intecomm_screening.admin.list_filters import AttendDatetListFilter
+from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin
+
+from ..admin_site import intecomm_group_admin
+from ..models import PatientFollowupCall
 
 
-@admin.register(PatientCall, site=intecomm_screening_admin)
-class PatientCallAdmin(BaseModelAdminMixin):
-    form = PatientCallForm
+@admin.register(PatientFollowupCall, site=intecomm_group_admin)
+class PatientFollowupCallAdmin(BaseModelAdminMixin):
+    # form = PatientCallForm
     show_object_tools = False
-    change_list_template: str = "intecomm_screening/admin/patientcall_change_list.html"
+    change_list_template: str = "intecomm_group/admin/patientfollowupcall_change_list.html"
 
     fieldsets = (
         (

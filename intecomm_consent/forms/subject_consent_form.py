@@ -2,7 +2,7 @@ from django import forms
 from edc_consent.modelform_mixins import ConsentModelFormMixin
 from edc_form_validators import FormValidatorMixin
 from edc_sites.forms import SiteModelFormMixin
-from intecomm_form_validators.subject import SubjectConsentFormValidator
+from intecomm_form_validators.consent import SubjectConsentFormValidator
 
 from ..models import SubjectConsent
 

@@ -9,7 +9,7 @@ from intecomm_consent.models import SubjectConsent
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientLogForm
-from ..models import PatientLog, SubjectScreening
+from ..models import PatientGroup, PatientLog, SubjectScreening
 from .list_filters import (
     AttendDateListFilter,
     ConsentedListFilter,
@@ -33,7 +33,7 @@ class PatientLogAdmin(BaseModelAdminMixin):
     show_cancel = True
     change_list_template: str = "intecomm_screening/admin/patientlog_change_list.html"
 
-    autocomplete_fields = ["patient_group"]
+    autocomplete_fields = ["site"]
 
     inlines = [AddPatientCallInline, ViewPatientCallInline]
 
@@ -58,7 +58,8 @@ class PatientLogAdmin(BaseModelAdminMixin):
             "Name and contact",
             {
                 "fields": (
-                    "name",
+                    "legal_name",
+                    "familiar_name",
                     "initials",
                     "gender",
                     "hf_identifier",
@@ -77,12 +78,7 @@ class PatientLogAdmin(BaseModelAdminMixin):
         ),
         (
             "Address / Location",
-            {
-                "fields": (
-                    "location_description",
-                    "patient_group",
-                )
-            },
+            {"fields": ("location_description",)},
         ),
         (
             "Health",
@@ -168,10 +164,10 @@ class PatientLogAdmin(BaseModelAdminMixin):
         "id",
         "screening_identifier",
         "subject_identifier",
-        "patient_group__name",
         "hf_identifier__exact",
         "initials__exact",
-        "name__exact",
+        "legal_name__exact",
+        "familiar_name__exact",
         "contact_number__exact",
         "alt_contact_number__exact",
     )
@@ -263,9 +259,9 @@ class PatientLogAdmin(BaseModelAdminMixin):
     def site_name(self, obj=None):
         return obj.site.name.title()
 
-    @admin.display(description="Patient", ordering="name")
+    @admin.display(description="Patient", ordering="familiar_name")
     def patient(self, obj=None):
-        return f"{obj.name} ({obj.initials})"
+        return f"{obj.familiar_name} ({obj.initials})"
 
     @admin.display(description="Screen/Consent", ordering="screening_datetime")
     def screened(self, obj=None):
@@ -282,14 +278,15 @@ class PatientLogAdmin(BaseModelAdminMixin):
             return obj.consent_datetime.date()
         return None
 
-    @admin.display(description="Group", ordering="patient_group__name")
+    @admin.display(description="Group", ordering="patientgroup__name")
     def group_name(self, obj=None):
-        if obj.patient_group:
+        if obj.patientgroup_set.all().count() > 0:
+            patient_group = obj.patientgroup_set.all().first()
             url = reverse(
                 "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
             )
-            url = f"{url}?q={obj.patient_group.name}"
-            return format_html(f'<a href="{url}">{obj.patient_group}</a>')
+            url = f"{url}?q={patient_group.name}"
+            return format_html(f'<a href="{url}">{patient_group}</a>')
         return "<available>"
 
     @admin.display(description="Calls", ordering="contact_attempts")
@@ -299,18 +296,26 @@ class PatientLogAdmin(BaseModelAdminMixin):
         return format_html(f'<A href="{url}">{obj.contact_attempts}</a>')
 
     def get_search_results(self, request, queryset, search_term):
-        queryset, may_have_duplicates = super().get_search_results(
+        """Union initial search queryset (qs1) with
+        patients in a group whose name matches the search term (qs2).
+
+        Note: queryset is a queryset already passed through the
+        changelist's filters.
+        """
+        qs1, may_have_duplicates = super().get_search_results(
             request,
             queryset,
             search_term,
         )
+        queryset_pks = [obj.pk for obj in queryset.all()]
         try:
-            patient_log = self.model.objects.get(name=search_term)
+            patient_group = PatientGroup.objects.get(name__iexact=search_term)
         except ObjectDoesNotExist:
-            pass
+            qs = qs1
         else:
-            queryset |= self.model.objects.filter(id=patient_log.id)
-        return queryset, may_have_duplicates
+            pks = [obj.pk for obj in patient_group.patients.filter(pk__in=queryset_pks)]
+            qs = qs1 | self.model.objects.filter(id__in=pks)
+        return qs, True
 
     @staticmethod
     def get_screening_context(obj) -> dict:

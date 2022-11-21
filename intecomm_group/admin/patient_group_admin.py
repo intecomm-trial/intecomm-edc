@@ -1,17 +1,10 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-from django_audit_fields.admin import ModelAdminAuditFieldsMixin, audit_fieldset_tuple
-from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
-from edc_model_admin.history import SimpleHistoryAdmin
-from edc_model_admin.mixins import (
-    ModelAdminFormAutoNumberMixin,
-    ModelAdminFormInstructionsMixin,
-    ModelAdminInstitutionMixin,
-    ModelAdminNextUrlRedirectMixin,
-    TemplatesModelAdminMixin,
-)
+from django_audit_fields.admin import audit_fieldset_tuple
 from intecomm_form_validators import DISSOLVED, IN_FOLLOWUP
+
+from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin
 
 from ..admin_site import intecomm_group_admin
 from ..forms import PatientGroupForm
@@ -19,16 +12,8 @@ from ..models import PatientGroup
 
 
 @admin.register(PatientGroup, site=intecomm_group_admin)
-class PatientGroupAdmin(
-    TemplatesModelAdminMixin,
-    ModelAdminFormInstructionsMixin,
-    ModelAdminFormAutoNumberMixin,
-    ModelAdminRevisionMixin,
-    ModelAdminInstitutionMixin,
-    ModelAdminNextUrlRedirectMixin,
-    ModelAdminAuditFieldsMixin,
-    SimpleHistoryAdmin,
-):
+class PatientGroupAdmin(BaseModelAdminMixin):
+
     """Modeladmin for patient groups in follow-up or dissolved.
 
     See `get_queryset`"""

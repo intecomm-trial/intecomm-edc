@@ -1,6 +1,9 @@
 {% extends "edc_model_admin/admin/change_list.html" %}
 {% load i18n admin_urls static admin_list edc_admin_modify %}
 
+{% block content_title %}<h1>Patient Groups in Followup</h1>{% endblock %}
+{% block content_subtitle %}<h5><span style="color:orange;">Note:</span>You may not add a new group here. Instead go to the screening section.</h5>{% endblock %}
+
 {% block object-tools-items %}
   <li>
     <a href="{% url "followup_comm_url" %}" class="changelink">
@@ -13,8 +16,13 @@
     </a>
   </li>
   <li>
-    <a href="{% url "intecomm_group_admin:intecomm_group_communitycarelocation_changelist" %}" class="changelink">
-      Locations
+    <a href="#" class="changelink" style="background-color: black;">
+      Groups
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_group_admin:intecomm_group_patientfollowupcall_changelist" %}" class="changelink">
+      Calls
     </a>
   </li>
   <li>
@@ -25,6 +33,11 @@
   <li>
     <a href="{% url "intecomm_group_admin:intecomm_group_patientgroupmeeting_changelist" %}" class="changelink">
       Meetings
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_group_admin:intecomm_group_communitycarelocation_changelist" %}" class="changelink">
+      Locations
     </a>
   </li>
 {% endblock %}

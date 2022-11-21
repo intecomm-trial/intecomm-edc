@@ -4,13 +4,12 @@ from edc_model.models import BaseUuidModel
 from edc_sites.models import SiteModelMixin
 from edc_utils import formatted_date
 
-from ..model_mixins import PatientCallModelMixin
-from .patient_log import PatientLog
+from intecomm_screening.model_mixins import PatientCallModelMixin
 
 
-class PatientCall(PatientCallModelMixin, SiteModelMixin, BaseUuidModel):
+class PatientFollowupCall(PatientCallModelMixin, SiteModelMixin, BaseUuidModel):
 
-    patient_log = models.ForeignKey(PatientLog, on_delete=models.PROTECT)
+    patient_log = models.ForeignKey("intecomm_screening.PatientLog", on_delete=models.PROTECT)
 
     def __str__(self):
         report_dt = formatted_date(self.report_datetime.date())
@@ -33,6 +32,6 @@ class PatientCall(PatientCallModelMixin, SiteModelMixin, BaseUuidModel):
     ]
 
     class Meta:
-        verbose_name = "Patient Call"
-        verbose_name_plural = "Patient Calls"
+        verbose_name = "Patient Followup Call"
+        verbose_name_plural = "Patient Followup Calls"
         ordering = ["report_datetime"]
