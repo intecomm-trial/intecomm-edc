@@ -62,6 +62,9 @@ class HealthFacility(SiteModelMixin, BaseUuidModel):
     history = HistoricalRecords()
     objects = Manager()
 
+    def __str__(self):
+        return f"{self.name} {self.health_facility_type.display_name}"
+
     def save(self, *args, **kwargs):
         self.name = self.name.upper()
         super().save(*args, **kwargs)

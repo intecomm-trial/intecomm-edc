@@ -1,0 +1,48 @@
+{% extends "edc_model_admin/admin/change_list.html" %}
+{% load i18n admin_urls static admin_list edc_admin_modify %}
+
+{% block content_title %}<h1>Patient Groups in Followup</h1>{% endblock %}
+{% block content_subtitle %}<h5><span style="color:orange;">Note:</span>You may not add a new group here. Instead go to the screening section.</h5>{% endblock %}
+
+{% block object-tools-items %}
+  <li>
+    <a href="{% url "followup_comm_url" %}" class="changelink">
+      Home
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_dashboard:comm_subject_listboard_url" %}" class="changelink">
+      Subjects
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_group_admin:intecomm_group_patientgroup_changelist" %}" class="changelink">
+      Groups
+    </a>
+  </li>
+  <li>
+    <a href="#" class="changelink" style="background-color: black;">
+      Calls
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_group_admin:intecomm_group_patientgroupappointment_changelist" %}" class="changelink">
+      Appointments
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_group_admin:intecomm_group_patientgroupmeeting_changelist" %}" class="changelink">
+      Meetings
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_group_admin:intecomm_group_communitycarelocation_changelist" %}" class="changelink">
+      Locations
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_group_admin:intecomm_group_patientfollowupcall_add" %}" class="addlink" style="background-color: darkorange;">
+      Add
+    </a>
+  </li>
+{% endblock %}

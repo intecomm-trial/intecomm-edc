@@ -15,7 +15,7 @@ from ..choices import GROUP_STATUS_CHOICES
 
 class PatientGroup(SiteModelMixin, BaseUuidModel):
 
-    group_identifier = models.CharField(max_length=36, unique=True, default=uuid4)
+    group_identifier = models.CharField(max_length=36, null=True)
 
     group_identifier_as_pk = models.UUIDField(
         max_length=36, default=uuid4, unique=True, editable=False
@@ -36,7 +36,7 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
 
     patients = models.ManyToManyField(
         "intecomm_screening.PatientLog",
-        verbose_name="Membership",
+        verbose_name="Patients",
         blank=True,
     )
 
@@ -48,14 +48,16 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
 
     ratio = models.DecimalField(max_digits=10, decimal_places=4, null=True)
 
-    enforce_group_size_min = models.BooleanField(
-        verbose_name="Enforce group size minimum",
-        default=True,
+    bypass_group_size_min = models.BooleanField(
+        verbose_name="Bypass group size minimum of 14",
+        default=False,
+        help_text="If ticked, you must have consulted with your study coordinator first",
     )
 
-    enforce_ratio = models.BooleanField(
-        verbose_name="Enforce 2:1 NCD:HIV ratio",
-        default=True,
+    bypass_group_ratio = models.BooleanField(
+        verbose_name="Bypass 2:1 NCD:HIV ratio",
+        default=False,
+        help_text="If ticked, you must have consulted with your study coordinator first",
     )
 
     randomize_now = models.CharField(
@@ -63,7 +65,7 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
     )
 
     confirm_randomize_now = models.CharField(
-        verbose_name="If YES, please confirm by typing the wors RANDOMIZE here",
+        verbose_name="If YES, please confirm by typing the word RANDOMIZE here",
         max_length=15,
         null=True,
         blank=True,
@@ -84,6 +86,11 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
     def __str__(self):
         status = " (R)" if self.randomized else f"<{self.get_status_display()}>"
         return f"{self.name.upper()} {status}" if self.name else f"<new> {self.user_created}"
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.group_identifier = self.group_identifier_as_pk
+        super().save(*args, **kwargs)
 
     class Meta(BaseUuidModel.Meta):
         verbose_name = "Patient Group"

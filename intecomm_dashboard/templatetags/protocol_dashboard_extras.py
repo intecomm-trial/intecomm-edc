@@ -8,6 +8,7 @@ from edc_dashboard.utils import get_bootstrap_version
 from edc_screening.constants import ELIGIBLE, NOT_ELIGIBLE
 
 from intecomm_screening.models import PatientLog, SubjectRefusal
+from intecomm_screening.utils import get_add_or_change_consent_url
 
 from ..model_wrappers import SubjectRefusalModelWrapper
 
@@ -74,15 +75,45 @@ def eligibility_button(subject_screening_model_wrapper):
 def add_consent_button(context, model_wrapper):
     title = ["Consent subject to participate."]
     consent_version = model_wrapper.consent.version
+
+    (add_consent_url, change_consent_url, subject_identifier,) = get_add_or_change_consent_url(
+        model_wrapper.object,
+        next_url_name="intecomm_dashboard:screening_listboard_url,screening_identifier",
+    )
     return dict(
         perms=context["perms"],
         screening_identifier=model_wrapper.object.screening_identifier,
         href=model_wrapper.consent.href,
         consent_version=consent_version,
         title=" ".join(title),
-        change_list_url=reverse(
-            "intecomm_consent_admin:intecomm_consent_subjectconsent_changelist"
-        ),
+        add_consent_url=add_consent_url,
+        change_consent_url=change_consent_url,
+        subject_identifier=subject_identifier,
+    )
+
+
+@register.inclusion_tag(
+    f"intecomm_dashboard/bootstrap{get_bootstrap_version()}/"
+    f"buttons/patient_log_button.html",
+    takes_context=True,
+)
+def patient_log_button(context, model_wrapper):
+    change_list_href = None
+    title = "Go to patient's log"
+    screening_identifier = model_wrapper.object.screening_identifier
+    try:
+        obj = PatientLog.objects.get(screening_identifier=screening_identifier)
+    except ObjectDoesNotExist:
+        pass
+    else:
+        change_list_href = reverse(
+            "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
+        )
+        change_list_href = f"{change_list_href}?q={obj.id}"
+    return dict(
+        perms=context["perms"],
+        change_list_href=change_list_href,
+        title=title,
     )
 
 
@@ -93,7 +124,7 @@ def add_consent_button(context, model_wrapper):
 )
 def patient_group_button(context, model_wrapper):
     change_list_href = None
-    patient_group_name = None
+    patient_group = None
     title = "Go to patient's group"
     screening_identifier = model_wrapper.object.screening_identifier
     try:
@@ -101,17 +132,16 @@ def patient_group_button(context, model_wrapper):
     except ObjectDoesNotExist:
         pass
     else:
-        if obj.patient_group:
-            patient_group_name = obj.patient_group.name
+        if patient_group := obj.patientgroup_set.all().first():
             change_list_href = reverse(
                 "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
             )
-            change_list_href = f"{change_list_href}?q={patient_group_name}"
+            change_list_href = f"{change_list_href}?q={patient_group.name}"
     return dict(
         perms=context["perms"],
         change_list_href=change_list_href,
         title=title,
-        patient_group_name=patient_group_name,
+        patient_group=patient_group,
     )
 
 
@@ -139,22 +169,12 @@ def refusal_button(context, model_wrapper):
 )
 def dashboard_button(model_wrapper):
     subject_dashboard_url = url_names.get("subject_dashboard_url")
-    # get randomized
-    if not model_wrapper.object.patient_log.patient_group:
-        randomized = False
-    else:
-        randomized = model_wrapper.object.patient_log.patient_group.randomized
-    subject_dashboard_href = "#"
-    if randomized:
-        subject_dashboard_href = reverse(
-            subject_dashboard_url, args=(model_wrapper.subject_identifier,)
-        )
+    subject_dashboard_href = reverse(
+        subject_dashboard_url, args=(model_wrapper.subject_identifier,)
+    )
     title = "Go to subject's dashboard"
-    if not randomized:
-        title = "(Disabled) Subject's group has not randomized."
     return dict(
         subject_dashboard_href=subject_dashboard_href,
         subject_identifier=model_wrapper.subject_identifier,
-        randomized=randomized,
         title=title,
     )

@@ -1,13 +1,8 @@
 <table>
-    <td>Cell</td><td>{{contact_number}}</td>
+  <tr>
+    <td colspan="2"><a title="place a call to this patient" href="{{ add_patient_call_url }}?contact_number={{ contact_number }}&alt_contact_number={{ alt_contact_number }}&patient_log={{  patient_log_id }}">Call now</a></td>
   </tr>
   <tr>
-    <td>Alt</td><td>{{alt_contact_number}}</td>
-  </tr>
-  <tr>
-    <td>Calls</td><td><a href="{{ patient_call_url }}">{{call_attempts}}</a></td>
-  </tr>
-  <tr>
-    <td colspan="2"><a href="{{ add_patient_call_url }}?patient_log={{  patient_log_id }}">Call now</a></td>
+    <td colspan="2"><a title="Go to calls made to this patient" href="{{ patient_call_url }}">Calls: {{call_attempts}}</a></td>
   </tr>
 </table>

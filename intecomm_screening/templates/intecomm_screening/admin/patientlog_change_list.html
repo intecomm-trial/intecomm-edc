@@ -1,18 +1,39 @@
 {% extends "edc_model_admin/admin/change_list.html" %}
 {% load i18n admin_urls static admin_list edc_admin_modify %}
 
+
 {% block object-tools-items %}
   <li>
     <a href="{% url "grouping_url" %}" class="changelink">Home</a>
   </li>
   <li>
     <a href="{% url "intecomm_dashboard:screening_listboard_url" %}" class="changelink">
-      Screening to Consent
+      Screening
+    </a>
+  </li>
+  <li>
+    <a href="#" class="changelink" style="background-color: black;">
+      Patients
     </a>
   </li>
   <li>
     <a href="{% url "intecomm_screening_admin:intecomm_screening_patientgroup_changelist" %}" class="changelink">
       Groups
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_patientcall_changelist" %}" class="changelink">
+      Calls
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_healthtalklog_changelist" %}" class="changelink">
+      Talks
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_healthfacility_changelist" %}" class="changelink">
+      Facilities
     </a>
   </li>
   <li>

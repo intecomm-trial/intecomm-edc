@@ -24,6 +24,9 @@ class SubjectConsentAdmin(
     show_cancel = True
     change_list_template: str = "intecomm_consent/admin/subjectconsent_change_list.html"
 
+    name_fields: list[str] = ["legal_name", "familiar_name"]
+    name_display_field: str = "familiar_name"
+
     actions = [
         flag_as_verified_against_paper,
         unflag_as_verified_against_paper,
@@ -36,8 +39,8 @@ class SubjectConsentAdmin(
                 "fields": (
                     "screening_identifier",
                     "subject_identifier",
-                    "first_name",
-                    "last_name",
+                    "legal_name",
+                    "familiar_name",
                     "initials",
                     "gender",
                     "language",

@@ -5,11 +5,10 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields import audit_fieldset_tuple
 
-from intecomm_consent.models import SubjectConsent
-
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientLogForm
-from ..models import PatientLog, SubjectScreening
+from ..models import PatientGroup, PatientLog, SubjectScreening
+from ..utils import get_add_or_change_consent_url
 from .list_filters import (
     AttendDateListFilter,
     ConsentedListFilter,
@@ -32,8 +31,17 @@ class PatientLogAdmin(BaseModelAdminMixin):
     show_object_tools = True
     show_cancel = True
     change_list_template: str = "intecomm_screening/admin/patientlog_change_list.html"
+    change_list_title = PatientLog._meta.verbose_name
+    change_list_note = format_html(
+        "In addition to other values, you may search for patients on the last 4-digits of "
+        "either their mobile number or health center identifier."
+    )
+    change_list_help = (
+        "Searches on encrypted data work on exact uppercase matches only. When "
+        'searching on a full name, put the full name in quotations, for example, "JOHN SMITH".'
+    )
 
-    autocomplete_fields = ["patient_group"]
+    autocomplete_fields = ["site"]
 
     inlines = [AddPatientCallInline, ViewPatientCallInline]
 
@@ -55,13 +63,15 @@ class PatientLogAdmin(BaseModelAdminMixin):
             },
         ),
         (
-            "Name and contact",
+            "Name and basic demographics",
             {
                 "fields": (
-                    "name",
+                    "legal_name",
+                    "familiar_name",
                     "initials",
+                    "hospital_identifier",
                     "gender",
-                    "hf_identifier",
+                    "age_in_years",
                 )
             },
         ),
@@ -77,12 +87,7 @@ class PatientLogAdmin(BaseModelAdminMixin):
         ),
         (
             "Address / Location",
-            {
-                "fields": (
-                    "location_description",
-                    "patient_group",
-                )
-            },
+            {"fields": ("location_description",)},
         ),
         (
             "Health",
@@ -109,8 +114,8 @@ class PatientLogAdmin(BaseModelAdminMixin):
             "Appointments",
             {
                 "fields": (
-                    "last_routine_appt_date",
-                    "next_routine_appt_date",
+                    "last_appt_date",
+                    "next_appt_date",
                 )
             },
         ),
@@ -130,7 +135,7 @@ class PatientLogAdmin(BaseModelAdminMixin):
     )
 
     list_display = (
-        "patient",
+        "__str__",
         "hf_id",
         "dx",
         "group_name",
@@ -168,10 +173,12 @@ class PatientLogAdmin(BaseModelAdminMixin):
         "id",
         "screening_identifier",
         "subject_identifier",
-        "patient_group__name",
-        "hf_identifier__exact",
+        "last_4_hospital_identifier__exact",
+        "last_4_contact_number__exact",
+        "hospital_identifier__exact",
         "initials__exact",
-        "name__exact",
+        "legal_name__exact",
+        "familiar_name__exact",
         "contact_number__exact",
         "alt_contact_number__exact",
     )
@@ -198,31 +205,27 @@ class PatientLogAdmin(BaseModelAdminMixin):
     def date_logged(self, obj=None):
         return obj.report_datetime.date()
 
-    @admin.display(description="next_appt", ordering="next_routine_appt_date")
+    @admin.display(description="next_appt", ordering="next_appt_date")
     def next_appt(self, obj=None):
-        return obj.next_routine_appt_date
+        return obj.next_appt_date
 
-    @admin.display(description="last_appt", ordering="last_routine_appt_date")
+    @admin.display(description="last_appt", ordering="last_appt_date")
     def last_appt(self, obj=None):
-        return obj.last_routine_appt_date
+        return obj.last_appt_date
 
-    @admin.display(description="HF ID", ordering="hf_identifier")
+    @admin.display(description="HF ID", ordering="hospital_identifier")
     def hf_id(self, obj=None):
-        return obj.hf_identifier
+        return obj.hospital_identifier
 
     @admin.display(description="DX")
     def dx(self, obj=None):
         return [c.name.upper() for c in obj.conditions.all().order_by("name")]
 
-    @admin.display(description="Appts", ordering="next_routine_appt_date")
+    @admin.display(description="Appts", ordering="next_appt_date")
     def appts(self, obj=None):
-        attend_date = None
-        if patient_call := obj.patientcall_set.all().order_by("report_datetime").last():
-            attend_date = patient_call.attend_date or None
         context = dict(
-            last_appt=obj.last_routine_appt_date or "-",
-            next_appt=obj.next_routine_appt_date or "-",
-            attend_date=attend_date or "-",
+            last_appt=obj.last_appt_date or "-",
+            next_appt=obj.next_appt_date or "-",
         )
         return format_html(
             render_to_string("intecomm_screening/change_list_appts.html", context=context)
@@ -263,9 +266,9 @@ class PatientLogAdmin(BaseModelAdminMixin):
     def site_name(self, obj=None):
         return obj.site.name.title()
 
-    @admin.display(description="Patient", ordering="name")
+    @admin.display(description="Patient", ordering="familiar_name")
     def patient(self, obj=None):
-        return f"{obj.name} ({obj.initials})"
+        return f"{obj.familiar_name} ({obj.initials})"
 
     @admin.display(description="Screen/Consent", ordering="screening_datetime")
     def screened(self, obj=None):
@@ -282,14 +285,15 @@ class PatientLogAdmin(BaseModelAdminMixin):
             return obj.consent_datetime.date()
         return None
 
-    @admin.display(description="Group", ordering="patient_group__name")
+    @admin.display(description="Group", ordering="patientgroup__name")
     def group_name(self, obj=None):
-        if obj.patient_group:
+        if obj.patientgroup_set.all().count() > 0:
+            patient_group = obj.patientgroup_set.all().first()
             url = reverse(
                 "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
             )
-            url = f"{url}?q={obj.patient_group.name}"
-            return format_html(f'<a href="{url}">{obj.patient_group}</a>')
+            url = f"{url}?q={patient_group.name}"
+            return format_html(f'<a href="{url}">{patient_group}</a>')
         return "<available>"
 
     @admin.display(description="Calls", ordering="contact_attempts")
@@ -299,18 +303,26 @@ class PatientLogAdmin(BaseModelAdminMixin):
         return format_html(f'<A href="{url}">{obj.contact_attempts}</a>')
 
     def get_search_results(self, request, queryset, search_term):
-        queryset, may_have_duplicates = super().get_search_results(
+        """Union initial search queryset (qs1) with
+        patients in a group whose name matches the search term (qs2).
+
+        Note: queryset is a queryset already passed through the
+        changelist's filters.
+        """
+        qs1, may_have_duplicates = super().get_search_results(
             request,
             queryset,
             search_term,
         )
+        queryset_pks = [obj.pk for obj in queryset.all()]
         try:
-            patient_log = self.model.objects.get(name=search_term)
+            patient_group = PatientGroup.objects.get(name__iexact=search_term)
         except ObjectDoesNotExist:
-            pass
+            qs = qs1
         else:
-            queryset |= self.model.objects.filter(id=patient_log.id)
-        return queryset, may_have_duplicates
+            pks = [obj.pk for obj in patient_group.patients.filter(pk__in=queryset_pks)]
+            qs = qs1 | self.model.objects.filter(id__in=pks)
+        return qs, True
 
     @staticmethod
     def get_screening_context(obj) -> dict:
@@ -319,10 +331,13 @@ class PatientLogAdmin(BaseModelAdminMixin):
         add_consent_url = None
         change_consent_url = None
         subject_identifier = None
+        subject_screening = None
+        eligible = None
         if obj.screening_identifier:
             subject_screening = SubjectScreening.objects.get(
                 screening_identifier=obj.screening_identifier
             )
+            eligible = subject_screening.eligible
             url = reverse(
                 "intecomm_screening_admin:intecomm_screening_subjectscreening_change",
                 args=(subject_screening.id,),
@@ -335,35 +350,22 @@ class PatientLogAdmin(BaseModelAdminMixin):
             url = reverse("intecomm_screening_admin:intecomm_screening_subjectscreening_add")
             add_screening_url = (
                 f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
-                f"&hospital_identifier={obj.hf_identifier}"
+                f"&hospital_identifier={obj.hospital_identifier}"
                 f"&initials={obj.initials}"
                 f"&site={obj.site.id}"
                 f"&gender={obj.gender}"
+                f"&age_in_years={obj.age_in_years}"
+                f"&legal_name={obj.legal_name}"
+                f"&familiar_name={obj.familiar_name}"
                 f"&patient_log={obj.id}"
                 f"&q={obj.screening_identifier}"
             )
-        try:
-            subject_consent = SubjectConsent.objects.get(
-                screening_identifier=obj.screening_identifier
-            )
-        except ObjectDoesNotExist:
-            url = reverse("intecomm_consent_admin:intecomm_consent_subjectconsent_add")
-            add_consent_url = (
-                f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
-                f"&screening_identifier={obj.screening_identifier}"
-                f"&hospital_identifier={obj.hf_identifier}"
-                f"&initials={obj.initials}"
-                f"&site={obj.site.id}"
-            )
-        else:
-            subject_identifier = subject_consent.subject_identifier
-            url = reverse(
-                "intecomm_consent_admin:intecomm_consent_subjectconsent_change",
-                args=(subject_consent.id,),
-            )
-            change_consent_url = (
-                f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
-            )
+        if subject_screening and subject_screening.eligible:
+            (
+                add_consent_url,
+                change_consent_url,
+                subject_identifier,
+            ) = get_add_or_change_consent_url(subject_screening)
 
         return dict(
             add_screening_url=add_screening_url,
@@ -372,4 +374,5 @@ class PatientLogAdmin(BaseModelAdminMixin):
             change_consent_url=change_consent_url,
             screening_identifier=obj.screening_identifier,
             subject_identifier=subject_identifier,
+            eligible=eligible,
         )

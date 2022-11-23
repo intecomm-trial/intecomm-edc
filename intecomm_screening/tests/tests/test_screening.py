@@ -1,4 +1,3 @@
-from decimal import Decimal
 from uuid import uuid4
 
 from django.test import TestCase, tag
@@ -17,7 +16,7 @@ class TestScreening(TestCase):
         self.assertIsNotNone(obj.name)
         self.assertIsNotNone(obj.group_identifier)
         self.assertRegexpMatches(str(obj.group_identifier), UUID_PATTERN)
-        self.assertEqual(obj.ratio, Decimal("0"))
+        self.assertEqual(obj.ratio, None)
         self.assertEqual(obj.randomize_now, NO)
         self.assertFalse(obj.randomized)
         self.assertEqual(obj.patients.all().count(), 0)
@@ -26,40 +25,47 @@ class TestScreening(TestCase):
     def test_with_patients_ok(self):
         initials = "ABCDEFGHIJKLMNOP"
         for i in range(0, 4):
-            make_recipe(
+            obj = make_recipe(
                 "intecomm_screening.patientlog",
-                name=f"NAME{i} AAA{i}",
+                legal_name=f"NAMEA{i} AAA{i}",
+                familiar_name=f"NAMEA{i}",
                 initials=f"N{initials[i]}A",
-                hf_identifier=uuid4().hex,
+                hospital_identifier=uuid4().hex,
                 contact_number=f"123456789{i}",
-                conditions=Conditions.objects.filter(name=HIV),
             )
+            obj.conditions.add(Conditions.objects.get(name=HIV))
         for i in range(0, 5):
             make_recipe(
                 "intecomm_screening.patientlog",
-                name=f"NAME{i} BBB{i}",
-                initials=f"N{initials[i]}B",
-                hf_identifier=uuid4().hex,
+                legal_name=f"NAMEB{i} BBB{i}",
+                familiar_name=f"NAMEB{i}",
+                hospital_identifier=uuid4().hex,
                 contact_number=f"12345678{i}9",
-                conditions=Conditions.objects.filter(name=DM),
             )
+            obj.conditions.add(Conditions.objects.get(name=DM))
         for i in range(0, 5):
             make_recipe(
                 "intecomm_screening.patientlog",
-                name=f"NAME{i} CCC{i}",
-                initials=f"N{initials[i]}C",
-                hf_identifier=uuid4().hex,
+                legal_name=f"NAMEC{i} CCC{i}",
+                familiar_name=f"NAMEC{i}",
+                hospital_identifier=uuid4().hex,
                 contact_number=f"1234567{i}89",
-                conditions=Conditions.objects.filter(name=HTN),
             )
-
-        obj = make_recipe("intecomm_screening.patientgroup")
+            obj.conditions.add(Conditions.objects.get(name=HTN))
+        for patient_log in PatientLog.objects.all():
+            self.assertEqual(patient_log.patientgroup_set.all().count(), 0)
         self.assertEqual(PatientLog.objects.all().count(), 14)
-        for patient_log in PatientLog.objects.all():
-            obj.patients.add(patient_log)
 
-        for patient_log in PatientLog.objects.all():
-            self.assertEqual(patient_log.patient_group.name, obj.name)
+        # create patient_group
+        patient_group = make_recipe("intecomm_screening.patientgroup")
 
-        obj.refresh_from_db()
-        self.assertEqual(obj.patients.all().count(), 14)
+        # add patient_logs to patient_group
+        for index, patient_log in enumerate(PatientLog.objects.all()):
+            patient_group.patients.add(patient_log)
+        for patient_log in PatientLog.objects.all():
+            self.assertEqual(patient_log.patientgroup_set.all().count(), 1)
+            self.assertEqual(patient_log.patientgroup_set.all().first(), patient_group)
+
+        patient_group.refresh_from_db()
+
+        self.assertEqual(patient_group.patients.count(), 14)

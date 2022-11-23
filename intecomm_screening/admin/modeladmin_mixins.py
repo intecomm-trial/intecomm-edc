@@ -8,6 +8,7 @@ from edc_model_admin.mixins import (
     ModelAdminNextUrlRedirectMixin,
     TemplatesModelAdminMixin,
 )
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 
 class BaseModelAdminMixin(
@@ -18,6 +19,7 @@ class BaseModelAdminMixin(
     ModelAdminInstitutionMixin,
     ModelAdminNextUrlRedirectMixin,
     ModelAdminAuditFieldsMixin,
+    SiteModelAdminMixin,
     SimpleHistoryAdmin,
 ):
     show_cancel = True

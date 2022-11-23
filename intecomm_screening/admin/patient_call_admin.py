@@ -8,7 +8,7 @@ from django.utils.html import format_html
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientCallForm
 from ..models import PatientCall
-from .list_filters import AttendDatetListFilter
+from .list_filters import LastApptListFilter, NextApptListFilter
 from .modeladmin_mixins import BaseModelAdminMixin
 
 
@@ -17,6 +17,7 @@ class PatientCallAdmin(BaseModelAdminMixin):
     form = PatientCallForm
     show_object_tools = False
     change_list_template: str = "intecomm_screening/admin/patientcall_change_list.html"
+    change_list_title = PatientCall._meta.verbose_name
 
     fieldsets = (
         (
@@ -29,60 +30,97 @@ class PatientCallAdmin(BaseModelAdminMixin):
             },
         ),
         (
-            "Details of call",
+            "Contact numbers",
+            {
+                "fields": (
+                    "contact_number",
+                    "alt_contact_number",
+                )
+            },
+        ),
+        (
+            "Patient Status",
             {
                 "fields": (
                     "answered",
                     "respondent",
-                    "willing_to_attend",
-                    "attend_date",
+                    "survival_status",
+                    "catchment_area",
+                )
+            },
+        ),
+        (
+            "Patient Care",
+            {
+                "fields": (
+                    "last_appt_date",
+                    "last_attend_clinic",
+                    "last_attend_clinic_other",
+                    "next_appt_date",
+                )
+            },
+        ),
+        (
+            "Notes and followup",
+            {
+                "fields": (
                     "call_again",
+                    "comment",
                 )
             },
         ),
     )
 
     list_display = (
-        "patient_log",
-        "patient_log_link",
         "report_datetime",
+        "patient_log_link",
         "answered",
-        "willing_to_attend",
-        "call_again",
-        "attend_appt_date",
         "respondent",
+        "alive",
+        "in_area",
+        "call_again",
+        "last_appt",
+        "next_appt",
     )
 
     list_filter = (
         "report_datetime",
-        AttendDatetListFilter,
+        LastApptListFilter,
+        NextApptListFilter,
         "answered",
-        "willing_to_attend",
         "call_again",
         "respondent",
+        "survival_status",
+        "catchment_area",
     )
 
     radio_fields = {
         "answered": admin.VERTICAL,
         "respondent": admin.VERTICAL,
-        "willing_to_attend": admin.VERTICAL,
+        "survival_status": admin.VERTICAL,
+        "catchment_area": admin.VERTICAL,
         "call_again": admin.VERTICAL,
     }
 
     search_fields = (
         "patient_log__id",
-        "patient_log__name__exact",
+        "patient_log__legal_name__exact",
+        "patient_log__familiar_name__exact",
     )
 
-    @admin.display(description="Attend Date", ordering="attend_date")
-    def attend_appt_date(self, obj=None):
-        return obj.attend_date
+    @admin.display(description="Last Appt", ordering="last_appt_date")
+    def last_appt(self, obj=None):
+        return obj.last_appt_date
 
-    @admin.display(description="Attend Date", ordering="attend_date")
+    @admin.display(description="Next Appt", ordering="next_appt_date")
+    def next_appt(self, obj=None):
+        return obj.next_appt_date
+
+    @admin.display(description="Patient", ordering="patient_log")
     def patient_log_link(self, obj=None):
         url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
         url = f"{url}?q={obj.patient_log.id}"
-        return format_html(f'<A href="{url}">patient log</a>')
+        return format_html(f'<A href="{url}">{obj.patient_log}</a>')
 
     @property
     def patient_log_model_cls(self):
@@ -103,3 +141,11 @@ class PatientCallAdmin(BaseModelAdminMixin):
         if obj and "patient_log" not in readonly:
             readonly = readonly + ("patient_log",)
         return readonly
+
+    @admin.display(description="Alive", ordering="survival_status")
+    def alive(self, obj=None):
+        return obj.survival_status
+
+    @admin.display(description="In Area", ordering="catchment_area")
+    def in_area(self, obj=None):
+        return obj.catchment_area

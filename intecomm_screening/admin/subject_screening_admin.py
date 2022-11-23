@@ -50,12 +50,18 @@ class SubjectScreeningAdmin(
         (
             "Demographics",
             {
+                "description": (
+                    "Please review carefully. If anything needs to be changed, do so on "
+                    "the Patient Log and try again"
+                ),
                 "fields": (
+                    "legal_name",
+                    "familiar_name",
                     "initials",
+                    "hospital_identifier",
                     "gender",
                     "age_in_years",
-                    "hospital_identifier",
-                )
+                ),
             },
         ),
         (
@@ -151,7 +157,13 @@ class SubjectScreeningAdmin(
             "Updates",
             {
                 "classes": ("collapse",),
-                "fields": ("screening_identifier", "subject_identifier"),
+                "fields": (
+                    "screening_identifier",
+                    "eligible",
+                    "eligibility_datetime",
+                    "real_eligibility_datetime",
+                    "subject_identifier",
+                ),
             },
         ),
         audit_fieldset_tuple,
@@ -183,7 +195,13 @@ class SubjectScreeningAdmin(
         "reasons_ineligible",
     )
 
-    readonly_fields = ("screening_identifier", "subject_identifier")
+    readonly_fields = (
+        "screening_identifier",
+        "eligible",
+        "eligibility_datetime",
+        "real_eligibility_datetime",
+        "subject_identifier",
+    )
 
     radio_fields = {
         "consent_ability": admin.VERTICAL,

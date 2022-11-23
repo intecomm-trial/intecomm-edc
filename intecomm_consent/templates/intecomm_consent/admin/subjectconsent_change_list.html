@@ -6,8 +6,18 @@
     <a href="{% url "grouping_url" %}" class="changelink">Home</a>
   </li>
   <li>
+    <a href="#" class="changelink"  style="background-color: black;">
+      Consent
+    </a>
+  </li>
+  <li>
     <a href="{% url "intecomm_dashboard:screening_listboard_url" %}" class="changelink">
-      Screening to Consent
+      Screening
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist" %}" class="changelink">
+      Patients
     </a>
   </li>
   <li>
@@ -15,5 +25,24 @@
       Groups
     </a>
   </li>
-  {{ block.super }}
+  <li>
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_patientcall_changelist" %}" class="changelink">
+      Calls
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_healthtalklog_changelist" %}" class="changelink">
+      Talks
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_healthfacility_changelist" %}" class="changelink">
+      Facilities
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_consent_admin:intecomm_consent_subjectconsent_add" %}" class="addlink" style="background-color: darkorange;">
+      Add
+    </a>
+  </li>
 {% endblock %}

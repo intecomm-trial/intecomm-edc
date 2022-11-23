@@ -1,11 +1,11 @@
 from django.db import models
 from django.db.models import UniqueConstraint
-from django.db.models.functions import Lower
 from edc_model.models import BaseUuidModel, HistoricalRecords
 from edc_model_fields.fields import OtherCharField
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
+from edc_utils import formatted_date
 
-from intecomm_lists.models import HealthFacilityTypes, HealthTalkTypes
+from intecomm_lists.models import HealthTalkTypes
 from intecomm_screening.models import HealthFacility
 
 
@@ -13,8 +13,8 @@ class Manager(models.Manager):
 
     use_in_migrations = True
 
-    def get_by_natural_key(self, health_facility_name, report_date):
-        return self.get(health_facility_name=health_facility_name, report_date=report_date)
+    def get_by_natural_key(self, health_facility, report_date):
+        return self.get(health_facility=health_facility, report_date=report_date)
 
 
 class HealthTalkLog(SiteModelMixin, BaseUuidModel):
@@ -24,14 +24,6 @@ class HealthTalkLog(SiteModelMixin, BaseUuidModel):
         verbose_name="Health facility",
         on_delete=models.PROTECT,
     )
-
-    health_facility_type = models.ForeignKey(
-        HealthFacilityTypes,
-        verbose_name="Health facility type",
-        on_delete=models.PROTECT,
-    )
-
-    health_facility_type_other = OtherCharField()
 
     health_talk_type = models.ForeignKey(
         HealthTalkTypes, verbose_name="Type of talk", on_delete=models.PROTECT
@@ -51,14 +43,13 @@ class HealthTalkLog(SiteModelMixin, BaseUuidModel):
     history = HistoricalRecords()
     objects = Manager()
 
-    def save(self, *args, **kwargs):
-        if self.health_facility_name:
-            self.health_facility_name = self.health_facility_name.upper()
-        super().save(*args, **kwargs)
+    def __str__(self):
+        dt = formatted_date(self.report_date)
+        return f"{self.health_facility} on {dt}"
 
     def natural_key(self):
         return (
-            self.health_facility_name,
+            self.health_facility,
             self.report_date,
         )
 
@@ -67,7 +58,9 @@ class HealthTalkLog(SiteModelMixin, BaseUuidModel):
         verbose_name_plural = "Health talk logs"
         constraints = [
             UniqueConstraint(
-                Lower("health_facility").desc(),
-                name="unique_lower_name_report_date",
+                "health_facility",
+                "report_date",
+                name="unique_health_facility_report_date",
+                violation_error_message="Only one report expected per facility per day.",
             )
         ]

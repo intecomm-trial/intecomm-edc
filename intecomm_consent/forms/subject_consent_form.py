@@ -2,7 +2,7 @@ from django import forms
 from edc_consent.modelform_mixins import ConsentModelFormMixin
 from edc_form_validators import FormValidatorMixin
 from edc_sites.forms import SiteModelFormMixin
-from intecomm_form_validators.subject import SubjectConsentFormValidator
+from intecomm_form_validators.consent import SubjectConsentFormValidator
 
 from ..models import SubjectConsent
 
@@ -20,10 +20,9 @@ class SubjectConsentForm(
 
     # def clean_gender_of_consent(self):
     #     return None
-    #
-    # def clean_guardian_and_dob(self):
-    #     return None
-    #
+    def clean_guardian_and_dob(self):
+        return None
+
     # def clean_identity_with_unique_fields(self):
     #     return None
 
@@ -40,4 +39,10 @@ class SubjectConsentForm(
                 "Format is 'LASTNAME, FIRSTNAME'. "
                 "All uppercase separated by a comma."
             ),
+        }
+        widgets = {
+            "legal_name": forms.TextInput(attrs={"readonly": "readonly"}),
+            "familiar_name": forms.TextInput(attrs={"readonly": "readonly"}),
+            "initials": forms.TextInput(attrs={"readonly": "readonly"}),
+            "identity": forms.TextInput(attrs={"readonly": "readonly"}),
         }

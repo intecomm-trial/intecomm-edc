@@ -4,7 +4,7 @@ from django.utils.html import format_html
 from django_crypto_fields.fields import EncryptedCharField
 from edc_constants.choices import PREG_YES_NO_NA, SELECTION_METHOD, YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE, PURPOSIVELY_SELECTED
-from edc_model.models import BaseUuidModel, DurationYMDField
+from edc_model.models import BaseUuidModel, DurationYMDField, NameFieldsModelMixin
 from edc_screening.model_mixins import EligibilityModelMixin, ScreeningModelMixin
 from edc_screening.screening_identifier import (
     ScreeningIdentifier as BaseScreeningIdentifier,
@@ -28,6 +28,7 @@ class SubjectScreening(
     EligibilityModelMixin,
     BloodPressureModelMixin,
     ScreeningModelMixin,
+    NameFieldsModelMixin,
     BaseUuidModel,
 ):
 
@@ -231,10 +232,13 @@ class SubjectScreening(
     )
 
     def save(self, *args, **kwargs):
-        if self.patient_log and self.patient_log.hf_identifier != self.hospital_identifier:
+        if (
+            self.patient_log
+            and self.patient_log.hospital_identifier != self.hospital_identifier
+        ):
             raise SubjectScreeningError(
                 "Health facility identifier does not match patient log. "
-                f"Perhaps catch this in the form. Got{self.patient_log.hf_identifier}!="
+                f"Perhaps catch this in the form. Got{self.patient_log.hospital_identifier}!="
                 f"{self.hospital_identifier}"
             )
         if self.patient_log and self.patient_log.initials != self.initials:
