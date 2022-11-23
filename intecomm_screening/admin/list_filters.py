@@ -16,22 +16,15 @@ DM_ONLY = "DM_ONLY"
 class NextApptListFilter(FutureDateListFilter):
     title = _("Next Appt")
 
-    parameter_name = "next_routine_appt_date"
-    field_name = "next_routine_appt_date"
+    parameter_name = "next_appt_date"
+    field_name = "next_appt_date"
 
 
 class LastApptListFilter(PastDateListFilter):
     title = _("Last Appt")
 
-    parameter_name = "last_routine_appt_date"
-    field_name = "last_routine_appt_date"
-
-
-class AttendDatetListFilter(FutureDateListFilter):
-    title = _("Attend date")
-
-    parameter_name = "attend_date"
-    field_name = "attend_date"
+    parameter_name = "last_appt_date"
+    field_name = "last_appt_date"
 
 
 class InPatientGroup(SimpleListFilter):
@@ -166,10 +159,10 @@ class DxListFilter(SimpleListFilter):
 
 
 class AttendDateListFilter(FutureDateListFilter):
-    title = "Attend date"
+    title = "Next Appt"
 
-    parameter_name = "attend_date"
-    field_name = "patientcall__attend_date"
+    parameter_name = "next_appt_date"
+    field_name = "patientcall__next_appt_date"
 
     def queryset(self, request, queryset) -> QuerySet | None:
         qs = super().queryset(request, queryset)

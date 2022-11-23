@@ -48,37 +48,3 @@ def patient_call_on_post_delete(sender, instance, using, **kwargs):
         else instance.patient_log.call_attempts - 1
     )
     instance.patient_log.save(update_fields=["call_attempts"])
-
-
-# @receiver(
-#     m2m_changed,
-#     weak=False,
-#     dispatch_uid="update_patient_log_on_patient_group_m2m_change",
-# )
-# def update_patient_log_on_patient_group_m2m_change(action, instance, pk_set, **kwargs):
-#     if isinstance(instance, PatientGroup):
-#         if action == "post_remove":
-#             for pk in pk_set:
-#                 patient_log = PatientLog.objects.get(id=pk)
-#                 patient_log.patient_group = None
-#                 patient_log.save_base(update_fields=["patient_group"])
-#         elif action == "post_add":
-#             for pk in pk_set:
-#                 patient_log = PatientLog.objects.get(id=pk)
-#                 patient_log.patient_group = instance
-#                 patient_log.save_base(update_fields=["patient_group"])
-#
-
-# @receiver(
-#     post_save,
-#     weak=False,
-#     sender=PatientLog,
-#     dispatch_uid="update_patient_group_membership_on_patient_log_post_save",
-# )
-# def update_patient_group_on_patient_log_post_save(
-#     sender, instance, raw, update_fields, **kwargs
-# ):
-#     if not raw and not update_fields:
-#         remove_from_group(instance)
-#         if instance.patient_group:
-#             add_to_group(instance)

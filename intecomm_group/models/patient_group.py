@@ -48,14 +48,16 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
 
     ratio = models.DecimalField(max_digits=10, decimal_places=4, null=True)
 
-    enforce_group_size_min = models.BooleanField(
-        verbose_name="Enforce group size minimum",
-        default=True,
+    bypass_group_size_min = models.BooleanField(
+        verbose_name="Bypass group size minimum of 14",
+        default=False,
+        help_text="If ticked, you must have consulted with your study coordinator first",
     )
 
-    enforce_ratio = models.BooleanField(
-        verbose_name="Enforce 2:1 NCD:HIV ratio",
-        default=True,
+    bypass_group_ratio = models.BooleanField(
+        verbose_name="Bypass 2:1 NCD:HIV ratio",
+        default=False,
+        help_text="If ticked, you must have consulted with your study coordinator first",
     )
 
     randomize_now = models.CharField(
@@ -63,7 +65,7 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
     )
 
     confirm_randomize_now = models.CharField(
-        verbose_name="If YES, please confirm by typing the wors RANDOMIZE here",
+        verbose_name="If YES, please confirm by typing the word RANDOMIZE here",
         max_length=15,
         null=True,
         blank=True,

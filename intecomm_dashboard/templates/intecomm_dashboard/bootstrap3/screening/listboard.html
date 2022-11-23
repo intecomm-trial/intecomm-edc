@@ -49,6 +49,7 @@
       {% screening_button result %}
       {% eligibility_button result %}
       {% if result.eligible %}
+        {% patient_log_button result %}
         {% patient_group_button result %}
         {% if result.consent %}
             {% dashboard_button result %}

@@ -15,6 +15,7 @@ class HealthTalkLogAdmin(BaseModelAdminMixin):
     form = HealthTalkLogForm
     show_object_tools = True
     change_list_template: str = "intecomm_screening/admin/healthtalklog_change_list.html"
+    change_list_title = HealthTalkLog._meta.verbose_name
 
     autocomplete_fields = ["health_facility"]
 

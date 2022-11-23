@@ -2,7 +2,7 @@ from django.db import models
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
 from edc_constants.choices import YES_NO, YES_NO_UNSURE_NA
 from edc_constants.constants import NOT_APPLICABLE
-from edc_model.models import HistoricalRecords
+from edc_model.models import HistoricalRecords, OtherCharField
 from edc_model.validators.phone import phone_number
 from edc_sites.models import CurrentSiteManager
 from edc_utils import get_utcnow
@@ -49,8 +49,26 @@ class PatientCallModelMixin(models.Model):
         default=NOT_APPLICABLE,
     )
 
-    attend_date = models.DateField(
-        verbose_name="When can the patient next attend", null=True, blank=True
+    last_appt_date = models.DateField(
+        verbose_name="When did the patient last seek care",
+        null=True,
+        blank=True,
+        help_text="This may be helpful when updating health records",
+    )
+
+    last_attend_clinic = models.CharField(
+        verbose_name="Where did the patient last seek care",
+        max_length=25,
+        choices=(),
+        null=True,
+        blank=True,
+        help_text="This may be helpful when updating health records",
+    )
+
+    last_attend_clinic_other = OtherCharField()
+
+    next_appt_date = models.DateField(
+        verbose_name="When will the patient next attend", null=True, blank=True
     )
 
     call_again = models.CharField(

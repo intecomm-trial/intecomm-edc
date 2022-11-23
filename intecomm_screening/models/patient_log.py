@@ -4,7 +4,7 @@ from django.db import models
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
 from edc_constants.choices import GENDER, YES_NO_TBD
 from edc_constants.constants import TBD
-from edc_model.models import BaseUuidModel, HistoricalRecords
+from edc_model.models import BaseUuidModel, HistoricalRecords, NameFieldsModelMixin
 from edc_model.validators.phone import phone_number
 from edc_model_fields.fields import InitialsField
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
@@ -23,7 +23,7 @@ class PatientLogManager(models.Manager):
         return self.get(legal_name=legal_name)
 
 
-class PatientLog(SiteModelMixin, BaseUuidModel):
+class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
 
     patient_log_identifier = models.CharField(
         max_length=36,
@@ -57,16 +57,11 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         help_text="Auto populated when consent form is complete",
     )
 
-    legal_name = EncryptedCharField(blank=False, unique=True)
-
-    familiar_name = EncryptedCharField(
-        verbose_name="How should we refer to you? (if we speak to you)",
-        blank=False,
-    )
-
     initials = InitialsField()
 
     gender = models.CharField(choices=GENDER, max_length=10, blank=False)
+
+    age_in_years = models.IntegerField(verbose_name="Age")
 
     report_datetime = models.DateTimeField(default=get_utcnow)
 
@@ -78,11 +73,18 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         related_name="+",
     )
 
-    hf_identifier = EncryptedCharField(
+    hospital_identifier = EncryptedCharField(
         verbose_name="Health center identifier",
         unique=True,
         blank=False,
         help_text="Must be unique",
+    )
+
+    last_4_hospital_identifier = EncryptedCharField(
+        verbose_name="Last 4 digits of hospital_identifier",
+        null=True,
+        editable=False,
+        help_text="auto-populated",
     )
 
     contact_number = EncryptedCharField(
@@ -90,6 +92,13 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
     )
 
     alt_contact_number = EncryptedCharField(null=True, blank=True, validators=[phone_number])
+
+    last_4_contact_number = EncryptedCharField(
+        verbose_name="Last 4 digits of contact number",
+        null=True,
+        editable=False,
+        help_text="auto-populated",
+    )
 
     may_contact = models.CharField(
         verbose_name="Has the patient agreed to be contacted prior to consent?",
@@ -122,7 +131,7 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         help_text="Refer to the SOP for the definition of 'stable'.",
     )
 
-    last_routine_appt_date = models.DateField(
+    last_appt_date = models.DateField(
         verbose_name="When was the patient last seen at this health facility",
         null=True,
         blank=True,
@@ -132,7 +141,7 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         ),
     )
 
-    next_routine_appt_date = models.DateField(
+    next_appt_date = models.DateField(
         verbose_name="Next scheduled routine appointment at this health facility",
         help_text="This date will help prioritize efforts to contact the patient",
     )
@@ -176,6 +185,8 @@ class PatientLog(SiteModelMixin, BaseUuidModel):
         self.legal_name = self.legal_name.upper()
         self.familiar_name = self.familiar_name.upper()
         self.initials = self.initials.upper()
+        self.last_4_contact_number = self.contact_number[-4:]
+        self.last_4_hospital_identifier = self.hospital_identifier[-4:]
         super().save(*args, **kwargs)
 
     def natural_key(self):

@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
-from intecomm_screening.admin.list_filters import AttendDatetListFilter
+from intecomm_screening.admin.list_filters import LastApptListFilter, NextApptListFilter
 from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin
 
 from ..admin_site import intecomm_group_admin
@@ -45,7 +45,8 @@ class PatientFollowupCallAdmin(BaseModelAdminMixin):
                     "respondent",
                     "survival_status",
                     "catchment_area",
-                    "attend_date",
+                    "last_appt_date",
+                    "next_appt_date",
                     "call_again",
                     "comment",
                 )
@@ -61,13 +62,13 @@ class PatientFollowupCallAdmin(BaseModelAdminMixin):
         "survival_status",
         "catchment_area",
         "call_again",
-        "attend_appt_date",
         "respondent",
     )
 
     list_filter = (
         "report_datetime",
-        AttendDatetListFilter,
+        LastApptListFilter,
+        NextApptListFilter,
         "answered",
         "call_again",
         "respondent",
@@ -89,15 +90,11 @@ class PatientFollowupCallAdmin(BaseModelAdminMixin):
         "patient_log__familiar_name__exact",
     )
 
-    @admin.display(description="Attend Date", ordering="attend_date")
-    def attend_appt_date(self, obj=None):
-        return obj.attend_date
-
-    @admin.display(description="Attend Date", ordering="attend_date")
+    @admin.display(description="Patient", ordering="patient_log")
     def patient_log_link(self, obj=None):
         url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
         url = f"{url}?q={obj.patient_log.id}"
-        return format_html(f'<A href="{url}">patient log</a>')
+        return format_html(f'<A href="{url}">{obj.patient_log}</a>')
 
     @property
     def patient_log_model_cls(self):

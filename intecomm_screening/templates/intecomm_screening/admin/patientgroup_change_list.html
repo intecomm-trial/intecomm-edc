@@ -2,16 +2,13 @@
 {% load i18n admin_urls static admin_list edc_admin_modify %}
 
 
-{% block content_title %}<h1>Patient Groups</h1>{% endblock %}
-{% block content_subtitle %}<h5><span style="color:orange;">Note:</span>Searches on encrypted data work on exact uppercase matches only</h5>{% endblock %}
-
 {% block object-tools-items %}
   <li>
     <a href="{% url "grouping_url" %}" class="changelink">Home</a>
   </li>
   <li>
     <a href="{% url "intecomm_dashboard:screening_listboard_url" %}" class="changelink">
-      Screening to Consent
+      Screening
     </a>
   </li>
   <li>
@@ -22,6 +19,11 @@
   <li>
     <a href="#" class="changelink" style="background-color: black;">
       Groups
+    </a>
+  </li>
+  <li>
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_patientcall_changelist" %}" class="changelink">
+      Calls
     </a>
   </li>
   <li>

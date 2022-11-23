@@ -494,3 +494,7 @@ if "test" in sys.argv:
     MIGRATION_MODULES = DisableMigrations()
     PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
     DEFAULT_FILE_STORAGE = "inmemorystorage.InMemoryStorage"
+
+
+INTECOMM_MIN_GROUP_SIZE = 14
+INTECOMM_MIN_GROUP_SIZE_FOR_RATIO = 9

@@ -23,7 +23,9 @@ class SubjectScreeningForm(
             "consent_ability": "Is the patient able and willing to give informed consent."
         }
         widgets = {
-            # "gender": forms.TextInput(attrs={"readonly": "readonly"}),
+            "legal_name": forms.TextInput(attrs={"readonly": "readonly"}),
+            "familiar_name": forms.TextInput(attrs={"readonly": "readonly"}),
             "initials": forms.TextInput(attrs={"readonly": "readonly"}),
+            "age_in_years": forms.TextInput(attrs={"readonly": "readonly"}),
             "hospital_identifier": forms.TextInput(attrs={"readonly": "readonly"}),
         }

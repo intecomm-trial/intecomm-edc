@@ -4,7 +4,7 @@
  	title="{{ title }}"
     class="btn btn-warning btn-sm" data-toggle="tooltip"  data-placement="right"
         {% if perms.intecomm_consent.view_subjectconsent or perms.intecomm_consent.change_subjectconsent %}
-        	href="{{ change_list_url }}"
+        	href="{{ add_consent_url }}"
         {% else %}
         	disabled
         {% endif %}>

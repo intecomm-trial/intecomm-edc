@@ -8,6 +8,7 @@ from django_audit_fields.admin import audit_fieldset_tuple
 from edc_constants.constants import COMPLETE, NEW
 from edc_utils.round_up import round_up
 from intecomm_form_validators import RECRUITING
+from intecomm_form_validators.utils import get_min_group_size_for_ratio
 
 from intecomm_group.exceptions import PatientGroupNotRandomized
 from intecomm_group.utils import (
@@ -30,6 +31,8 @@ class PatientGroupAdmin(BaseModelAdminMixin):
 
     show_object_tools = True
     change_list_template: str = "intecomm_screening/admin/patientgroup_change_list.html"
+    change_list_help = "Searches on encrypted data work on exact uppercase matches only"
+    change_list_title = PatientGroup._meta.verbose_name_plural
 
     fieldsets = (
         (
@@ -37,14 +40,18 @@ class PatientGroupAdmin(BaseModelAdminMixin):
             {"fields": ("report_datetime", "name", "patients", "notes")},
         ),
         (
-            "Status and rules",
+            "Status, Size, Ratio",
             {
                 "description": format_html(
                     "Please consult with your study coordinator before you "
                     "choose to override the minimum group size and/or the ratio of "
                     "NCD to HIV patients."
                 ),
-                "fields": ("status", "enforce_group_size_min", "enforce_ratio"),
+                "fields": (
+                    "status",
+                    "bypass_group_size_min",
+                    "bypass_group_ratio",
+                ),
             },
         ),
         (
@@ -55,9 +62,12 @@ class PatientGroupAdmin(BaseModelAdminMixin):
                     "RANDOMIZE. <BR>Please consult with your study coordinator before "
                     "randomizing a group that does not meet the minimum group size and/or "
                     "the ratio of NCD to HIV patients. <BR>"
-                    "<B>Important: THIS STEP CANNOT BE UNDONE</B"
+                    "<B>Important: THIS STEP CANNOT BE UNDONE</B>"
                 ),
-                "fields": ("randomize_now", "confirm_randomize_now"),
+                "fields": (
+                    "randomize_now",
+                    "confirm_randomize_now",
+                ),
             },
         ),
         audit_fieldset_tuple,
@@ -116,7 +126,7 @@ class PatientGroupAdmin(BaseModelAdminMixin):
     def rounded_ratio(self, obj=None):
         ncd, hiv, ratio = verify_patient_group_ratio_raise(obj.patients.all())
         ratio_str = ""
-        if obj.patients.all().count() >= 6:
+        if obj.patients.all().count() >= get_min_group_size_for_ratio():
             ratio = round_up(ratio or Decimal("0.00"), Decimal("2.00"))
             ratio_str = f" {({ratio})}"
         return f"{ncd}:{hiv}{ratio_str}"
