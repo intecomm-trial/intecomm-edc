@@ -1,7 +1,6 @@
 from uuid import uuid4
 
 from django.db import models
-from django.db.models import Manager
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
 from edc_model.models import BaseUuidModel, HistoricalRecords
@@ -11,6 +10,11 @@ from edc_utils import get_utcnow
 from intecomm_form_validators import RECRUITING
 
 from ..choices import GROUP_STATUS_CHOICES
+
+
+class PatientGroupManager(models.Manager):
+
+    use_in_migrations = True
 
 
 class PatientGroup(SiteModelMixin, BaseUuidModel):
@@ -38,6 +42,41 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
         "intecomm_screening.PatientLog",
         verbose_name="Patients",
         blank=True,
+    )
+
+    hiv_patients = models.ManyToManyField(
+        "intecomm_screening.PatientLog",
+        verbose_name="HIV-only",
+        blank=True,
+        related_name="hiv_patients",
+        # related_query_name="hiv_patients",
+        # through_fields=("patient_group", "hiv_patient"),
+    )
+
+    dm_patients = models.ManyToManyField(
+        "intecomm_screening.PatientLog",
+        verbose_name="DM-only",
+        blank=True,
+        related_name="dm_patients",
+        # related_query_name="dm_patients",
+        # through_fields=("patient_group", "dm_patient"),
+    )
+
+    htn_patients = models.ManyToManyField(
+        "intecomm_screening.PatientLog",
+        verbose_name="HTN-only",
+        blank=True,
+        related_name="htn_patients",
+        # related_query_name="htn_patients",
+        # through_fields=("patient_group", "htn_patient"),
+    )
+
+    multi_patients = models.ManyToManyField(
+        "intecomm_screening.PatientLog",
+        verbose_name="Multi-morbidity",
+        blank=True,
+        related_name="multi_patients",
+        # related_query_name="multi_patients",
     )
 
     status = models.CharField(
@@ -79,7 +118,7 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
 
     on_site = CurrentSiteManager()
 
-    objects = Manager()
+    objects = PatientGroupManager()
 
     history = HistoricalRecords()
 

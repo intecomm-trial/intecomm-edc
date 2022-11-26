@@ -5,12 +5,12 @@ from django.db.models import Q
 from edc_listboard.views import SubjectListboardView as BaseSubjectListboardView
 
 
-class CommSubjectListboardView(BaseSubjectListboardView):
+class SubjectListboardView(BaseSubjectListboardView):
 
-    listboard_template = "comm_subject_listboard_template"
-    listboard_url = "comm_subject_listboard_url"
-    navbar_selected_item = "comm_followup"
-    search_form_url = "comm_subject_listboard_url"
+    listboard_template = "subject_listboard_template"
+    listboard_url = "subject_listboard_url"
+    navbar_selected_item = "baseline"
+    search_form_url = "subject_listboard_url"
     listboard_fa_icon = "fas fa-users-between-lines fa-2x"
 
     def get_queryset(self):

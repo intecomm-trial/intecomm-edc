@@ -31,8 +31,8 @@ class HealthFacility(SiteModelMixin, BaseUuidModel):
     health_facility_type_other = OtherCharField()
 
     distance = models.IntegerField(
-        verbose_name="Approximate distance from health center",
-        help_text="In km. If within the health center type '0'",
+        verbose_name="Approximate distance from integrated-care clinic",
+        help_text="In km. If within the integrated-care clinic facility type '0'",
     )
 
     gps = models.CharField(

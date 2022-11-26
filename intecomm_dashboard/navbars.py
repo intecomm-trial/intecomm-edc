@@ -20,6 +20,18 @@ navbar.append_item(
     )
 )
 
+# navbar.append_item(
+#     NavbarItem(
+#         name="baseline",
+#         title="Baseline",
+#         label="Baseline",
+#         fa_icon="fa-solid fa-user",
+#         codename="edc_subject_dashboard.view_subject_listboard",
+#         url_name="subject_listboard_url",
+#         no_url_namespace=no_url_namespace,
+#     )
+# )
+
 navbar.append_item(
     NavbarItem(
         name="comm_followup",

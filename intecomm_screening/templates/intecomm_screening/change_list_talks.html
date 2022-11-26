@@ -1,7 +1,7 @@
 <table>
-    <td>HT1</td><td style="white-space: nowrap;">{{ ht1 }}</td>
+    <td style="white-space: nowrap;">HT1</td><td style="{% if ht1.upper == "YES"  %}color:green;{% elif ht1.upper == "NO" %}color:red;{% else %}color:orange;{% endif %}white-space: nowrap;">{{ ht1|upper }}</td>
   </tr>
   <tr>
-    <td>HT2</td><td style="white-space: nowrap;">{{ ht2 }}</td>
+    <td style="white-space: nowrap;">HT2</td><td style="{% if ht2.upper == "YES"  %}color:green;{% elif ht2.upper == "NO" %}color:red;{% else %}color:orange;{% endif %}white-space: nowrap;">{{ ht2|upper }}</td>
   </tr>
 </table>
