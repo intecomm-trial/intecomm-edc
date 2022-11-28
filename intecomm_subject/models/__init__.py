@@ -1,8 +1,18 @@
+from .blood_results import (
+    BloodResultsFbc,
+    BloodResultsGlu,
+    BloodResultsHba1c,
+    BloodResultsIns,
+    BloodResultsLft,
+    BloodResultsLipid,
+    BloodResultsRft,
+)
 from .cd4_result import Cd4Result
 from .clinical_review import ClinicalReview
 from .clinical_review_baseline import ClinicalReviewBaseline
 from .complications_baseline import ComplicationsBaseline
 from .complications_followup import ComplicationsFollowup
+from .concomitant_medication import ConcomitantMedication
 from .dm_initial_review import DmInitialReview
 from .dm_medication_adherence import DmMedicationAdherence
 from .dm_review import DmReview
@@ -28,4 +38,6 @@ from .other_baseline_data import OtherBaselineData
 from .subject_requisition import SubjectRequisition
 from .subject_visit import SubjectVisit
 from .subject_visit_missed import SubjectVisitMissed
+from .urine_dipstick_test import UrineDipstickTest
+from .urine_pregnancy import UrinePregnancy
 from .viral_load_result import ViralLoadResult

@@ -1,8 +1,15 @@
+from .blood_results import (
+    BloodResultsFbcAdmin,
+    BloodResultsGluAdmin,
+    BloodResultsLftAdmin,
+    BloodResultsRftAdmin,
+)
 from .cd4_result_admin import Cd4ResultAdmin
 from .clinical_review_admin import ClinicalReviewAdmin
 from .clinical_review_baseline_admin import ClinicalReviewBaselineAdmin
 from .complications_baseline_admin import ComplicationsBaselineAdmin
 from .complications_followup_admin import ComplicationsFollowupAdmin
+from .concomitant_medication_admin import ConcomitantMedicationAdmin
 from .dm_initial_review_admin import DmInitialReviewAdmin
 from .dm_medication_adherence_admin import DmMedicationAdherenceAdmin
 from .dm_review_admin import DmReviewAdmin

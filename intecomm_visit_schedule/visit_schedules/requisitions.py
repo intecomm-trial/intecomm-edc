@@ -1,11 +1,12 @@
 from edc_lab_panel.panels import (
     blood_glucose_panel,
+    cd4_panel,
     fbc_panel,
     hba1c_panel,
-    insulin_panel,
     lft_panel,
     lipids_panel,
     rft_panel,
+    vl_panel,
 )
 from edc_visit_schedule import FormsCollection, Requisition
 
@@ -16,7 +17,8 @@ requisitions_prn = FormsCollection(
     Requisition(show_order=240, panel=lft_panel, required=True, additional=False),
     Requisition(show_order=250, panel=fbc_panel, required=True, additional=False),
     Requisition(show_order=260, panel=lipids_panel, required=True, additional=False),
-    Requisition(show_order=270, panel=insulin_panel, required=True, additional=False),
+    Requisition(show_order=280, panel=cd4_panel, required=True, additional=False),
+    Requisition(show_order=300, panel=vl_panel, required=True, additional=False),
     name="requisitions_prn",
 )
 
