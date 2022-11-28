@@ -33,6 +33,7 @@ from .htn_medication_adherence import HtnMedicationAdherence
 from .htn_review import HtnReview
 from .indicators import Indicators
 from .investigations import Investigations
+from .malaria_test import MalariaTest
 from .medications import Medications
 from .other_baseline_data import OtherBaselineData
 from .subject_requisition import SubjectRequisition
