@@ -51,8 +51,10 @@
       {% if result.eligible %}
         {% patient_log_button result %}
         {% patient_group_button result %}
-        {% if result.consent %}
-            {% dashboard_button result %}
+        {% if result.consent  %}
+            {% if result.object.patient_group %}
+              {% dashboard_button result %}
+            {% endif %}
         {% else %}
             {% refusal_button result %}
             {% add_consent_button result %}

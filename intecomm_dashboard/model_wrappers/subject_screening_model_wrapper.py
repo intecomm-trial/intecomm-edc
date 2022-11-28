@@ -46,3 +46,7 @@ class SubjectScreeningModelWrapper(ConsentModelWrapperMixin, ModelWrapper):
         if self.screening_identifier:
             human = f"{self.screening_identifier[0:4]}-{self.screening_identifier[4:]}"
         return human or self.screening_identifier
+
+    @property
+    def patient_group(self):
+        return self.object.patient_group

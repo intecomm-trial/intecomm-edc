@@ -71,7 +71,7 @@ urlpatterns += [
         LogoutView.as_view(next_page=get_index_page()),
         name="switch_sites_url",
     ),
-    path("grouping/", GroupingView.as_view(), name="grouping_url"),
+    path("grouping/", GroupingView.as_view(), name="screen_group_url"),
     path("followup_comm/", FollowupCommView.as_view(), name="followup_comm_url"),
     path("followup_inte/", FollowupInteView.as_view(), name="followup_inte_url"),
     path("home/", HomeView.as_view(), name="home_url"),

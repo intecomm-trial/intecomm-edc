@@ -209,6 +209,10 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     def natural_key(self):
         return (self.legal_name,)  # noqa
 
+    @property
+    def patient_group(self):
+        return self.patientgroup_set.all().first()
+
 
 class Meta(SiteModelMixin.Meta, BaseUuidModel.Meta):
     verbose_name = "Patient Log"

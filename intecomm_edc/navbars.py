@@ -20,6 +20,10 @@ navbar.append_item(
     [item for item in intecomm_dashboard_navbar.items if item.name == "screen_group"][0]
 )
 
+# navbar.append_item(
+#     [item for item in intecomm_dashboard_navbar.items if item.name == "consented_subject"][0]
+# )
+
 navbar.append_item(
     [item for item in intecomm_dashboard_navbar.items if item.name == "comm_followup"][0]
 )

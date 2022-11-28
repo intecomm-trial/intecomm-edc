@@ -15,22 +15,10 @@ navbar.append_item(
         label="Screen/Group",
         fa_icon="fa-solid fa-user-plus",
         codename="edc_screening.view_screening_listboard",
-        url_name="grouping_url",
+        url_name="screen_group_url",
         no_url_namespace=no_url_namespace,
     )
 )
-
-# navbar.append_item(
-#     NavbarItem(
-#         name="baseline",
-#         title="Baseline",
-#         label="Baseline",
-#         fa_icon="fa-solid fa-user",
-#         codename="edc_subject_dashboard.view_subject_listboard",
-#         url_name="subject_listboard_url",
-#         no_url_namespace=no_url_namespace,
-#     )
-# )
 
 navbar.append_item(
     NavbarItem(
@@ -55,6 +43,18 @@ navbar.append_item(
         no_url_namespace=no_url_namespace,
     )
 )
+
+# navbar.append_item(
+#     NavbarItem(
+#         name="consented_subject",
+#         title="Baseline",
+#         label="Baseline",
+#         fa_icon="fa-solid fa-user-circle",
+#         codename="edc_subject_dashboard.view_subject_listboard",
+#         url_name="subject_listboard_url",
+#         no_url_namespace=no_url_namespace,
+#     )
+# )
 
 navbar.append_item(review_navbar_item)
 navbar.append_item(tmg_navbar_item)

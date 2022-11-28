@@ -26,8 +26,10 @@ class SubjectScreeningAdmin(
 
     form = SubjectScreeningForm
     list_per_page = 15
-    post_url_on_delete_name = "screening_listboard_url"
-    subject_listboard_url_name = "screening_listboard_url"
+    post_url_on_delete_name = "subject_dashboard_url"
+    subject_listboard_url_name = "subject_dashboard_url"
+
+    subject_dashboard_url_name = "subject_dashboard_url"
 
     change_list_template: str = "intecomm_screening/admin/subjectscreening_change_list.html"
 
@@ -293,3 +295,33 @@ class SubjectScreeningAdmin(
             else:
                 kwargs["queryset"] = PatientLog.objects.none()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def view_on_site(self, obj) -> str:
+        # TODO:
+        try:
+            url = super().view_on_site(obj)
+        except NoReverseMatch:
+            raise
+            # if obj.subject_identifier:
+            #     pass
+            # else:
+            #     raise
+        return url
+        # try:
+        #     RegisteredSubject.objects.get(subject_identifier=obj.subject_identifier)
+        # except ObjectDoesNotExist:
+        #     url = reverse(self.get_subject_listboard_url_name())
+        # else:
+        #     try:
+        #         url = reverse(
+        #             self.get_subject_dashboard_url_name(),
+        #             kwargs=self.get_subject_dashboard_url_kwargs(obj),
+        #         )
+        #     except NoReverseMatch as e:
+        #         if callable(super().view_on_site):
+        #             url = super().view_on_site(obj)
+        #         else:
+        #             raise NoReverseMatch(
+        #                 f"{e}. See subject_dashboard_url_name for {repr(self)}."
+        #             )
+        # return url
