@@ -33,7 +33,7 @@ project_settings = DefaultTestSettings(
     DEFENDER_ENABLED=False,
     DJANGO_LAB_DASHBOARD_REQUISITION_MODEL="intecomm_subject.subjectrequisition",
     ADVERSE_EVENT_ADMIN_SITE="intecomm_ae_admin",
-    EDC_DX_LABELS=dict(hiv="HIV", dm="Diabetes", htn="Hypertension", chol="High Cholesterol"),
+    EDC_DX_LABELS=dict(hiv="HIV", dm="Diabetes", htn="Hypertension"),
     ADVERSE_EVENT_APP_LABEL="intecomm_ae",
     EDC_NAVBAR_DEFAULT="intecomm_dashboard",
     EDC_PROTOCOL_STUDY_OPEN_DATETIME=datetime(2019, 4, 30, 0, 0, 0, tzinfo=ZoneInfo("UTC")),
