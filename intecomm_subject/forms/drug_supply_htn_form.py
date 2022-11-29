@@ -1,5 +1,5 @@
 from django import forms
-from edc_rx_refill.modelform_mixins import DrugSupplyNcdModelFormMixin
+from edc_rx.modelform_mixins import DrugSupplyNcdModelFormMixin
 
 from intecomm_lists.models import HtnTreatments
 

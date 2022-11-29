@@ -1,9 +1,10 @@
 from django.db import models
 from edc_model.models import BaseUuidModel
+from edc_rx.model_mixins import DrugRefillModelMixin
 
 from intecomm_lists.models import DmTreatments
 
-from ..model_mixins import CrfModelMixin, DrugRefillModelMixin
+from ..model_mixins import CrfModelMixin
 
 
 class DrugRefillDm(DrugRefillModelMixin, CrfModelMixin, BaseUuidModel):

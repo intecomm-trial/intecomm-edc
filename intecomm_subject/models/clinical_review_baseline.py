@@ -5,9 +5,10 @@ from edc_dx_review.model_mixins import (
     ClinicalReviewModelMixin,
 )
 from edc_model.models import BaseUuidModel
+from edc_rx.model_mixins import TreatmentPayMethodsModelMixin
 from edc_visit_schedule.constants import DAY1
 
-from ..model_mixins import CrfModelMixin, TreatmentPayMethodsModelMixin
+from ..model_mixins import CrfModelMixin
 
 
 class ClinicalReviewBaselineError(Exception):
