@@ -1,3 +1,4 @@
+from .arv_regimens import ArvRegimens
 from .blood_results import (
     BloodResultsFbc,
     BloodResultsGlu,

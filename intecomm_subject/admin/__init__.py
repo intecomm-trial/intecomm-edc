@@ -1,3 +1,4 @@
+from .arv_regimens_admin import ArvRegimensAdmin
 from .blood_results import (
     BloodResultsFbcAdmin,
     BloodResultsGluAdmin,
@@ -14,6 +15,7 @@ from .dm_initial_review_admin import DmInitialReviewAdmin
 from .dm_medication_adherence_admin import DmMedicationAdherenceAdmin
 from .dm_review_admin import DmReviewAdmin
 from .drug_refill_dm_admin import DrugRefillDmAdmin
+from .drug_refill_hiv_admin import DrugRefillHivAdmin
 from .drug_refill_htn_admin import DrugRefillHtnAdmin
 from .family_history_admin import FamilyHistoryAdmin
 from .glucose_admin import GlucoseAdmin
@@ -31,4 +33,6 @@ from .other_baseline_data_admin import OtherBaselineDataAdmin
 from .subject_requisition_admin import SubjectRequisitionAdmin
 from .subject_visit_admin import SubjectVisitAdmin
 from .subject_visit_missed_admin import SubjectVisitMissedAdmin
+from .urine_dipstick_test_admin import UrineDipstickTestAdmin
+from .urine_pregnancy_admin import UrinePregnancyAdmin
 from .viral_load_result_admin import ViralLoadResultAdmin

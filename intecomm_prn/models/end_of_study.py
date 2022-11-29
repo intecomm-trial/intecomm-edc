@@ -1,23 +1,13 @@
 from django.db import models
 from edc_action_item.models import ActionModelMixin
-from edc_constants.choices import YES_NO_NA
-from edc_constants.constants import (
-    DEAD,
-    DELIVERY,
-    DIABETES,
-    NOT_APPLICABLE,
-    OTHER,
-    PREGNANCY,
-    TOXICITY,
-)
+from edc_constants.constants import DEAD, NOT_APPLICABLE, OTHER
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_model.models import BaseUuidModel
 from edc_model.validators import date_not_future
 from edc_offstudy.constants import (
     COMPLETED_FOLLOWUP,
+    CONSENT_WITHDRAWAL,
     END_OF_STUDY_ACTION,
-    LATE_EXCLUSION,
-    WITHDRAWAL,
 )
 from edc_offstudy.model_mixins import OffstudyModelMixin
 from edc_sites.models import SiteModelMixin
@@ -25,7 +15,7 @@ from edc_transfer.constants import TRANSFERRED
 
 from intecomm_lists.models import OffstudyReasons
 
-from ..choices import CLINICAL_WITHDRAWAL_REASONS, TOXICITY_WITHDRAWAL_REASONS
+from ..choices import CLINICAL_WITHDRAWAL_REASONS
 from ..constants import CLINICAL_WITHDRAWAL
 
 
@@ -49,63 +39,19 @@ class EndOfStudy(SiteModelMixin, ActionModelMixin, OffstudyModelMixin, BaseUuidM
         null=True,
         limit_choices_to={
             "name__in": [
-                CLINICAL_WITHDRAWAL,
                 COMPLETED_FOLLOWUP,
-                DEAD,
-                DELIVERY,
-                DIABETES,
-                LATE_EXCLUSION,
+                CONSENT_WITHDRAWAL,
+                CLINICAL_WITHDRAWAL,
                 LOST_TO_FOLLOWUP,
-                OTHER,
-                PREGNANCY,
-                TOXICITY,
                 TRANSFERRED,
-                WITHDRAWAL,
+                DEAD,
+                OTHER,
             ]
         },
     )
 
     other_offstudy_reason = models.TextField(
         verbose_name="If OTHER, please specify", max_length=500, blank=True, null=True
-    )
-
-    # TODO: 6m off drug and duration ?? See SOP
-    ltfu_date = models.DateField(
-        verbose_name="Date lost to followup, if applicable",
-        validators=[date_not_future],
-        blank=True,
-        null=True,
-        help_text="A Loss to followup report must be on file",
-    )
-
-    death_date = models.DateField(
-        verbose_name="Date of death, if applicable",
-        validators=[date_not_future],
-        blank=True,
-        null=True,
-        help_text="A Death report must be on file",
-    )
-
-    pregnancy_date = models.DateField(
-        verbose_name="Date pregnancy known/UPT, if applicable",
-        validators=[date_not_future],
-        blank=True,
-        null=True,
-        help_text=(
-            "A UPT CRF must be on file and participant not on the delivery schedule. "
-            "Use UPT date or, if UPT not needed, use report date on last UPT CRF."
-        ),
-    )
-
-    delivery_date = models.DateField(
-        verbose_name="Date of delivery, if applicable",
-        validators=[date_not_future],
-        blank=True,
-        null=True,
-        help_text=(
-            "A Delivery CRF must be on file. Use delivery date, "
-            "if reported, or report date from Delivery CRF"
-        ),
     )
 
     clinical_withdrawal_reason = models.CharField(
@@ -132,18 +78,12 @@ class EndOfStudy(SiteModelMixin, ActionModelMixin, OffstudyModelMixin, BaseUuidM
         null=True,
     )
 
-    toxicity_withdrawal_reason = models.CharField(
-        verbose_name=" If the patient experienced an unacceptable toxicity', please explain",
-        max_length=25,
-        choices=TOXICITY_WITHDRAWAL_REASONS,
-        default=NOT_APPLICABLE,
-    )
-
-    toxicity_withdrawal_reason_other = models.TextField(
-        verbose_name="If 'other toxicity', please specify ...",
-        max_length=500,
+    ltfu_date = models.DateField(
+        verbose_name="Date lost to followup, if applicable",
+        validators=[date_not_future],
         blank=True,
         null=True,
+        help_text="A Loss to followup report must be on file",
     )
 
     transfer_date = models.DateField(
@@ -154,11 +94,12 @@ class EndOfStudy(SiteModelMixin, ActionModelMixin, OffstudyModelMixin, BaseUuidM
         help_text="A Transfer form must be on file.",
     )
 
-    transferred_consent = models.CharField(
-        verbose_name="If transferred, has the patient provided consent to be followed-up?",
-        choices=YES_NO_NA,
-        max_length=15,
-        default=NOT_APPLICABLE,
+    death_date = models.DateField(
+        verbose_name="Date of death, if applicable",
+        validators=[date_not_future],
+        blank=True,
+        null=True,
+        help_text="A Death report must be on file",
     )
 
     comment = models.TextField(

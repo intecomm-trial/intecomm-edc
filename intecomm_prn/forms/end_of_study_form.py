@@ -4,8 +4,8 @@ from edc_form_validators import FormValidatorMixin
 from edc_model_form.mixins import BaseModelFormMixin
 from edc_offstudy.modelform_mixins import OffstudyModelFormMixin
 from edc_sites.forms import SiteModelFormMixin
+from intecomm_form_validators.prn import EndOfStudyFormValidator
 
-from ..form_validators import EndOfStudyFormValidator
 from ..models import EndOfStudy
 
 

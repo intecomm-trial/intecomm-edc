@@ -63,25 +63,10 @@ class EndOfStudyAdmin(
             "Dates from supporting documents (if applicable)",
             {
                 "fields": (
-                    "death_date",
                     "ltfu_date",
                     "transfer_date",
-                    "pregnancy_date",
-                    "delivery_date",
+                    "death_date",
                 )
-            },
-        ],
-        [
-            "Toxicity (if applicable)",
-            {
-                "description": (
-                    "This section is applicable if the patient experienced an "
-                    "unacceptable toxicity, as indicated above"
-                ),
-                "fields": (
-                    "toxicity_withdrawal_reason",
-                    "toxicity_withdrawal_reason_other",
-                ),
             },
         ],
         [
@@ -109,7 +94,6 @@ class EndOfStudyAdmin(
     radio_fields = {
         "offstudy_reason": admin.VERTICAL,
         "clinical_withdrawal_reason": admin.VERTICAL,
-        "toxicity_withdrawal_reason": admin.VERTICAL,
     }
 
     def get_list_display(self, request) -> Tuple[str, ...]:
