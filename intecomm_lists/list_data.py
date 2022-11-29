@@ -1,4 +1,5 @@
 from edc_constants.constants import (
+    CLINICAL_WITHDRAWAL,
     DEAD,
     DM,
     HIV,
@@ -12,7 +13,6 @@ from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_offstudy.constants import COMPLETED_FOLLOWUP, CONSENT_WITHDRAWAL
 from edc_transfer.constants import TRANSFERRED
 
-from intecomm_prn.constants import CLINICAL_WITHDRAWAL
 from intecomm_subject.constants import INTEGRATED
 
 list_data = {

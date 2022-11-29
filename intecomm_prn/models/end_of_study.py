@@ -1,6 +1,6 @@
 from django.db import models
 from edc_action_item.models import ActionModelMixin
-from edc_constants.constants import DEAD, NOT_APPLICABLE, OTHER
+from edc_constants.constants import CLINICAL_WITHDRAWAL, DEAD, NOT_APPLICABLE, OTHER
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_model.models import BaseUuidModel
 from edc_model.validators import date_not_future
@@ -16,7 +16,6 @@ from edc_transfer.constants import TRANSFERRED
 from intecomm_lists.models import OffstudyReasons
 
 from ..choices import CLINICAL_WITHDRAWAL_REASONS
-from ..constants import CLINICAL_WITHDRAWAL
 
 
 class EndOfStudy(SiteModelMixin, ActionModelMixin, OffstudyModelMixin, BaseUuidModel):
