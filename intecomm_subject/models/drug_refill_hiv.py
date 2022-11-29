@@ -1,10 +1,10 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from edc_model.models import BaseUuidModel
+from edc_rx.model_mixins import DrugRefillModelMixin
 
-from intecomm_lists.models import ArvRegimens
-
-from ..model_mixins import CrfModelMixin, DrugRefillModelMixin
+from ..model_mixins import CrfModelMixin
+from .arv_regimens import ArvRegimens
 
 
 class DrugRefillHiv(DrugRefillModelMixin, CrfModelMixin, BaseUuidModel):

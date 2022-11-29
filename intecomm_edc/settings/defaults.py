@@ -102,6 +102,8 @@ INSTALLED_APPS = [
     "edc_lab.apps.AppConfig",
     "edc_visit_schedule.apps.AppConfig",
     "edc_visit_tracking.apps.AppConfig",
+    "edc_dx.apps.AppConfig",
+    "edc_dx_review.apps.AppConfig",
     "edc_device.apps.AppConfig",
     "edc_dashboard.apps.AppConfig",
     "edc_data_manager.apps.AppConfig",
@@ -133,6 +135,7 @@ INSTALLED_APPS = [
     "edc_registration.apps.AppConfig",
     "edc_pdf_reports.apps.AppConfig",
     "edc_review_dashboard.apps.AppConfig",
+    "edc_rx.apps.AppConfig",
     "edc_screening.apps.AppConfig",
     "edc_sites.apps.AppConfig",
     "edc_subject_dashboard.apps.AppConfig",
@@ -140,7 +143,6 @@ INSTALLED_APPS = [
     "edc_unblinding.apps.AppConfig",
     "edc_form_describer.apps.AppConfig",
     "edc_adherence.apps.AppConfig",
-    "edc_dx.apps.AppConfig",
     "canned_views.apps.AppConfig",
     "intecomm_rando.apps.AppConfig",
     "intecomm_consent.apps.AppConfig",
@@ -357,8 +359,10 @@ LAB_DASHBOARD_BASE_TEMPLATES = env.dict("DJANGO_LAB_DASHBOARD_BASE_TEMPLATES")
 LAB_DASHBOARD_URL_NAMES = env.dict("DJANGO_LAB_DASHBOARD_URL_NAMES")
 
 # edc-diagnosis
-EDC_DX_LABELS = dict(hiv="HIV", dm="Diabetes", htn="Hypertension", chol="High Cholesterol")
+EDC_DX_LABELS = dict(hiv="HIV", dm="Diabetes", htn="Hypertension")
 
+# edc-dx-review
+EDC_DX_REVIEW_APP_LABEL = "intecomm_subject"
 # edc_facility
 HOLIDAY_FILE = env.str("DJANGO_HOLIDAY_FILE")
 

@@ -1,9 +1,9 @@
 from django.db import models
 from edc_model.models import BaseUuidModel
+from edc_rx.model_mixins import DrugSupplyModelMixin
 
 from intecomm_lists.models import HtnTreatments
 
-from ..model_mixins import DrugSupplyModelMixin
 from .drug_refill_htn import DrugRefillHtn
 
 

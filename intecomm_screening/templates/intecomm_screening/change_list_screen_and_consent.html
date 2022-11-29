@@ -1,27 +1,30 @@
 <table>
   {% if add_screening_url %}
     <tr>
-      <td colspan="2"><a href="{{ add_screening_url }}">Screen</a></td>
+      <td style="white-space: nowrap;"><a title="click to screen" href="{{ add_screening_url }}">Screen</a></td>
+      <td style="background-color: orange"><a title="click to screen" style="color: black" href="{{ add_screening_url }}">PENDING</a></td>
     </tr>
   {% else %}
     <tr>
-      <td>Screen </td><td><a href="{{ change_screening_url }}">{{ screening_identifier }}</a></td>
+      <td style="color:darkgreen;white-space: nowrap;">Screened </td>
+      <td style="white-space: nowrap;"><a href="{{ change_screening_url }}">{{ screening_identifier }}</a></td>
     </tr>
   {% endif  %}
   {% if screening_identifier and eligible %}
     {% if add_consent_url %}
       <tr>
-        <td colspan="2"><a href="{{ add_consent_url }}">Consent</a></td>
+        <td style="white-space: nowrap;"><a title="click to consent" href="{{ add_consent_url }}">Consent</a></td>
+        <td style="background-color: orange"><a title="click to consent" style="color: black" href="{{ add_consent_url }}">PENDING</a></td>
       </tr>
     {% else %}
       <tr>
-        <td>Consent</td><td><a href="{{ change_consent_url }}">{{ subject_identifier }}</a></td>
+        <td style="color:darkgreen;white-space: nowrap;">Consented</td><td style="white-space: nowrap;"><a href="{{ change_consent_url }}">{{ subject_identifier }}</a></td>
       </tr>
     {% endif  %}
   {% else %}
     {% if screening_identifier %}
       <tr>
-        <td colspan="2">INELGIBLE</td>
+        <td colspan="2">INELIGIBLE</td>
       </tr>
     {% endif  %}
   {% endif  %}

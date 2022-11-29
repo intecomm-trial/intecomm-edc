@@ -13,6 +13,7 @@ from ..models import LossToFollowup
 
 class LossToFollowupFormValidator(PrnFormValidatorMixin, FormValidator):
     def clean(self):
+        # TODO: should not be submitted before 12 months from baseline
         self.required_if(YES, field="home_visit", field_required="home_visit_detail")
         self.validate_other_specify(
             field="loss_category", other_specify_field="loss_category_other"

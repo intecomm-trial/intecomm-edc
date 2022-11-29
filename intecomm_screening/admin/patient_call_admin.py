@@ -55,7 +55,7 @@ class PatientCallAdmin(BaseModelAdminMixin):
                 "fields": (
                     "last_appt_date",
                     "last_attend_clinic",
-                    "last_attend_clinic_other",
+                    # "last_attend_clinic_other",
                     "next_appt_date",
                 )
             },

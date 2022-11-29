@@ -59,7 +59,7 @@ class PatientCallModelMixin(models.Model):
     last_attend_clinic = models.CharField(
         verbose_name="Where did the patient last seek care",
         max_length=25,
-        choices=(),
+        # choices=(),
         null=True,
         blank=True,
         help_text="This may be helpful when updating health records",

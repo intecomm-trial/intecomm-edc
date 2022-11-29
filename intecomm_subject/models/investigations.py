@@ -1,10 +1,9 @@
 from django.db import models
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
+from edc_dx_review.models import ReasonsForTesting
 from edc_model.models import BaseUuidModel
 from edc_model_fields.fields import OtherCharField
-
-from intecomm_lists.models import ReasonsForTesting
 
 from ..model_mixins import CrfModelMixin
 

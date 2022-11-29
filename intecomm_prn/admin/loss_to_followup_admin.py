@@ -27,7 +27,6 @@ class LossToFollowupAdmin(
             {
                 "fields": (
                     "last_seen_datetime",
-                    "number_consecutive_missed_visits",
                     "last_missed_visit_datetime",
                     "home_visited",
                     "home_visit_detail",
@@ -45,14 +44,12 @@ class LossToFollowupAdmin(
         "subject_identifier",
         "dashboard",
         "last_seen_datetime",
-        "number_consecutive_missed_visits",
         "home_visited",
     )
 
     list_filter = (
         "last_seen_datetime",
         "last_missed_visit_datetime",
-        "number_consecutive_missed_visits",
     )
 
     radio_fields = {

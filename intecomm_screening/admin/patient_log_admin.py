@@ -34,7 +34,7 @@ class PatientLogAdmin(BaseModelAdminMixin):
     change_list_title = PatientLog._meta.verbose_name
     change_list_note = format_html(
         "In addition to other values, you may search for patients on the last 4-digits of "
-        "either their mobile number or health center identifier."
+        "either their mobile number or hospital identifier."
     )
     change_list_help = (
         "Searches on encrypted data work on exact uppercase matches only. When "
@@ -143,7 +143,7 @@ class PatientLogAdmin(BaseModelAdminMixin):
         "appts",
         "contacts",
         "talks",
-        "site_name",
+        "site_id",
         "user_created",
         "created",
         "modified",
@@ -215,11 +215,21 @@ class PatientLogAdmin(BaseModelAdminMixin):
 
     @admin.display(description="HF ID", ordering="hospital_identifier")
     def hf_id(self, obj=None):
-        return obj.hospital_identifier
+        context = dict(hospital_identifier=obj.hospital_identifier)
+        return format_html(
+            render_to_string(
+                "intecomm_screening/change_list_hospital_identifier.html", context=context
+            )
+        )
 
     @admin.display(description="DX")
     def dx(self, obj=None):
-        return [c.name.upper() for c in obj.conditions.all().order_by("name")]
+        context = dict(
+            diagnoses=[c.name.upper() for c in obj.conditions.all().order_by("name")]
+        )
+        return format_html(
+            render_to_string("intecomm_screening/change_list_dx.html", context=context)
+        )
 
     @admin.display(description="Appts", ordering="next_appt_date")
     def appts(self, obj=None):
@@ -255,16 +265,16 @@ class PatientLogAdmin(BaseModelAdminMixin):
     @admin.display(description="Talks")
     def talks(self, obj=None):
         context = dict(
-            ht1=obj.get_first_health_talk_display() or "-",
-            ht2=obj.get_second_health_talk_display() or "-",
+            ht1=obj.first_health_talk,
+            ht2=obj.second_health_talk,
         )
         return format_html(
             render_to_string("intecomm_screening/change_list_talks.html", context=context)
         )
 
     @admin.display(description="Site", ordering="site")
-    def site_name(self, obj=None):
-        return obj.site.name.title()
+    def site_id(self, obj=None):
+        return obj.site.id
 
     @admin.display(description="Patient", ordering="familiar_name")
     def patient(self, obj=None):
@@ -287,14 +297,17 @@ class PatientLogAdmin(BaseModelAdminMixin):
 
     @admin.display(description="Group", ordering="patientgroup__name")
     def group_name(self, obj=None):
+        context = dict()
         if obj.patientgroup_set.all().count() > 0:
             patient_group = obj.patientgroup_set.all().first()
             url = reverse(
                 "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
             )
             url = f"{url}?q={patient_group.name}"
-            return format_html(f'<a href="{url}">{patient_group}</a>')
-        return "<available>"
+            context.update(url=url, patient_group=patient_group)
+        return format_html(
+            render_to_string("intecomm_screening/change_list_group.html", context=context)
+        )
 
     @admin.display(description="Calls", ordering="contact_attempts")
     def calls(self, obj):

@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 from uuid import uuid4
 
 from django.db import models
+from django.utils.html import format_html
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
 from edc_constants.choices import GENDER, YES_NO_TBD
-from edc_constants.constants import TBD
+from edc_constants.constants import DM, HIV, HTN, TBD
 from edc_model.models import BaseUuidModel, HistoricalRecords, NameFieldsModelMixin
 from edc_model.validators.phone import phone_number
 from edc_model_fields.fields import InitialsField
@@ -21,6 +24,29 @@ class PatientLogManager(models.Manager):
 
     def get_by_natural_key(self, legal_name):
         return self.get(legal_name=legal_name)
+
+
+def abbrev_cond(c: list | None) -> str:
+    c = sorted(c, key=str.casefold)
+    if c == [DM]:
+        abbrev = "*d*"
+    elif c == [DM, HIV]:
+        abbrev = "hd*"
+    elif c == [DM, HTN]:
+        abbrev = "*dt"
+    elif c == [DM, HIV, HTN]:
+        abbrev = "hdt"
+    elif c == [HIV]:
+        abbrev = "h**"
+    elif c == [HIV, HTN]:
+        abbrev = "h*t"
+    elif c == [HTN]:
+        abbrev = "**t"
+    elif not c:
+        abbrev = "***"
+    else:
+        raise TypeError(f"Invalid list of conditions. Got c == {c}.")
+    return abbrev
 
 
 class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
@@ -74,7 +100,7 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     )
 
     hospital_identifier = EncryptedCharField(
-        verbose_name="Health center identifier",
+        verbose_name="Hospital identifier",
         unique=True,
         blank=False,
         help_text="Must be unique",
@@ -110,13 +136,6 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     location_description = EncryptedTextField(
         null=True, blank=True, help_text="Street, landmarks near home, etc"
     )
-
-    # patient_group_hint = models.CharField(
-    #     max_length=10,
-    #     null=True,
-    #     blank=True,
-    #     help_text="If needed, add a hint to help search for patients to add to a group",
-    # )
 
     conditions = models.ManyToManyField(
         Conditions,
@@ -177,9 +196,7 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     history = HistoricalRecords()
 
     def __str__(self):
-        return (
-            f"{self.familiar_name.upper()}-{self.initials.upper()}-{self.contact_number[-4:]}"
-        )
+        return format_html(f"{self.legal_name.upper()}-{self.contact_number[-4:]}")
 
     def save(self, *args, **kwargs):
         self.legal_name = self.legal_name.upper()
@@ -191,6 +208,10 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
 
     def natural_key(self):
         return (self.legal_name,)  # noqa
+
+    @property
+    def patient_group(self):
+        return self.patientgroup_set.all().first()
 
 
 class Meta(SiteModelMixin.Meta, BaseUuidModel.Meta):

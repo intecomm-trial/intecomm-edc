@@ -249,6 +249,10 @@ class SubjectScreening(
             )
         super().save(*args, **kwargs)
 
+    @property
+    def patient_group(self):
+        return self.patient_log.patientgroup_set.all().first()
+
     class Meta:
         verbose_name = "Subject Screening"
         verbose_name_plural = "Subject Screening"

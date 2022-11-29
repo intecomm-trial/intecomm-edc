@@ -1,0 +1,6 @@
+from edc_crf.modelform_mixins import CrfModelFormMixin as BaseCrfModelFormMixin
+from edc_dx_review.form_mixins import ClinicalReviewBaselineRequiredModelFormMixin
+
+
+class CrfModelFormMixin(ClinicalReviewBaselineRequiredModelFormMixin, BaseCrfModelFormMixin):
+    pass

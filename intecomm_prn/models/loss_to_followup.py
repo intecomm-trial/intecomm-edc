@@ -25,19 +25,11 @@ class LossToFollowup(
 
     action_name = LTFU_ACTION
 
-    tracking_identifier_prefix = "LF"
-
     report_datetime = models.DateTimeField(
         verbose_name="Report Date and Time", default=get_utcnow
     )
 
     last_seen_datetime = models.DateField(verbose_name="Date participant last seen")
-
-    number_consecutive_missed_visits = models.DateField(
-        verbose_name="Number of consecutive visits missed", null=True, blank=False
-    )
-
-    # TODO has the patient been off study medication for more than 6 months. If no, not LTFU!!
 
     last_missed_visit_datetime = models.DateField(
         verbose_name="Date of last missed visit report submitted",

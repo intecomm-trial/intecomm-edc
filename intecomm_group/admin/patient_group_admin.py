@@ -1,3 +1,4 @@
+import inflect
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
@@ -9,6 +10,8 @@ from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin
 from ..admin_site import intecomm_group_admin
 from ..forms import PatientGroupForm
 from ..models import PatientGroup
+
+p = inflect.engine()
 
 
 @admin.register(PatientGroup, site=intecomm_group_admin)
@@ -28,7 +31,7 @@ class PatientGroupAdmin(BaseModelAdminMixin):
     fieldsets = (
         (
             None,
-            {"fields": ("report_datetime", "name", "patients", "status", "notes")},
+            {"fields": ("report_datetime", "name", "status", "notes")},
         ),
         audit_fieldset_tuple,
     )
@@ -38,7 +41,7 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         "opened",
         "status",
         "meetings",
-        "members",
+        "patients",
         "user_created",
         "created",
     )
@@ -52,10 +55,16 @@ class PatientGroupAdmin(BaseModelAdminMixin):
 
     search_fields = (
         "name",
-        "patients__name",
+        "patients_hiv__legal_name__exact",
+        "patients_hiv__familiar_name__exact",
+        "patients_hiv__initials__iexact",
+        "patients_dm__legal_name__exact",
+        "patients_dm__familiar_name__exact",
+        "patients_dm__initials__iexact",
+        "patients_htn__legal_name__exact",
+        "patients_htn__familiar_name__exact",
+        "patients_htn__initials__iexact",
     )
-
-    filter_horizontal = ("patients",)
 
     radio_fields = {
         "status": admin.VERTICAL,
@@ -67,7 +76,6 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         "status",
         "randomized",
         "randomized_datetime",
-        "patients",
     )
 
     @admin.display(description="Opened", ordering="report_datetime")
@@ -81,12 +89,16 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         url = f"{url}?q={name}"
         return format_html(f'<a href="{url}">Meetings</a>')
 
-    @admin.display(description="Members")
-    def members(self, obj=None):
-        cnt = obj.patients.all().count()
-        url = reverse("intecomm_prn_admin:intecomm_prn_patientlog_changelist")
+    @admin.display(description="Patients")
+    def patients(self, obj=None):
+        cnt = (
+            obj.hiv_patients.all().count()
+            + obj.dm_patients.all().count()
+            + obj.htn_patients.all().count()
+        )
+        url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
         url = f"{url}?q={obj.name}"
-        return format_html(f'<a href="{url}">{cnt} patients</a>')
+        return format_html(f'<a href="{url}">{cnt}&nbsp;{p.plural("patient", cnt)}</a>')
 
     def get_queryset(self, request):
         return super().get_queryset(request).filter(status__in=[IN_FOLLOWUP, DISSOLVED])

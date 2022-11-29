@@ -1,12 +1,21 @@
+from .arv_regimens_admin import ArvRegimensAdmin
+from .blood_results import (
+    BloodResultsFbcAdmin,
+    BloodResultsGluAdmin,
+    BloodResultsLftAdmin,
+    BloodResultsRftAdmin,
+)
 from .cd4_result_admin import Cd4ResultAdmin
 from .clinical_review_admin import ClinicalReviewAdmin
 from .clinical_review_baseline_admin import ClinicalReviewBaselineAdmin
 from .complications_baseline_admin import ComplicationsBaselineAdmin
 from .complications_followup_admin import ComplicationsFollowupAdmin
+from .concomitant_medication_admin import ConcomitantMedicationAdmin
 from .dm_initial_review_admin import DmInitialReviewAdmin
 from .dm_medication_adherence_admin import DmMedicationAdherenceAdmin
 from .dm_review_admin import DmReviewAdmin
 from .drug_refill_dm_admin import DrugRefillDmAdmin
+from .drug_refill_hiv_admin import DrugRefillHivAdmin
 from .drug_refill_htn_admin import DrugRefillHtnAdmin
 from .family_history_admin import FamilyHistoryAdmin
 from .glucose_admin import GlucoseAdmin
@@ -18,9 +27,12 @@ from .htn_initial_review_admin import HtnInitialReviewAdmin
 from .htn_medication_adherence_admin import HtnMedicationAdherenceAdmin
 from .htn_review_admin import HtnReviewAdmin
 from .indicators_admin import IndicatorsAdmin
+from .malaria_test_admin import MalariaTestAdmin
 from .medications_admin import MedicationsAdmin
 from .other_baseline_data_admin import OtherBaselineDataAdmin
 from .subject_requisition_admin import SubjectRequisitionAdmin
 from .subject_visit_admin import SubjectVisitAdmin
 from .subject_visit_missed_admin import SubjectVisitMissedAdmin
+from .urine_dipstick_test_admin import UrineDipstickTestAdmin
+from .urine_pregnancy_admin import UrinePregnancyAdmin
 from .viral_load_result_admin import ViralLoadResultAdmin

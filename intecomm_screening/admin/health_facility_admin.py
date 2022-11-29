@@ -16,7 +16,7 @@ class HealthFacilityAdmin(BaseModelAdminMixin):
     show_object_tools = True
     change_list_template: str = "intecomm_screening/admin/healthfacility_change_list.html"
     change_list_title = HealthFacility._meta.verbose_name_plural
-    change_list_note = "These are health facilites within a health center"
+    change_list_note = "These are health facilites within a hospital"
 
     fieldsets = (
         (

@@ -29,6 +29,8 @@ class SubjectScreeningAdmin(
     post_url_on_delete_name = "screening_listboard_url"
     subject_listboard_url_name = "screening_listboard_url"
 
+    subject_dashboard_url_name = "screening_listboard_url"
+
     change_list_template: str = "intecomm_screening/admin/subjectscreening_change_list.html"
 
     additional_instructions = (
@@ -293,3 +295,6 @@ class SubjectScreeningAdmin(
             else:
                 kwargs["queryset"] = PatientLog.objects.none()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def view_on_site(self, obj) -> str:
+        return reverse(self.get_subject_listboard_url_name())

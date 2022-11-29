@@ -4,6 +4,7 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from .patient_call import PatientCall
+from .proxy_models import PatientGroup
 from .subject_screening import SubjectScreening
 
 
@@ -48,3 +49,14 @@ def patient_call_on_post_delete(sender, instance, using, **kwargs):
         else instance.patient_log.call_attempts - 1
     )
     instance.patient_log.save(update_fields=["call_attempts"])
+
+
+@receiver(
+    post_save,
+    weak=False,
+    sender=PatientGroup,
+    dispatch_uid="patient_group_on_post_save",
+)
+def patient_group_on_post_save(sender, instance, raw, created, **kwargs):
+    pass
+    # instance.patients.clear()
