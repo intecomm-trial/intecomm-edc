@@ -8,7 +8,7 @@ from edc_consent.modeladmin_mixins import ModelAdminConsentMixin
 from edc_constants.choices import GENDER
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
-from edc_sites.get_language_choices_for_site import get_language_choices_for_site
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..admin_site import intecomm_consent_admin
 from ..forms import SubjectConsentForm
@@ -17,7 +17,10 @@ from ..models import SubjectConsent
 
 @admin.register(SubjectConsent, site=intecomm_consent_admin)
 class SubjectConsentAdmin(
-    ModelAdminConsentMixin, ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin
+    SiteModelAdminMixin,
+    ModelAdminConsentMixin,
+    ModelAdminSubjectDashboardMixin,
+    SimpleHistoryAdmin,
 ):
 
     form = SubjectConsentForm
@@ -93,13 +96,4 @@ class SubjectConsentAdmin(
     def formfield_for_choice_field(self, db_field, request, **kwargs):
         if db_field.name == "gender":
             kwargs["choices"] = GENDER
-        if db_field.name == "language":
-            try:
-                language_choices = get_language_choices_for_site(request.site, other=True)
-            except AttributeError as e:
-                if "WSGIRequest" not in str(e):
-                    raise
-            else:
-                if language_choices:
-                    kwargs["choices"] = language_choices
         return super().formfield_for_choice_field(db_field, request, **kwargs)

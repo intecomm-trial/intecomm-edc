@@ -22,6 +22,13 @@ project_settings = DefaultTestSettings(
     SITE_ID=SiteID(default=101),
     SENTRY_ENABLED=False,
     INDEX_PAGE="localhost:8000",
+    LANGUAGES=[
+        ["lg", "Luganda"],
+        ["sw", "Swahili"],
+        ["en", "English"],
+        ["ry", "Runyakitara"],
+        ["mas", "Maasai"],
+    ],
     EXPORT_FOLDER=join(base_dir, "tests", "export"),
     SUBJECT_APP_LABEL="intecomm_subject",
     SUBJECT_SCREENING_MODEL="intecomm_screening.subjectscreening",
