@@ -44,6 +44,8 @@ project_settings = DefaultTestSettings(
         en="English",
         lg="Luganda",
         rny="Runyankore",
+        ry="Runyakitara",
+        mas="Maasai",
     ),
     DASHBOARD_BASE_TEMPLATES=dict(
         edc_base_template="edc_dashboard/base.html",
@@ -130,6 +132,8 @@ project_settings = DefaultTestSettings(
         "edc_refusal.apps.AppConfig",
         "edc_sites.apps.AppConfig",
         "edc_dx.apps.AppConfig",
+        "edc_dx_review.apps.AppConfig",
+        "edc_rx.apps.AppConfig",
         "canned_views.apps.AppConfig",
         "intecomm_auth.apps.AppConfig",
         "intecomm_consent.apps.AppConfig",
