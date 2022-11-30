@@ -18,13 +18,8 @@ class SubjectConsentForm(
         widget=forms.TextInput(attrs={"readonly": "readonly"}),
     )
 
-    # def clean_gender_of_consent(self):
-    #     return None
     def clean_guardian_and_dob(self):
         return None
-
-    # def clean_identity_with_unique_fields(self):
-    #     return None
 
     class Meta:
         model = SubjectConsent

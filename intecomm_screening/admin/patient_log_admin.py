@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields import audit_fieldset_tuple
+from edc_constants.choices import GENDER
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientLogForm
@@ -389,3 +390,8 @@ class PatientLogAdmin(BaseModelAdminMixin):
             subject_identifier=subject_identifier,
             eligible=eligible,
         )
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        if db_field.name == "gender":
+            kwargs["choices"] = GENDER
+        return super().formfield_for_choice_field(db_field, request, **kwargs)

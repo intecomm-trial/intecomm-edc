@@ -2,6 +2,8 @@ _version.py
 .idea
 .env
 .etc/
+.env*
+env*
 .pydevproject
 .project
 .settings/

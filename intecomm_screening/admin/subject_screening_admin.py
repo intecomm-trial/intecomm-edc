@@ -8,6 +8,7 @@ from django.urls.exceptions import NoReverseMatch
 from django.utils.html import format_html
 from django.utils.translation import gettext as _
 from django_audit_fields import audit_fieldset_tuple
+from edc_constants.choices import GENDER
 from edc_dashboard.url_names import url_names
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
@@ -298,3 +299,8 @@ class SubjectScreeningAdmin(
 
     def view_on_site(self, obj) -> str:
         return reverse(self.get_subject_listboard_url_name())
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        if db_field.name == "gender":
+            kwargs["choices"] = GENDER
+        return super().formfield_for_choice_field(db_field, request, **kwargs)

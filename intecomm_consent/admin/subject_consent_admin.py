@@ -5,8 +5,10 @@ from edc_consent.actions import (
     unflag_as_verified_against_paper,
 )
 from edc_consent.modeladmin_mixins import ModelAdminConsentMixin
+from edc_constants.choices import GENDER
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..admin_site import intecomm_consent_admin
 from ..forms import SubjectConsentForm
@@ -15,7 +17,10 @@ from ..models import SubjectConsent
 
 @admin.register(SubjectConsent, site=intecomm_consent_admin)
 class SubjectConsentAdmin(
-    ModelAdminConsentMixin, ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin
+    SiteModelAdminMixin,
+    ModelAdminConsentMixin,
+    ModelAdminSubjectDashboardMixin,
+    SimpleHistoryAdmin,
 ):
 
     form = SubjectConsentForm
@@ -87,3 +92,8 @@ class SubjectConsentAdmin(
         "language": admin.VERTICAL,
         "study_questions": admin.VERTICAL,
     }
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        if db_field.name == "gender":
+            kwargs["choices"] = GENDER
+        return super().formfield_for_choice_field(db_field, request, **kwargs)
