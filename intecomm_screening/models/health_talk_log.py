@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import UniqueConstraint
 from edc_model.models import BaseUuidModel, HistoricalRecords
 from edc_model_fields.fields import OtherCharField
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
@@ -56,11 +55,12 @@ class HealthTalkLog(SiteModelMixin, BaseUuidModel):
     class Meta(SiteModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Health talk log"
         verbose_name_plural = "Health talk logs"
-        constraints = [
-            UniqueConstraint(
-                "health_facility",
-                "report_date",
-                name="unique_health_facility_report_date",
-                violation_error_message="Only one report expected per facility per day.",
-            )
-        ]
+        unique_together = ("health_facility", "report_date")
+        # constraints = [
+        #     UniqueConstraint(
+        #         "health_facility",
+        #         "report_date",
+        #         name="unique_health_facility_report_date",
+        #         violation_error_message="Only one report expected per facility per day.",
+        #     )
+        # ]

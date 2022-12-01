@@ -1,7 +1,6 @@
 from django.apps import apps as django_apps
 from django.contrib.sites.managers import CurrentSiteManager
 from django.db import models
-from django.db.models import UniqueConstraint
 from edc_consent.field_mixins import (
     CitizenFieldsMixin,
     FullNamePersonalFieldsMixin,
@@ -114,7 +113,6 @@ class SubjectConsent(
         return "subject_identifier"
 
     class Meta(ConsentModelMixin.Meta, BaseUuidModel.Meta):
-        unique_together = ()
         indexes = [
             models.Index(
                 fields=[
@@ -126,30 +124,47 @@ class SubjectConsent(
                 ]
             )
         ]
-        constraints = [
-            UniqueConstraint(
+
+        unique_together = (
+            (
                 "subject_identifier",
                 "version",
-                name="unique_consent_subject_id_and_version",
-                violation_error_message=(
-                    "A subject with this identifier has already completed this "
-                    "version of the consent"
-                ),
             ),
-            UniqueConstraint(
+            (
                 "subject_identifier",
                 "screening_identifier",
-                name="unique_consent_subject_id_screening_id",
             ),
-            UniqueConstraint(
+            (
                 "familiar_name",
                 "dob",
                 "initials",
                 "version",
-                name="unique_consent_name_dob_initials",
-                violation_error_message=(
-                    "A subject with this 'familiar' name, dob and initials has already "
-                    "completed this version of the consent"
-                ),
             ),
-        ]
+        )
+        # constraints = [
+        #     UniqueConstraint(
+        #         "subject_identifier",
+        #         "version",
+        #         name="unique_consent_subject_id_and_version",
+        #         violation_error_message=(
+        #             "A subject with this identifier has already completed this "
+        #             "version of the consent"
+        #         ),
+        #     ),
+        #     UniqueConstraint(
+        #         "subject_identifier",
+        #         "screening_identifier",
+        #         name="unique_consent_subject_id_screening_id",
+        #     ),
+        #     UniqueConstraint(
+        #         "familiar_name",
+        #         "dob",
+        #         "initials",
+        #         "version",
+        #         name="unique_consent_name_dob_initials",
+        #         violation_error_message=(
+        #             "A subject with this 'familiar' name, dob and initials has already "
+        #             "completed this version of the consent"
+        #         ),
+        #     ),
+        # ]
