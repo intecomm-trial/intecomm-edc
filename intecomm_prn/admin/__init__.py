@@ -4,5 +4,5 @@ from .offschedule_baseline_admin import OffScheduleBaselineAdmin
 from .offschedule_followup_admin import OffScheduleFollowupAdmin
 from .onschedule_baseline_admin import OnScheduleBaselineAdmin
 from .onschedule_followup_admin import OnScheduleFollowupAdmin
-from .protocol_incident_admin import ProtocolDeviationViolationAdmin
+from .protocol_incident_admin import ProtocolIncidentAdmin
 from .subject_transfer_admin import SubjectTransferAdmin
