@@ -10,10 +10,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # migrations.RemoveConstraint(
-        #     model_name="healthtalklog",
-        #     name="unique_health_facility_report_date",
-        # ),
+        migrations.RemoveConstraint(
+            model_name="healthtalklog",
+            name="unique_health_facility_report_date",
+        ),
         migrations.AlterUniqueTogether(
             name="healthtalklog",
             unique_together={("health_facility", "report_date")},

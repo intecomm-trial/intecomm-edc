@@ -10,18 +10,18 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # migrations.RemoveConstraint(
-        #     model_name="subjectconsent",
-        #     name="unique_consent_subject_id_and_version",
-        # ),
-        # migrations.RemoveConstraint(
-        #     model_name="subjectconsent",
-        #     name="unique_consent_subject_id_screening_id",
-        # ),
-        # migrations.RemoveConstraint(
-        #     model_name="subjectconsent",
-        #     name="unique_consent_name_dob_initials",
-        # ),
+        migrations.RemoveConstraint(
+            model_name="subjectconsent",
+            name="unique_consent_subject_id_and_version",
+        ),
+        migrations.RemoveConstraint(
+            model_name="subjectconsent",
+            name="unique_consent_subject_id_screening_id",
+        ),
+        migrations.RemoveConstraint(
+            model_name="subjectconsent",
+            name="unique_consent_name_dob_initials",
+        ),
         migrations.AlterUniqueTogether(
             name="subjectconsent",
             unique_together={

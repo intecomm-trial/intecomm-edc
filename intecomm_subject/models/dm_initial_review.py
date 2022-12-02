@@ -1,25 +1,30 @@
 from django.db import models
 from edc_constants.choices import YES_NO
-from edc_constants.constants import NOT_APPLICABLE, YES
+from edc_constants.constants import YES
 from edc_dx_review.model_mixins.initial_review import InitialReviewModelMixin
 from edc_glucose.model_mixins import GlucoseModelMixin
 from edc_model import duration_to_date
 from edc_model.models import BaseUuidModel, DurationYMDField
+from edc_model_fields.fields import OtherCharField
 
-from ..choices import DM_MANAGEMENT
+from intecomm_lists.models import DmManagement
+
 from ..model_mixins import CrfModelMixin
 
 
 class DmInitialReview(
-    InitialReviewModelMixin, GlucoseModelMixin, CrfModelMixin, BaseUuidModel
+    InitialReviewModelMixin,
+    GlucoseModelMixin,
+    CrfModelMixin,
+    BaseUuidModel,
 ):
 
-    managed_by = models.CharField(
+    managed_by = models.ManyToManyField(
+        DmManagement,
         verbose_name="How is the patient's diabetes managed?",
-        max_length=25,
-        choices=DM_MANAGEMENT,
-        default=NOT_APPLICABLE,
     )
+
+    managed_by_other = OtherCharField()
 
     med_start_ago = DurationYMDField(
         verbose_name=(

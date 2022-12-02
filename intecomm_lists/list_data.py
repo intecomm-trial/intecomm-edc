@@ -13,7 +13,7 @@ from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_offstudy.constants import COMPLETED_FOLLOWUP, CONSENT_WITHDRAWAL
 from edc_transfer.constants import TRANSFERRED
 
-from intecomm_subject.constants import INTEGRATED
+from intecomm_subject.constants import DIET_LIFESTYLE, DRUGS, INSULIN, INTEGRATED
 
 list_data = {
     "intecomm_lists.offstudyreasons": [
@@ -76,5 +76,11 @@ list_data = {
     "intecomm_lists.locationtypes": [
         ("school", "School"),
         (OTHER, "Other (specify below)"),
+    ],
+    "intecomm_lists.dmmanagement": [
+        (INSULIN, "Insulin injections"),
+        (DRUGS, "Oral drugs"),
+        (DIET_LIFESTYLE, "Diet and lifestyle"),
+        (OTHER, "Other, please specify below ..."),
     ],
 }

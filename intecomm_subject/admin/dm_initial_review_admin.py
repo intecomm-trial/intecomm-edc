@@ -43,9 +43,9 @@ class DmInitialReviewAdmin(CrfModelAdmin):
         audit_fieldset_tuple,
     )
 
+    filter_horizontal = ["managed_by"]
     radio_fields = {
         "crf_status": admin.VERTICAL,
-        "managed_by": admin.VERTICAL,
         "glucose_performed": admin.VERTICAL,
         "glucose_quantifier": admin.VERTICAL,
         "glucose_units": admin.VERTICAL,

@@ -37,6 +37,7 @@ from .investigations import Investigations
 from .malaria_test import MalariaTest
 from .medications import Medications
 from .other_baseline_data import OtherBaselineData
+from .social_harms import SocialHarms
 from .subject_requisition import SubjectRequisition
 from .subject_visit import SubjectVisit
 from .subject_visit_missed import SubjectVisitMissed

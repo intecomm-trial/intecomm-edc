@@ -30,6 +30,7 @@ from .indicators_admin import IndicatorsAdmin
 from .malaria_test_admin import MalariaTestAdmin
 from .medications_admin import MedicationsAdmin
 from .other_baseline_data_admin import OtherBaselineDataAdmin
+from .social_harms_admin import SocialHarmsAdmin
 from .subject_requisition_admin import SubjectRequisitionAdmin
 from .subject_visit_admin import SubjectVisitAdmin
 from .subject_visit_missed_admin import SubjectVisitMissedAdmin
