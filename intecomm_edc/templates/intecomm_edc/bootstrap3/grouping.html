@@ -30,13 +30,13 @@
       <div class="panel-heading">Screen / Group</div>
       <div class="list-group">
         <a id="home_list_group_home" href="{% url 'home_url' %}" class="list-group-item"><i class="fas fa-reply fa-1x fa-fw" aria-hidden="true"></i> Home</a>
-      {% if perms.intecomm_screening.add_healthtalklog %}
+      {% if perms.intecomm_screening.view_healthtalklog %}
         <a id="home_list_group_healthtalklog" href="{% url 'intecomm_screening_admin:intecomm_screening_healthtalklog_changelist' %}" class="list-group-item"><i class="fas fa-users-between-lines fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Health Talk Log</a>
       {% endif %}
-      {% if perms.intecomm_screening.add_patientlog %}
+      {% if perms.intecomm_screening.view_patientlog %}
         <a id="home_list_group_patientlog" href="{% url 'intecomm_screening_admin:intecomm_screening_patientlog_changelist' %}" class="list-group-item"><i class="fas fa-person-circle-plus fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Patient Log</a>
       {% endif %}
-      {% if perms.intecomm_screening.add_patientgroup %}
+      {% if perms.intecomm_screening.view_patientgroup %}
         <a id="home_list_group_patientgroup" href="{% url 'intecomm_screening_admin:intecomm_screening_patientgroup_changelist' %}" class="list-group-item"><i class="fas fa-users fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Manage Patient Groups</a>
       {% endif %}
       {% if perms.edc_screening.view_screening_listboard %}
