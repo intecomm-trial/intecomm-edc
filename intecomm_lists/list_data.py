@@ -2,12 +2,17 @@ from edc_constants.constants import (
     CLINICAL_WITHDRAWAL,
     DEAD,
     DM,
+    FREE_OF_CHARGE,
     HIV,
     HTN,
+    INSURANCE,
     NCD,
     NOT_APPLICABLE,
     OTHER,
+    OWN_CASH,
+    PATIENT_CLUB,
     PREGNANCY,
+    RELATIVE,
 )
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_offstudy.constants import COMPLETED_FOLLOWUP, CONSENT_WITHDRAWAL
@@ -16,6 +21,14 @@ from edc_transfer.constants import TRANSFERRED
 from intecomm_subject.constants import DIET_LIFESTYLE, DRUGS, INSULIN, INTEGRATED
 
 list_data = {
+    "intecomm_lists.drugpaysources": [
+        (OWN_CASH, "Own cash"),
+        (INSURANCE, "Insurance"),
+        (PATIENT_CLUB, "Patient support group / club"),
+        (RELATIVE, "Relative or others paying"),
+        (FREE_OF_CHARGE, "Free drugs from the pharmacy"),
+        (OTHER, "Other pay source (specify below)"),
+    ],
     "intecomm_lists.offstudyreasons": [
         (COMPLETED_FOLLOWUP, "Patient completed 12 months of follow-up"),
         (CONSENT_WITHDRAWAL, "Patient withdrew consent to participate further"),

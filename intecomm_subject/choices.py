@@ -162,15 +162,6 @@ MISSED_VISIT_CALLER_CHOICES = (
     (NOT_APPLICABLE, "Not applicable"),
 )
 
-PAYEE_CHOICES = (
-    ("own_cash", "Own cash"),
-    ("insurance", "Insurance"),
-    ("relative", "Relative of others paying"),
-    ("free", "Free drugs from the pharmacy"),
-    (NOT_APPLICABLE, "Not applicable"),
-)
-
-
 PHYSICAL_ACTIVITY = (
     ("retired", "Retired"),
     (SITTING, "Mostly sitting"),
