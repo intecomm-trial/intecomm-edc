@@ -18,7 +18,7 @@ from .constants import (
 )
 
 ALCOHOL_CONSUMPTION = (
-    ("ocassionally", "Ocassionally"),
+    ("occasionally", "Occasionally"),
     ("1_2_per_week", "1-2 times a week"),
     ("3_4_per_week", "3-4 times a week"),
     ("daily", "Daily"),
