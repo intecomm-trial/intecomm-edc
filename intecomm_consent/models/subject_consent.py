@@ -65,6 +65,8 @@ class SubjectConsent(
         verbose_name="Screening datetime", null=True, editable=False
     )
 
+    group_identifier = models.CharField(max_length=50, null=True)
+
     ethnicity = models.CharField(
         max_length=15,
         help_text="fromm screening",

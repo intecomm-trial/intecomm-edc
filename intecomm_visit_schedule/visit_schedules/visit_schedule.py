@@ -1,7 +1,8 @@
 from edc_visit_schedule import VisitSchedule
 
 from ..constants import VISIT_SCHEDULE
-from .baseline_schedule import baseline_schedule
+from .comm_schedule import comm_schedule
+from .inte_schedule import inte_schedule
 
 visit_schedule = VisitSchedule(
     name=VISIT_SCHEDULE,
@@ -11,5 +12,5 @@ visit_schedule = VisitSchedule(
     locator_model="edc_locator.subjectlocator",
     previous_visit_schedule=None,
 )
-
-visit_schedule.add_schedule(baseline_schedule)
+visit_schedule.add_schedule(comm_schedule)
+visit_schedule.add_schedule(inte_schedule)

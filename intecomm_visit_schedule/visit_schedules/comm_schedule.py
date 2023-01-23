@@ -16,7 +16,7 @@ from edc_visit_schedule.constants import (
     MONTH12,
 )
 
-from ..constants import FOLLOWUP_SCHEDULE
+from ..constants import COMM_SCHEDULE, MONTH0
 from .crfs import (
     crfs_1m,
     crfs_2m,
@@ -75,13 +75,25 @@ class Visit(BaseVisit):
 
 
 # schedule for new participants
-followup_schedule = Schedule(
-    name=FOLLOWUP_SCHEDULE,
-    verbose_name="followup",
-    onschedule_model="intecomm_prn.onschedule_followup",
-    offschedule_model="intecomm_prn.offschedule_followup",
+comm_schedule = Schedule(
+    name=COMM_SCHEDULE,
+    verbose_name="community-based integrated care",
+    onschedule_model="intecomm_prn.onschedulecomm",
+    offschedule_model="intecomm_prn.offschedulecomm",
     consent_model="intecomm_consent.subjectconsent",
     appointment_model="edc_appointment.appointment",
+)
+
+visit00 = Visit(
+    code=MONTH0,
+    title="Baseline",
+    timepoint=0,
+    rbase=relativedelta(day=0),
+    rlower=relativedelta(days=0),
+    rupper=relativedelta(days=0),
+    requisitions=requisitions_1m,
+    crfs=crfs_1m,
+    facility_name="5-day-clinic",
 )
 
 
@@ -230,6 +242,7 @@ visit12 = Visit(
 )
 
 visits = [
+    visit00,
     visit01,
     visit02,
     visit03,
@@ -244,4 +257,4 @@ visits = [
     visit12,
 ]
 for visit in visits:
-    followup_schedule.add_visit(visit=visit)
+    comm_schedule.add_visit(visit=visit)

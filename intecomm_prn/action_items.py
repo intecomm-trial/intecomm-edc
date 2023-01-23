@@ -12,16 +12,33 @@ from edc_visit_schedule.constants import OFFSCHEDULE_ACTION
 
 from intecomm_subject.constants import MISSED_VISIT_ACTION
 
+from .constants import OFFSCHEDULE_COMM_ACTION, OFFSCHEDULE_INTE_ACTION
 
-class OffscheduleAction(ActionWithNotification):
-    name = OFFSCHEDULE_ACTION
-    display_name = "Submit Off-Schedule (followup)"
-    notification_display_name = "Off-Schedule (followup)"
+
+class OffscheduleInteAction(ActionWithNotification):
+    name = OFFSCHEDULE_INTE_ACTION
+    display_name = "Submit Off-Schedule INTE"
+    notification_display_name = "Off-Schedule INTE"
     parent_action_names = [
         DEATH_REPORT_ACTION,
         LTFU_ACTION,
     ]
-    reference_model = "intecomm_prn.offschedulefollowup"
+    reference_model = "intecomm_prn.offscheduleinte"
+    show_link_to_changelist = True
+    admin_site_name = "intecomm_prn_admin"
+    priority = HIGH_PRIORITY
+    singleton = True
+
+
+class OffscheduleCommAction(ActionWithNotification):
+    name = OFFSCHEDULE_COMM_ACTION
+    display_name = "Submit Off-Schedule COMM"
+    notification_display_name = "Off-Schedule COMM"
+    parent_action_names = [
+        DEATH_REPORT_ACTION,
+        LTFU_ACTION,
+    ]
+    reference_model = "intecomm_prn.offschedulecomm"
     show_link_to_changelist = True
     admin_site_name = "intecomm_prn_admin"
     priority = HIGH_PRIORITY
@@ -65,6 +82,7 @@ class ProtocolIncidentAction(BaseProtocolIncidentAction):
 
 site_action_items.register(EndOfStudyAction)
 site_action_items.register(LossToFollowupAction)
-site_action_items.register(OffscheduleAction)
+site_action_items.register(OffscheduleInteAction)
+site_action_items.register(OffscheduleCommAction)
 site_action_items.register(ProtocolIncidentAction)
 site_action_items.register(SubjectTransferAction)
