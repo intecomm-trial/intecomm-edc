@@ -380,9 +380,13 @@ class PatientLogAdmin(BaseModelAdminMixin):
                 change_consent_url,
                 subject_identifier,
             ) = get_add_or_change_consent_url(subject_screening)
-
+        stable_display = (
+            obj.get_stable_display()
+            if obj.get_stable_display() != "To be determined"
+            else "TBD"
+        )
         return dict(
-            stable=obj.get_stable_display(),
+            stable=stable_display,
             add_screening_url=add_screening_url,
             change_screening_url=change_screening_url,
             add_consent_url=add_consent_url,
