@@ -58,7 +58,7 @@ class StableListFilter(SimpleListFilter):
         return (
             (YES, "Yes"),
             (NO, "No"),
-            (TBD, "To be determined"),
+            (TBD, "To be determined (TBD)"),
         )
 
     def queryset(self, request, queryset) -> QuerySet | None:
