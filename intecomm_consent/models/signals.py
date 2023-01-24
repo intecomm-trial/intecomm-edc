@@ -51,6 +51,7 @@ def subject_consent_on_post_save(sender, instance, raw, created, **kwargs):
                     rando_obj.allocated_datetime.year,
                     rando_obj.allocated_datetime.month,
                     rando_obj.allocated_datetime.day,
+                    rando_obj.allocated_datetime.hour,
                     rando_obj.allocated_datetime.minute,
                     rando_obj.allocated_datetime.second,
                     tzinfo=ZoneInfo("UTC"),
