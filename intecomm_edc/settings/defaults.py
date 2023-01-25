@@ -306,6 +306,15 @@ SHORT_DATETIME_FORMAT = "d/m/Y H:i"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # edc-appointment
+EDC_APPOINTMENT_APPT_TYPE_CHOICES = (
+    ("clinic", "IN CLINIC / FACILITY"),
+    ("community", "IN COMMUNITY"),
+    ("hospital", "In hospital"),
+    ("home", "At home"),
+    ("telephone", "By telephone"),
+)
+EDC_APPOINTMENT_APPT_TYPE_DEFAULT = None
+
 EDC_APPOINTMENT_APPT_REASON_CHOICES = (
     (SCHEDULED_APPT, "Scheduled visit (study)"),
     (UNSCHEDULED_APPT, "Routine / Unscheduled (non-study)"),
@@ -378,10 +387,11 @@ EDC_OFFSTUDY_OFFSTUDY_MODEL = "intecomm_prn.endofstudy"
 EDC_PROTOCOL_VIOLATION_TYPE = PROTOCOL_INCIDENT
 
 # edc_randomization
-EDC_RANDOMIZATION_LIST_PATH = env.str("EDC_RANDOMIZATION_LIST_PATH")
+
 EDC_RANDOMIZATION_UNBLINDED_USERS = env.list("EDC_RANDOMIZATION_UNBLINDED_USERS")
 EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER = False
 EDC_RANDOMIZATION_SKIP_VERIFY_CHECKS = True
+EDC_RANDOMIZATION_LIST_PATH = env.str("EDC_RANDOMIZATION_LIST_PATH")
 
 # edc-sites
 EDC_SITES_MODULE_NAME = env.str("EDC_SITES_MODULE_NAME")

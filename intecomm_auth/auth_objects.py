@@ -9,8 +9,18 @@ clinic_codenames = get_clinic_codenames(
     list_app="intecomm_lists",
 )
 
+# remove any user from deleting a patient group
+clinic_codenames = [
+    codename for codename in clinic_codenames if not codename.endswith("delete_patientgroup")
+]
 screening_codenames = get_clinic_codenames(
     "intecomm_screening",
     list_app="intecomm_lists",
 )
+screening_codenames = [
+    codename
+    for codename in screening_codenames
+    if not codename.endswith("delete_patientgroup")
+]
+
 screening_codenames.sort()

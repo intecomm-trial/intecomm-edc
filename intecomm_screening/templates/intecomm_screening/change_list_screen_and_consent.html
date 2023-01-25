@@ -1,4 +1,8 @@
 <table>
+    <tr>
+      <td style="white-space: nowrap;">Stable</td><td style="{% if stable != "Yes"%}background-color: red{% endif %}">{{ stable }}</td>
+    </tr>
+
   {% if add_screening_url %}
     <tr>
       <td style="white-space: nowrap;"><a title="click to screen" href="{{ add_screening_url }}">Screen</a></td>

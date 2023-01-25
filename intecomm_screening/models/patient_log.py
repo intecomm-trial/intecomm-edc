@@ -83,6 +83,13 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
         help_text="Auto populated when consent form is complete",
     )
 
+    group_identifier = models.CharField(
+        max_length=25,
+        null=True,
+        blank=True,
+        help_text="Auto populated when group is randimized",
+    )
+
     initials = InitialsField()
 
     gender = models.CharField(choices=GENDER, max_length=10, blank=False)

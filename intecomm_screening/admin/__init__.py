@@ -1,6 +1,8 @@
 from .health_facility_admin import HealthFacilityAdmin
 from .health_talk_log_admin import HealthTalkLogAdmin
+from .modeladmin_mixins import BaseModelAdminMixin
 from .patient_call_admin import PatientCallAdmin
+from .patient_call_inlines import AddPatientCallInline, ViewPatientCallInline
 from .patient_group_admin import PatientGroupAdmin
 from .patient_log_admin import PatientLogAdmin
 from .site_admin import SiteAdmin

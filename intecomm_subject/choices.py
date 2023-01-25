@@ -12,14 +12,13 @@ from .constants import (
     DRUGS,
     GTE_3HRS,
     HEALTH_FACILITY,
-    INSULIN,
     NURSE,
     SITTING,
     THIS_CLINIC,
 )
 
 ALCOHOL_CONSUMPTION = (
-    ("ocassionally", "Ocassionally"),
+    ("occasionally", "Occasionally"),
     ("1_2_per_week", "1-2 times a week"),
     ("3_4_per_week", "3-4 times a week"),
     ("daily", "Daily"),
@@ -39,16 +38,18 @@ CARE_DELIVERY = (
     (NOT_APPLICABLE, "Not applicable"),
 )
 
-DM_MANAGEMENT = (
-    (INSULIN, "Insulin injections"),
-    (DRUGS, "Oral drugs"),
-    (DIET_LIFESTYLE, "Diet and lifestyle alone"),
+DISCLOSURE = (
+    ("voluntary", "Voluntary disclosure"),
+    ("involuntary", "Involuntary disclosure"),
+    ("by_others", "Others told them without permission"),
+    (NOT_APPLICABLE, "Not applicable"),
 )
 
 EDUCATION = (
     ("no_formal_education", "No Formal Education"),
     ("primary", "Up to primary"),
     ("secondary", "Up to secondary / high school"),
+    ("post_secondary", "College or similar higher institution"),
     ("tertiary", "university educated"),
 )
 
@@ -57,6 +58,7 @@ EMPLOYMENT_STATUS = (
     ("manual_work", "Skilled / Unskilled manual work"),
     ("housewife", "Housewife"),
     ("unemployed", "Not working / seeking work"),
+    ("unemployed_not_seeking", "Not working / NOT seeking work"),
     ("retired", "Retired"),
     (OTHER, "Other, please specify"),
 )
@@ -71,6 +73,19 @@ HOUSEHOLD_YES_NO_CHOICES = (
 HTN_MANAGEMENT = (
     (DRUGS, "Drugs / Medicine"),
     (DIET_LIFESTYLE, "Diet and lifestyle alone"),
+)
+
+IMPACT_SEVERITY = (
+    ("minor", "Minor"),
+    ("moderate", "Moderate"),
+    ("major", "Major"),
+    (NOT_APPLICABLE, "Not applicable"),
+)
+
+IMPACT_STATUS = (
+    ("resolved", "Resolved"),
+    ("ongoing", "Ongoing"),
+    (NOT_APPLICABLE, "Not applicable"),
 )
 
 MISSED_PILLS = (
@@ -146,15 +161,6 @@ MISSED_VISIT_CALLER_CHOICES = (
     (OTHER, "Other"),
     (NOT_APPLICABLE, "Not applicable"),
 )
-
-PAYEE_CHOICES = (
-    ("own_cash", "Own cash"),
-    ("insurance", "Insurance"),
-    ("relative", "Relative of others paying"),
-    ("free", "Free drugs from the pharmacy"),
-    (NOT_APPLICABLE, "Not applicable"),
-)
-
 
 PHYSICAL_ACTIVITY = (
     ("retired", "Retired"),

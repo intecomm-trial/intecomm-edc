@@ -3,13 +3,16 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
-from intecomm_form_validators import DISSOLVED, IN_FOLLOWUP
+from edc_constants.constants import COMPLETE, NEW
+from intecomm_form_validators import RECRUITING
 
 from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin
 
 from ..admin_site import intecomm_group_admin
+from ..exceptions import PatientGroupNotRandomized
 from ..forms import PatientGroupForm
 from ..models import PatientGroup
+from ..utils import get_assignment_description_for_patient_group
 
 p = inflect.engine()
 
@@ -38,10 +41,13 @@ class PatientGroupAdmin(BaseModelAdminMixin):
 
     list_display = (
         "__str__",
-        "opened",
+        "group_identifier",
+        "randomized_date",
         "status",
+        "to_subjects",
+        "arm",
         "meetings",
-        "patients",
+        "opened",
         "user_created",
         "created",
     )
@@ -55,15 +61,10 @@ class PatientGroupAdmin(BaseModelAdminMixin):
 
     search_fields = (
         "name",
-        "patients_hiv__legal_name__exact",
-        "patients_hiv__familiar_name__exact",
-        "patients_hiv__initials__iexact",
-        "patients_dm__legal_name__exact",
-        "patients_dm__familiar_name__exact",
-        "patients_dm__initials__iexact",
-        "patients_htn__legal_name__exact",
-        "patients_htn__familiar_name__exact",
-        "patients_htn__initials__iexact",
+        "group_identifier",
+        "patients__legal_name__exact",
+        "patients__familiar_name__exact",
+        "patients__initials__iexact",
     )
 
     radio_fields = {
@@ -78,6 +79,27 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         "randomized_datetime",
     )
 
+    @admin.display(description="Randomized", ordering="randomized_datetime")
+    def randomized_date(self, obj=None):
+        try:
+            return obj.randomized_datetime.date()
+        except AttributeError:
+            return None
+
+    @admin.display(description="Arm")
+    def arm(self, obj=None):
+        try:
+            arm_as_str = get_assignment_description_for_patient_group(obj.group_identifier)
+        except PatientGroupNotRandomized:
+            link = None
+        else:
+            url = reverse("intecomm_group_admin:intecomm_group_patientgroup_changelist")
+            url = f"{url}?q={obj.name}"
+            link = format_html(
+                f'<a title="Go to group followup" href="{url}">{arm_as_str}</a>'
+            )
+        return link
+
     @admin.display(description="Opened", ordering="report_datetime")
     def opened(self, obj=None):
         return obj.report_datetime.date()
@@ -85,20 +107,23 @@ class PatientGroupAdmin(BaseModelAdminMixin):
     @admin.display(description="Meetings")
     def meetings(self, obj=None):
         name = "+".join(obj.name.split(" "))
-        url = reverse("intecomm_prn_admin:intecomm_group_patientgroupmeeting_changelist")
+        url = reverse("intecomm_group_admin:intecomm_group_patientgroupmeeting_changelist")
         url = f"{url}?q={name}"
         return format_html(f'<a href="{url}">Meetings</a>')
 
     @admin.display(description="Patients")
-    def patients(self, obj=None):
-        cnt = (
-            obj.hiv_patients.all().count()
-            + obj.dm_patients.all().count()
-            + obj.htn_patients.all().count()
-        )
-        url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
-        url = f"{url}?q={obj.name}"
+    def to_subjects(self, obj=None):
+        cnt = obj.patients.all().count()
+        url = reverse("intecomm_dashboard:comm_subject_listboard_url")
+        url = f"{url}?q={obj.group_identifier}"
         return format_html(f'<a href="{url}">{cnt}&nbsp;{p.plural("patient", cnt)}</a>')
 
+    # def get_queryset(self, request):
+    #     return super().get_queryset(request).filter(status__in=[IN_FOLLOWUP, DISSOLVED])
+
     def get_queryset(self, request):
-        return super().get_queryset(request).filter(status__in=[IN_FOLLOWUP, DISSOLVED])
+        return (
+            super()
+            .get_queryset(request)
+            .exclude(status__in=[NEW, RECRUITING, COMPLETE], randomized=False)
+        )

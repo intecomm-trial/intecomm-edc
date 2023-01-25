@@ -20,6 +20,7 @@ from .drug_refill_htn_admin import DrugRefillHtnAdmin
 from .family_history_admin import FamilyHistoryAdmin
 from .glucose_admin import GlucoseAdmin
 from .hba1c_result_admin import Hba1cResultAdmin
+from .health_economics_admin import HealthEconomicsAdmin
 from .hiv_initial_review_admin import HivInitialReviewAdmin
 from .hiv_medication_adherence_admin import HivMedicationAdherenceAdmin
 from .hiv_review_admin import HivReviewAdmin
@@ -30,6 +31,7 @@ from .indicators_admin import IndicatorsAdmin
 from .malaria_test_admin import MalariaTestAdmin
 from .medications_admin import MedicationsAdmin
 from .other_baseline_data_admin import OtherBaselineDataAdmin
+from .social_harms_admin import SocialHarmsAdmin
 from .subject_requisition_admin import SubjectRequisitionAdmin
 from .subject_visit_admin import SubjectVisitAdmin
 from .subject_visit_missed_admin import SubjectVisitMissedAdmin

@@ -44,7 +44,7 @@ def verify_patient_group_ratio_raise(
 def get_assignment_description_for_patient_group(group_identifier: str | None) -> str:
     try:
         description = get_assignment_description_for_subject(
-            group_identifier, randomizer_name="default"
+            group_identifier, randomizer_name="default", identifier_fld="group_identifier"
         )
     except SubjectNotRandomization:
         raise PatientGroupNotRandomized("Group is not randomized")

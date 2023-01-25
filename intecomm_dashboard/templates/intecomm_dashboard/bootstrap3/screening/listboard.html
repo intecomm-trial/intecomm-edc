@@ -52,7 +52,7 @@
         {% patient_log_button result %}
         {% patient_group_button result %}
         {% if result.consent  %}
-            {% if result.object.patient_group %}
+            {% if result.object.patient_group.randomized %}
               {% dashboard_button result %}
             {% endif %}
         {% else %}

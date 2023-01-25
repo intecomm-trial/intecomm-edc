@@ -26,6 +26,7 @@ from .drug_supply_htn import DrugSupplyHtn
 from .family_history import FamilyHistory
 from .glucose import Glucose
 from .hba1c_result import Hba1cResult
+from .health_economics import HealthEconomics
 from .hiv_initial_review import HivInitialReview
 from .hiv_medication_adherence import HivMedicationAdherence
 from .hiv_review import HivReview
@@ -37,6 +38,7 @@ from .investigations import Investigations
 from .malaria_test import MalariaTest
 from .medications import Medications
 from .other_baseline_data import OtherBaselineData
+from .social_harms import SocialHarms
 from .subject_requisition import SubjectRequisition
 from .subject_visit import SubjectVisit
 from .subject_visit_missed import SubjectVisitMissed

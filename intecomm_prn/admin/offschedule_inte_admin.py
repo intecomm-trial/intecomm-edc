@@ -9,19 +9,19 @@ from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 
 from ..admin_site import intecomm_prn_admin
-from ..forms import OffScheduleFollowupForm
-from ..models import EndOfStudy, OffScheduleFollowup
+from ..forms import OffScheduleInteForm
+from ..models import EndOfStudy, OffScheduleInte
 
 
-@admin.register(OffScheduleFollowup, site=intecomm_prn_admin)
-class OffScheduleFollowupAdmin(
+@admin.register(OffScheduleInte, site=intecomm_prn_admin)
+class OffScheduleInteAdmin(
     DataManagerModelAdminMixin,
     ActionItemModelAdminMixin,
     ModelAdminSubjectDashboardMixin,
     SimpleHistoryAdmin,
 ):
 
-    form = OffScheduleFollowupForm
+    form = OffScheduleInteForm
 
     additional_instructions = format_html(
         '<span style="color:orange;font-weight:bold">Note:</span> Detailed '

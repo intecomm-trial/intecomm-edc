@@ -3,6 +3,8 @@ from .patient_followup_call import PatientFollowupCall
 from .patient_group import PatientGroup
 from .patient_group_appointment import PatientGroupAppointment
 from .patient_group_meeting import PatientGroupMeeting
+
+# from .proxy_models import PatientLog
 from .signals import (
     create_or_update_patient_group_meeting_on_post_save,
     update_patient_group_ratio_on_post_save,

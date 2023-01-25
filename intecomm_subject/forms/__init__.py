@@ -18,9 +18,11 @@ from .drug_refill_htn_form import DrugRefillHtnForm
 from .drug_supply_dm_form import DrugSupplyDmForm
 from .drug_supply_hiv_form import DrugSupplyHivForm
 from .drug_supply_htn_form import DrugSupplyHtnForm
+from .health_economics_form import HealthEconomicsForm
 from .hiv_review_form import HivReviewForm
 from .htn_review_form import HtnReviewForm
 from .malaria_test_form import MalariaTestForm
+from .social_harms_form import SocialHarmsForm
 from .subject_requisition_form import SubjectRequisitionForm
 from .subject_visit_form import SubjectVisitForm
 from .subject_visit_missed_form import SubjectVisitMissedForm
