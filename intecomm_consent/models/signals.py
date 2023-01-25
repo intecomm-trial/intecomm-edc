@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 from edc_randomization.utils import get_object_for_subject
+from edc_registration.models import RegisteredSubject
 from edc_visit_schedule import site_visit_schedules
 from intecomm_rando.constants import CLINIC_CONTROL, COMM_INTERVENTION
 
@@ -35,6 +36,19 @@ def subject_consent_on_post_save(sender, instance, raw, created, **kwargs):
             subject_screening.patient_log.save_base(
                 update_fields=["subject_identifier", "consent_datetime"]
             )
+            # TODO: is this the right place to do this?
+            rs_obj = RegisteredSubject.objects.get(
+                subject_identifier=instance.subject_identifier
+            )
+            try:
+                rs_obj.full_name = instance.full_name
+            except AttributeError:
+                pass
+            try:
+                rs_obj.familiar_name = instance.familiar_name
+            except AttributeError:
+                pass
+            rs_obj.save(update_fields=["full_name", "familiar_name"])
         elif instance.group_identifier:
             # put subject on schedule once in a group
             rando_obj = get_object_for_subject(
