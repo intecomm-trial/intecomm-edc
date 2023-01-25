@@ -306,6 +306,15 @@ SHORT_DATETIME_FORMAT = "d/m/Y H:i"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # edc-appointment
+EDC_APPOINTMENT_APPT_TYPE_CHOICES = (
+    ("clinic", "IN CLINIC / FACILITY"),
+    ("community", "IN COMMUNITY"),
+    ("hospital", "In hospital"),
+    ("home", "At home"),
+    ("telephone", "By telephone"),
+)
+EDC_APPOINTMENT_APPT_TYPE_DEFAULT = None
+
 EDC_APPOINTMENT_APPT_REASON_CHOICES = (
     (SCHEDULED_APPT, "Scheduled visit (study)"),
     (UNSCHEDULED_APPT, "Routine / Unscheduled (non-study)"),

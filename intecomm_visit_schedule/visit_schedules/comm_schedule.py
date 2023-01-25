@@ -30,6 +30,7 @@ from .crfs import (
     crfs_10m,
     crfs_11m,
     crfs_12m,
+    crfs_d1,
     crfs_missed,
 )
 from .crfs import crfs_prn as default_crfs_prn
@@ -47,6 +48,7 @@ from .requisitions import (
     requisitions_10m,
     requisitions_11m,
     requisitions_12m,
+    requisitions_d1,
 )
 from .requisitions import requisitions_prn as default_requisitions_prn
 from .requisitions import requisitions_unscheduled as default_requisitions_unscheduled
@@ -91,8 +93,8 @@ visit00 = Visit(
     rbase=relativedelta(day=0),
     rlower=relativedelta(days=0),
     rupper=relativedelta(days=0),
-    requisitions=requisitions_1m,
-    crfs=crfs_1m,
+    requisitions=requisitions_d1,
+    crfs=crfs_d1,
     facility_name="5-day-clinic",
 )
 
