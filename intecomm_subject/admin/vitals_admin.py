@@ -13,6 +13,8 @@ class VitalsAdmin(CrfModelAdmin):
 
     form = VitalsForm
 
+    additional_instructions = "To be completed by the research nurse."
+
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
         (
@@ -30,10 +32,7 @@ class VitalsAdmin(CrfModelAdmin):
         (
             "Blood Pressure",
             {
-                "description": (
-                    "To be completed by the research nurse. <BR>"
-                    "Refer to SOP for blood pressure measurement procedure."
-                ),
+                "description": "Refer to SOP for blood pressure measurement procedure.",
                 "fields": (
                     "sys_blood_pressure_one",
                     "dia_blood_pressure_one",
