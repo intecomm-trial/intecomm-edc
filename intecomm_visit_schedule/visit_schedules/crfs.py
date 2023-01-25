@@ -19,7 +19,7 @@ crfs_prn = FormsCollection(
 
 crfs_d1 = FormsCollection(
     Crf(show_order=100, model="intecomm_subject.clinicalreviewbaseline"),
-    Crf(show_order=110, model="intecomm_subject.indicators"),
+    Crf(show_order=110, model="intecomm_subject.vitals"),
     Crf(show_order=120, model="intecomm_subject.hivinitialreview", required=False),
     Crf(show_order=130, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=140, model="intecomm_subject.htninitialreview", required=False),
@@ -34,7 +34,7 @@ crfs_d1 = FormsCollection(
 
 crfs_1m = FormsCollection(
     Crf(show_order=110, model="intecomm_subject.clinicalreview"),
-    Crf(show_order=115, model="intecomm_subject.indicators"),
+    Crf(show_order=115, model="intecomm_subject.vitals"),
     Crf(show_order=112, model="intecomm_subject.hivinitialreview", required=False),
     Crf(show_order=114, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
@@ -54,7 +54,7 @@ crfs_1m = FormsCollection(
 )
 crfs_2m = FormsCollection(
     Crf(show_order=110, model="intecomm_subject.clinicalreview"),
-    Crf(show_order=115, model="intecomm_subject.indicators"),
+    Crf(show_order=115, model="intecomm_subject.vitals"),
     Crf(show_order=112, model="intecomm_subject.hivinitialreview", required=False),
     Crf(show_order=114, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
@@ -73,7 +73,7 @@ crfs_2m = FormsCollection(
 )
 crfs_3m = FormsCollection(
     Crf(show_order=110, model="intecomm_subject.clinicalreview"),
-    Crf(show_order=115, model="intecomm_subject.indicators"),
+    Crf(show_order=115, model="intecomm_subject.vitals"),
     Crf(show_order=112, model="intecomm_subject.hivinitialreview", required=False),
     Crf(show_order=114, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
@@ -92,7 +92,7 @@ crfs_3m = FormsCollection(
 )
 crfs_4m = FormsCollection(
     Crf(show_order=110, model="intecomm_subject.clinicalreview"),
-    Crf(show_order=115, model="intecomm_subject.indicators"),
+    Crf(show_order=115, model="intecomm_subject.vitals"),
     Crf(show_order=112, model="intecomm_subject.hivinitialreview", required=False),
     Crf(show_order=114, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
@@ -111,7 +111,7 @@ crfs_4m = FormsCollection(
 )
 crfs_5m = FormsCollection(
     Crf(show_order=110, model="intecomm_subject.clinicalreview"),
-    Crf(show_order=115, model="intecomm_subject.indicators"),
+    Crf(show_order=115, model="intecomm_subject.vitals"),
     Crf(show_order=112, model="intecomm_subject.hivinitialreview", required=False),
     Crf(show_order=114, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
@@ -130,7 +130,7 @@ crfs_5m = FormsCollection(
 )
 crfs_6m = FormsCollection(
     Crf(show_order=110, model="intecomm_subject.clinicalreview"),
-    Crf(show_order=115, model="intecomm_subject.indicators"),
+    Crf(show_order=115, model="intecomm_subject.vitals"),
     Crf(show_order=112, model="intecomm_subject.hivinitialreview", required=False),
     Crf(show_order=114, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
@@ -149,7 +149,7 @@ crfs_6m = FormsCollection(
 )
 crfs_7m = FormsCollection(
     Crf(show_order=110, model="intecomm_subject.clinicalreview"),
-    Crf(show_order=115, model="intecomm_subject.indicators"),
+    Crf(show_order=115, model="intecomm_subject.vitals"),
     Crf(show_order=112, model="intecomm_subject.hivinitialreview", required=False),
     Crf(show_order=114, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
@@ -168,7 +168,7 @@ crfs_7m = FormsCollection(
 )
 crfs_8m = FormsCollection(
     Crf(show_order=110, model="intecomm_subject.clinicalreview"),
-    Crf(show_order=115, model="intecomm_subject.indicators"),
+    Crf(show_order=115, model="intecomm_subject.vitals"),
     Crf(show_order=112, model="intecomm_subject.hivinitialreview", required=False),
     Crf(show_order=114, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
@@ -187,7 +187,7 @@ crfs_8m = FormsCollection(
 )
 crfs_9m = FormsCollection(
     Crf(show_order=110, model="intecomm_subject.clinicalreview"),
-    Crf(show_order=115, model="intecomm_subject.indicators"),
+    Crf(show_order=115, model="intecomm_subject.vitals"),
     Crf(show_order=112, model="intecomm_subject.hivinitialreview", required=False),
     Crf(show_order=114, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
@@ -206,7 +206,7 @@ crfs_9m = FormsCollection(
 )
 crfs_10m = FormsCollection(
     Crf(show_order=110, model="intecomm_subject.clinicalreview"),
-    Crf(show_order=115, model="intecomm_subject.indicators"),
+    Crf(show_order=115, model="intecomm_subject.vitals"),
     Crf(show_order=112, model="intecomm_subject.hivinitialreview", required=False),
     Crf(show_order=114, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
@@ -225,7 +225,7 @@ crfs_10m = FormsCollection(
 )
 crfs_11m = FormsCollection(
     Crf(show_order=110, model="intecomm_subject.clinicalreview"),
-    Crf(show_order=115, model="intecomm_subject.indicators"),
+    Crf(show_order=115, model="intecomm_subject.vitals"),
     Crf(show_order=112, model="intecomm_subject.hivinitialreview", required=False),
     Crf(show_order=114, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
@@ -244,7 +244,7 @@ crfs_11m = FormsCollection(
 )
 crfs_12m = FormsCollection(
     Crf(show_order=110, model="intecomm_subject.clinicalreview"),
-    Crf(show_order=115, model="intecomm_subject.indicators"),
+    Crf(show_order=115, model="intecomm_subject.vitals"),
     Crf(show_order=112, model="intecomm_subject.hivinitialreview", required=False),
     Crf(show_order=114, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
