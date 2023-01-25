@@ -205,3 +205,5 @@ VISIT_REASON = (
     (UNSCHEDULED, "Routine / Unscheduled visit (non-study)"),
     (MISSED_VISIT, "Missed visit"),
 )
+
+EST_MEASURED_CHOICES = (("estimated", "Estimated"), ("measured", "Measured"))
