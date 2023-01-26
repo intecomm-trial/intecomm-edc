@@ -18,19 +18,16 @@ class VitalsAdmin(CrfModelAdmin):
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
         (
-            "Weight, Height, Waist and Hip",
+            "Weight",
             {
                 "fields": (
                     "weight",
                     "weight_determination",
-                    "height",
-                    "waist",
-                    "hip",
                 )
             },
         ),
         (
-            "Blood Pressure",
+            "Blood Pressure and Heart",
             {
                 "description": "Refer to SOP for blood pressure measurement procedure.",
                 "fields": (
@@ -39,16 +36,19 @@ class VitalsAdmin(CrfModelAdmin):
                     "sys_blood_pressure_two",
                     "dia_blood_pressure_two",
                     "severe_htn",
+                    "heart_rate",
+                    "respiratory_rate",
                 ),
             },
         ),
         (
-            "Heart Rate, Respiratory Rate and Temperature",
+            "Other vitals",
             {
                 "fields": (
-                    "heart_rate",
-                    "respiratory_rate",
                     "temperature",
+                    "height",
+                    "waist",
+                    "hip",
                 ),
             },
         ),
@@ -58,4 +58,5 @@ class VitalsAdmin(CrfModelAdmin):
 
     radio_fields = {
         "severe_htn": admin.VERTICAL,
+        "weight_determination": admin.VERTICAL,
     }

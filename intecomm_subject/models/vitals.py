@@ -28,6 +28,12 @@ class Vitals(
         choices=EST_MEASURED_CHOICES,
     )
 
+    heart_rate = HeartRateField()
+
+    respiratory_rate = RespiratoryRateField(null=True, blank=True)
+
+    temperature = TemperatureField()
+
     height = HeightField(null=True, blank=True)
 
     waist = WaistCircumferenceField(null=True, blank=True)
@@ -40,12 +46,6 @@ class Vitals(
         blank=True,
         help_text="in centimeters",
     )
-
-    heart_rate = HeartRateField()
-
-    respiratory_rate = RespiratoryRateField(null=True, blank=True)
-
-    temperature = TemperatureField()
 
     class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
         verbose_name = "Vitals"
