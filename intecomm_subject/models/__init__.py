@@ -33,7 +33,6 @@ from .hiv_review import HivReview
 from .htn_initial_review import HtnInitialReview
 from .htn_medication_adherence import HtnMedicationAdherence
 from .htn_review import HtnReview
-from .indicators import Indicators
 from .investigations import Investigations
 from .malaria_test import MalariaTest
 from .medications import Medications
@@ -45,3 +44,4 @@ from .subject_visit_missed import SubjectVisitMissed
 from .urine_dipstick_test import UrineDipstickTest
 from .urine_pregnancy import UrinePregnancy
 from .viral_load_result import ViralLoadResult
+from .vitals import Vitals
