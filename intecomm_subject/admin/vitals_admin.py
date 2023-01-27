@@ -18,38 +18,51 @@ class VitalsAdmin(CrfModelAdmin):
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
         (
-            "Weight",
+            "Weight, Height and Temperature",
             {
                 "fields": (
-                    "weight",
                     "weight_determination",
+                    "weight",
+                    "height",
+                    "temperature",
                 )
             },
         ),
         (
-            "Blood Pressure and Heart",
+            "Blood Pressure: First reading",
             {
                 "description": "Refer to SOP for blood pressure measurement procedure.",
                 "fields": (
+                    "bp_one_taken",
+                    "bp_one_not_taken_reason",
                     "sys_blood_pressure_one",
                     "dia_blood_pressure_one",
-                    "sys_blood_pressure_two",
-                    "dia_blood_pressure_two",
-                    "severe_htn",
-                    "heart_rate",
-                    "respiratory_rate",
                 ),
             },
         ),
         (
-            "Other vitals",
+            "Blood Pressure: Second reading",
             {
+                "description": "Refer to SOP for blood pressure measurement procedure.",
                 "fields": (
-                    "temperature",
-                    "height",
-                    "waist",
-                    "hip",
+                    "bp_two_taken",
+                    "bp_two_not_taken_reason",
+                    "sys_blood_pressure_two",
+                    "dia_blood_pressure_two",
                 ),
+            },
+        ),
+        (
+            "Severe hypertension",
+            {
+                "description": "Refer to SOP on severe hypertension.",
+                "fields": ("severe_htn",),
+            },
+        ),
+        (
+            "Comments",
+            {
+                "fields": ("comments",),
             },
         ),
         crf_status_fieldset,
@@ -59,4 +72,6 @@ class VitalsAdmin(CrfModelAdmin):
     radio_fields = {
         "severe_htn": admin.VERTICAL,
         "weight_determination": admin.VERTICAL,
+        "bp_one_taken": admin.VERTICAL,
+        "bp_two_taken": admin.VERTICAL,
     }

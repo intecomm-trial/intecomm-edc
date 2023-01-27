@@ -2,7 +2,6 @@ from edc_dx_review.model_mixins import (
     ClinicalReviewBaselineDmModelMixin,
     ClinicalReviewBaselineHivModelMixin,
     ClinicalReviewBaselineHtnModelMixin,
-    ClinicalReviewModelMixin,
 )
 from edc_model.models import BaseUuidModel
 from edc_rx.model_mixins import TreatmentPayMethodsModelMixin
@@ -20,7 +19,6 @@ class ClinicalReviewBaseline(
     ClinicalReviewBaselineHivModelMixin,
     ClinicalReviewBaselineHtnModelMixin,
     ClinicalReviewBaselineDmModelMixin,
-    ClinicalReviewModelMixin,
     CrfModelMixin,
     BaseUuidModel,
 ):
@@ -30,8 +28,8 @@ class ClinicalReviewBaseline(
             and self.subject_visit.visit_code_sequence != 0
         ):
             raise ClinicalReviewBaselineError(
-                f"This model is only valid at baseline. Got `{self.subject_visit}`. "
-                "Perhaps cathc this in the form."
+                f"This form is only available at baseline. Got `{self.subject_visit}`. "
+                "Perhaps catch this in the form."
             )
         super().save(*args, **kwargs)
 

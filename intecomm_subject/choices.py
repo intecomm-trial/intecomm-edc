@@ -1,4 +1,12 @@
-from edc_constants.constants import NEVER, NO, NOT_APPLICABLE, OTHER, YES
+from edc_constants.constants import (
+    ESTIMATED,
+    MEASURED,
+    NEVER,
+    NO,
+    NOT_APPLICABLE,
+    OTHER,
+    YES,
+)
 from edc_reportable import (
     MILLIGRAMS_PER_DECILITER,
     MILLIMOLES_PER_LITER,
@@ -206,4 +214,8 @@ VISIT_REASON = (
     (MISSED_VISIT, "Missed visit"),
 )
 
-EST_MEASURED_CHOICES = (("estimated", "Estimated"), ("measured", "Measured"))
+ESTIMATED_MEASURED_CHOICES = (
+    (MEASURED, "Measured"),
+    (ESTIMATED, "Estimated"),
+    (NOT_APPLICABLE, "Not recorded / Not applicable"),
+)

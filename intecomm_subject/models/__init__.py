@@ -33,7 +33,6 @@ from .hiv_review import HivReview
 from .htn_initial_review import HtnInitialReview
 from .htn_medication_adherence import HtnMedicationAdherence
 from .htn_review import HtnReview
-from .indicators import Indicators
 from .investigations import Investigations
 from .malaria_test import MalariaTest
 from .medications import Medications
