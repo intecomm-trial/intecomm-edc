@@ -216,20 +216,19 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         if obj and not obj.randomized:
             patient_log_model_cls = django_apps.get_model("intecomm_screening.patientlog")
             conditions = [HIV, DM, HTN]
-            q_lookup = Q(patientgroup__isnull=True, stable=YES, site_id=obj.site_id)
+            q_lookup = Q(patientgroup__isnull=True) | Q(patientgroup__name=obj.name)
             for cond in conditions:
-                if obj:
-                    q_lookup = q_lookup | Q(patientgroup__name=obj.name)
-                q_lookup = q_lookup, Q(conditions__name=cond)
                 form.base_fields[
                     f"{cond.lower()}_patients"
-                ].queryset = patient_log_model_cls.objects.filter(*q_lookup).exclude(
+                ].queryset = patient_log_model_cls.objects.filter(
+                    q_lookup, stable=YES, site_id=obj.site_id, conditions__name=cond
+                ).exclude(
                     Q(conditions__name__in=[c for c in conditions if c != cond])
                 )
 
             # multimorbidity
             qs = (
-                patient_log_model_cls.objects.filter(q_lookup | Q(patientgroup__name=obj.name))
+                patient_log_model_cls.objects.filter(q_lookup, stable=YES, site_id=obj.site_id)
                 .values("id")
                 .annotate(conditions_count=Count("conditions__name"))
             )

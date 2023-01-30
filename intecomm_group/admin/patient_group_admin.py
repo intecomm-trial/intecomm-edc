@@ -5,6 +5,8 @@ from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_constants.constants import COMPLETE, NEW
 from intecomm_form_validators import RECRUITING
+from intecomm_rando.constants import COMM_INTERVENTION
+from intecomm_rando.models import RandomizationList
 
 from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin
 
@@ -113,13 +115,16 @@ class PatientGroupAdmin(BaseModelAdminMixin):
 
     @admin.display(description="Patients")
     def to_subjects(self, obj=None):
+        if (
+            RandomizationList.objects.get(group_identifier=obj.group_identifier).assignment
+            == COMM_INTERVENTION
+        ):
+            url = reverse("intecomm_dashboard:comm_subject_listboard_url")
+        else:
+            url = reverse("intecomm_dashboard:inte_subject_listboard_url")
         cnt = obj.patients.all().count()
-        url = reverse("intecomm_dashboard:comm_subject_listboard_url")
         url = f"{url}?q={obj.group_identifier}"
         return format_html(f'<a href="{url}">{cnt}&nbsp;{p.plural("patient", cnt)}</a>')
-
-    # def get_queryset(self, request):
-    #     return super().get_queryset(request).filter(status__in=[IN_FOLLOWUP, DISSOLVED])
 
     def get_queryset(self, request):
         return (
