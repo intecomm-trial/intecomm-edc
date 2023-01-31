@@ -6,9 +6,7 @@
     <a id="followup_comm_button"
         title="Home"
         class="btn btn-sm btn-default" role="button"
-        href="{% url "followup_comm_url" %}">
-            Home
-    </a>
+        href="{{ followup_url }}">Home</a>
     <a id="patientgroup_changelist"
         title="{% if perms.intecomm_screening.change_patientlog %}patient groups{% else %}check your permissions{% endif %}"
         class="btn btn-sm btn-default" role="button"

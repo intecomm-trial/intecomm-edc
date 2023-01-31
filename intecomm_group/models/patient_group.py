@@ -49,8 +49,6 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
         verbose_name="HIV-only",
         blank=True,
         related_name="hiv_patients",
-        # related_query_name="hiv_patients",
-        # through_fields=("patient_group", "hiv_patient"),
     )
 
     dm_patients = models.ManyToManyField(
@@ -58,8 +56,6 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
         verbose_name="DM-only",
         blank=True,
         related_name="dm_patients",
-        # related_query_name="dm_patients",
-        # through_fields=("patient_group", "dm_patient"),
     )
 
     htn_patients = models.ManyToManyField(
@@ -67,8 +63,6 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
         verbose_name="HTN-only",
         blank=True,
         related_name="htn_patients",
-        # related_query_name="htn_patients",
-        # through_fields=("patient_group", "htn_patient"),
     )
 
     multi_patients = models.ManyToManyField(
@@ -76,7 +70,6 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
         verbose_name="Multi-morbidity",
         blank=True,
         related_name="multi_patients",
-        # related_query_name="multi_patients",
     )
 
     status = models.CharField(

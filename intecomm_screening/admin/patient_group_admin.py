@@ -8,7 +8,7 @@ from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
-from edc_constants.constants import DM, HIV, HTN
+from edc_constants.constants import DM, HIV, HTN, YES
 from edc_utils.round_up import round_up
 from intecomm_form_validators.utils import get_group_size_for_ratio
 
@@ -216,22 +216,19 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         if obj and not obj.randomized:
             patient_log_model_cls = django_apps.get_model("intecomm_screening.patientlog")
             conditions = [HIV, DM, HTN]
+            q_lookup = Q(patientgroup__isnull=True) | Q(patientgroup__name=obj.name)
             for cond in conditions:
-                q_lookup = Q(patientgroup__isnull=True)
-                if obj:
-                    q_lookup = q_lookup | Q(patientgroup__name=obj.name)
-                q_lookup = q_lookup, Q(conditions__name=cond)
                 form.base_fields[
                     f"{cond.lower()}_patients"
-                ].queryset = patient_log_model_cls.objects.filter(*q_lookup).exclude(
+                ].queryset = patient_log_model_cls.objects.filter(
+                    q_lookup, stable=YES, site_id=obj.site_id, conditions__name=cond
+                ).exclude(
                     Q(conditions__name__in=[c for c in conditions if c != cond])
                 )
 
             # multimorbidity
             qs = (
-                patient_log_model_cls.objects.filter(
-                    Q(patientgroup__name=obj.name) | Q(patientgroup__isnull=True)
-                )
+                patient_log_model_cls.objects.filter(q_lookup, stable=YES, site_id=obj.site_id)
                 .values("id")
                 .annotate(conditions_count=Count("conditions__name"))
             )

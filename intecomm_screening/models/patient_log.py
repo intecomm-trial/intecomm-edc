@@ -203,6 +203,9 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     history = HistoricalRecords()
 
     def __str__(self):
+        # stable = "-S" if self.stable == YES else ""
+        # cond = "-".join([o.name for o in self.conditions.all()])
+        # -{self.site_id} - {stable} - {cond}
         return format_html(f"{self.legal_name.upper()}-{self.contact_number[-4:]}")
 
     def save(self, *args, **kwargs):
