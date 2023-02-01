@@ -1,0 +1,15 @@
+sid,assignment,site_name,description,facility_type,country,version
+10101,a,kasangati,community-based care,HF1,UG,1
+10102,b,kasangati,clinic-based care,HF1,UG,1
+10103,a,kasangati,community-based care,HF1,UG,1
+10104,b,kasangati,clinic-based care,HF1,UG,1
+10105,b,kasangati,clinic-based care,HF1,UG,1
+10106,a,kasangati,community-based care,HF1,UG,1
+10107,b,kasangati,clinic-based care,HF1,UG,1
+20101,a,amana,community-based care,HF1,TZ,1
+20102,b,amana,clinic-based care,HF1,TZ,1
+20103,a,amana,community-based care,HF1,TZ,1
+20104,b,amana,clinic-based care,HF1,TZ,1
+20105,b,amana,clinic-based care,HF1,TZ,1
+20106,a,amana,community-based care,HF1,TZ,1
+20107,b,amana,clinic-based care,HF1,TZ,1

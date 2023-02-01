@@ -213,7 +213,11 @@ class PatientGroupAdmin(BaseModelAdminMixin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        if obj and not obj.randomized:
+        if (
+            obj
+            and not obj.randomized
+            and request.user.has_perm("intecomm_screening.change_patientlog")
+        ):
             patient_log_model_cls = django_apps.get_model("intecomm_screening.patientlog")
             conditions = [HIV, DM, HTN]
             q_lookup = Q(patientgroup__isnull=True) | Q(patientgroup__name=obj.name)
