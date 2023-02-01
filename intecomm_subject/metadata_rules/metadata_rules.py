@@ -93,21 +93,6 @@ class ClinicalReviewRuleGroup(CrfRuleGroup):
         source_model = "intecomm_subject.clinicalreview"
 
 
-# @register()
-# class FamilyHistoryRuleGroup(CrfRuleGroup):
-#
-#     family_history = CrfRule(
-#         predicate=pc.family_history_required,
-#         consequence=REQUIRED,
-#         alternative=NOT_REQUIRED,
-#         target_models=["familyhistory"],
-#     )
-#
-#     class Meta:
-#         app_label = "intecomm_subject"
-#         source_model = "intecomm_subject.subjectvisit"
-
-
 @register()
 class MedicationsRuleGroup(CrfRuleGroup):
 
