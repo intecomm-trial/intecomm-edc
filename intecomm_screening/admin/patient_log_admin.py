@@ -28,6 +28,7 @@ from .patient_call_inlines import AddPatientCallInline, ViewPatientCallInline
 class PatientLogAdmin(BaseModelAdminMixin):
 
     form = PatientLogForm
+    custom_form_codename = "edc_data_manager.special_bypassmodelform"
     list_per_page = 20
     show_object_tools = True
     show_cancel = True

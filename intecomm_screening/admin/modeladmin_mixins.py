@@ -4,6 +4,7 @@ from edc_model_admin.history import SimpleHistoryAdmin
 from edc_model_admin.mixins import (
     ModelAdminFormAutoNumberMixin,
     ModelAdminFormInstructionsMixin,
+    ModelAdminGetFormClsMixin,
     ModelAdminInstitutionMixin,
     ModelAdminNextUrlRedirectMixin,
     TemplatesModelAdminMixin,
@@ -20,6 +21,7 @@ class BaseModelAdminMixin(
     ModelAdminNextUrlRedirectMixin,
     ModelAdminAuditFieldsMixin,
     SiteModelAdminMixin,
+    ModelAdminGetFormClsMixin,
     SimpleHistoryAdmin,
 ):
     show_cancel = True
