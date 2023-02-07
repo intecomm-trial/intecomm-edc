@@ -18,7 +18,12 @@ class SubjectConsentForm(
         widget=forms.TextInput(attrs={"readonly": "readonly"}),
     )
 
+    def validate_guardian_and_dob(self):
+        """Override method from modelform"""
+        pass
+
     def clean_guardian_and_dob(self):
+        """Override method from form validator"""
         return None
 
     class Meta:
