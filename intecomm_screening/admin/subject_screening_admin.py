@@ -165,6 +165,7 @@ class SubjectScreeningAdmin(
                     "eligible",
                     "eligibility_datetime",
                     "real_eligibility_datetime",
+                    "reasons_ineligible",
                     "subject_identifier",
                 ),
             },
@@ -203,6 +204,7 @@ class SubjectScreeningAdmin(
         "eligible",
         "eligibility_datetime",
         "real_eligibility_datetime",
+        "reasons_ineligible",
         "subject_identifier",
     )
 
