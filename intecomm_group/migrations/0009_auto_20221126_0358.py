@@ -32,7 +32,6 @@ def update_patients_m2ms(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_group", "0008_patientgroup_dm_patients_patientgroup_hiv_patients_and_more"),
     ]

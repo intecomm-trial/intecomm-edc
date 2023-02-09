@@ -24,7 +24,6 @@ from ..models import PatientLog, SubjectScreening
 class SubjectScreeningAdmin(
     SiteModelAdminMixin, ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin
 ):
-
     form = SubjectScreeningForm
     list_per_page = 15
     post_url_on_delete_name = "screening_listboard_url"

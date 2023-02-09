@@ -11,7 +11,6 @@ from edc_reportable import (
 
 
 class Cd4Result(CrfWithRequisitionModelMixin, CrfModelMixin, BaseUuidModel):
-
     lab_panel = cd4_panel
 
     requisition = models.ForeignKey(**requisition_fk_options)

@@ -5,7 +5,6 @@ import edc_model.models.fields.other_charfield
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         (
             "intecomm_group",

@@ -10,7 +10,6 @@ from .modeladmin_mixins import CrfModelAdmin
 
 @admin.register(ConcomitantMedication, site=intecomm_subject_admin)
 class ConcomitantMedicationAdmin(CrfModelAdmin):
-
     form = ConcomitantMedicationForm
 
     fieldsets = (

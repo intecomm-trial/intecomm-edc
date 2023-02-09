@@ -8,7 +8,6 @@ from ..model_mixins import CrfModelMixin
 
 
 class ComplicationsBaseline(CrfModelMixin, BaseUuidModel):
-
     # stroke
     stroke = models.CharField(
         verbose_name="Stroke",

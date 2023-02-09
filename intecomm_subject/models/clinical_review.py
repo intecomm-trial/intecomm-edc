@@ -16,7 +16,6 @@ class ClinicalReview(
     CrfModelMixin,
     BaseUuidModel,
 ):
-
     hiv_test = models.CharField(
         verbose_name="Since last seen, was the patient tested for HIV infection?",
         max_length=15,

@@ -10,7 +10,6 @@ from ..models import SubjectConsent
 class SubjectConsentForm(
     SiteModelFormMixin, FormValidatorMixin, ConsentModelFormMixin, forms.ModelForm
 ):
-
     form_validator_cls = SubjectConsentFormValidator
 
     screening_identifier = forms.CharField(

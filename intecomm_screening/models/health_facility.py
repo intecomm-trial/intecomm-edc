@@ -9,7 +9,6 @@ from intecomm_lists.models import HealthFacilityTypes
 
 
 class Manager(models.Manager):
-
     use_in_migrations = True
 
     def get_by_natural_key(self, name):
@@ -17,7 +16,6 @@ class Manager(models.Manager):
 
 
 class HealthFacility(SiteModelMixin, BaseUuidModel):
-
     report_datetime = models.DateTimeField(default=get_utcnow)
 
     name = models.CharField(max_length=25, unique=True)

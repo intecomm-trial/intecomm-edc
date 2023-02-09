@@ -6,7 +6,6 @@ import edc_vitals.models.fields.temperature
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_subject", "0011_remove_clinicalreviewbaseline_complications_and_more"),
     ]

@@ -9,7 +9,6 @@ from .modeladmin_mixins import CrfModelAdmin
 
 @admin.register(ComplicationsBaseline, site=intecomm_subject_admin)
 class ComplicationsBaselineAdmin(CrfModelAdmin):
-
     # form = ComplicationsBaselineForm
 
     fieldsets = (

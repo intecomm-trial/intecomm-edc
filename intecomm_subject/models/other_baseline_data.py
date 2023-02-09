@@ -11,7 +11,6 @@ from ..model_mixins import CrfModelMixin
 
 
 class OtherBaselineData(CrfModelMixin, BaseUuidModel):
-
     employment_status = models.CharField(
         verbose_name="What is the patient's employment status?",
         max_length=25,

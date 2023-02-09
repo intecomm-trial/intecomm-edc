@@ -16,7 +16,6 @@ from ..models import SubjectReconsent
 
 @admin.register(SubjectReconsent, site=intecomm_consent_admin)
 class SubjectReconsentAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin):
-
     form = SubjectReconsentForm
 
     fieldsets = (

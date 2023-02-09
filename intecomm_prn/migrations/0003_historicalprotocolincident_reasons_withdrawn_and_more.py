@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_prn", "0002_remove_endofstudy_delivery_date_and_more"),
     ]

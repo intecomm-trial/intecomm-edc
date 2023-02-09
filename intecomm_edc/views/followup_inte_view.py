@@ -5,7 +5,6 @@ from edc_navbar import NavbarViewMixin
 
 
 class FollowupInteView(EdcViewMixin, NavbarViewMixin, TemplateView):
-
     template_name = f"intecomm_edc/bootstrap{settings.EDC_BOOTSTRAP}/followup_inte.html"
     navbar_name = settings.APP_NAME
     navbar_selected_item = "inte_followup"

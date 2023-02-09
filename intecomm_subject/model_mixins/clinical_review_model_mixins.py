@@ -28,7 +28,6 @@ class ClinicalReviewModelMixin(models.Model):
 
 
 class ClinicalReviewBaselineHivModelMixin(models.Model):
-
     hiv_test = models.CharField(
         verbose_name="Has the patient ever tested for HIV infection?",
         max_length=15,
@@ -76,7 +75,6 @@ class ClinicalReviewBaselineHivModelMixin(models.Model):
 
 
 class ClinicalReviewBaselineHtnModelMixin(models.Model):
-
     htn_test = models.CharField(
         verbose_name="Has the patient ever tested for Hypertension?",
         max_length=15,
@@ -122,7 +120,6 @@ class ClinicalReviewBaselineHtnModelMixin(models.Model):
 
 
 class ClinicalReviewBaselineDmModelMixin(models.Model):
-
     dm_test = models.CharField(
         verbose_name="Has the patient ever tested for Diabetes?",
         max_length=15,

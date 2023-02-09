@@ -11,7 +11,6 @@ from ..models import SubjectScreening
 class SubjectScreeningForm(
     AlreadyConsentedFormMixin, SiteModelFormMixin, FormValidatorMixin, forms.ModelForm
 ):
-
     form_validator_cls = SubjectScreeningFormValidator
 
     site = SiteField()

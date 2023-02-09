@@ -8,7 +8,6 @@ from ..model_mixins import CrfModelMixin
 
 
 class DrugRefillHtn(DrugRefillModelMixin, CrfModelMixin, BaseUuidModel):
-
     rx = models.ManyToManyField(
         HtnTreatments,
         verbose_name="Which medicine did the patient receive today?",

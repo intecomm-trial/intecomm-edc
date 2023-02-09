@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_subject", "0010_remove_historicalvitals_weight_is_estmated_and_more"),
     ]

@@ -12,7 +12,6 @@ from .modeladmin_mixins import ModelAdminMixin
 
 @admin.register(SubjectVisit, site=intecomm_subject_admin)
 class SubjectVisitAdmin(VisitModelAdminMixin, ModelAdminMixin, SimpleHistoryAdmin):
-
     show_dashboard_in_list_display_pos = 2
 
     form = SubjectVisitForm

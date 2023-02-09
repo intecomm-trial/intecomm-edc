@@ -13,12 +13,10 @@ from ..choices import GROUP_STATUS_CHOICES
 
 
 class PatientGroupManager(models.Manager):
-
     use_in_migrations = True
 
 
 class PatientGroup(SiteModelMixin, BaseUuidModel):
-
     group_identifier = models.CharField(max_length=36, null=True)
 
     group_identifier_as_pk = models.UUIDField(

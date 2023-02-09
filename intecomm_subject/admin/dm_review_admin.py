@@ -10,7 +10,6 @@ from .modeladmin_mixins import CrfModelAdmin
 
 @admin.register(DmReview, site=intecomm_subject_admin)
 class DmReviewAdmin(CrfModelAdmin):
-
     form = DmReviewForm
 
     fieldsets = (

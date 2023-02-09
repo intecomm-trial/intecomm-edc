@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_subject", "0008_historicalvitals_vitals_remove_indicators_site_and_more"),
     ]

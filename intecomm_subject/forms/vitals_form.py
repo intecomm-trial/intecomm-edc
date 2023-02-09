@@ -6,7 +6,6 @@ from ..models import Vitals
 
 
 class VitalsForm(CrfModelFormMixin, forms.ModelForm):
-
     form_validator_cls = VitalsFormValidator
 
     class Meta:

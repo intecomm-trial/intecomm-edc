@@ -21,7 +21,6 @@ import uuid
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("sites", "0002_alter_domain_unique"),
         ("intecomm_lists", "0003_dmmanagement_dmmanagement_intecomm_li_id_b4d41f_idx"),

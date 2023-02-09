@@ -18,7 +18,6 @@ class DmInitialReview(
     CrfModelMixin,
     BaseUuidModel,
 ):
-
     managed_by = models.ManyToManyField(
         DmManagement,
         verbose_name="How is the patient's diabetes managed?",

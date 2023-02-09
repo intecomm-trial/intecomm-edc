@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_screening", "0012_alter_historicalpatientcall_last_attend_clinic_and_more"),
         ("intecomm_group", "0007_remove_historicalpatientfollowupcall_attend_date_and_more"),

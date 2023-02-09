@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_subject", "0002_remove_historicaldminitialreview_managed_by_and_more"),
     ]

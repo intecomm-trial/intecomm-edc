@@ -20,7 +20,6 @@ class SubjectScreeningError(Exception):
 
 
 class ScreeningIdentifier(BaseScreeningIdentifier):
-
     template = "S{random_string}"
 
 
@@ -31,7 +30,6 @@ class SubjectScreening(
     NameFieldsModelMixin,
     BaseUuidModel,
 ):
-
     identifier_cls = ScreeningIdentifier
     eligibility_cls = ScreeningEligibility
 

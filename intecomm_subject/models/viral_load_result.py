@@ -11,7 +11,6 @@ from ..model_mixins import CrfModelMixin
 
 
 class ViralLoadResult(CrfWithRequisitionModelMixin, CrfModelMixin, BaseUuidModel):
-
     lab_panel = vl_panel
 
     requisition = models.ForeignKey(

@@ -7,7 +7,6 @@ import edc_model.models.fields.other_charfield
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_screening", "0007_historicalpatientlog_last_4_contact_number_and_more"),
     ]

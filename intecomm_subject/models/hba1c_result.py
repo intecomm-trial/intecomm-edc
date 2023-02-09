@@ -10,7 +10,6 @@ from ..model_mixins import CrfModelMixin
 
 
 class Hba1cResult(CrfModelMixin, BaseUuidModel):
-
     drawn_date = models.DateField(
         verbose_name="Specimen collection date",
         validators=[date_not_future],

@@ -13,7 +13,6 @@ from ..model_mixins import CrfModelMixin
 class PatientHistory(
     CrfModelMixin, BloodPressureModelMixin, FbgModelMixin, FastingModelMixin, BaseUuidModel
 ):
-
     new_complaints = models.CharField(
         verbose_name="Does the patient have any new complaints on this visit?",
         max_length=15,

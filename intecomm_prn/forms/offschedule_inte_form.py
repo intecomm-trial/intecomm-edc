@@ -22,7 +22,6 @@ class OffScheduleInteForm(
     FormValidatorMixin,
     forms.ModelForm,
 ):
-
     form_validator_cls = OffScheduleInteFormValidator
     report_datetime_field_attr = "offschedule_datetime"
 

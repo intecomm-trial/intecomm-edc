@@ -26,7 +26,6 @@ from .patient_call_inlines import AddPatientCallInline, ViewPatientCallInline
 
 @admin.register(PatientLog, site=intecomm_screening_admin)
 class PatientLogAdmin(BaseModelAdminMixin):
-
     form = PatientLogForm
     custom_form_codename = "edc_data_manager.special_bypassmodelform"
     list_per_page = 20

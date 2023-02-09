@@ -28,7 +28,6 @@ p = inflect.engine()
 
 @admin.register(PatientGroup, site=intecomm_screening_admin)
 class PatientGroupAdmin(BaseModelAdminMixin):
-
     form = PatientGroupForm
 
     show_object_tools = True

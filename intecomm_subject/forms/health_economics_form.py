@@ -6,7 +6,6 @@ from .mixins import CrfModelFormMixin
 
 
 class HealthEconomicsForm(CrfModelFormMixin, forms.ModelForm):
-
     form_validator_cls = HealthEconomicsFormValidator
 
     class Meta:
