@@ -7,13 +7,6 @@
        title="Home"
        class="btn btn-sm btn-default" role="button"
        href="{{ followup_url }}">Home</a>
-    <a id="patientgroup_changelist"
-        title="{% if perms.intecomm_screening.change_patientlog %}patient groups{% else %}check your permissions{% endif %}"
-        class="btn btn-sm btn-default" role="button"
-        {% if not perms.intecomm_group.change_patientgroup %}disabled{% endif %}
-        href="{% if perms.intecomm_group.add_patientgroup %}{% url "intecomm_group_admin:intecomm_group_patientgroup_changelist" %}{% endif %}">
-            Groups
-    </a>
 
 {% endblock %}
 
@@ -26,7 +19,6 @@
     <th>Subject</th>
     <th>Age / Born</th>
     <th>Consented</th>
-    <th>Group</th>
     <th>Modified</th>
     <!-- end results header -->
 
@@ -44,6 +36,5 @@
     </td>
     <td>{% age_in_years result.object.dob %}yrs {% if perms.edc_registration.display_dob %}{{ result.object.dob|date:"SHORT_DATE_FORMAT" }}{% else %}**/**/****{% endif %}</td>
     <td>{{ result.object.consent_datetime|date:"SHORT_DATE_FORMAT" }}</td>
-    <td><a href="{% url "intecomm_group_admin:intecomm_group_patientgroup_changelist" %}?q={{result.group_identifier}}">{{ result.group_identifier }}</a></td>
     <td>{{ result.object.modified|date:"SHORT_DATETIME_FORMAT" }}</td>
 {% endblock listboard_table_columns %}
