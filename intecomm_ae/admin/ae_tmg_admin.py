@@ -9,5 +9,4 @@ from ..models import AeTmg
 
 @admin.register(AeTmg, site=intecomm_ae_admin)
 class AeTmgAdmin(AeTmgModelAdminMixin, SimpleHistoryAdmin):
-
     form = AeTmgForm

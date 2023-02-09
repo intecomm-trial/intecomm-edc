@@ -10,7 +10,6 @@ from .modeladmin_mixins import CrfModelAdmin
 
 @admin.register(Vitals, site=intecomm_subject_admin)
 class VitalsAdmin(CrfModelAdmin):
-
     form = VitalsForm
 
     additional_instructions = "To be completed by the research nurse."

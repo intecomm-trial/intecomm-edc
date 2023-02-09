@@ -32,7 +32,6 @@ tomorrow = now + relativedelta(days=1)
 
 
 class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
-
     fqdn = fqdn
 
     default_sites = get_sites_by_country("tanzania")

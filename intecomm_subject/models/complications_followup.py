@@ -7,7 +7,6 @@ from ..model_mixins import CrfModelMixin
 
 
 class ComplicationsFollowup(CrfModelMixin, BaseUuidModel):
-
     # stroke
     stroke = models.CharField(verbose_name="Stroke", max_length=25, choices=YES_NO)
 

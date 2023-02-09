@@ -9,7 +9,6 @@ from .modeladmin_mixins import CrfModelAdmin
 
 @admin.register(SubjectVisitMissed, site=intecomm_subject_admin)
 class SubjectVisitMissedAdmin(CrfModelAdmin):
-
     form = SubjectVisitMissedForm
 
     fieldsets = (

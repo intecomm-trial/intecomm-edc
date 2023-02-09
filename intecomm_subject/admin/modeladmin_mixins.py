@@ -25,17 +25,14 @@ class ModelAdminMixin(ModelAdminSubjectDashboardMixin):
 
 
 class CrfModelAdminMixin(CrfStatusModelAdminMixin, ModelAdminCrfDashboardMixin):
-
     pass
 
 
 class CrfModelAdmin(ModelAdminCrfDashboardMixin, SimpleHistoryAdmin):
-
     pass
 
 
 class MedicationAdherenceAdminMixin:
-
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
         (

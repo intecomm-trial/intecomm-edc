@@ -35,7 +35,6 @@ class ScreeningFormMixin:
 class SubjectRefusalForm(
     AlreadyConsentedFormMixin, ScreeningFormMixin, FormValidatorMixin, forms.ModelForm
 ):
-
     form_validator_cls = SubjectRefusalFormValidator
 
     def clean(self):

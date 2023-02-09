@@ -8,5 +8,4 @@ from .offschedule_inte_admin import OffScheduleInteAdmin
 
 @admin.register(OffScheduleComm, site=intecomm_prn_admin)
 class OffScheduleCommAdmin(OffScheduleInteAdmin):
-
     form = OffScheduleCommForm

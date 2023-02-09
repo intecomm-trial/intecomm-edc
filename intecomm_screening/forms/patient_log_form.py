@@ -10,7 +10,6 @@ from ..models import PatientLog
 class PatientLogForm(
     AlreadyConsentedFormMixin, SiteModelFormMixin, FormValidatorMixin, forms.ModelForm
 ):
-
     form_validator_cls = PatientLogFormValidator
 
     class Meta:

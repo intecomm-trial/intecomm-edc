@@ -13,7 +13,6 @@ from ..models import OnScheduleInte
 class OnScheduleInteAdmin(
     DataManagerModelAdminMixin, ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin
 ):
-
     instructions = None
 
     fields = ("subject_identifier", "onschedule_datetime")

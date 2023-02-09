@@ -10,7 +10,6 @@ from ..model_mixins import CrfModelMixin, FollowupReviewModelMixin
 
 
 class HtnReview(FollowupReviewModelMixin, CrfModelMixin, BaseUuidModel):
-
     test_date = models.DateField(
         verbose_name="Date tested for Hypertension",
         null=True,

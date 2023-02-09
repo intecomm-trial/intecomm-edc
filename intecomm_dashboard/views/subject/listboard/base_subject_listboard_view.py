@@ -10,7 +10,6 @@ from ....model_wrappers import SubjectConsentModelWrapper
 
 
 class BaseSubjectListboardView(SubjectListboardView):
-
     model_wrapper_cls = SubjectConsentModelWrapper
     name_search_field: str = "legal_name"
     identity_regex: str = r"^[A-Z0-9\ ]+$"

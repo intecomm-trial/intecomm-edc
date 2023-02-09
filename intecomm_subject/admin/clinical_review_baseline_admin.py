@@ -11,7 +11,6 @@ from .modeladmin_mixins import CrfModelAdmin
 
 @admin.register(ClinicalReviewBaseline, site=intecomm_subject_admin)
 class ClinicalReviewBaselineAdmin(CrfModelAdmin):
-
     form = ClinicalReviewBaselineForm
 
     fieldsets = (

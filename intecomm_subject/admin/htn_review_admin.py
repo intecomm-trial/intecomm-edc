@@ -9,7 +9,6 @@ from .modeladmin_mixins import CrfModelAdmin
 
 @admin.register(HtnReview, site=intecomm_subject_admin)
 class HtnReviewAdmin(CrfModelAdmin):
-
     # form = HtnReviewForm
 
     fieldsets = (

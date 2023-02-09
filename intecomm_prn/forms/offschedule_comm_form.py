@@ -22,7 +22,6 @@ class OffScheduleCommForm(
     FormValidatorMixin,
     forms.ModelForm,
 ):
-
     form_validator_cls = OffScheduleCommFormValidator
     report_datetime_field_attr = "offschedule_datetime"
 

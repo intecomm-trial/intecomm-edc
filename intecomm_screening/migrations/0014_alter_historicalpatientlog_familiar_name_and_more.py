@@ -6,7 +6,6 @@ import django_crypto_fields.fields.encrypted_char_field
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_screening", "0013_alter_healthfacility_distance_and_more"),
     ]

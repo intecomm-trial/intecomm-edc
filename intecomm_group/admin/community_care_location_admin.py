@@ -15,7 +15,6 @@ class CommunityCareLocationAdmin(
     PrnModelAdminMixin,
     SimpleHistoryAdmin,
 ):
-
     form = CommunityCareLocationForm
 
     date_hierarchy = "report_datetime"

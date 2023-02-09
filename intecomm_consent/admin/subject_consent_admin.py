@@ -22,7 +22,6 @@ class SubjectConsentAdmin(
     ModelAdminSubjectDashboardMixin,
     SimpleHistoryAdmin,
 ):
-
     form = SubjectConsentForm
 
     show_object_tools = False

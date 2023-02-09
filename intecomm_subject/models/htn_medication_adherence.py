@@ -9,7 +9,6 @@ class HtnMedicationAdherence(
     CrfModelMixin,
     BaseUuidModel,
 ):
-
     condition_label = "Hypertension"
 
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):

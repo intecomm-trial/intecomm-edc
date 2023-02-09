@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_lists", "0002_delete_reasonsfortesting_and_more"),
     ]

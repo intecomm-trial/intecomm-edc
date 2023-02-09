@@ -4,7 +4,6 @@ from edc_sites.models import CurrentSiteManager, SiteModelMixin
 
 
 class Location(SiteModelMixin, ListModelMixin):
-
     on_site = CurrentSiteManager()
     history = HistoricalRecords()
     objects = ListModelManager()

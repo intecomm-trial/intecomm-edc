@@ -36,7 +36,6 @@ def get_impact_fieldset(prefix: str, phrase: str, description: bool | None = Non
 
 @admin.register(SocialHarms, site=intecomm_subject_admin)
 class SocialHarmsAdmin(CrfModelAdmin):
-
     form = SocialHarmsForm
 
     fieldsets = (

@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_screening", "0009_historicalsubjectscreening_familiar_name_and_more"),
     ]
