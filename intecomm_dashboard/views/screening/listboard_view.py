@@ -50,7 +50,6 @@ class ListboardViewFilters(Base):
 
 
 class ListboardView(ScreeningListboardView):
-
     listboard_model = "intecomm_screening.subjectscreening"
     model_wrapper_cls = SubjectScreeningModelWrapper
     navbar_selected_item = "screen_group"

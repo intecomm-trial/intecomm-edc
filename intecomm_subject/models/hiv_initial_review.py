@@ -14,7 +14,6 @@ from ..model_mixins import CrfModelMixin
 
 
 class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, BaseUuidModel):
-
     receives_care = models.CharField(
         verbose_name="Is the patient receiving care for HIV?",
         max_length=15,

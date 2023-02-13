@@ -2,7 +2,6 @@ from edc_model_wrapper import ModelWrapper
 
 
 class PatientLogModelWrapper(ModelWrapper):
-
     model = "intecomm_screening.patientlog"
     next_url_attrs = ["patient_log_identifier"]
     next_url_name = "patient_log_listboard_url"

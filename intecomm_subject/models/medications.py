@@ -7,7 +7,6 @@ from ..model_mixins import CrfModelMixin
 
 
 class Medications(CrfModelMixin, BaseUuidModel):
-
     refill_hiv = models.CharField(
         verbose_name="Is the patient filling / refilling HIV medications?",
         max_length=25,

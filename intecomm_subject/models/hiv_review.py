@@ -7,7 +7,6 @@ from ..model_mixins import CrfModelMixin, FollowupReviewModelMixin
 
 
 class HivReview(FollowupReviewModelMixin, CrfModelMixin, BaseUuidModel):
-
     dx = models.CharField(
         verbose_name="Has the patient been infected with HIV?",
         max_length=15,

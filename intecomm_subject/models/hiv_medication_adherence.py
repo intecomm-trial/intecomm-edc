@@ -9,7 +9,6 @@ class HivMedicationAdherence(
     CrfModelMixin,
     BaseUuidModel,
 ):
-
     condition_label = "HIV"
 
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):

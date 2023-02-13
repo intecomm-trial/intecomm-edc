@@ -23,7 +23,6 @@ class PatientGroupAppointmentAdmin(
     ModelAdminInstitutionMixin,
     SimpleHistoryAdmin,
 ):
-
     form = PatientGroupAppointmentForm
 
     show_object_tools = True

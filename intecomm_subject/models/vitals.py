@@ -21,7 +21,6 @@ class Vitals(
     CrfModelMixin,
     edc_models.BaseUuidModel,
 ):
-
     weight = WeightField(null=True, blank=True)
 
     weight_determination = models.CharField(

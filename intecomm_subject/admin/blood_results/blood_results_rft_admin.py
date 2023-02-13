@@ -24,7 +24,6 @@ from ..modeladmin_mixins import CrfModelAdmin
 
 @admin.register(BloodResultsRft, site=intecomm_subject_admin)
 class BloodResultsRftAdmin(BloodResultsModelAdminMixin, CrfModelAdmin):
-
     form = BloodResultsRftForm
     actions = ["create_or_update_egfr_notification", "recalculate_egfr"]
     fieldsets = (

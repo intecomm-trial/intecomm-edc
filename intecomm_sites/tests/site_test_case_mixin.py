@@ -2,7 +2,6 @@ from ..sites import all_sites
 
 
 class SiteTestCaseMixin:
-
     default_country = "tz"
 
     @property

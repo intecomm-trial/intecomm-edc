@@ -9,7 +9,6 @@ from .patient_group import PatientGroup
 
 
 class PatientGroupAppointment(BaseUuidModel):
-
     report_datetime = models.DateTimeField(default=get_utcnow)
 
     patient_group = models.ForeignKey(

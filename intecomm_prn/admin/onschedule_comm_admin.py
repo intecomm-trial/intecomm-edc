@@ -7,5 +7,4 @@ from .onschedule_inte_admin import OnScheduleInteAdmin
 
 @admin.register(OnScheduleComm, site=intecomm_prn_admin)
 class OnScheduleCommAdmin(OnScheduleInteAdmin):
-
     pass

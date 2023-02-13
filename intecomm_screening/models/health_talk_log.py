@@ -9,7 +9,6 @@ from intecomm_screening.models import HealthFacility
 
 
 class Manager(models.Manager):
-
     use_in_migrations = True
 
     def get_by_natural_key(self, health_facility, report_date):
@@ -17,7 +16,6 @@ class Manager(models.Manager):
 
 
 class HealthTalkLog(SiteModelMixin, BaseUuidModel):
-
     health_facility = models.ForeignKey(
         HealthFacility,
         verbose_name="Health facility",

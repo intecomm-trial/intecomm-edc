@@ -6,7 +6,6 @@ import edc_model.validators.phone
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_screening", "0004_rename_name_historicalpatientlog_legal_name_and_more"),
     ]

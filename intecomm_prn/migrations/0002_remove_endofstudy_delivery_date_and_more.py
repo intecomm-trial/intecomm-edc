@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_lists", "0002_delete_reasonsfortesting_and_more"),
         ("intecomm_prn", "0001_initial"),

@@ -9,5 +9,4 @@ from ..models import DeathReportTmg
 
 @admin.register(DeathReportTmg, site=intecomm_ae_admin)
 class DeathReportTmgAdmin(DeathReportTmgModelAdminMixin, SimpleHistoryAdmin):
-
     form = DeathReportTmgForm

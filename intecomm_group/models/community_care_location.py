@@ -11,7 +11,6 @@ from ..choices import LOCATION_STATUS
 
 
 class CommunityCareLocation(SiteModelMixin, BaseUuidModel):
-
     report_datetime = models.DateTimeField()
 
     name = models.CharField(max_length=25, unique=True, null=True, blank=False)

@@ -11,7 +11,6 @@ from ..models import SubjectReconsent
 class SubjectReconsentForm(
     SiteModelFormMixin, FormValidatorMixin, ActionItemFormMixin, forms.ModelForm
 ):
-
     subject_identifier = forms.CharField(
         label="Subject identifier",
         widget=forms.TextInput(attrs={"readonly": "readonly"}),

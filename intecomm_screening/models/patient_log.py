@@ -19,7 +19,6 @@ from .proxy_models import Site
 
 
 class PatientLogManager(models.Manager):
-
     use_in_migrations = True
 
     def get_by_natural_key(self, legal_name):
@@ -50,7 +49,6 @@ def abbrev_cond(c: list | None) -> str:
 
 
 class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
-
     patient_log_identifier = models.CharField(
         max_length=36,
         default=uuid4,

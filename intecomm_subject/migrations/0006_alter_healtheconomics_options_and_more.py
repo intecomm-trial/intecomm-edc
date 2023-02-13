@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_subject", "0005_alter_historicalsocialharms_coworkers_impact_and_more"),
     ]

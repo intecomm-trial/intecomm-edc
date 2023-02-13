@@ -9,7 +9,6 @@ from .patient_log import PatientLog
 
 
 class PatientCall(PatientCallModelMixin, SiteModelMixin, BaseUuidModel):
-
     patient_log = models.ForeignKey(PatientLog, on_delete=models.PROTECT)
 
     def __str__(self):

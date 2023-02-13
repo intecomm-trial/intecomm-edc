@@ -8,7 +8,6 @@ from intecomm_screening.model_mixins import PatientCallModelMixin
 
 
 class PatientFollowupCall(PatientCallModelMixin, SiteModelMixin, BaseUuidModel):
-
     patient_log = models.ForeignKey("intecomm_screening.PatientLog", on_delete=models.PROTECT)
 
     def __str__(self):

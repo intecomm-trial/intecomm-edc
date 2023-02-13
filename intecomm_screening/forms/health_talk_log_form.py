@@ -6,7 +6,6 @@ from ..models import HealthTalkLog
 
 
 class HealthTalkLogForm(FormValidatorMixin, forms.ModelForm):
-
     form_validator_cls = HealthTalkLogFormValidator
 
     class Meta:

@@ -10,7 +10,6 @@ from ..model_mixins import CrfModelMixin
 
 
 class HtnInitialReview(InitialReviewModelMixin, CrfModelMixin, BaseUuidModel):
-
     managed_by = models.CharField(
         verbose_name="How is the patient's hypertension managed?",
         max_length=15,

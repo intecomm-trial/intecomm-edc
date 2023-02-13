@@ -6,7 +6,6 @@ from ..models import PatientGroup
 
 
 class PatientGroupForm(FormValidatorMixin, forms.ModelForm):
-
     form_validator_cls = PatientGroupFormValidator
 
     class Meta:
