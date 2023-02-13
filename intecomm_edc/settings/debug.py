@@ -14,7 +14,7 @@ print(f"Settings file {__file__}")
 # SITE_ID = SiteID(default=105)  # Mpigi
 # SITE_ID = SiteID(default=106)  # Namayumba
 # SITE_ID = SiteID(default=107)  # Namulonge
-# SITE_ID = SiteID(default=108)  # Ndejje
+SITE_ID = SiteID(default=108)  # Ndejje
 # SITE_ID = SiteID(default=109)  # Sekiwunga
 # SITE_ID = SiteID(default=110)  # Wakiso
 
@@ -26,7 +26,7 @@ print(f"Settings file {__file__}")
 # SITE_ID = SiteID(default=205)  # Kisarawe
 # SITE_ID = SiteID(default=206)  # Mbagala
 # SITE_ID = SiteID(default=207)  # Mnazi_Moja
-SITE_ID = SiteID(default=208)  # Mwananyamala
+# SITE_ID = SiteID(default=208)  # Mwananyamala
 # SITE_ID = SiteID(default=209)  # Sinza
 # SITE_ID = SiteID(default=210)  # Temeke
 
