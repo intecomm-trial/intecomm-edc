@@ -55,8 +55,8 @@ class OtherBaselineData(CrfModelMixin, BaseUuidModel):
         editable=False,
     )
 
-    smoker_current_duration_estimated_date = DurationYMDField(
-        verbose_name="If you are still smoking, how long have you been smoking?",
+    smoker_current_duration_estimated_date = models.DateField(
+        verbose_name="Estimated date smoker has been smoking since?",
         null=True,
         blank=True,
     )
