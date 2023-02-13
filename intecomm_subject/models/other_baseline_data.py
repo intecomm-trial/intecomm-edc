@@ -32,13 +32,13 @@ class OtherBaselineData(CrfModelMixin, BaseUuidModel):
     )
 
     smoking_status = models.CharField(
-        verbose_name="Which of these options describes you",
+        verbose_name="Which of these options describes you?",
         max_length=15,
         choices=SMOKER_STATUS_SIMPLE,
     )
 
     smoker_quit_ago = DurationYMDField(
-        verbose_name="If you used to smoke but stopped, how long ago did you stop",
+        verbose_name="If you used to smoke but stopped, how long ago did you stop?",
         null=True,
         blank=True,
     )
@@ -55,11 +55,12 @@ class OtherBaselineData(CrfModelMixin, BaseUuidModel):
         editable=False,
     )
 
-    smoker_current_duration_estimated_date = DurationYMDField(
-        verbose_name="If you are still smoking, how long have you been smoking?",
+    smoker_current_duration_estimated_date = models.DateField(
+        verbose_name="Estimated date smoker has been smoking since?",
         null=True,
         blank=True,
     )
+
     alcohol = models.CharField(
         verbose_name="Do you drink alcohol?",
         max_length=15,
@@ -74,13 +75,16 @@ class OtherBaselineData(CrfModelMixin, BaseUuidModel):
     )
 
     activity_work = models.CharField(
-        verbose_name="Does your work involve moderate or vigorous-intensity physical activity",
+        verbose_name=(
+            "Does your work involve moderate or vigorous-intensity physical activity?"
+        ),
         max_length=15,
         choices=YES_NO,
         help_text="See interviewer notes above.",
         null=True,
         blank=False,
     )
+
     activity_work_days_per_wk = models.IntegerField(
         verbose_name=(
             "If yes, how many DAYS do you do these physical activities as "
@@ -105,10 +109,11 @@ class OtherBaselineData(CrfModelMixin, BaseUuidModel):
         null=True,
         help_text="Number of days in a typical week",
     )
+
     activity_combined_mn_avg_day = models.IntegerField(
         verbose_name=(
             "On an average day, how many MINUTES do you spend on all physical activities "
-            "combined (moderate or vigorous-intensity work activities, exercise, sports "
+            "combined? (moderate or vigorous-intensity work activities, exercise, sports "
             "and fitness)"
         ),
         validators=[MinValueValidator(0), MaxValueValidator(1080)],
