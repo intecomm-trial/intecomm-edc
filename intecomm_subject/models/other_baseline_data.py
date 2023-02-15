@@ -58,7 +58,8 @@ class OtherBaselineData(CrfModelMixin, BaseUuidModel):
     smoker_current_duration_estimated_date = models.DateField(
         verbose_name="Estimated date smoker has been smoking since?",
         null=True,
-        blank=True,
+        editable=False,
+        help_text="auto updated by save",
     )
 
     alcohol = models.CharField(

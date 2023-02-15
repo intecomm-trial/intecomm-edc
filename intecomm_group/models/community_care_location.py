@@ -35,21 +35,21 @@ class CommunityCareLocation(SiteModelMixin, BaseUuidModel):
         max_length=50,
         null=True,
         blank=True,
-        help_text="copy and paste directly from google maps",
+        help_text="Copy and paste directly from google maps",
     )
 
     latitude = models.FloatField(
         validators=[MinValueValidator(-90), MaxValueValidator(90)],
         null=True,
         blank=True,
-        help_text="in degrees. copy and paste directly from google maps",
+        help_text="in degrees. Copy and paste directly from google maps",
     )
 
     longitude = models.FloatField(
         validators=[MinValueValidator(-180), MaxValueValidator(180)],
         null=True,
         blank=True,
-        help_text="in degrees. copy and paste directly from google maps",
+        help_text="in degrees. Copy and paste directly from google maps",
     )
 
     description = models.TextField(null=True, blank=True)

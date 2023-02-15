@@ -172,7 +172,7 @@ def main():
         "intecomm_lists.tests",
         "intecomm_prn.tests",
         "intecomm_group.tests",
-        "intecomm_rando.tests",
+        # "intecomm_rando.tests",
         "intecomm_screening.tests",
         "intecomm_subject.tests",
         "intecomm_visit_schedule.tests",

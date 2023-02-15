@@ -7,8 +7,6 @@ from ..choices import MEETING_STATUS
 from ..constants import ATTENDED
 from .patient_group_appointment import PatientGroupAppointment
 
-# from intecomm_screening.models import PatientLog
-
 
 class PatientGroupMeeting(BaseUuidModel):
     patient_group_appointment = models.OneToOneField(

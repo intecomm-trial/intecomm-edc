@@ -85,7 +85,7 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
         max_length=25,
         null=True,
         blank=True,
-        help_text="Auto populated when group is randimized",
+        help_text="Auto populated when group is randomized",
     )
 
     initials = InitialsField()
@@ -152,7 +152,10 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
         max_length=15,
         choices=YES_NO_TBD,
         default=TBD,
-        help_text="Refer to the SOP for the definition of 'stable'.",
+        help_text=(
+            "Refer to the Participant Selection SOP for the "
+            "definition of 'clinically stable'."
+        ),
     )
 
     last_appt_date = models.DateField(
