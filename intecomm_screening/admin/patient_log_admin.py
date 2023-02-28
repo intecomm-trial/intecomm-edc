@@ -132,6 +132,10 @@ class PatientLogAdmin(BaseModelAdminMixin):
                 ),
             },
         ),
+        (
+            "Group",
+            {"classes": ("collapse",), "fields": ("group_identifier",)},
+        ),
         audit_fieldset_tuple,
     )
 
@@ -197,6 +201,7 @@ class PatientLogAdmin(BaseModelAdminMixin):
         "screening_datetime",
         "subject_identifier",
         "consent_datetime",
+        "group_identifier",
     )
 
     def post_url_on_delete_kwargs(self, request, obj):

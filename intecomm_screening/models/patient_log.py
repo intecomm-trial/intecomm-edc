@@ -85,7 +85,7 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
         max_length=25,
         null=True,
         blank=True,
-        help_text="Auto populated when group is randimized",
+        help_text="Auto populated when group is randomized",
     )
 
     initials = InitialsField()
