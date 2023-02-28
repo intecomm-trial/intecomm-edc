@@ -24,6 +24,32 @@ Installation
 
 ... in development
 
+
+Randomization
+------------
+Groups of patients are randomized to community integrated care (intervention) or facility integrated care (control).
+
+A patient group is represented by the ``PatientGroup`` model. A ``PatientGroup`` model instance contains patients who are represented by ``PatientLog`` model instances.
+
+Before a group is "ready" to randomize:
+
+* the group membership must meet the ratio of HIV, HTN, DM or multi-morbidity patients.
+* the group must meet the minimum group size.
+* all patients must be screened as eligible and consented
+
+If "ready", the patient group is randomized when the ``PatientGroup`` model instance saves succcessfully
+with field ``randomize_now`` set to YES.
+
+Randomization occurs in the signal ``randomize_patient_group_on_post_save``. The signal
+leaves most of the work to the class ``RandomizeGroup``. ``RandomizeGroup`` calls it's ``randomize`` method does the following:
+
+* The group is randomized to intervention or control;
+* ``PatientGroup`` model instance is allocated a ``group_identifier``;
+* Each ``PatientGroup`` model instance in the group is updated with the ``group_identifier``;
+* Each ``SubjectConsent`` model instance in the group is updated with the ``group_identifier`` (which triggers another signal associated with the subject consent. This signal puts the subject on schedule);
+* Each ``RegisteredSubject`` model instance in the group is updated with the ``group_identifier``;
+
+
 .. |pypi| image:: https://img.shields.io/pypi/v/intecomm-edc.svg
     :target: https://pypi.python.org/pypi/intecomm-edc
 
