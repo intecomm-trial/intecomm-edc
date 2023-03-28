@@ -373,6 +373,7 @@ EDC_DX_LABELS = dict(hiv="HIV", dm="Diabetes", htn="Hypertension")
 
 # edc-dx-review
 EDC_DX_REVIEW_APP_LABEL = "intecomm_subject"
+EDC_DX_REVIEW_LIST_MODEL_APP_LABEL = "edc_dx_review"
 # edc_facility
 HOLIDAY_FILE = env.str("DJANGO_HOLIDAY_FILE")
 

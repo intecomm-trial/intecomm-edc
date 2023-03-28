@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_crf.admin import crf_status_fieldset_tuple
+from edc_dx import get_diagnosis_labels_prefixes
+from edc_dx_review.fieldsets import get_clinical_review_cond_fieldsets
+from edc_dx_review.radio_fields import get_clinical_review_cond_radio_fields
 
 from ..admin_site import intecomm_subject_admin
 from ..forms import ClinicalReviewForm
@@ -15,42 +18,7 @@ class ClinicalReviewAdmin(CrfModelAdmin):
 
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
-        (
-            "HYPERTENSION",
-            {
-                "fields": (
-                    "htn_test",
-                    "htn_test_date",
-                    "htn_reason",
-                    "htn_reason_other",
-                    "htn_dx",
-                )
-            },
-        ),
-        (
-            "DIABETES",
-            {
-                "fields": (
-                    "dm_test",
-                    "dm_test_date",
-                    "dm_reason",
-                    "dm_reason_other",
-                    "dm_dx",
-                )
-            },
-        ),
-        (
-            "HIV",
-            {
-                "fields": (
-                    "hiv_test",
-                    "hiv_test_date",
-                    "hiv_reason",
-                    "hiv_reason_other",
-                    "hiv_dx",
-                )
-            },
-        ),
+        *get_clinical_review_cond_fieldsets(),
         ("Complications", {"fields": ("complications",)}),
         treatment_pay_methods_fieldset_tuple,
         crf_status_fieldset_tuple,
@@ -58,20 +26,11 @@ class ClinicalReviewAdmin(CrfModelAdmin):
     )
 
     radio_fields = {
-        "htn_test": admin.VERTICAL,
-        "dm_test": admin.VERTICAL,
-        "health_insurance": admin.VERTICAL,
-        "hiv_test": admin.VERTICAL,
-        "htn_dx": admin.VERTICAL,
-        "dm_dx": admin.VERTICAL,
-        "hiv_dx": admin.VERTICAL,
         "complications": admin.VERTICAL,
         "crf_status": admin.VERTICAL,
+        "health_insurance": admin.VERTICAL,
         "patient_club": admin.VERTICAL,
+        **get_clinical_review_cond_radio_fields(),
     }
 
-    filter_horizontal = [
-        "htn_reason",
-        "dm_reason",
-        "hiv_reason",
-    ]
+    filter_horizontal = [f"{cond}_reason" for cond in get_diagnosis_labels_prefixes()]
