@@ -11,6 +11,7 @@ from .cd4_result_form import Cd4ResultForm
 from .clinical_review_baseline import ClinicalReviewBaselineForm
 from .clinical_review_form import ClinicalReviewForm
 from .concomitant_medication_form import ConcomitantMedicationForm
+from .dm_initial_review_form import DmInitialReviewForm
 from .dm_review_form import DmReviewForm
 from .drug_refill_dm_form import DrugRefillDmForm
 from .drug_refill_hiv_form import DrugRefillHivForm
@@ -19,7 +20,9 @@ from .drug_supply_dm_form import DrugSupplyDmForm
 from .drug_supply_hiv_form import DrugSupplyHivForm
 from .drug_supply_htn_form import DrugSupplyHtnForm
 from .health_economics_form import HealthEconomicsForm
+from .hiv_initial_review_form import HivInitialReviewForm
 from .hiv_review_form import HivReviewForm
+from .htn_initial_review_form import HtnInitialReviewForm
 from .htn_review_form import HtnReviewForm
 from .malaria_test_form import MalariaTestForm
 from .social_harms_form import SocialHarmsForm
