@@ -79,6 +79,7 @@ class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, BaseUuidModel):
         choices=YES_NO_PENDING_NA,
         default=NOT_APPLICABLE,
     )
+
     vl = models.IntegerField(
         verbose_name="Most recent viral load",
         validators=[MinValueValidator(0), MaxValueValidator(9999999)],
@@ -91,13 +92,15 @@ class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, BaseUuidModel):
         max_length=10,
         choices=VL_QUANTIFIER_NA,
         null=True,
+        default=NOT_APPLICABLE,
     )
 
-    vl_date = models.DateField(
-        verbose_name="Date of most recent viral load",
+    drawn_date = models.DateField(
+        verbose_name="Date specimen drawn",
         validators=[date_not_future],
         null=True,
         blank=True,
+        help_text="If exact date not known, please estimate",
     )
 
     # CD4
