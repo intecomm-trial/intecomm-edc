@@ -14,17 +14,12 @@ from edc_constants.constants import (
     PREGNANCY,
     RELATIVE,
 )
+from edc_dx_review.constants import DRUGS, INSULIN
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_offstudy.constants import COMPLETED_FOLLOWUP, CONSENT_WITHDRAWAL
 from edc_transfer.constants import TRANSFERRED
 
-from intecomm_subject.constants import (
-    DIET_LIFESTYLE,
-    DRUGS,
-    INSULIN,
-    INTEGRATED,
-    VIT_B_FOLIC_ACID,
-)
+from intecomm_subject.constants import DIET_LIFESTYLE, INTEGRATED, VIT_B_FOLIC_ACID
 
 list_data = {
     "intecomm_lists.drugpaysources": [
@@ -181,7 +176,7 @@ list_data = {
         ("glimepiride_2mg_metformin", "Glimepiride (2mg) + Metformin combo"),
         ("glimepiride_s", "Glimepiride (S)"),
         ("glipizide_s", "Glipizide (S)"),
-        ("insulin", "Insulin"),
+        (INSULIN, "Insulin"),
         ("metformin_b", "Metformin (B)"),
         ("pioglitazone", "Pioglitazone"),
         ("pregabalin", "Pregabalin (diabetic neuropathy)"),
