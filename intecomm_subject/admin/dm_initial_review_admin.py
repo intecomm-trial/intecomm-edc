@@ -3,13 +3,14 @@ from django_audit_fields.admin import audit_fieldset_tuple
 from edc_crf.admin import crf_status_fieldset_tuple
 
 from ..admin_site import intecomm_subject_admin
+from ..forms import DmInitialReviewForm
 from ..models import DmInitialReview
 from .modeladmin_mixins import CrfModelAdmin
 
 
 @admin.register(DmInitialReview, site=intecomm_subject_admin)
 class DmInitialReviewAdmin(CrfModelAdmin):
-    # form = DmInitialReviewForm
+    form = DmInitialReviewForm
 
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
