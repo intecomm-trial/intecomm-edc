@@ -52,6 +52,7 @@ class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, BaseUuidModel):
         verbose_name="Date started antiretroviral therapy (ART)",
         validators=[date_not_future],
         null=True,
+        blank=True,
         help_text="If possible, provide the exact date here instead of estimating above.",
     )
 
@@ -90,7 +91,6 @@ class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, BaseUuidModel):
         max_length=10,
         choices=VL_QUANTIFIER_NA,
         null=True,
-        blank=True,
     )
 
     vl_date = models.DateField(
