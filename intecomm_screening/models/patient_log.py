@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from uuid import uuid4
 
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.html import format_html
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
@@ -92,7 +93,10 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
 
     gender = models.CharField(choices=GENDER, max_length=10, blank=False)
 
-    age_in_years = models.IntegerField(verbose_name="Age")
+    age_in_years = models.IntegerField(
+        verbose_name="Age",
+        validators=[MinValueValidator(18), MaxValueValidator(110)],
+    )
 
     report_datetime = models.DateTimeField(default=get_utcnow)
 
