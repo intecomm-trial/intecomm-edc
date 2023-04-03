@@ -14,12 +14,12 @@ from edc_constants.constants import (
     PREGNANCY,
     RELATIVE,
 )
-from edc_dx_review.constants import DRUGS, INSULIN
+from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS, INSULIN
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_offstudy.constants import COMPLETED_FOLLOWUP, CONSENT_WITHDRAWAL
 from edc_transfer.constants import TRANSFERRED
 
-from intecomm_subject.constants import DIET_LIFESTYLE, INTEGRATED, VIT_B_FOLIC_ACID
+from intecomm_subject.constants import INTEGRATED, VIT_B_FOLIC_ACID
 
 list_data = {
     "intecomm_lists.drugpaysources": [
