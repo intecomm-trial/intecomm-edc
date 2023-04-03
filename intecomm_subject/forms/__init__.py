@@ -10,6 +10,7 @@ from .blood_results import (
 from .cd4_result_form import Cd4ResultForm
 from .clinical_review_baseline import ClinicalReviewBaselineForm
 from .clinical_review_form import ClinicalReviewForm
+from .complications_baseline_form import ComplicationsBaselineForm
 from .concomitant_medication_form import ConcomitantMedicationForm
 from .dm_initial_review_form import DmInitialReviewForm
 from .dm_review_form import DmReviewForm
@@ -25,6 +26,8 @@ from .hiv_review_form import HivReviewForm
 from .htn_initial_review_form import HtnInitialReviewForm
 from .htn_review_form import HtnReviewForm
 from .malaria_test_form import MalariaTestForm
+from .medications_form import MedicationsForm
+from .other_baseline_data import OtherBaselineDataForm
 from .social_harms_form import SocialHarmsForm
 from .subject_requisition_form import SubjectRequisitionForm
 from .subject_visit_form import SubjectVisitForm

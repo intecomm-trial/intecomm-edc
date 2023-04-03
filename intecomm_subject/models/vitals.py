@@ -80,7 +80,7 @@ class Vitals(
         help_text="in centimeters",
     )
 
-    comments = models.TextField(null=True)
+    comments = models.TextField(null=True, blank=True)
 
     class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
         verbose_name = "Vitals"
