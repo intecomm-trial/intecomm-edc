@@ -97,6 +97,11 @@ list_data = {
         (DIET_LIFESTYLE, "Diet and lifestyle"),
         (OTHER, "Other, please specify below ..."),
     ],
+    "intecomm_lists.htnmanagement": [
+        (DRUGS, "Oral drugs"),
+        (DIET_LIFESTYLE, "Diet and lifestyle"),
+        (OTHER, "Other, please specify below ..."),
+    ],
     "intecomm_lists.htntreatments": [
         ("aldactone", "Aldactone (Spironolactone)"),
         ("amlodipine", "Amlodipine"),

@@ -15,11 +15,18 @@ class DmInitialReviewAdmin(CrfModelAdmin):
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
         (
-            "Diagnosis and Treatment",
+            "Diagnosis",
             {
                 "fields": (
                     "dx_ago",
                     "dx_date",
+                )
+            },
+        ),
+        (
+            "Treatment",
+            {
+                "fields": (
                     "managed_by",
                     "med_start_ago",
                 )
@@ -44,6 +51,7 @@ class DmInitialReviewAdmin(CrfModelAdmin):
     )
 
     filter_horizontal = ["managed_by"]
+
     radio_fields = {
         "crf_status": admin.VERTICAL,
         "glucose_performed": admin.VERTICAL,
