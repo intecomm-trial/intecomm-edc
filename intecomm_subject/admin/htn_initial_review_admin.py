@@ -15,12 +15,21 @@ class HtnInitialReviewAdmin(CrfModelAdmin):
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
         (
-            "Diagnosis and Treatment",
+            "Hypertension diagnosis",
             {
                 "fields": (
-                    "dx_ago",
                     "dx_date",
+                    "dx_ago",
+                )
+            },
+        ),
+        (
+            "Hypertension treatment",
+            {
+                "fields": (
                     "managed_by",
+                    "managed_by_other",
+                    "med_start_date",
                     "med_start_ago",
                 )
             },
@@ -31,5 +40,7 @@ class HtnInitialReviewAdmin(CrfModelAdmin):
 
     radio_fields = {
         "crf_status": admin.VERTICAL,
-        "managed_by": admin.VERTICAL,
+        # "managed_by": admin.VERTICAL,
     }
+
+    filter_horizontal = ["managed_by"]

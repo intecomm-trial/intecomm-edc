@@ -1,8 +1,7 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from django.core.exceptions import ValidationError
-from django.db.models.signals import post_delete, post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from edc_randomization.utils import get_object_for_subject
 from edc_registration.models import RegisteredSubject
@@ -10,9 +9,12 @@ from edc_visit_schedule import site_visit_schedules
 from intecomm_rando.constants import CLINIC_CONTROL, COMM_INTERVENTION
 
 from intecomm_screening.models import SubjectScreening
-from intecomm_subject.models import SubjectVisit
 
 from .subject_consent import SubjectConsent
+
+
+class SubjectConsentDeleteError(Exception):
+    pass
 
 
 @receiver(
@@ -77,31 +79,12 @@ def subject_consent_on_post_save(sender, instance, raw, created, **kwargs):
 
 
 @receiver(
-    post_delete,
+    pre_delete,
     weak=False,
     sender=SubjectConsent,
-    dispatch_uid="subject_consent_on_post_delete",
+    dispatch_uid="subject_consent_on_pre_delete",
 )
-def subject_consent_on_post_delete(sender, instance, using, **kwargs):
-    """Updates/Resets subject screening."""
-    # don't allow if subject visits exist. This should be caught
-    # in the ModelAdmin delete view
-    if SubjectVisit.objects.filter(subject_identifier=instance.subject_identifier).exists():
-        raise ValidationError("Unable to delete consent. Visit data exists.")
-
-    # TODO:
-    # _, schedule = site_visit_schedules.get_by_onschedule_model(
-    #     "intecomm_prn.onschedulebaseline"
-    # )
-    # schedule.take_off_schedule(
-    #     subject_identifier=instance.subject_identifier,
-    #     offschedule_datetime=instance.consent_datetime,
-    # )
-
-    # update subject screening
-    subject_screening = SubjectScreening.objects.get(
-        screening_identifier=instance.screening_identifier
+def subject_consent_on_pre_delete(sender, instance, using, **kwargs):
+    raise SubjectConsentDeleteError(
+        f"Subject consent may not be deleted. Got {instance.subject_identifier}."
     )
-    subject_screening.consented = False
-    subject_screening.subject_identifier = subject_screening.subject_screening_as_pk
-    subject_screening.save()
