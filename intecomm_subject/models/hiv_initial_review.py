@@ -1,11 +1,12 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from edc_constants.choices import YES_NO, YES_NO_NA, YES_NO_PENDING_NA
-from edc_constants.constants import NOT_APPLICABLE, YES
-from edc_dx_review.model_mixins.initial_review import InitialReviewModelMixin
+from edc_constants.constants import HIV, NOT_APPLICABLE
+from edc_crf.model_mixins import SingletonCrfModelMixin
+from edc_dx_review.model_mixins import rx_initial_review_model_mixin_factory
+from edc_dx_review.model_mixins.factory import dx_initial_review_model_mixin_factory
 from edc_lab.choices import VL_QUANTIFIER_NA
-from edc_model import duration_to_date
-from edc_model.models import BaseUuidModel, DurationYMDField
+from edc_model.models import BaseUuidModel
 from edc_model.validators import date_not_future
 from edc_reportable import CELLS_PER_MILLIMETER_CUBED_DISPLAY, COPIES_PER_MILLILITER
 
@@ -13,7 +14,16 @@ from ..choices import CARE_ACCESS
 from ..model_mixins import CrfModelMixin
 
 
-class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, BaseUuidModel):
+class HivInitialReview(
+    dx_initial_review_model_mixin_factory("dx"),
+    rx_initial_review_model_mixin_factory(
+        "rx_init", verbose_name_label="antiretroviral therapy (ART)"
+    ),
+    SingletonCrfModelMixin,
+    CrfModelMixin,
+    BaseUuidModel,
+):
+    diagnosis_label = HIV
     receives_care = models.CharField(
         verbose_name="Is the patient receiving care for HIV?",
         max_length=15,
@@ -32,44 +42,6 @@ class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, BaseUuidModel):
         max_length=50,
         null=True,
         blank=True,
-    )
-
-    arv_initiated = models.CharField(
-        verbose_name="Has the patient started antiretroviral therapy (ART)?",
-        max_length=15,
-        choices=YES_NO,
-        default=YES,
-    )
-
-    arv_initiation_ago = DurationYMDField(
-        verbose_name="How long ago did the patient start ART?",
-        null=True,
-        blank=True,
-        help_text="If possible, provide the exact date below instead of estimating here.",
-    )
-
-    arv_initiation_actual_date = models.DateField(
-        verbose_name="Date started antiretroviral therapy (ART)",
-        validators=[date_not_future],
-        null=True,
-        blank=True,
-        help_text="If possible, provide the exact date here instead of estimating above.",
-    )
-
-    arv_initiation_estimated_date = models.DateField(
-        verbose_name="Estimated Date started antiretroviral therapy (ART)",
-        validators=[date_not_future],
-        null=True,
-        editable=False,
-        help_text="Calculated based on response to `arv_initiation_ago`",
-    )
-
-    arv_initiation_date_estimated = models.CharField(
-        verbose_name="Was the ART start date estimated?",
-        max_length=15,
-        choices=YES_NO,
-        default=YES,
-        editable=False,
     )
 
     # Viral Load
@@ -125,15 +97,6 @@ class HivInitialReview(InitialReviewModelMixin, CrfModelMixin, BaseUuidModel):
         null=True,
         blank=True,
     )
-
-    def save(self, *args, **kwargs):
-        if self.dx_ago:
-            self.dx_estimated_date = duration_to_date(self.dx_ago, self.report_datetime)
-        if self.arv_initiation_ago:
-            self.arv_initiation_estimated_date = duration_to_date(
-                self.arv_initiation_ago, self.report_datetime
-            )
-        super().save(*args, **kwargs)
 
     @property
     def best_art_initiation_date(self):

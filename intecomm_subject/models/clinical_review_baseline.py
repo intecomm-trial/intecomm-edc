@@ -1,8 +1,4 @@
-from edc_dx_review.model_mixins import (
-    ClinicalReviewBaselineDmModelMixin,
-    ClinicalReviewBaselineHivModelMixin,
-    ClinicalReviewBaselineHtnModelMixin,
-)
+from edc_dx_review.model_mixins.factory import baseline_review_model_mixin_factory
 from edc_model.models import BaseUuidModel
 from edc_rx.model_mixins import TreatmentPayMethodsModelMixin
 from edc_visit_schedule.constants import DAY1
@@ -16,9 +12,7 @@ class ClinicalReviewBaselineError(Exception):
 
 class ClinicalReviewBaseline(
     TreatmentPayMethodsModelMixin,
-    ClinicalReviewBaselineHivModelMixin,
-    ClinicalReviewBaselineHtnModelMixin,
-    ClinicalReviewBaselineDmModelMixin,
+    baseline_review_model_mixin_factory(),
     CrfModelMixin,
     BaseUuidModel,
 ):

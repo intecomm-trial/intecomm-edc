@@ -29,8 +29,8 @@ class HtnInitialReviewAdmin(CrfModelAdmin):
                 "fields": (
                     "managed_by",
                     "managed_by_other",
-                    "med_start_date",
-                    "med_start_ago",
+                    "rx_init_date",
+                    "rx_init_ago",
                 )
             },
         ),
@@ -44,3 +44,8 @@ class HtnInitialReviewAdmin(CrfModelAdmin):
     }
 
     filter_horizontal = ["managed_by"]
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj=obj, **kwargs)
+        form = self.replace_label_text(form, "diagnosis_label", self.model.diagnosis_label)
+        return form
