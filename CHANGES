@@ -1,6 +1,10 @@
 Changes
 =======
 
+0.1.17
+------
+- update initial review models/forms
+
 0.1.16
 ------
 - add subject's friendly name to INTE subject listboard
