@@ -3,6 +3,7 @@ Changes
 
 0.1.18
 ------
+- add missing migrations
 - bump to edc 0.4.78
 
 0.1.17
