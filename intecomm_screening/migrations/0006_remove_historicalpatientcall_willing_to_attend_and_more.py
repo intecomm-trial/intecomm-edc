@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_screening", "0005_historicalpatientcall_alt_contact_number_and_more"),
     ]

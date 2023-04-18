@@ -37,6 +37,12 @@ class DmManagement(ListModelMixin):
         verbose_name_plural = "Diabetes Management"
 
 
+class HtnManagement(ListModelMixin):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "HTN Management"
+        verbose_name_plural = "HTN Management"
+
+
 class DmTreatments(ListModelMixin):
     class Meta(ListModelMixin.Meta):
         verbose_name = "Diabetes Treatments"
@@ -161,3 +167,15 @@ class LocationTypes(ListModelMixin):
     class Meta(ListModelMixin.Meta):
         verbose_name = "Community-care location type"
         verbose_name_plural = "Community-care location types"
+
+
+class RxModificationReasons(ListModelMixin):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Treatment Modification Reasons"
+        verbose_name_plural = "Treatment Modification Reasons"
+
+
+class RxModifications(ListModelMixin):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Treatment Modifications"
+        verbose_name_plural = "Treatment Modifications"

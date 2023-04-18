@@ -9,7 +9,6 @@ class DmMedicationAdherence(
     CrfModelMixin,
     BaseUuidModel,
 ):
-
     condition_label = "Diabetes"
 
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):

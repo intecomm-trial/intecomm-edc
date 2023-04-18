@@ -4,5 +4,4 @@ from .pdf_report_mixin import ProtocolCrfReportMixin
 
 
 class AeReport(ProtocolCrfReportMixin, BaseAeReport):
-
     pass

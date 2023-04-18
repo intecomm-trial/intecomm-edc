@@ -15,7 +15,6 @@ class SubjectConsentModelWrapper(BaseModelWrapper):
 
 
 class SubjectScreeningModelWrapper(ConsentModelWrapperMixin, ModelWrapper):
-
     consent_model_wrapper_cls = SubjectConsentModelWrapper
     model = "intecomm_screening.subjectscreening"
     next_url_attrs = ["screening_identifier"]

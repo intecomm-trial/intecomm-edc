@@ -32,7 +32,6 @@ import intecomm_screening.models.patient_log
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

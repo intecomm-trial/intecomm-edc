@@ -11,7 +11,6 @@ from .patient_group_appointment import PatientGroupAppointment
 
 
 class PatientGroupMeeting(BaseUuidModel):
-
     patient_group_appointment = models.OneToOneField(
         PatientGroupAppointment,
         on_delete=models.PROTECT,

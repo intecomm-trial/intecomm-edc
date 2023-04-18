@@ -53,7 +53,6 @@ class AddPatientCallInline(
 class ViewPatientCallInline(
     ModelAdminAuditFieldsMixin, PatientCallInlineMixin, admin.StackedInline
 ):
-
     fieldsets = (
         (
             "Details of the call",

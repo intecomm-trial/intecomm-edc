@@ -8,7 +8,6 @@ from .drug_refill_hiv import DrugRefillHiv
 
 
 class DrugSupplyHiv(DrugSupplyModelMixin, BaseUuidModel):
-
     drug_refill = models.ForeignKey(DrugRefillHiv, on_delete=models.PROTECT)
 
     drug = models.ForeignKey(ArvDrugs, on_delete=models.PROTECT)

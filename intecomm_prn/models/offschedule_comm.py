@@ -7,7 +7,6 @@ from ..constants import OFFSCHEDULE_COMM_ACTION
 
 
 class OffScheduleComm(SiteModelMixin, ActionModelMixin, OffScheduleModelMixin, BaseUuidModel):
-
     action_name = OFFSCHEDULE_COMM_ACTION
     offschedule_compare_dates_as_datetimes = False
 

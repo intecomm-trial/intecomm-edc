@@ -10,7 +10,6 @@ from .modeladmin_mixins import CrfModelAdmin
 
 @admin.register(UrineDipstickTest, site=intecomm_subject_admin)
 class UrineDipstickTestAdmin(CrfModelAdmin):
-
     form = UrineDipstickTestForm
 
     fieldsets = (

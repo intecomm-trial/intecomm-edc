@@ -6,7 +6,6 @@ from ..model_mixins import CrfModelMixin
 
 
 class UrinePregnancy(CrfModelMixin, edc_models.BaseUuidModel):
-
     performed = models.CharField(
         verbose_name="Was the urine pregnancy test performed?",
         max_length=15,

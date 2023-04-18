@@ -26,7 +26,6 @@ from .patient_call_inlines import AddPatientCallInline, ViewPatientCallInline
 
 @admin.register(PatientLog, site=intecomm_screening_admin)
 class PatientLogAdmin(BaseModelAdminMixin):
-
     form = PatientLogForm
     custom_form_codename = "edc_data_manager.special_bypassmodelform"
     list_per_page = 20
@@ -133,6 +132,10 @@ class PatientLogAdmin(BaseModelAdminMixin):
                 ),
             },
         ),
+        (
+            "Group",
+            {"classes": ("collapse",), "fields": ("group_identifier",)},
+        ),
         audit_fieldset_tuple,
     )
 
@@ -198,6 +201,7 @@ class PatientLogAdmin(BaseModelAdminMixin):
         "screening_datetime",
         "subject_identifier",
         "consent_datetime",
+        "group_identifier",
     )
 
     def post_url_on_delete_kwargs(self, request, obj):

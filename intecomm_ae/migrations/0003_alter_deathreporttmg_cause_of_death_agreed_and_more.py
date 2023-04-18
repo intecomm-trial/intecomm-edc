@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_ae", "0002_rename_narrative_aetmg_investigator_narrative_and_more"),
     ]

@@ -10,7 +10,6 @@ from .modeladmin_mixins import CrfModelAdmin
 
 @admin.register(HivReview, site=intecomm_subject_admin)
 class HivReviewAdmin(CrfModelAdmin):
-
     # form = HivReviewForm
 
     fieldsets = (

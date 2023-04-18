@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from uuid import uuid4
 
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.html import format_html
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
@@ -19,7 +20,6 @@ from .proxy_models import Site
 
 
 class PatientLogManager(models.Manager):
-
     use_in_migrations = True
 
     def get_by_natural_key(self, legal_name):
@@ -50,7 +50,6 @@ def abbrev_cond(c: list | None) -> str:
 
 
 class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
-
     patient_log_identifier = models.CharField(
         max_length=36,
         default=uuid4,
@@ -87,14 +86,17 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
         max_length=25,
         null=True,
         blank=True,
-        help_text="Auto populated when group is randimized",
+        help_text="Auto populated when group is randomized",
     )
 
     initials = InitialsField()
 
     gender = models.CharField(choices=GENDER, max_length=10, blank=False)
 
-    age_in_years = models.IntegerField(verbose_name="Age")
+    age_in_years = models.IntegerField(
+        verbose_name="Age",
+        validators=[MinValueValidator(18), MaxValueValidator(110)],
+    )
 
     report_datetime = models.DateTimeField(default=get_utcnow)
 

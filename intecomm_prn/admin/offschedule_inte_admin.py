@@ -20,7 +20,6 @@ class OffScheduleInteAdmin(
     ModelAdminSubjectDashboardMixin,
     SimpleHistoryAdmin,
 ):
-
     form = OffScheduleInteForm
 
     additional_instructions = format_html(

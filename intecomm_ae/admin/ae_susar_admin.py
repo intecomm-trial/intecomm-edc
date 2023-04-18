@@ -9,5 +9,4 @@ from ..models import AeSusar
 
 @admin.register(AeSusar, site=intecomm_ae_admin)
 class AeSusarAdmin(AeSusarModelAdminMixin, SimpleHistoryAdmin):
-
     form = AeSusarForm

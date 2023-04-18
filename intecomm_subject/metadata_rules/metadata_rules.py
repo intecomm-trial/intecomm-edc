@@ -9,7 +9,6 @@ pc = Predicates()
 
 @register()
 class ClinicalReviewBaselineRuleGroup(CrfRuleGroup):
-
     hiv = CrfRule(
         predicate=P("hiv_dx", "eq", YES),
         consequence=REQUIRED,
@@ -38,7 +37,6 @@ class ClinicalReviewBaselineRuleGroup(CrfRuleGroup):
 
 @register()
 class ClinicalReviewRuleGroup(CrfRuleGroup):
-
     hiv_dx = CrfRule(
         predicate=P("hiv_dx", "eq", YES),
         consequence=REQUIRED,
@@ -95,7 +93,6 @@ class ClinicalReviewRuleGroup(CrfRuleGroup):
 
 @register()
 class MedicationsRuleGroup(CrfRuleGroup):
-
     refill_hiv = CrfRule(
         predicate=P("refill_hiv", "eq", YES),
         consequence=REQUIRED,

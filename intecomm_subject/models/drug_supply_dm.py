@@ -8,7 +8,6 @@ from .drug_refill_dm import DrugRefillDm
 
 
 class DrugSupplyDm(DrugSupplyModelMixin, BaseUuidModel):
-
     drug_refill = models.ForeignKey(DrugRefillDm, on_delete=models.PROTECT)
 
     drug = models.ForeignKey(DmTreatments, on_delete=models.PROTECT)

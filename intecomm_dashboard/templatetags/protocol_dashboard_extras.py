@@ -76,7 +76,11 @@ def add_consent_button(context, model_wrapper):
     title = ["Consent subject to participate."]
     consent_version = model_wrapper.consent.version
 
-    (add_consent_url, change_consent_url, subject_identifier,) = get_add_or_change_consent_url(
+    (
+        add_consent_url,
+        change_consent_url,
+        subject_identifier,
+    ) = get_add_or_change_consent_url(
         model_wrapper.object,
         next_url_name="intecomm_dashboard:screening_listboard_url,screening_identifier",
     )

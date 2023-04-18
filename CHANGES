@@ -1,6 +1,13 @@
 Changes
 =======
 
+0.1.16
+------
+- add subject's friendly name to INTE subject listboard
+- fix DataError if saving to 'smoker_current_duration_estimated_date' in
+  Other Baseline Data form
+- bump to edc 0.4.69
+
 0.1.5
 -----
 - edc 0.4.59

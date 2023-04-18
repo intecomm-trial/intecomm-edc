@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from django.contrib import admin
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_consent.actions import (
@@ -22,7 +24,6 @@ class SubjectConsentAdmin(
     ModelAdminSubjectDashboardMixin,
     SimpleHistoryAdmin,
 ):
-
     form = SubjectConsentForm
 
     show_object_tools = False
@@ -74,6 +75,10 @@ class SubjectConsentAdmin(
                 "description": "The following questions are directed to the interviewer.",
             },
         ),
+        (
+            "Group",
+            {"classes": ("collapse",), "fields": ("group_identifier",)},
+        ),
         audit_fieldset_tuple,
     )
 
@@ -97,3 +102,9 @@ class SubjectConsentAdmin(
         if db_field.name == "gender":
             kwargs["choices"] = GENDER
         return super().formfield_for_choice_field(db_field, request, **kwargs)
+
+    def get_readonly_fields(self, request, obj=None) -> Tuple[str, ...]:
+        readonly_fields = super().get_readonly_fields(request, obj=obj)
+        if "group_identifier" not in readonly_fields:
+            readonly_fields += ("group_identifier",)
+        return readonly_fields

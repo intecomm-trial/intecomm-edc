@@ -7,6 +7,7 @@ from edc_constants.constants import (
     OTHER,
     YES,
 )
+from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS
 from edc_reportable import (
     MILLIGRAMS_PER_DECILITER,
     MILLIMOLES_PER_LITER,
@@ -16,8 +17,6 @@ from edc_visit_tracking.constants import MISSED_VISIT, SCHEDULED, UNSCHEDULED
 
 from .constants import (
     COMMUNITY_CLINIC,
-    DIET_LIFESTYLE,
-    DRUGS,
     GTE_3HRS,
     HEALTH_FACILITY,
     NURSE,

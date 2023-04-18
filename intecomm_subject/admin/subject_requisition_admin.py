@@ -18,7 +18,6 @@ from .modeladmin_mixins import CrfModelAdmin
 
 @admin.register(SubjectRequisition, site=intecomm_subject_admin)
 class SubjectRequisitionAdmin(RequisitionAdminMixin, CrfModelAdmin):
-
     # form = SubjectRequisitionForm
 
     fieldsets = (

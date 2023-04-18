@@ -8,7 +8,6 @@ from .arv_regimens import ArvRegimens
 
 
 class DrugRefillHiv(DrugRefillModelMixin, CrfModelMixin, BaseUuidModel):
-
     rx = models.ForeignKey(
         ArvRegimens,
         verbose_name="Which medicine did the patient receive today?",

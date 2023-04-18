@@ -3,14 +3,14 @@ from django_audit_fields.admin import audit_fieldset_tuple
 from edc_crf.admin import crf_status_fieldset_tuple
 
 from ..admin_site import intecomm_subject_admin
+from ..forms import ComplicationsBaselineForm
 from ..models import ComplicationsBaseline
 from .modeladmin_mixins import CrfModelAdmin
 
 
 @admin.register(ComplicationsBaseline, site=intecomm_subject_admin)
 class ComplicationsBaselineAdmin(CrfModelAdmin):
-
-    # form = ComplicationsBaselineForm
+    form = ComplicationsBaselineForm
 
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),

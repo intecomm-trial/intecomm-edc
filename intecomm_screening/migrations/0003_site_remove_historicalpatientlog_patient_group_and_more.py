@@ -7,7 +7,6 @@ import django_crypto_fields.fields.encrypted_char_field
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("sites", "0002_alter_domain_unique"),
         (

@@ -3,13 +3,14 @@ from django_audit_fields.admin import audit_fieldset_tuple
 from edc_crf.admin import crf_status_fieldset_tuple
 
 from ..admin_site import intecomm_subject_admin
+from ..forms import HivInitialReviewForm
 from ..models import HivInitialReview
 from .modeladmin_mixins import CrfModelAdmin
 
 
 @admin.register(HivInitialReview, site=intecomm_subject_admin)
 class HivInitialReviewAdmin(CrfModelAdmin):
-    # form = HivInitialReviewForm
+    form = HivInitialReviewForm
 
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
@@ -17,8 +18,8 @@ class HivInitialReviewAdmin(CrfModelAdmin):
             "Diagnosis and Care",
             {
                 "fields": (
-                    "dx_ago",
                     "dx_date",
+                    "dx_ago",
                     "receives_care",
                     "clinic",
                     "clinic_other",
@@ -29,13 +30,13 @@ class HivInitialReviewAdmin(CrfModelAdmin):
             "Monitoring and Treatment",
             {
                 "fields": (
-                    "arv_initiated",
-                    "arv_initiation_ago",
-                    "arv_initiation_actual_date",
+                    "rx_init",
+                    "rx_init_date",
+                    "rx_init_ago",
                     "has_vl",
+                    "drawn_date",
                     "vl",
                     "vl_quantifier",
-                    "vl_date",
                     "has_cd4",
                     "cd4",
                     "cd4_date",
@@ -47,7 +48,7 @@ class HivInitialReviewAdmin(CrfModelAdmin):
     )
 
     radio_fields = {
-        "arv_initiated": admin.VERTICAL,
+        "rx_init": admin.VERTICAL,
         "clinic": admin.VERTICAL,
         "crf_status": admin.VERTICAL,
         "has_cd4": admin.VERTICAL,
@@ -61,3 +62,8 @@ class HivInitialReviewAdmin(CrfModelAdmin):
         list_filters = list(list_filters or [])
         list_filters.insert(4, "has_vl")
         return tuple(list_filters)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj=obj, **kwargs)
+        form = self.replace_label_text(form, "diagnosis_label", self.model.diagnosis_label)
+        return form

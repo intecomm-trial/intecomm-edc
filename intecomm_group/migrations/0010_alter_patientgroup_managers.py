@@ -6,7 +6,6 @@ import intecomm_group.models.patient_group
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("intecomm_group", "0009_auto_20221126_0358"),
     ]

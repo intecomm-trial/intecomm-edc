@@ -7,20 +7,14 @@ site_reference_configs.register_from_visit_schedule(
 configs = {
     "intecomm_subject.clinicalreviewbaseline": [
         "dm_dx",
-        "dm_test",
         "hiv_dx",
-        "hiv_test",
         "htn_dx",
-        "htn_test",
     ],
     "intecomm_subject.clinicalreview": [
         "complications",
         "dm_dx",
-        "dm_test",
         "hiv_dx",
-        "hiv_test",
         "htn_dx",
-        "htn_test",
     ],
     "intecomm_subject.medications": ["refill_hiv", "refill_dm", "refill_htn"],
 }

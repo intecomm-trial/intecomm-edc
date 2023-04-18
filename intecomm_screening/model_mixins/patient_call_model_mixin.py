@@ -22,7 +22,6 @@ class Manager(models.Manager):
 
 
 class PatientCallModelMixin(models.Model):
-
     report_datetime = models.DateTimeField(default=get_utcnow)
 
     contact_number = EncryptedCharField(blank=False, validators=[phone_number])

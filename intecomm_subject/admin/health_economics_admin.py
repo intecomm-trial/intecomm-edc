@@ -12,7 +12,6 @@ from .modeladmin_mixins import CrfModelAdminMixin
 
 @admin.register(HealthEconomics, site=intecomm_subject_admin)
 class HealthEconomicsAdmin(CrfModelAdminMixin, FormLabelModelAdminMixin, SimpleHistoryAdmin):
-
     form = HealthEconomicsForm
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),

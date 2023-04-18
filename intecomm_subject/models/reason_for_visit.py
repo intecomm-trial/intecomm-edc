@@ -10,7 +10,6 @@ from ..model_mixins import CrfModelMixin
 
 
 class ReasonForVisit(CrfModelMixin, BaseUuidModel):
-
     health_services = models.ManyToManyField(
         HealthServices,
         related_name="health_services",

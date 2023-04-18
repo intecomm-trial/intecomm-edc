@@ -1,13 +1,19 @@
 from __future__ import annotations
 
-from django.db.models.signals import post_delete, post_save
+from django.db.models.signals import post_delete, post_save, pre_delete
 from django.dispatch import receiver
-from edc_constants.constants import YES
-from intecomm_rando.randomize_group import RandomizeGroup
 
+from . import PatientLog
 from .patient_call import PatientCall
-from .proxy_models import PatientGroup
 from .subject_screening import SubjectScreening
+
+
+class SubjectScreeningDeleteError(Exception):
+    pass
+
+
+class PatientLogDeleteError(Exception):
+    pass
 
 
 @receiver(
@@ -23,6 +29,46 @@ def update_subjectscreening_on_post_save(sender, instance, raw, **kwargs):
         instance.patient_log.save_base(
             update_fields=["screening_identifier", "screening_datetime"]
         )
+
+
+@receiver(
+    pre_delete,
+    weak=False,
+    sender=PatientLog,
+    dispatch_uid="patientlog_on_pre_delete",
+)
+def patientlog_on_pre_delete(sender, instance, **kwargs):
+    if instance.screening_identifier:
+        raise PatientLogDeleteError(
+            f"Not allowed. Subject has been screened. Got {instance.screening_identifier}."
+        )
+
+
+@receiver(
+    pre_delete,
+    weak=False,
+    sender=SubjectScreening,
+    dispatch_uid="subjectscreening_on_pre_delete",
+)
+def subjectscreening_on_pre_delete(sender, instance, **kwargs):
+    if instance.consented:
+        raise SubjectScreeningDeleteError(
+            f"Not allowed. Subject is consented. Got {instance.screening_identifier}."
+        )
+
+
+@receiver(
+    post_delete,
+    weak=False,
+    sender=SubjectScreening,
+    dispatch_uid="subjectscreening_on_post_delete",
+)
+def subjectscreening_on_post_delete(sender, instance, **kwargs):
+    instance.patient_log.screening_identifier = None
+    instance.patient_log.screening_datetime = None
+    instance.patient_log.save_base(
+        update_fields=["screening_identifier", "screening_datetime"]
+    )
 
 
 @receiver(
@@ -51,20 +97,3 @@ def patient_call_on_post_delete(sender, instance, using, **kwargs):
         else instance.patient_log.call_attempts - 1
     )
     instance.patient_log.save(update_fields=["call_attempts"])
-
-
-@receiver(
-    post_save,
-    weak=False,
-    sender=PatientGroup,
-    dispatch_uid="patient_group_on_post_save",
-)
-def patient_group_on_post_save(sender, instance, raw, created, **kwargs):
-    if not raw:
-        try:
-            instance.randomize == YES
-        except AttributeError:
-            pass
-        else:
-            randomize_group = RandomizeGroup(instance)
-            randomize_group.randomize()
