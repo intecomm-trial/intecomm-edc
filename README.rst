@@ -26,7 +26,7 @@ Installation
 
 
 Randomization
-------------
+-------------
 Groups of patients are randomized to community integrated care (intervention) or facility integrated care (control).
 
 A patient group is represented by the ``PatientGroup`` model. A ``PatientGroup`` model instance contains patients who are represented by ``PatientLog`` model instances.
