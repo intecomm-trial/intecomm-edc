@@ -16,7 +16,9 @@ from ..model_mixins import CrfModelMixin
 
 class DmInitialReview(
     dx_initial_review_model_mixin_factory("dx"),
-    rx_initial_review_model_mixin_factory("rx_init"),
+    rx_initial_review_model_mixin_factory(
+        "rx_init", verbose_name_label="medicines for diabetes"
+    ),
     GlucoseModelMixin,
     SingletonCrfModelMixin,
     CrfModelMixin,
