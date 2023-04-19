@@ -302,6 +302,8 @@ DATETIME_FORMAT = "j N Y H:i"
 SHORT_DATE_FORMAT = "d/m/Y"
 SHORT_DATETIME_FORMAT = "d/m/Y H:i"
 
+REPORT_DATETIME_FIELD_NAME = "report_datetime"
+
 # See also any inte_* or edc_* apps.py
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
