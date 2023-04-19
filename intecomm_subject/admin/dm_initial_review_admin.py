@@ -18,8 +18,8 @@ class DmInitialReviewAdmin(CrfModelAdmin):
             "Diagnosis",
             {
                 "fields": (
-                    "dx_ago",
                     "dx_date",
+                    "dx_ago",
                 )
             },
         ),
