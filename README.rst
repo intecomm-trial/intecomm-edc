@@ -1,29 +1,18 @@
 |pypi| |actions| |codecov| |downloads|
 
-
-
 intecomm-edc
 ------------
-
-
 Controlling chronic diseases in Africa: Development and evaluation of an integrated community-based management model for HIV, Diabetes and Hypertension in Tanzania and Uganda (INTE-COMM study)
-
 
 Liverpool School of Tropical Medicine
 
-
 http://www.isrctn.com/ISRCTN15319595
-
 
 See also https://github.com/clinicedc/edc
 
-
-
 Installation
 ------------
-
 ... in development
-
 
 Randomization
 -------------
