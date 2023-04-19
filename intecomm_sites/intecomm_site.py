@@ -10,11 +10,11 @@ class IntecommSite(SingleSite):
         name,
         *,
         health_facility_type: str = None,
-        integrated_clinic_days: list[int] | None = None,
+        clinic_days: list[int] | None = None,
         **kwargs,
     ):
         self.health_facility_type = health_facility_type
-        self.integrated_clinic_days = integrated_clinic_days
+        self.clinic_days = clinic_days
         super().__init__(site_id, name, **kwargs)
 
     def __str__(self):
