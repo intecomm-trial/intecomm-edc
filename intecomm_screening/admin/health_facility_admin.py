@@ -31,6 +31,10 @@ class HealthFacilityAdmin(BaseModelAdminMixin):
             },
         ),
         (
+            "Clinic days",
+            {"fields": ("mon", "tue", "wed", "thu", "fri", "sat")},
+        ),
+        (
             "Location",
             {
                 "description": "Provide this information if available",
@@ -53,6 +57,7 @@ class HealthFacilityAdmin(BaseModelAdminMixin):
     list_display = (
         "name",
         "health_facility_type",
+        "clinic_days",
         "distance",
         "map",
     )
@@ -84,3 +89,20 @@ class HealthFacilityAdmin(BaseModelAdminMixin):
     def site_name(obj=None):
         get_site_name(obj.site.id, all_sites)
         return obj.name
+
+    @admin.display(description="Clinic Days")
+    def clinic_days(self, obj=None) -> str:
+        days = []
+        if obj.mon:
+            days.append("Mon")
+        if obj.tue:
+            days.append("Tue")
+        if obj.wed:
+            days.append("Wed")
+        if obj.thu:
+            days.append("Thu")
+        if obj.fri:
+            days.append("Fri")
+        if obj.sat:
+            days.append("Sat")
+        return ",".join(days) if days else "unknown"

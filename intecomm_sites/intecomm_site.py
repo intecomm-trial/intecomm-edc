@@ -1,9 +1,20 @@
+from __future__ import annotations
+
 from edc_sites.single_site import SingleSite
 
 
 class IntecommSite(SingleSite):
-    def __init__(self, site_id, name, *, health_facility_type: str = None, **kwargs):
+    def __init__(
+        self,
+        site_id,
+        name,
+        *,
+        health_facility_type: str = None,
+        integrated_clinic_days: list[int] | None = None,
+        **kwargs,
+    ):
         self.health_facility_type = health_facility_type
+        self.integrated_clinic_days = integrated_clinic_days
         super().__init__(site_id, name, **kwargs)
 
     def __str__(self):

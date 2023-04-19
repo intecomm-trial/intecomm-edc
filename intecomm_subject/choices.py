@@ -5,6 +5,7 @@ from edc_constants.constants import (
     NO,
     NOT_APPLICABLE,
     OTHER,
+    PATIENT,
     YES,
 )
 from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS
@@ -217,4 +218,10 @@ ESTIMATED_MEASURED_CHOICES = (
     (MEASURED, "Measured"),
     (ESTIMATED, "Estimated"),
     (NOT_APPLICABLE, "Not recorded / Not applicable"),
+)
+
+APPT_DATE_INFO_SOURCES = (
+    ("health_records", "Health record"),
+    (PATIENT, "Patient"),
+    ("estimated", "I estimated the date"),
 )

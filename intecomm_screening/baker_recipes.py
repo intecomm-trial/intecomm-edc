@@ -20,6 +20,7 @@ patientgroup = Recipe(
     report_datetime=get_utcnow(),
     status=RECRUITING,
     randomize_now=NO,
+    group_identifier=None,
 )
 
 patientlog = Recipe(
