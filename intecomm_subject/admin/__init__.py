@@ -29,6 +29,7 @@ from .htn_medication_adherence_admin import HtnMedicationAdherenceAdmin
 from .htn_review_admin import HtnReviewAdmin
 from .malaria_test_admin import MalariaTestAdmin
 from .medications_admin import MedicationsAdmin
+from .next_appointment_admin import NextAppointmentAdmin
 from .other_baseline_data_admin import OtherBaselineDataAdmin
 from .social_harms_admin import SocialHarmsAdmin
 from .subject_requisition_admin import SubjectRequisitionAdmin

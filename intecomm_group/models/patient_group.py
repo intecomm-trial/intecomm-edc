@@ -119,7 +119,7 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
 
     def save(self, *args, **kwargs):
         if not self.id:
-            self.group_identifier = self.group_identifier_as_pk
+            self.group_identifier = str(self.group_identifier_as_pk)
         super().save(*args, **kwargs)
 
     class Meta(BaseUuidModel.Meta):

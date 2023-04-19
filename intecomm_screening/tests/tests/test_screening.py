@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from django.test import TestCase, tag
+from django.test import TestCase
 from edc_constants.constants import DM, HIV, HTN, NO, UUID_PATTERN
 from intecomm_form_validators import RECRUITING
 from model_bakery.baker import make_recipe
@@ -21,8 +21,8 @@ class TestScreening(TestCase):
         self.assertFalse(obj.randomized)
         self.assertEqual(obj.patients.all().count(), 0)
 
-    @tag("grp1")
     def test_with_patients_ok(self):
+        obj = None
         initials = "ABCDEFGHIJKLMNOP"
         for i in range(0, 4):
             obj = make_recipe(

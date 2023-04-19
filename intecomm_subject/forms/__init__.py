@@ -27,6 +27,7 @@ from .htn_initial_review_form import HtnInitialReviewForm
 from .htn_review_form import HtnReviewForm
 from .malaria_test_form import MalariaTestForm
 from .medications_form import MedicationsForm
+from .next_appointment_form import NextAppointmentForm
 from .other_baseline_data import OtherBaselineDataForm
 from .social_harms_form import SocialHarmsForm
 from .subject_requisition_form import SubjectRequisitionForm

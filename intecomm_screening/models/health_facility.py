@@ -54,6 +54,13 @@ class HealthFacility(SiteModelMixin, BaseUuidModel):
         help_text="in degrees. copy and paste directly from google maps",
     )
 
+    mon = models.BooleanField()
+    tue = models.BooleanField()
+    wed = models.BooleanField()
+    thu = models.BooleanField()
+    fri = models.BooleanField()
+    sat = models.BooleanField()
+
     notes = models.TextField(null=True, blank=True)
 
     on_site = CurrentSiteManager()
@@ -69,6 +76,24 @@ class HealthFacility(SiteModelMixin, BaseUuidModel):
 
     def natural_key(self):
         return (self.name,)
+
+    @property
+    def clinic_days(self) -> list[int]:
+        """Using ISO numbering where Monday=1."""
+        days = []
+        if self.mon:
+            days.append(1)
+        if self.tue:
+            days.append(2)
+        if self.wed:
+            days.append(3)
+        if self.thu:
+            days.append(4)
+        if self.fri:
+            days.append(5)
+        if self.sat:
+            days.append(6)
+        return days
 
     class Meta(SiteModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Health Facility"
