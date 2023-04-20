@@ -222,7 +222,7 @@ visit11 = Visit(
 
 visit12 = Visit(
     code=MONTH12,
-    title="Month 12",
+    title="Month 12 (End of study)",
     timepoint=12,
     rbase=relativedelta(months=12),
     rlower=relativedelta(days=5),
