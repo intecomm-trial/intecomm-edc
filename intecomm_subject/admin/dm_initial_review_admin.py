@@ -18,8 +18,8 @@ class DmInitialReviewAdmin(CrfModelAdmin):
             "Diagnosis",
             {
                 "fields": (
-                    "dx_ago",
                     "dx_date",
+                    "dx_ago",
                 )
             },
         ),
@@ -28,6 +28,7 @@ class DmInitialReviewAdmin(CrfModelAdmin):
             {
                 "fields": (
                     "managed_by",
+                    "managed_by_other",
                     "rx_init_date",
                     "rx_init_ago",
                 )

@@ -17,7 +17,7 @@ class NextAppointmentAdmin(CrfModelAdminMixin, FormLabelModelAdminMixin, SimpleH
         (None, {"fields": ("subject_visit", "report_datetime")}),
         (
             "Integrated Clinic",
-            {"fields": ("health_facility", "appt_date", "info_source")},
+            {"fields": ("health_facility", "appt_date", "info_source", "best_visit_code")},
         ),
         crf_status_fieldset_tuple,
         audit_fieldset_tuple,
@@ -26,4 +26,5 @@ class NextAppointmentAdmin(CrfModelAdminMixin, FormLabelModelAdminMixin, SimpleH
     radio_fields = {
         "crf_status": admin.VERTICAL,
         "info_source": admin.VERTICAL,
+        # "best_visit_code": admin.VERTICAL,
     }

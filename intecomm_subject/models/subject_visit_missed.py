@@ -1,10 +1,10 @@
 from django.db import models
 from edc_model.models import BaseUuidModel
+from edc_visit_tracking.constants import VISIT_MISSED_ACTION
 from edc_visit_tracking.model_mixins import SubjectVisitMissedModelMixin
 
 from intecomm_lists.models import SubjectVisitMissedReasons
 
-from ..constants import MISSED_VISIT_ACTION
 from ..model_mixins import CrfWithActionModelMixin
 
 
@@ -13,11 +13,9 @@ class SubjectVisitMissed(
     CrfWithActionModelMixin,
     BaseUuidModel,
 ):
-    action_name = MISSED_VISIT_ACTION
+    action_name = VISIT_MISSED_ACTION
 
-    missed_reasons = models.ManyToManyField(
-        SubjectVisitMissedReasons, blank=True, related_name="meta_missed_reasons"
-    )
+    missed_reasons = models.ManyToManyField(SubjectVisitMissedReasons, blank=True)
 
     class Meta(CrfWithActionModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Missed Visit Report"
