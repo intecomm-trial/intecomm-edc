@@ -322,6 +322,9 @@ EDC_APPOINTMENT_APPT_REASON_CHOICES = (
     (UNSCHEDULED_APPT, "Routine / Unscheduled (non-study)"),
 )
 
+# edc-export
+EDC_EXPORT_EXPORT_PII_USERS = env.list("EDC_EXPORT_EXPORT_PII_USERS")
+
 # edc-pdutils
 EXPORT_FILENAME_TIMESTAMP_FORMAT = "%Y%m%d"
 

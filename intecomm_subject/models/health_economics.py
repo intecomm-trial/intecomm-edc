@@ -68,6 +68,10 @@ class HealthEconomics(CrfModelMixin, BaseUuidModel):
         choices=YES_NO,
     )
 
+    welfare_other = models.TextField(
+        verbose_name="If yes, please explain", max_length=250, null=True, blank=True
+    )
+
     income_per_month = models.IntegerField(
         verbose_name="How much do you earn (take home) per month?",
         help_text="in local currency",

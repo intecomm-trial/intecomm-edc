@@ -33,7 +33,7 @@ class HealthEconomicsAdmin(CrfModelAdminMixin, FormLabelModelAdminMixin, SimpleH
         ),
         (
             "Part 2: Income",
-            {"fields": ("welfare",)},
+            {"fields": ("welfare", "welfare_other")},
         ),
         (
             "Part 3: Previous Healthcare Expenses: Medication",

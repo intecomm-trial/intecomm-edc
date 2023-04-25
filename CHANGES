@@ -1,10 +1,20 @@
 Changes
 =======
 
+0.1.20
+------
+- bump edc to 0.4.83
+- use glucose model factories and fieldset tuple
+- add field welfare_other to HE
+
+0.1.19
+------
+- bump edc to 0.4.82
+
 0.1.18
 ------
 - add next appointment model for facility arm
-- bump to edc 0.1.18
+- bump to edc 0.4.81
 
 0.1.17
 ------
