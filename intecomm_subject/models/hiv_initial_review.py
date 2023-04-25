@@ -24,6 +24,7 @@ class HivInitialReview(
     BaseUuidModel,
 ):
     diagnosis_label = HIV
+
     receives_care = models.CharField(
         verbose_name="Is the patient receiving care for HIV?",
         max_length=15,

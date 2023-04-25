@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_crf.admin import crf_status_fieldset_tuple
+from edc_glucose.fieldsets import glucose_fieldset_tuple
 
 from ..admin_site import intecomm_subject_admin
 from ..forms import DmInitialReviewForm
@@ -34,20 +35,7 @@ class DmInitialReviewAdmin(CrfModelAdmin):
                 )
             },
         ),
-        (
-            "Fasting Blood Sugar Measurement",
-            {
-                "fields": (
-                    "glucose_performed",
-                    "glucose_fasting",
-                    "glucose_fasting_duration_str",
-                    "glucose_date",
-                    "glucose_value",
-                    "glucose_quantifier",
-                    "glucose_units",
-                ),
-            },
-        ),
+        glucose_fieldset_tuple,
         crf_status_fieldset_tuple,
         audit_fieldset_tuple,
     )

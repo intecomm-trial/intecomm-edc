@@ -54,13 +54,17 @@ def update_appointments(instance):
             subject_visit.report_datetime = appointment.appt_datetime
             subject_visit.save()
             subject_visit_missed = SubjectVisitMissed.objects.create(
-                subject_visit=subject_visit, survival_status=ALIVE
+                subject_visit=subject_visit,
+                survival_status=ALIVE,
+                report_datetime=appointment.appt_datetime,
+                contact_last_date=None,
             )
             subject_visit_missed.missed_reasons.add(
-                SubjectVisitMissedReasons.objects.filter(name=OTHER)
+                SubjectVisitMissedReasons.objects.get(name=OTHER)
             )
             subject_visit_missed.missed_reasons_other = "NOT_SCHEDULED_FOR_FACILITY"
-            subject_visit_missed.comment = "auto-completed by EDC"
+            subject_visit_missed.comment = "[auto-completed by EDC]"
+            subject_visit_missed.save()
             appointment.appt_status = COMPLETE_APPT
             appointment.save()
         appointment = appointment.next
