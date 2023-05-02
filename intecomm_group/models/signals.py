@@ -4,8 +4,9 @@ from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
-from edc_constants.constants import COMPLETE, MULTI_MORBIDITY
+from edc_constants.constants import COMPLETE, MULTI_MORBIDITY, YES
 from edc_dx import get_diagnosis_labels_prefixes
+from intecomm_rando.randomize_group import randomize_group
 
 from ..utils import verify_patient_group_ratio_raise
 from .patient_group import PatientGroup
@@ -17,9 +18,10 @@ from .patient_group_meeting import PatientGroupMeeting
     post_save,
     weak=False,
     sender=PatientGroup,
-    dispatch_uid="update_patient_group_ratio_on_post_save",
+    dispatch_uid="update_patientgroup_on_post_save",
 )
-def update_patientgroup_ratio_on_post_save(sender, instance, raw, update_fields, **kwargs):
+def update_patientgroup_on_post_save(sender, instance, raw, update_fields, **kwargs):
+    """Check ratio, and if ready, randomize this group"""
     if not raw and not update_fields:
         raise_on_outofrange = True if instance.status == COMPLETE else False
         ncd, hiv, ratio = verify_patient_group_ratio_raise(
@@ -27,6 +29,14 @@ def update_patientgroup_ratio_on_post_save(sender, instance, raw, update_fields,
         )
         instance.ratio = ratio
         instance.save_base(update_fields=["ratio"])
+
+        if (
+            not instance.randomized
+            and instance.randomize_now == YES
+            and instance.confirm_randomize_now == "RANDOMIZE"
+            and instance.status == COMPLETE
+        ):
+            randomize_group(instance)
 
 
 @receiver(

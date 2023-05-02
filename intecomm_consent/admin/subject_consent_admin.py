@@ -6,11 +6,16 @@ from edc_consent.actions import (
     flag_as_verified_against_paper,
     unflag_as_verified_against_paper,
 )
-from edc_consent.modeladmin_mixins import ModelAdminConsentMixin
+from edc_consent.modeladmin_mixins import (
+    ConsentModelAdminMixin,
+    PiiNamesModelAdminMixin,
+)
 from edc_constants.choices import GENDER
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+
+from intecomm_sites import all_sites
 
 from ..admin_site import intecomm_consent_admin
 from ..forms import SubjectConsentForm
@@ -19,19 +24,21 @@ from ..models import SubjectConsent
 
 @admin.register(SubjectConsent, site=intecomm_consent_admin)
 class SubjectConsentAdmin(
+    PiiNamesModelAdminMixin,
     SiteModelAdminMixin,
-    ModelAdminConsentMixin,
+    ConsentModelAdminMixin,
     ModelAdminSubjectDashboardMixin,
     SimpleHistoryAdmin,
 ):
     form = SubjectConsentForm
 
+    name_fields: list[str] = ["legal_name", "familiar_name"]
+    name_display_field: str = "familiar_name"
+    all_sites = all_sites
+
     show_object_tools = False
     show_cancel = True
     change_list_template: str = "intecomm_consent/admin/subjectconsent_change_list.html"
-
-    name_fields: list[str] = ["legal_name", "familiar_name"]
-    name_display_field: str = "familiar_name"
 
     actions = [
         flag_as_verified_against_paper,
@@ -45,8 +52,7 @@ class SubjectConsentAdmin(
                 "fields": (
                     "screening_identifier",
                     "subject_identifier",
-                    "legal_name",
-                    "familiar_name",
+                    *name_fields,
                     "initials",
                     "gender",
                     "language",

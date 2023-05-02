@@ -42,3 +42,9 @@ class GroupManagementView(EdcViewMixin, NavbarViewMixin, TemplateView):
         for pk in selected_pks.split(","):
             patient_logs.append(PatientLog.objects.get(pk=pk))
         return patient_logs
+
+
+class PrintPatientLogReportView(EdcViewMixin, NavbarViewMixin, TemplateView):
+    template_name = "intecomm_screening/group_management.html"
+    navbar_selected_item = "home"
+    navbar_name = "default"
