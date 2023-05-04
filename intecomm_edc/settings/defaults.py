@@ -129,6 +129,7 @@ INSTALLED_APPS = [
     "edc_protocol.apps.AppConfig",
     "edc_protocol_incident.apps.AppConfig",
     "edc_prn.apps.AppConfig",
+    "edc_qol.apps.AppConfig",
     "edc_randomization.apps.AppConfig",
     "edc_reference.apps.AppConfig",
     "edc_refusal.apps.AppConfig",
@@ -371,6 +372,11 @@ DASHBOARD_URL_NAMES = env.dict("DJANGO_DASHBOARD_URL_NAMES")
 DASHBOARD_BASE_TEMPLATES = env.dict("DJANGO_DASHBOARD_BASE_TEMPLATES")
 LAB_DASHBOARD_BASE_TEMPLATES = env.dict("DJANGO_LAB_DASHBOARD_BASE_TEMPLATES")
 LAB_DASHBOARD_URL_NAMES = env.dict("DJANGO_LAB_DASHBOARD_URL_NAMES")
+
+# edc-consent
+EDC_CONSENT_REMOVE_PATIENT_NAMES_FROM_COUNTRIES = env.list(
+    "EDC_CONSENT_REMOVE_PATIENT_NAMES_FROM_COUNTRIES", default=[]
+)
 
 # edc-diagnosis
 EDC_DX_LABELS = dict(hiv="HIV", dm="Diabetes", htn="Hypertension")

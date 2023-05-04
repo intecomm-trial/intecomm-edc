@@ -27,6 +27,8 @@ class PatientGroupMeeting(BaseUuidModel):
 
     notes = models.TextField(null=True, blank=True)
 
+    # duration,
+
     def __str__(self):
         return self.patient_group_appointment.patient_group.name
 

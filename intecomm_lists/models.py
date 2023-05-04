@@ -179,3 +179,15 @@ class RxModifications(ListModelMixin):
     class Meta(ListModelMixin.Meta):
         verbose_name = "Treatment Modifications"
         verbose_name_plural = "Treatment Modifications"
+
+
+class ScreeningRefusalReasons(ListModelMixin):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Screening Refusal Reasons"
+        verbose_name_plural = "Screening Refusal Reasons"
+
+
+class ConsentRefusalReasons(ListModelMixin):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Consent Refusal Reasons"
+        verbose_name_plural = "Consent Refusal Reasons"

@@ -89,10 +89,13 @@ class PatientGroupAdmin(BaseModelAdminMixin):
                     "the ratio of NCD to HIV patients. <BR>"
                     "<B>Important: THIS STEP CANNOT BE UNDONE</B>"
                 ),
-                "fields": (
-                    "randomize_now",
-                    "confirm_randomize_now",
-                ),
+                "fields": ("randomize_now", "confirm_randomize_now"),
+            },
+        ),
+        (
+            "Randomization",
+            {
+                "fields": ("group_identifier", "randomized", "randomized_datetime"),
             },
         ),
         audit_fieldset_tuple,
@@ -142,7 +145,7 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         "randomize_now": admin.VERTICAL,
     }
 
-    readonly_fields = ("patients",)
+    readonly_fields = ("patients", "group_identifier", "randomized", "randomized_datetime")
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = super().get_fieldsets(request, obj)
@@ -152,19 +155,25 @@ class PatientGroupAdmin(BaseModelAdminMixin):
                 for fieldset in fieldsets
                 if fieldset[0] not in ["Selected Patients", "Randomize"]
             ]
-            fieldsets = tuple(fieldsets)
+        else:
+            fieldsets = [
+                fieldset for fieldset in fieldsets if fieldset[0] not in ["Randomization"]
+            ]
+        fieldsets = tuple(fieldsets)
         return fieldsets
 
     def get_readonly_fields(self, request, obj=None) -> Tuple[str, ...]:
         fields = super().get_readonly_fields(request, obj)
         if obj and obj.randomized:
             fields += (
+                "report_datetime",
                 "hiv_patients",
                 "dm_patients",
                 "htn_patients",
                 "multi_patients",
                 "bypass_group_size_min",
                 "bypass_group_ratio",
+                "status",
             )
         return fields
 

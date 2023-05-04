@@ -6,13 +6,13 @@ from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 
 from ..admin_site import intecomm_screening_admin
-from ..forms import SubjectRefusalForm
-from ..models import SubjectRefusal
+from ..forms import ConsentRefusalForm
+from ..models import ConsentRefusal
 
 
-@admin.register(SubjectRefusal, site=intecomm_screening_admin)
-class SubjectRefusalAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin):
-    form = SubjectRefusalForm
+@admin.register(ConsentRefusal, site=intecomm_screening_admin)
+class ConsentRefusalAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin):
+    form = ConsentRefusalForm
 
     autocomplete_fields = ["subject_screening"]
 

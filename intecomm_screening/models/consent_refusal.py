@@ -7,16 +7,17 @@ from edc_search.model_mixins import SearchSlugManager
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
 from edc_utils import get_utcnow
 
-from ..choices import REFUSAL_REASONS
+from intecomm_lists.models import ConsentRefusalReasons
+
 from .subject_screening import SubjectScreening
 
 
-class SubjectRefusalManager(SearchSlugManager, models.Manager):
+class ConsentRefusalManager(SearchSlugManager, models.Manager):
     def get_by_natural_key(self, subject_identifier):
         return self.get(subject_identifier=subject_identifier)
 
 
-class SubjectRefusal(NonUniqueSubjectIdentifierModelMixin, SiteModelMixin, BaseUuidModel):
+class ConsentRefusal(NonUniqueSubjectIdentifierModelMixin, SiteModelMixin, BaseUuidModel):
     subject_screening = models.ForeignKey(SubjectScreening, on_delete=models.PROTECT)
 
     subject_identifier = models.CharField(max_length=50, editable=False)
@@ -24,19 +25,22 @@ class SubjectRefusal(NonUniqueSubjectIdentifierModelMixin, SiteModelMixin, BaseU
     screening_identifier = models.CharField(max_length=50, editable=False)
 
     report_datetime = models.DateTimeField(
-        verbose_name="Report Date and Time", default=get_utcnow
+        verbose_name="Report date and time", default=get_utcnow
     )
 
-    reason = models.CharField(
-        verbose_name="Reason for refusal to join",
+    reason = models.ForeignKey(
+        ConsentRefusalReasons,
+        on_delete=models.PROTECT,
+        verbose_name="Reason for refusal to consent",
         max_length=25,
-        choices=REFUSAL_REASONS,
+        null=True,
+        blank=False,
     )
 
     other_reason = OtherCharField()
 
     on_site = CurrentSiteManager()
-    objects = SubjectRefusalManager()
+    objects = ConsentRefusalManager()
     history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
@@ -58,5 +62,5 @@ class SubjectRefusal(NonUniqueSubjectIdentifierModelMixin, SiteModelMixin, BaseU
         return ["screening_identifier", "subject_identifier"]
 
     class Meta:
-        verbose_name = "Subject Refusal"
-        verbose_name_plural = "Subject Refusals"
+        verbose_name = "Consent Refusal"
+        verbose_name_plural = "Consent Refusals"

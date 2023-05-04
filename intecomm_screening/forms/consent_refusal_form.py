@@ -4,9 +4,9 @@ from django.utils.safestring import mark_safe
 from edc_dashboard.url_names import url_names
 from edc_form_validators import FormValidatorMixin
 from edc_screening.modelform_mixins import AlreadyConsentedFormMixin
-from intecomm_form_validators import SubjectRefusalFormValidator
+from intecomm_form_validators import ConsentRefusalFormValidator
 
-from ..models import SubjectRefusal, SubjectScreening
+from ..models import ConsentRefusal, SubjectScreening
 
 
 class ScreeningFormMixin:
@@ -32,15 +32,15 @@ class ScreeningFormMixin:
         return cleaned_data
 
 
-class SubjectRefusalForm(
+class ConsentRefusalForm(
     AlreadyConsentedFormMixin, ScreeningFormMixin, FormValidatorMixin, forms.ModelForm
 ):
-    form_validator_cls = SubjectRefusalFormValidator
+    form_validator_cls = ConsentRefusalFormValidator
 
     def clean(self):
         cleaned_data = super().clean()
         return cleaned_data
 
     class Meta:
-        model = SubjectRefusal
+        model = ConsentRefusal
         fields = "__all__"

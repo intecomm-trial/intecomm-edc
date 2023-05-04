@@ -1,8 +1,8 @@
 from edc_model_wrapper import ModelWrapper
 
 
-class SubjectRefusalModelWrapper(ModelWrapper):
-    model = "intecomm_screening.subjectrefusal"
+class ConsentRefusalModelWrapper(ModelWrapper):
+    model = "intecomm_screening.consentrefusal"
     next_url_attrs = ["screening_identifier"]
     next_url_name = "screening_listboard_url"
 
