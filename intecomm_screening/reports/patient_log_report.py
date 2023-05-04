@@ -2,7 +2,7 @@ from tempfile import mkdtemp
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from edc_identifier.simple_identifier import convert_to_human_readable
+from edc_identifier.utils import convert_to_human_readable
 from edc_pdf_reports import Report
 from edc_utils import convert_php_dateformat
 from reportlab.lib import colors

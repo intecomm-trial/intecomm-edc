@@ -1,5 +1,6 @@
 from typing import Type
 
+from django.core.exceptions import ObjectDoesNotExist
 from edc_identifier.identifier import Identifier
 from edc_identifier.simple_identifier import SimpleUniqueIdentifier
 
@@ -50,3 +51,19 @@ class FilingIdentifier(Identifier):
 
     def validate_identifier_pattern(self, *args, **kwargs):
         return True
+
+    def update_identifier_model(self) -> bool:
+        """Attempts to update identifier_model and returns True (or instance)
+        if successful else False if identifier already exists.
+        """
+        try:
+            self.identifier_model_cls.objects.get(identifier=self.identifier)
+        except ObjectDoesNotExist:
+            return self.identifier_model_cls.objects.create(
+                identifier=self.identifier,
+                identifier_type=self.name,
+                identifier_prefix=self.identifier_prefix,
+                device_id=self.device_id,
+                site_id=self.site_id,
+            )
+        return False
