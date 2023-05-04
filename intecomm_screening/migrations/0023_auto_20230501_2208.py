@@ -14,7 +14,7 @@ def update_filing_identifier(apps, schema_editor):
         total=total,
     ):
         obj.filing_identifier = FilingIdentifier(site_id=obj.site_id).identifier
-        obj.save(update_fields=["filing_identifier"])
+        obj.obj.save_base(update_fields=["filing_identifier"])
 
 
 class Migration(migrations.Migration):

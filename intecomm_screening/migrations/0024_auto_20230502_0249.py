@@ -14,7 +14,7 @@ def update_patient_log_identifier(apps, schema_editor):
         total=total,
     ):
         obj.patient_log_identifier = PatientLogIdentifier().identifier
-        obj.save(update_fields=["patient_log_identifier"])
+        obj.save_base(update_fields=["patient_log_identifier"])
 
 
 class Migration(migrations.Migration):
