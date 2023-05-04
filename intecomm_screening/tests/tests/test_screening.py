@@ -1,5 +1,6 @@
 from uuid import uuid4
 
+from _decimal import Decimal
 from django.test import TestCase
 from edc_constants.constants import DM, HIV, HTN, NO, UUID_PATTERN
 from intecomm_form_validators import RECRUITING
@@ -16,7 +17,7 @@ class TestScreening(TestCase):
         self.assertIsNotNone(obj.name)
         self.assertIsNotNone(obj.group_identifier)
         self.assertRegexpMatches(str(obj.group_identifier), UUID_PATTERN)
-        self.assertEqual(obj.ratio, None)
+        self.assertEqual(obj.ratio, Decimal("0"))
         self.assertEqual(obj.randomize_now, NO)
         self.assertFalse(obj.randomized)
         self.assertEqual(obj.patients.all().count(), 0)
