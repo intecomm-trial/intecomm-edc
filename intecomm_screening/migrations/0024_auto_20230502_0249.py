@@ -13,7 +13,7 @@ def update_patient_log_identifier(apps, schema_editor):
         patientlog_cls.objects.all(),
         total=total,
     ):
-        obj.patient_log_identifier = PatientLogIdentifier().identifier
+        obj.patient_log_identifier = PatientLogIdentifier(site_id=obj.site_id).identifier
         obj.save_base(update_fields=["patient_log_identifier"])
 
 
