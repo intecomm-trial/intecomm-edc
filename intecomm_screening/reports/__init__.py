@@ -1,1 +1,1 @@
-from .patient_log_report import PatientLogReport
+from .patient_log_report import PatientLogReport, PatientLogReportError
