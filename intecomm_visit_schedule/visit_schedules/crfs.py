@@ -4,6 +4,7 @@ from edc_visit_schedule import Crf, FormsCollection
 
 crfs_prn = FormsCollection(
     Crf(show_order=10, model="intecomm_subject.bloodresultsfbc"),
+    Crf(show_order=100, model="intecomm_subject.nextappointment"),
     Crf(show_order=150, model="intecomm_subject.glucose"),
     Crf(show_order=220, model="intecomm_subject.bloodresultsglu"),
     Crf(show_order=230, model="intecomm_subject.bloodresultshba1c"),
@@ -30,7 +31,7 @@ crfs_d1 = FormsCollection(
     Crf(show_order=160, model="intecomm_subject.otherbaselinedata"),
     Crf(show_order=165, model="intecomm_subject.complicationsbaseline"),
     Crf(show_order=240, model="edc_qol.icecapa"),
-    Crf(show_order=245, model="edc_qol.e"),
+    Crf(show_order=245, model="edc_qol.eq5d3l"),
     name="day1",
 )
 
