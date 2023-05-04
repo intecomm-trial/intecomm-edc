@@ -10,26 +10,6 @@ class PatientLogIdentifier(SimpleUniqueIdentifier):
     template = "P{random_string}"
     random_string_length: int = 7
 
-    def __init__(self, site_id: Type[int] = None, **kwargs):
-        self.site_id = str(site_id)
-        super().__init__(**kwargs)
-
-    def update_identifier_model(self) -> bool:
-        """Attempts to update identifier_model and returns True (or instance)
-        if successful else False if identifier already exists.
-        """
-        try:
-            self.identifier_model_cls.objects.get(identifier=self.identifier)
-        except ObjectDoesNotExist:
-            return self.identifier_model_cls.objects.create(
-                identifier=self.identifier,
-                identifier_type=self.name,
-                identifier_prefix=self.identifier_prefix,
-                device_id=self.device_id,
-                site_id=self.site_id,
-            )
-        return False
-
 
 class FilingIdentifier(Identifier):
     name = "filing_identifier"
