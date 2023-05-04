@@ -55,7 +55,7 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
         verbose_name="File number",
         max_length=36,
         default=uuid4,
-        null=True,
+        unique=True,
         help_text="A sequential number to label a manual patient file",
     )
     patient_log_identifier = models.CharField(
@@ -225,6 +225,8 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     )
 
     screening_refusal_reason_other = OtherCharField()
+
+    printed = models.BooleanField(default=False)
 
     on_site = CurrentSiteManager()
     objects = PatientLogManager()

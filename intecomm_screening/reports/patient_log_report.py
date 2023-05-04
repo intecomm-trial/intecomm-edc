@@ -21,12 +21,6 @@ from intecomm_consent.models import SubjectConsent
 from intecomm_screening.models import SubjectScreening
 
 
-class ReportError(Exception):
-    def __init__(self, message, code=None):
-        super().__init__(message)
-        self.code = code
-
-
 class PatientLogReport(Report):
     default_page = dict(
         rightMargin=1 * cm,
@@ -41,7 +35,7 @@ class PatientLogReport(Report):
         self.object = patient_log
         self.user = user  # a User model instance
         self.image_folder = mkdtemp()
-        self.report_filename = f"{self.object.patient_log_identifier}.pdf"
+        self.report_filename = f"{self.object.filing_identifier}.pdf"
 
     def screening(self, attr):
         try:
@@ -221,13 +215,22 @@ class PatientLogReport(Report):
                     )
                 ],
             ),
+            (
+                [Paragraph("HOSPITAL IDENTIFIER:", self.styles["line_data_large"])],
+                [
+                    Paragraph(
+                        str(self.object.hospital_identifier) or " ",
+                        self.styles["line_data_largest"],
+                    )
+                ],
+            ),
         ]
         t = Table(data, colWidths=(6 * cm, None), rowHeights=(1 * cm))
         t.setStyle(
             TableStyle(
                 [
                     ("INNERGRID", (0, 0), (1, 0), 0.25, colors.black),
-                    ("INNERGRID", (0, 0), (1, 3), 0.25, colors.black),
+                    ("INNERGRID", (0, 0), (1, 4), 0.25, colors.black),
                     ("BOX", (0, 0), (-1, -1), 0.25, colors.black),
                     ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
                 ]
@@ -389,8 +392,6 @@ class PatientLogReport(Report):
         t = Table(data, colWidths=(9 * cm))
         t.hAlign = "LEFT"
         story.append(t)
-
-        story.append(Spacer(0.1 * cm, 0.5 * cm))
 
         data = [
             [

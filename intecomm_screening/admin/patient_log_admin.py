@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
 from django.template.loader import render_to_string
@@ -10,12 +10,18 @@ from django_audit_fields import audit_fieldset_tuple
 from edc_consent.modeladmin_mixins import PiiNamesModelAdminMixin
 from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER
+from edc_utils import get_utcnow
 
 from intecomm_sites.sites import all_sites
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientLogForm
-from ..models import PatientGroup, PatientLog, SubjectScreening
+from ..models import (
+    PatientGroup,
+    PatientLog,
+    PatientLogReportPrintHistory,
+    SubjectScreening,
+)
 from ..reports import PatientLogReport
 from ..utils import get_add_or_change_consent_url
 from .list_filters import (
@@ -32,10 +38,29 @@ from .modeladmin_mixins import BaseModelAdminMixin
 from .patient_call_inlines import AddPatientCallInline, ViewPatientCallInline
 
 
+@admin.action(description="Print patient reference")
 def render_pdf_action(modeladmin, request, queryset, **kwargs):  # noqa
-    for obj in queryset:
-        report = PatientLogReport(patient_log=obj, user=request.user)
-    return report.render()
+    report = None
+    if queryset.count() > 1:
+        messages.add_message(
+            request, messages.ERROR, "Select only one patient to print and try again"
+        )
+    else:
+        for obj in queryset:
+            report = PatientLogReport(patient_log=obj, user=request.user).render()
+            PatientLogReportPrintHistory.objects.create(
+                patient_log_identifier=obj.patient_log_identifier,
+                printed_datetime=get_utcnow(),
+                printed_user=request.user.username,
+            )
+            obj.printed = True
+            obj.save(update_fields=["printed"])
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Successfully printed patient reference for {obj.patient_log_identifier}.",
+            )
+    return report
 
 
 @admin.register(PatientLog, site=intecomm_screening_admin)
@@ -176,7 +201,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
     )
 
     list_display = (
-        "__str__",
+        "first_column",
         "hf_id",
         "dx",
         "group_name",
@@ -206,6 +231,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         "first_health_talk",
         "second_health_talk",
         "gender",
+        "printed",
     )
 
     filter_horizontal = ("conditions",)
@@ -250,7 +276,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
     def first_column(self, obj=None):
         for country in get_remove_patient_names_from_countries():
             if obj and obj.site.id in [s.site_id for s in self.all_sites.get(country)]:
-                return f"{obj.filing_identifier}-{self.contact_number[-4:]}"
+                return f"{obj.filing_identifier}-{obj.contact_number[-4:]}"
         return str(obj)
 
     @admin.display(description="Date logged", ordering="report_datetime")
