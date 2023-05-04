@@ -8,7 +8,6 @@ from edc_constants.constants import COMPLETE, MULTI_MORBIDITY
 from edc_dx import get_diagnosis_labels_prefixes
 
 from ..utils import verify_patient_group_ratio_raise
-from .patient_group import PatientGroup
 from .patient_group_appointment import PatientGroupAppointment
 from .patient_group_meeting import PatientGroupMeeting
 
@@ -16,11 +15,15 @@ from .patient_group_meeting import PatientGroupMeeting
 @receiver(
     post_save,
     weak=False,
-    sender=PatientGroup,
-    dispatch_uid="update_patient_group_ratio_on_post_save",
+    dispatch_uid="update_patientgroup_on_post_save",
 )
-def update_patientgroup_ratio_on_post_save(sender, instance, raw, update_fields, **kwargs):
-    if not raw and not update_fields:
+def update_patientgroup_on_post_save(sender, instance, raw, update_fields, **kwargs):
+    """Check ratio"""
+    if (
+        not raw
+        and not update_fields
+        and instance._meta.label_lower.split(".")[1] == "patientgroup"
+    ):
         raise_on_outofrange = True if instance.status == COMPLETE else False
         ncd, hiv, ratio = verify_patient_group_ratio_raise(
             instance.patients.all(), raise_on_outofrange=raise_on_outofrange

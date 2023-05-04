@@ -90,10 +90,11 @@ class SubjectConsent(
         return f"{self.subject_identifier} V{self.version}"
 
     def save(self, *args, **kwargs):
-        subject_screening = self.get_subject_screening()
-        self.screening_datetime = subject_screening.report_datetime
-        self.subject_type = "subject"
-        self.citizen = NOT_APPLICABLE
+        if not kwargs.get("update_fields"):
+            subject_screening = self.get_subject_screening()
+            self.screening_datetime = subject_screening.report_datetime
+            self.subject_type = "subject"
+            self.citizen = NOT_APPLICABLE
         super().save(*args, **kwargs)
 
     def natural_key(self):

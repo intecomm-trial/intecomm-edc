@@ -10,12 +10,13 @@ from edc_constants.choices import GENDER, YES_NO_TBD
 from edc_constants.constants import DM, HIV, HTN, TBD
 from edc_model.models import BaseUuidModel, HistoricalRecords, NameFieldsModelMixin
 from edc_model.validators.phone import phone_number
-from edc_model_fields.fields import InitialsField
+from edc_model_fields.fields import InitialsField, OtherCharField
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
 from edc_utils import get_utcnow
 
-from intecomm_lists.models import Conditions
+from intecomm_lists.models import Conditions, ScreeningRefusalReasons
 
+from ..identifiers import FilingIdentifier, PatientLogIdentifier
 from .proxy_models import Site
 
 
@@ -50,6 +51,13 @@ def abbrev_cond(c: list | None) -> str:
 
 
 class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
+    filing_identifier = models.CharField(
+        verbose_name="File number",
+        max_length=36,
+        default=uuid4,
+        unique=True,
+        help_text="A sequential number to label a manual patient file",
+    )
     patient_log_identifier = models.CharField(
         max_length=36,
         default=uuid4,
@@ -200,6 +208,26 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
 
     call_attempts = models.IntegerField(default=0, help_text="auto-updated", blank=True)
 
+    willing_to_screen = models.CharField(
+        verbose_name="Has the patient agreed to be screened for the INTECOMM study",
+        max_length=15,
+        choices=YES_NO_TBD,
+        default=TBD,
+        help_text="If NO, explain below",
+    )
+
+    screening_refusal_reason = models.ForeignKey(
+        ScreeningRefusalReasons,
+        on_delete=models.PROTECT,
+        verbose_name="Reason subject unwilling to screen",
+        null=True,
+        blank=True,
+    )
+
+    screening_refusal_reason_other = OtherCharField()
+
+    printed = models.BooleanField(default=False)
+
     on_site = CurrentSiteManager()
     objects = PatientLogManager()
     history = HistoricalRecords()
@@ -211,11 +239,16 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
         return format_html(f"{self.legal_name.upper()}-{self.contact_number[-4:]}")
 
     def save(self, *args, **kwargs):
-        self.legal_name = self.legal_name.upper()
-        self.familiar_name = self.familiar_name.upper()
-        self.initials = self.initials.upper()
-        self.last_4_contact_number = self.contact_number[-4:]
-        self.last_4_hospital_identifier = self.hospital_identifier[-4:]
+        if not kwargs.get("update_fields"):
+            self.legal_name = self.legal_name.upper()
+            self.familiar_name = self.familiar_name.upper()
+            self.initials = self.initials.upper()
+            self.last_4_contact_number = self.contact_number[-4:]
+            self.last_4_hospital_identifier = self.hospital_identifier[-4:]
+            if not self.filing_identifier:
+                self.filing_identifier = FilingIdentifier(site_id=self.site_id).identifier
+            if not self.patient_log_identifier:
+                self.patient_log_identifier = PatientLogIdentifier().identifier
         super().save(*args, **kwargs)
 
     def natural_key(self):

@@ -1,12 +1,6 @@
-from datetime import datetime
-from zoneinfo import ZoneInfo
-
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
-from edc_randomization.utils import get_object_for_subject
 from edc_registration.models import RegisteredSubject
-from edc_visit_schedule import site_visit_schedules
-from intecomm_rando.constants import CLINIC_CONTROL, COMM_INTERVENTION
 
 from intecomm_screening.models import SubjectScreening
 
@@ -51,31 +45,6 @@ def subject_consent_on_post_save(sender, instance, raw, created, **kwargs):
             except AttributeError:
                 pass
             rs_obj.save(update_fields=["full_name", "familiar_name"])
-        elif instance.group_identifier:
-            # put subject on schedule once in a group
-            rando_obj = get_object_for_subject(
-                instance.group_identifier, "default", identifier_fld="group_identifier"
-            )
-            if rando_obj.assignment in [COMM_INTERVENTION, CLINIC_CONTROL]:
-                model_name = (
-                    "intecomm_prn.onschedulecomm"
-                    if rando_obj.assignment == COMM_INTERVENTION
-                    else "intecomm_prn.onscheduleinte"
-                )
-                _, schedule = site_visit_schedules.get_by_onschedule_model(model_name)
-                allocated_datetime = datetime(
-                    rando_obj.allocated_datetime.year,
-                    rando_obj.allocated_datetime.month,
-                    rando_obj.allocated_datetime.day,
-                    rando_obj.allocated_datetime.hour,
-                    rando_obj.allocated_datetime.minute,
-                    rando_obj.allocated_datetime.second,
-                    tzinfo=ZoneInfo("UTC"),
-                )
-                schedule.put_on_schedule(
-                    subject_identifier=instance.subject_identifier,
-                    onschedule_datetime=allocated_datetime,
-                )
 
 
 @receiver(

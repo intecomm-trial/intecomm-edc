@@ -6,6 +6,7 @@ clinic_codenames = get_clinic_codenames(
     "intecomm_subject",
     "intecomm_consent",
     "intecomm_screening",
+    "edc_qol",
     list_app="intecomm_lists",
 )
 

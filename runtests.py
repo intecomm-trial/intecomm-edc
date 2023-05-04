@@ -177,6 +177,7 @@ def main():
         "intecomm_eligibility.tests",
         "intecomm_screening.tests",
         "intecomm_subject.tests",
+        "intecomm_consent.tests",
         "intecomm_visit_schedule.tests",
     ]
 

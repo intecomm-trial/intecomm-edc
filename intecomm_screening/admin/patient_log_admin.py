@@ -1,14 +1,28 @@
-from django.contrib import admin
+from typing import Tuple
+
+from django.contrib import admin, messages
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.handlers.wsgi import WSGIRequest
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields import audit_fieldset_tuple
+from edc_consent.modeladmin_mixins import PiiNamesModelAdminMixin
+from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER
+from edc_utils import get_utcnow
+
+from intecomm_sites.sites import all_sites
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientLogForm
-from ..models import PatientGroup, PatientLog, SubjectScreening
+from ..models import (
+    PatientGroup,
+    PatientLog,
+    PatientLogReportPrintHistory,
+    SubjectScreening,
+)
+from ..reports import PatientLogReport
 from ..utils import get_add_or_change_consent_url
 from .list_filters import (
     AttendDateListFilter,
@@ -24,9 +38,41 @@ from .modeladmin_mixins import BaseModelAdminMixin
 from .patient_call_inlines import AddPatientCallInline, ViewPatientCallInline
 
 
+@admin.action(description="Print patient reference")
+def render_pdf_action(modeladmin, request, queryset, **kwargs):  # noqa
+    report = None
+    if queryset.count() > 1:
+        messages.add_message(
+            request, messages.ERROR, "Select only one patient to print and try again"
+        )
+    else:
+        for obj in queryset:
+            report = PatientLogReport(patient_log=obj, user=request.user).render()
+            PatientLogReportPrintHistory.objects.create(
+                patient_log_identifier=obj.patient_log_identifier,
+                printed_datetime=get_utcnow(),
+                printed_user=request.user.username,
+            )
+            obj.printed = True
+            obj.save(update_fields=["printed"])
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Successfully printed patient reference for {obj.patient_log_identifier}.",
+            )
+    return report
+
+
 @admin.register(PatientLog, site=intecomm_screening_admin)
-class PatientLogAdmin(BaseModelAdminMixin):
+class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
     form = PatientLogForm
+
+    actions = [render_pdf_action]
+
+    name_fields: list[str] = ["legal_name", "familiar_name"]
+    name_display_field: str = "familiar_name"
+    all_sites = all_sites
+
     custom_form_codename = "edc_data_manager.special_bypassmodelform"
     list_per_page = 20
     show_object_tools = True
@@ -60,6 +106,7 @@ class PatientLogAdmin(BaseModelAdminMixin):
                 "fields": (
                     "report_datetime",
                     "site",
+                    "filing_identifier",
                 )
             },
         ),
@@ -121,6 +168,20 @@ class PatientLogAdmin(BaseModelAdminMixin):
             },
         ),
         (
+            "Willingness to screen",
+            {
+                "description": (
+                    "This section may be left blank until a decision is made. If and when the "
+                    "screening form is submitted, the response here will be "
+                    "automatically updated by the EDC"
+                ),
+                "fields": (
+                    "screening_refusal_reason",
+                    "screening_refusal_reason_other",
+                ),
+            },
+        ),
+        (
             "Screening and Consent",
             {
                 "classes": ("collapse",),
@@ -140,7 +201,7 @@ class PatientLogAdmin(BaseModelAdminMixin):
     )
 
     list_display = (
-        "__str__",
+        "first_column",
         "hf_id",
         "dx",
         "group_name",
@@ -170,6 +231,7 @@ class PatientLogAdmin(BaseModelAdminMixin):
         "first_health_talk",
         "second_health_talk",
         "gender",
+        "printed",
     )
 
     filter_horizontal = ("conditions",)
@@ -182,6 +244,7 @@ class PatientLogAdmin(BaseModelAdminMixin):
         "last_4_contact_number__exact",
         "hospital_identifier__exact",
         "initials__exact",
+        "filing_identifier",
         "legal_name__exact",
         "familiar_name__exact",
         "contact_number__exact",
@@ -194,6 +257,7 @@ class PatientLogAdmin(BaseModelAdminMixin):
         "may_contact": admin.VERTICAL,
         "second_health_talk": admin.VERTICAL,
         "stable": admin.VERTICAL,
+        "screening_refusal_reason": admin.VERTICAL,
     }
 
     readonly_fields = (
@@ -202,10 +266,18 @@ class PatientLogAdmin(BaseModelAdminMixin):
         "subject_identifier",
         "consent_datetime",
         "group_identifier",
+        "filing_identifier",
     )
 
     def post_url_on_delete_kwargs(self, request, obj):
         return {}
+
+    @admin.display(description="Patient log", ordering="-modified")
+    def first_column(self, obj=None):
+        for country in get_remove_patient_names_from_countries():
+            if obj and obj.site.id in [s.site_id for s in self.all_sites.get(country)]:
+                return f"{obj.filing_identifier}-{obj.contact_number[-4:]}"
+        return str(obj)
 
     @admin.display(description="Date logged", ordering="report_datetime")
     def date_logged(self, obj=None):
@@ -225,6 +297,15 @@ class PatientLogAdmin(BaseModelAdminMixin):
         return format_html(
             render_to_string(
                 "intecomm_screening/change_list_hospital_identifier.html", context=context
+            )
+        )
+
+    @admin.display(description="FILE", ordering="filing_identifier")
+    def filing_id(self, obj=None):
+        context = dict(filing_identifier=obj.filing_identifier)
+        return format_html(
+            render_to_string(
+                "intecomm_screening/change_list_filing_identifier.html", context=context
             )
         )
 
@@ -405,3 +486,22 @@ class PatientLogAdmin(BaseModelAdminMixin):
         if db_field.name == "gender":
             kwargs["choices"] = GENDER
         return super().formfield_for_choice_field(db_field, request, **kwargs)
+
+    def report(self, obj=None):
+        return format_html(
+            render_to_string(
+                "intecomm_screening/change_list_screen_and_consent.html",
+                context=self.get_screening_context(obj),
+            )
+        )
+
+    def get_search_fields(self, request: WSGIRequest) -> Tuple[str, ...]:
+        search_fields = super().get_search_fields(request)
+        for country in get_remove_patient_names_from_countries():
+            if request.site and request.site.id in [
+                s.site_id for s in self.all_sites.get(country)
+            ]:
+                search_fields = list(search_fields)
+                search_fields.append("filing_identifier")
+                search_fields = tuple(search_fields)
+        return search_fields

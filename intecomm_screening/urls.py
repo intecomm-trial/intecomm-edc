@@ -11,5 +11,10 @@ urlpatterns = [
         GroupManagementView.as_view(),
         name="group_managment_url",
     ),
+    # re_path(
+    #     r"^print_patient_log_report/(?P<id>\d+)/$",
+    #     PrintPatientLogReportView.as_view(),
+    #     name="print_patient_log_report_url",
+    # ),
     path("", RedirectView.as_view(url=f"/{app_name}/admin/"), name="home_url"),
 ]
