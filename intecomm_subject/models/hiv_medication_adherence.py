@@ -12,5 +12,5 @@ class HivMedicationAdherence(
     condition_label = "HIV"
 
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
-        verbose_name = "HIV Medication Adherence"
-        verbose_name_plural = "HIV Medication Adherence"
+        verbose_name = "Medication Adherence (HIV)"
+        verbose_name_plural = "Medication Adherence (HIV)"

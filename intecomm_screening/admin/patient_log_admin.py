@@ -22,7 +22,7 @@ from ..models import (
     PatientLogReportPrintHistory,
     SubjectScreening,
 )
-from ..reports import PatientLogReport
+from ..reports import PatientLogReport, PatientLogReportError
 from ..utils import get_add_or_change_consent_url
 from .list_filters import (
     AttendDateListFilter,
@@ -47,7 +47,13 @@ def render_pdf_action(modeladmin, request, queryset, **kwargs):  # noqa
         )
     else:
         for obj in queryset:
-            report = PatientLogReport(patient_log=obj, user=request.user).render()
+            try:
+                report = PatientLogReport(
+                    patient_log=obj, user=request.user
+                ).render_to_response()
+            except PatientLogReportError as e:
+                messages.add_message(request, messages.ERROR, str(e))
+                break
             PatientLogReportPrintHistory.objects.create(
                 patient_log_identifier=obj.patient_log_identifier,
                 printed_datetime=get_utcnow(),

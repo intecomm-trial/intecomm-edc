@@ -2,6 +2,7 @@ from tempfile import mkdtemp
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from edc_auth.auth_objects import PII
 from edc_identifier.utils import convert_to_human_readable
 from edc_pdf_reports import Report
 from edc_utils import convert_php_dateformat
@@ -21,6 +22,10 @@ from intecomm_consent.models import SubjectConsent
 from intecomm_screening.models import SubjectScreening
 
 
+class PatientLogReportError(Exception):
+    pass
+
+
 class PatientLogReport(Report):
     default_page = dict(
         rightMargin=1 * cm,
@@ -34,6 +39,8 @@ class PatientLogReport(Report):
         super().__init__(**kwargs)
         self.object = patient_log
         self.user = user  # a User model instance
+        if not user.groups.filter(name=PII):
+            raise PatientLogReportError("User does not have permissions to access PII")
         self.image_folder = mkdtemp()
         self.report_filename = f"{self.object.filing_identifier}.pdf"
 

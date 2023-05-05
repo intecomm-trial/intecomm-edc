@@ -23,6 +23,7 @@ from .drug_refill_htn import DrugRefillHtn
 from .drug_supply_dm import DrugSupplyDm
 from .drug_supply_hiv import DrugSupplyHiv
 from .drug_supply_htn import DrugSupplyHtn
+from .eq5d3l import Eq5d3l
 from .family_history import FamilyHistory
 from .glucose import Glucose
 from .hba1c_result import Hba1cResult
@@ -33,6 +34,7 @@ from .hiv_review import HivReview
 from .htn_initial_review import HtnInitialReview
 from .htn_medication_adherence import HtnMedicationAdherence
 from .htn_review import HtnReview
+from .icecapa import Icecapa
 from .investigations import Investigations
 from .malaria_test import MalariaTest
 from .medications import Medications
