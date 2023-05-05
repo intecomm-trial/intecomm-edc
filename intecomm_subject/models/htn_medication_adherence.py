@@ -12,5 +12,5 @@ class HtnMedicationAdherence(
     condition_label = "Hypertension"
 
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
-        verbose_name = "Hypertension Medication Adherence"
-        verbose_name_plural = "Hypertension Medication Adherence"
+        verbose_name = "Medication Adherence (Hypertension)"
+        verbose_name_plural = "Medication Adherence (Hypertension)"
