@@ -1,6 +1,10 @@
 Changes
 =======
 
+0.1.26
+------
+- reorder Medications admin fields to be consistent with clinical review (hiv, dm, htn)
+
 0.1.20
 ------
 - bump edc to 0.4.83
