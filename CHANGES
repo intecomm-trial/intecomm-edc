@@ -1,6 +1,12 @@
 Changes
 =======
 
+0.1.25
+------
+- reorder Medications admin fields to be consistent with clinical review (hiv, dm, htn)
+- bump to intecomm-form-validators 0.1.18
+- bump to edc 0.4.88
+
 0.1.20
 ------
 - bump edc to 0.4.83
