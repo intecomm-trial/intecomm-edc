@@ -1,0 +1,8 @@
+{% extends 'edc_subject_dashboard/bootstrap3/dashboard/appointments.html' %}
+{% load static %}
+
+{% block show_missed_label %}
+  &nbsp{% if wrapped.object.related_visit.reason == MISSED_VISIT %}
+  <span class="label label-default">{% if wrapped.subject_visit_missed.missed_reasons_other == NOT_SCHEDULED_FOR_FACILITY %}{{ NOT_APPLICABLE }}{% else %}MISSED{% endif %}</span>
+  {% endif %}
+{% endblock show_missed_label %}

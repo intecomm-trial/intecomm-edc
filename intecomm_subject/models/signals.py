@@ -16,6 +16,7 @@ from edc_utils import to_utc
 
 from intecomm_lists.models import SubjectVisitMissedReasons
 
+from ..constants import NOT_SCHEDULED_FOR_FACILITY
 from .next_appointment import NextAppointment
 from .subject_visit import SubjectVisit
 from .subject_visit_missed import SubjectVisitMissed
@@ -62,7 +63,7 @@ def update_appointments(instance):
             subject_visit_missed.missed_reasons.add(
                 SubjectVisitMissedReasons.objects.get(name=OTHER)
             )
-            subject_visit_missed.missed_reasons_other = "NOT_SCHEDULED_FOR_FACILITY"
+            subject_visit_missed.missed_reasons_other = NOT_SCHEDULED_FOR_FACILITY
             subject_visit_missed.comment = "[auto-completed by EDC]"
             subject_visit_missed.save()
             appointment.appt_status = COMPLETE_APPT

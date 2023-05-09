@@ -11,3 +11,7 @@
 {% endblock top_bar %}
 
 {% block extra_demographic_title %}Patient is a member of group <A href="{{patient_group_url}}">{{ group_name }}</A>{% endblock extra_demographic_title %}
+
+{% block appointments %}
+    {% include "intecomm_dashboard/bootstrap3/subject/dashboard/appointments.html" %}
+{% endblock appointments %}

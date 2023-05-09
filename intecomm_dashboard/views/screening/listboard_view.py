@@ -6,7 +6,8 @@ from django.urls import reverse
 from edc_listboard.filters import ListboardFilter
 from edc_listboard.filters import ListboardViewFilters as Base
 from edc_listboard.views import ScreeningListboardView
-from edc_screening.model_wrappers import SubjectScreeningModelWrapper
+
+from ...model_wrappers import SubjectScreeningModelWrapper
 
 
 class ListboardViewFilters(Base):
