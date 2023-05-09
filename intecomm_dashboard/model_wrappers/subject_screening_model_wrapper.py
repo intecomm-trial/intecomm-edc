@@ -4,6 +4,8 @@ from edc_consent import ConsentModelWrapperMixin
 from edc_model_wrapper import ModelWrapper
 from edc_subject_model_wrappers import SubjectConsentModelWrapper as BaseModelWrapper
 
+from .consent_refusal_model_wrapper import ConsentRefusalModelWrapper
+
 
 class SubjectConsentModelWrapper(BaseModelWrapper):
     @property
@@ -20,6 +22,7 @@ class SubjectScreeningModelWrapper(ConsentModelWrapperMixin, ModelWrapper):
     next_url_attrs = ["screening_identifier"]
     next_url_name = "screening_listboard_url"
     querystring_attrs = ["gender"]
+    refusal_model_wrapper_cls = ConsentRefusalModelWrapper
 
     @property
     def create_consent_options(self):
