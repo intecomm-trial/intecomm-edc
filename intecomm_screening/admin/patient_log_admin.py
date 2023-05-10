@@ -1,8 +1,7 @@
-from typing import Tuple
+import urllib.parse
 
 from django.contrib import admin, messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.handlers.wsgi import WSGIRequest
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
@@ -110,9 +109,10 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
             None,
             {
                 "fields": (
+                    "patient_log_identifier",
+                    "filing_identifier",
                     "report_datetime",
                     "site",
-                    "filing_identifier",
                 )
             },
         ),
@@ -250,7 +250,9 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         "last_4_contact_number__exact",
         "hospital_identifier__exact",
         "initials__exact",
+        "group_identifier",
         "filing_identifier",
+        "patient_log_identifier",
         "legal_name__exact",
         "familiar_name__exact",
         "contact_number__exact",
@@ -273,6 +275,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         "consent_datetime",
         "group_identifier",
         "filing_identifier",
+        "patient_log_identifier",
     )
 
     def post_url_on_delete_kwargs(self, request, obj):
@@ -373,7 +376,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
     def patient(self, obj=None):
         return f"{obj.familiar_name} ({obj.initials})"
 
-    @admin.display(description="Screen/Consent", ordering="screening_datetime")
+    @admin.display(description="Log/Scr/Consent", ordering="screening_datetime")
     def screened(self, obj=None):
         return format_html(
             render_to_string(
@@ -393,11 +396,18 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         context = dict()
         if obj.patientgroup_set.all().count() > 0:
             patient_group = obj.patientgroup_set.all().first()
-            url = reverse(
+            patient_group_url = reverse(
                 "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
             )
-            url = f"{url}?q={patient_group.name}"
-            context.update(url=url, patient_group=patient_group)
+            patient_group_url = (
+                f"{patient_group_url}?q={urllib.parse.quote(patient_group.name)}"
+            )
+            context.update(
+                patient_group_url=patient_group_url,
+                patient_group=patient_group,
+                subject_identifier=obj.subject_identifier,
+                subject_dashboard_url=self.get_subject_dashboard_url(obj),
+            )
         return format_html(
             render_to_string("intecomm_screening/change_list_group.html", context=context)
         )
@@ -430,8 +440,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
             qs = qs1 | self.model.objects.filter(id__in=pks)
         return qs, True
 
-    @staticmethod
-    def get_screening_context(obj) -> dict:
+    def get_screening_context(self, obj) -> dict:
         add_screening_url = None
         change_screening_url = None
         add_consent_url = None
@@ -483,10 +492,23 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
             change_screening_url=change_screening_url,
             add_consent_url=add_consent_url,
             change_consent_url=change_consent_url,
+            filing_identifier=obj.filing_identifier,
+            patient_log_identifier=obj.patient_log_identifier,
             screening_identifier=obj.screening_identifier,
             subject_identifier=subject_identifier,
+            group_identifier=obj.group_identifier,
             eligible=eligible,
         )
+
+    @staticmethod
+    def get_subject_dashboard_url(obj):
+        subject_dashboard_url = None
+        if obj.subject_identifier and obj.group_identifier:
+            subject_dashboard_url = reverse(
+                "intecomm_dashboard:subject_dashboard_url",
+                args=(obj.subject_identifier,),
+            )
+        return subject_dashboard_url
 
     def formfield_for_choice_field(self, db_field, request, **kwargs):
         if db_field.name == "gender":
@@ -501,13 +523,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
             )
         )
 
-    def get_search_fields(self, request: WSGIRequest) -> Tuple[str, ...]:
-        search_fields = super().get_search_fields(request)
-        for country in get_remove_patient_names_from_countries():
-            if request.site and request.site.id in [
-                s.site_id for s in self.all_sites.get(country)
-            ]:
-                search_fields = list(search_fields)
-                search_fields.append("filing_identifier")
-                search_fields = tuple(search_fields)
-        return search_fields
+    def get_changeform_initial_data(self, request) -> dict:
+        dct = super().get_changeform_initial_data(request)
+        dct.update({"patient_log_identifier": "custom_initial_value"})
+        return dct

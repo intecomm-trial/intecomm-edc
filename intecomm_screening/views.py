@@ -37,7 +37,8 @@ class GroupManagementView(EdcViewMixin, NavbarViewMixin, TemplateView):
         context_data.update(add_form=GroupAddForm())
         return context_data
 
-    def fetch_patient_logs(self, selected_pks: str):
+    @staticmethod
+    def fetch_patient_logs(selected_pks: str):
         patient_logs = []
         for pk in selected_pks.split(","):
             patient_logs.append(PatientLog.objects.get(pk=pk))

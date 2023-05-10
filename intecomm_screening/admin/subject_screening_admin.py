@@ -8,6 +8,7 @@ from django.urls.exceptions import NoReverseMatch
 from django.utils.html import format_html
 from django.utils.translation import gettext as _
 from django_audit_fields import audit_fieldset_tuple
+from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER
 from edc_dashboard.url_names import url_names
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
@@ -196,6 +197,8 @@ class SubjectScreeningAdmin(
         "hospital_identifier",
         "initials",
         "reasons_ineligible",
+        "legal_name",
+        "familiar_name",
     )
 
     readonly_fields = (
@@ -305,3 +308,15 @@ class SubjectScreeningAdmin(
         if db_field.name == "gender":
             kwargs["choices"] = GENDER
         return super().formfield_for_choice_field(db_field, request, **kwargs)
+
+    def get_search_fields(self, request: WSGIRequest) -> Tuple[str, ...]:
+        search_fields = super().get_search_fields(request)
+        for country in get_remove_patient_names_from_countries():
+            if request.site and request.site.id in [
+                s.site_id for s in self.all_sites.get(country)
+            ]:
+                search_fields = list(search_fields)
+                search_fields.remove("legal_name")
+                search_fields.remove("familiar_name")
+                search_fields = tuple(search_fields)
+        return search_fields
