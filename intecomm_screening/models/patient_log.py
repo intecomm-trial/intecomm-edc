@@ -243,10 +243,15 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     history = HistoricalRecords()
 
     def __str__(self):
-        # stable = "-S" if self.stable == YES else ""
-        # cond = "-".join([o.name for o in self.conditions.all()])
-        # -{self.site_id} - {stable} - {cond}
-        return format_html(f"{self.legal_name.upper()}-{self.contact_number[-4:]}")
+        if re.match(UUID_PATTERN, str(self.legal_name)):
+            return format_html(
+                f"{self.filing_identifier} {self.initials} "
+                f"{self.age_in_years}{self.gender}"
+            )
+        return format_html(
+            f"{self.legal_name.upper()}-{self.contact_number[-4:]} {self.initials} "
+            f"{self.age_in_years}{self.gender}"
+        )
 
     def save(self, *args, **kwargs):
         if not kwargs.get("update_fields"):

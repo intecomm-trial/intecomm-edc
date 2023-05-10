@@ -1,3 +1,5 @@
+import urllib.parse
+
 from django.contrib import admin, messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
@@ -394,12 +396,14 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         context = dict()
         if obj.patientgroup_set.all().count() > 0:
             patient_group = obj.patientgroup_set.all().first()
-            url = reverse(
+            patient_group_url = reverse(
                 "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
             )
-            url = f"{url}?q={patient_group.name}"
+            patient_group_url = (
+                f"{patient_group_url}?q={urllib.parse.quote(patient_group.name)}"
+            )
             context.update(
-                url=url,
+                patient_group_url=patient_group_url,
                 patient_group=patient_group,
                 subject_identifier=obj.subject_identifier,
                 subject_dashboard_url=self.get_subject_dashboard_url(obj),
