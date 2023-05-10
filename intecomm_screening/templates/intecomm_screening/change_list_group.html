@@ -2,5 +2,7 @@
 <tr>
 <td style="white-space: nowrap;">{% if patient_group_url %}<a title="Go to patient group" href="{{ patient_group_url }}">{{ patient_group.name|upper }}</a>{% else %}<span style="color:orange">available</span>{% endif %}</td>
 </tr>
+{% if subject_dashboard_url %}
 <tr><td style="white-space: nowrap;"><a title="Go to subject dashboard" href="{{ subject_dashboard_url }}">Go to Dashboard</a></td></tr>
+{% endif  %}
 </table>
