@@ -1,3 +1,6 @@
-<span style="white-space: pre;">
-  {% if url %} <a href="{{ url }}">{{ patient_group.name|upper }}</a> {% else %}<span style="color:orange">available</span>{% endif %}
-</span>
+<table>
+<tr>
+<td style="white-space: nowrap;">{% if url %} <a title="Go to patient group" href="{{ url }}">{{ patient_group.name|upper }}</a> {% else %}<span style="color:orange">available</span>{% endif %}</td>
+</tr>
+<tr><td style="white-space: nowrap;"><a title="Go to subject dashboard" href="{{ subject_dashboard_url }}">Go to Dashboard</a></td></tr>
+</table>

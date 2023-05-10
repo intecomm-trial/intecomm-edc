@@ -27,6 +27,7 @@ def get_add_or_change_consent_url(
         )
     except ObjectDoesNotExist:
         url = reverse("intecomm_consent_admin:intecomm_consent_subjectconsent_add")
+        # TODO: remove sensitive data from url!!
         add_consent_url = (
             f"{url}?next={next_url_name}"
             f"&screening_identifier={obj.screening_identifier}"

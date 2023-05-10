@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from django.contrib import admin
+from django.core.handlers.wsgi import WSGIRequest
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_consent.actions import (
     flag_as_verified_against_paper,
@@ -10,6 +11,7 @@ from edc_consent.modeladmin_mixins import (
     ConsentModelAdminMixin,
     PiiNamesModelAdminMixin,
 )
+from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
@@ -114,3 +116,15 @@ class SubjectConsentAdmin(
         if "group_identifier" not in readonly_fields:
             readonly_fields += ("group_identifier",)
         return readonly_fields
+
+    def get_search_fields(self, request: WSGIRequest) -> Tuple[str, ...]:
+        search_fields = super().get_search_fields(request)
+        for country in get_remove_patient_names_from_countries():
+            if request.site and request.site.id in [
+                s.site_id for s in self.all_sites.get(country)
+            ]:
+                search_fields = list(search_fields)
+                search_fields.remove("legal_name")
+                search_fields.remove("familiar_name")
+                search_fields = tuple(search_fields)
+        return search_fields

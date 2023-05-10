@@ -11,5 +11,5 @@ class OffScheduleInte(SiteModelMixin, ActionModelMixin, OffScheduleModelMixin, B
     offschedule_compare_dates_as_datetimes = False
 
     class Meta(OffScheduleModelMixin.Meta, BaseUuidModel.Meta):
-        verbose_name = "Off-schedule Facility Integrated Care"
-        verbose_name_plural = "Off-schedule Facility Integrated Care"
+        verbose_name = "Off-schedule facility-based integrated care"
+        verbose_name_plural = "Off-schedule facility-based integrated care"

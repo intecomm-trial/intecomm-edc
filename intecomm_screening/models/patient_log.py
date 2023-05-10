@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from uuid import uuid4
+import re
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.html import format_html
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
 from edc_constants.choices import GENDER, YES_NO_TBD
-from edc_constants.constants import DM, HIV, HTN, TBD
+from edc_constants.constants import DM, HIV, HTN, TBD, UUID_PATTERN
 from edc_model.models import BaseUuidModel, HistoricalRecords, NameFieldsModelMixin
 from edc_model.validators.phone import phone_number
 from edc_model_fields.fields import InitialsField, OtherCharField
@@ -52,16 +52,26 @@ def abbrev_cond(c: list | None) -> str:
 
 class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     filing_identifier = models.CharField(
-        verbose_name="File number",
+        verbose_name="Filing number",
         max_length=36,
-        default=uuid4,
+        blank=True,
         unique=True,
-        help_text="A sequential number to label a manual patient file",
+        help_text=format_html(
+            "Auto-populated when form is saved. <BR>"
+            "This is a sequential-like identifier to label this patient's paper file"
+        ),
     )
     patient_log_identifier = models.CharField(
+        verbose_name="Patient Log Reference",
         max_length=36,
-        default=uuid4,
         unique=True,
+        blank=True,
+        help_text=format_html(
+            "Auto-populated when form is saved. <BR>"
+            "You may prefer to use the FILING NUMBER. <BR>"
+            "This identifier is replaced by the 'screening identifier' if the patient screens "
+            "for the INTECOMM trial"
+        ),
     )
 
     screening_identifier = models.CharField(
@@ -245,9 +255,13 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
             self.initials = self.initials.upper()
             self.last_4_contact_number = self.contact_number[-4:]
             self.last_4_hospital_identifier = self.hospital_identifier[-4:]
-            if not self.filing_identifier:
+            if not self.filing_identifier or re.match(
+                UUID_PATTERN, str(self.filing_identifier)
+            ):
                 self.filing_identifier = FilingIdentifier(site_id=self.site_id).identifier
-            if not self.patient_log_identifier:
+            if not self.patient_log_identifier or re.match(
+                UUID_PATTERN, str(self.patient_log_identifier)
+            ):
                 self.patient_log_identifier = PatientLogIdentifier().identifier
         super().save(*args, **kwargs)
 
