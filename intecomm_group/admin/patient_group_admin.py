@@ -43,9 +43,9 @@ class PatientGroupAdmin(BaseModelAdminMixin):
 
     list_display = (
         "__str__",
-        "group_identifier",
         "randomized_date",
         "status",
+        "group_identifier",
         "to_subjects",
         "arm",
         "meetings",
@@ -88,17 +88,19 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         except AttributeError:
             return None
 
-    @admin.display(description="Arm")
+    @admin.display(description="Randomization")
     def arm(self, obj=None):
         try:
             arm_as_str = get_assignment_description_for_patient_group(obj.group_identifier)
         except PatientGroupNotRandomized:
             link = None
         else:
-            url = reverse("intecomm_group_admin:intecomm_group_patientgroup_changelist")
+            url = reverse(
+                "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
+            )
             url = f"{url}?q={obj.name}"
             link = format_html(
-                f'<a title="Go to group followup" href="{url}">{arm_as_str}</a>'
+                f'<a title="Back to all patient groups" href="{url}">{arm_as_str}</a>'
             )
         return link
 
@@ -113,7 +115,7 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         url = f"{url}?q={name}"
         return format_html(f'<a href="{url}">Meetings</a>')
 
-    @admin.display(description="Patients")
+    @admin.display(description="Dashboards")
     def to_subjects(self, obj=None):
         if (
             RandomizationList.objects.get(group_identifier=obj.group_identifier).assignment
@@ -124,7 +126,10 @@ class PatientGroupAdmin(BaseModelAdminMixin):
             url = reverse("intecomm_dashboard:inte_subject_listboard_url")
         cnt = obj.patients.all().count()
         url = f"{url}?q={obj.group_identifier}"
-        return format_html(f'<a href="{url}">{cnt}&nbsp;{p.plural("patient", cnt)}</a>')
+        return format_html(
+            f'<a title="Go to subject dashboards" href="{url}">"'
+            f'{cnt}&nbsp;{p.plural("subject", cnt)}</a>'
+        )
 
     def get_queryset(self, request):
         return (

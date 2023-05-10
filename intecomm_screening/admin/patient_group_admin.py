@@ -106,8 +106,9 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         "opened",
         "status",
         "rounded_ratio",
-        "to_patients",
         "arm",
+        "to_patients",
+        "group_identifier",
         "randomized_date",
         "user_created",
         "created",
@@ -121,6 +122,7 @@ class PatientGroupAdmin(BaseModelAdminMixin):
 
     search_fields = (
         "name",
+        "group_identifier",
         "hiv_patients__legal_name__exact",
         "hiv_patients__familiar_name__exact",
         "hiv_patients__initials__iexact",
@@ -193,9 +195,12 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         cnt = obj.patients.all().count()
         url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
         url = f"{url}?q={obj.name}"
-        return format_html(f'<a href="{url}">{cnt}&nbsp;{p.plural("patient", cnt)}</a>')
+        return format_html(
+            f'<a title="Go to patient log" href="{url}">'
+            f'{cnt}&nbsp;{p.plural("patient", cnt)}</a>'
+        )
 
-    @admin.display(description="Arm")
+    @admin.display(description="Randomization")
     def arm(self, obj=None):
         try:
             arm_as_str = get_assignment_description_for_patient_group(obj.group_identifier)
@@ -205,7 +210,7 @@ class PatientGroupAdmin(BaseModelAdminMixin):
             url = reverse("intecomm_group_admin:intecomm_group_patientgroup_changelist")
             url = f"{url}?q={obj.name}"
             link = format_html(
-                f'<a title="Go to group followup" href="{url}">{arm_as_str}</a>'
+                f'<a title="Go to patient groups in followup" href="{url}">{arm_as_str}</a>'
             )
         return link
 

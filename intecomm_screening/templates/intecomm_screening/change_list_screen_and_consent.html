@@ -1,6 +1,13 @@
 <table>
     <tr>
-      <td style="white-space: nowrap;">Stable</td><td style="{% if stable != "Yes"%}background-color: red{% endif %}">{{ stable }}</td>
+      <td style="white-space: nowrap;">Log</td><td>{{ patient_log_identifier }}</td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">Filing</td><td>{{ filing_identifier }}</td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">Stable</td>
+      <td style="{% if stable != "Yes"%}background-color: red{% endif %}">{{ stable }}</td>
     </tr>
 
   {% if add_screening_url %}
@@ -11,7 +18,7 @@
   {% else %}
     <tr>
       <td style="color:darkgreen;white-space: nowrap;">Screened </td>
-      <td style="white-space: nowrap;"><a href="{{ change_screening_url }}">{{ screening_identifier }}</a></td>
+      <td style="white-space: nowrap;"><a title="Go to screening form" href="{{ change_screening_url }}">{{ screening_identifier }}</a></td>
     </tr>
   {% endif  %}
   {% if screening_identifier and eligible %}
@@ -22,7 +29,7 @@
       </tr>
     {% else %}
       <tr>
-        <td style="color:darkgreen;white-space: nowrap;">Consented</td><td style="white-space: nowrap;"><a href="{{ change_consent_url }}">{{ subject_identifier }}</a></td>
+        <td style="color:darkgreen;white-space: nowrap;">Consented</td><td style="white-space: nowrap;"><a title="Go to consent form" href="{{ change_consent_url }}">{{ subject_identifier }}</a></td>
       </tr>
     {% endif  %}
   {% else %}
@@ -32,4 +39,9 @@
       </tr>
     {% endif  %}
   {% endif  %}
+  {% if group_identifier %}
+    <tr>
+      <td style="white-space: nowrap;">Group</td><td>{{ group_identifier }}</td>
+    </tr>
+  {% endif %}
 </table>

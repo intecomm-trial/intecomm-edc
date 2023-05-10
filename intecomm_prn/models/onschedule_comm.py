@@ -8,5 +8,5 @@ class OnScheduleComm(SiteModelMixin, OnScheduleModelMixin, BaseUuidModel):
     """A model used by the system. Auto-completed by subject_consent."""
 
     class Meta(OnScheduleModelMixin.Meta, BaseUuidModel.Meta):
-        verbose_name = "On-schedule Community Integrated Care"
-        verbose_name_plural = "On-schedule Community Integrated Care"
+        verbose_name = "On-schedule community-based integrated care"
+        verbose_name_plural = "On-schedule community-based integrated care"
