@@ -1,15 +1,22 @@
 from __future__ import annotations
 
+import typing
 from decimal import Decimal
 from typing import Tuple
 
+from django.urls import reverse
 from edc_constants.constants import DM, HIV, HTN
+from edc_randomization.site_randomizers import site_randomizers
 from edc_randomization.utils import (
     SubjectNotRandomization,
     get_assignment_description_for_subject,
 )
+from intecomm_rando.constants import COMM_INTERVENTION
 
 from .exceptions import PatientGroupNotRandomized
+
+if typing.TYPE_CHECKING:
+    from .models import PatientGroup
 
 
 class PatientGroupRatioError(Exception):
@@ -49,3 +56,20 @@ def get_assignment_description_for_patient_group(group_identifier: str | None) -
     except SubjectNotRandomization:
         raise PatientGroupNotRandomized("Group is not randomized")
     return description
+
+
+def get_group_subject_dashboards_url(patient_group: PatientGroup) -> str:
+    """Returns a url to the listboard of subjects in followup
+    for this group.
+    """
+    randomizer = site_randomizers.get("default")
+    if (
+        randomizer.model_cls()
+        .objects.get(group_identifier=patient_group.group_identifier)
+        .assignment
+        == COMM_INTERVENTION
+    ):
+        url = reverse("intecomm_dashboard:comm_subject_listboard_url")
+    else:
+        url = reverse("intecomm_dashboard:inte_subject_listboard_url")
+    return f"{url}?q={patient_group.group_identifier}"

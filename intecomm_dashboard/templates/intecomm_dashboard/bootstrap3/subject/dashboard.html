@@ -10,7 +10,9 @@
 
 {% endblock top_bar %}
 
-{% block extra_demographic_title %}Group: <A href="{{patient_group_url}}">{{ group_name }}</A>{% endblock extra_demographic_title %}
+{% block extra_demographic_title %}
+  Group: <A href="{{patient_group_url}}">{{ group_name }}</A>
+{% endblock extra_demographic_title %}
 
 {% block appointments %}
     {% include "intecomm_dashboard/bootstrap3/subject/dashboard/appointments.html" %}
@@ -21,3 +23,11 @@
   <a class="list-group-item"><i class="fas fa-file fa-fw"></i>{{ patient_log.filing_identifier }}</a>
   <a role="button" class="btn btn-sm btn-primary" data-toggle="tooltip" title="" href="{{ patient_log_url }}">Go to patient log <i class="fa-solid fa-mail-forward fa-1x fa-fw" aria-hidden="true"></i></a>
 {% endblock side_bar %}
+
+{% block top_bar_buttons_extra %}
+  <a href="{{group_subject_dashboards_url}}"
+     role="button" class="btn btn-sm btn-primary" data-toggle="tooltip" title="Go to patient group">
+  <i class="fa-solid fa-reply fa-1x fa-fw" aria-hidden="true"></i>
+    Group
+  </a>
+{% endblock top_bar_buttons_extra %}
