@@ -1,3 +1,4 @@
+import re
 from decimal import Decimal
 from typing import Tuple
 
@@ -8,7 +9,7 @@ from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
-from edc_constants.constants import DM, HIV, HTN, YES
+from edc_constants.constants import DM, HIV, HTN, UUID_PATTERN, YES
 from edc_utils.round_up import round_up
 from intecomm_form_validators.utils import get_group_size_for_ratio
 
@@ -104,11 +105,11 @@ class PatientGroupAdmin(BaseModelAdminMixin):
     list_display = (
         "__str__",
         "opened",
-        "status",
+        "group_status",
         "rounded_ratio",
         "arm",
         "to_patients",
-        "group_identifier",
+        "group_id",
         "randomized_date",
         "user_created",
         "created",
@@ -190,14 +191,24 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         except AttributeError:
             return None
 
-    @admin.display(description="Patients")
+    @admin.display(description="Group identifier", ordering="group_identifier")
+    def group_id(self, obj):
+        return (
+            None if re.match(UUID_PATTERN, str(obj.group_identifier)) else obj.group_identifier
+        )
+
+    @admin.display(description="Status", ordering="status")
+    def group_status(self, obj):
+        return format_html(f'<span class="nowrap">{obj.get_status_display()}</span>')
+
+    @admin.display(description="Patient Logs")
     def to_patients(self, obj=None):
         cnt = obj.patients.all().count()
         url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
         url = f"{url}?q={obj.name}"
         return format_html(
             f'<a title="Go to patient log" href="{url}">'
-            f'{cnt}&nbsp;{p.plural("patient", cnt)}</a>'
+            f'<span class="nowrap">{cnt}&nbsp;{p.plural("patient", cnt)}</span></a>'
         )
 
     @admin.display(description="Randomization")

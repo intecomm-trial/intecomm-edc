@@ -1,8 +1,9 @@
 from django.db import models
-from edc_constants.constants import NO, YES
+from edc_constants.constants import NO
 from edc_model.models import BaseUuidModel
 from edc_sites.models import SiteModelMixin
 from edc_utils import formatted_date
+from edc_utils.date import to_local
 
 from ..model_mixins import PatientCallModelMixin
 from .patient_log import PatientLog
@@ -12,16 +13,8 @@ class PatientCall(PatientCallModelMixin, SiteModelMixin, BaseUuidModel):
     patient_log = models.ForeignKey(PatientLog, on_delete=models.PROTECT)
 
     def __str__(self):
-        report_dt = formatted_date(self.report_datetime.date())
-        call_again = "Do not call" if self.call_again == NO else "Call again"
-        if self.call_again == YES:
-            msg = (
-                f"{report_dt}: {self.patient_log} was last called "
-                f"{self.report_datetime}. {call_again}."
-            )
-        else:
-            msg = f"{report_dt}: {self.patient_log}."
-        return msg
+        call_again = "Do not call again." if self.call_again == NO else "May call again."
+        return f"{formatted_date(to_local(self.report_datetime).date())}. {call_again}"
 
     def natural_key(self):
         return (self.patient_log,)

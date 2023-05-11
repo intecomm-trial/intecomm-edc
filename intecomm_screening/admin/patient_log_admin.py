@@ -404,7 +404,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
             )
             context.update(
                 patient_group_url=patient_group_url,
-                patient_group=patient_group,
+                patient_group_name=patient_group.name.replace(" ", "\n"),
                 subject_identifier=obj.subject_identifier,
                 subject_dashboard_url=self.get_subject_dashboard_url(obj),
             )

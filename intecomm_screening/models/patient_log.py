@@ -6,6 +6,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.html import format_html
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
+from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER, YES_NO_TBD
 from edc_constants.constants import DM, HIV, HTN, TBD, UUID_PATTERN
 from edc_model.models import BaseUuidModel, HistoricalRecords, NameFieldsModelMixin
@@ -15,6 +16,7 @@ from edc_sites.models import CurrentSiteManager, SiteModelMixin
 from edc_utils import get_utcnow
 
 from intecomm_lists.models import Conditions, ScreeningRefusalReasons
+from intecomm_sites import all_sites
 
 from ..identifiers import FilingIdentifier, PatientLogIdentifier
 from .proxy_models import Site
@@ -189,7 +191,9 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
 
     next_appt_date = models.DateField(
         verbose_name="Next scheduled routine appointment at this health facility",
-        help_text="This date will help prioritize efforts to contact the patient",
+        null=True,
+        blank=True,
+        help_text="If known, this date will help prioritize efforts to contact the patient",
     )
 
     first_health_talk = models.CharField(
@@ -243,7 +247,12 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     history = HistoricalRecords()
 
     def __str__(self):
-        if re.match(UUID_PATTERN, str(self.legal_name)):
+        remove_patient_names = False
+        for country in get_remove_patient_names_from_countries():
+            if self.site and self.site.id in [s.site_id for s in all_sites.get(country)]:
+                remove_patient_names = True
+                break
+        if remove_patient_names or re.match(UUID_PATTERN, str(self.legal_name)):
             return format_html(
                 f"{self.filing_identifier} {self.initials} "
                 f"{self.age_in_years}{self.gender}"

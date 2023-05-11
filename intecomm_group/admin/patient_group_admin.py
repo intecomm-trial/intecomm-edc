@@ -1,12 +1,12 @@
+import re
+
 import inflect
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
-from edc_constants.constants import COMPLETE, NEW
+from edc_constants.constants import COMPLETE, NEW, UUID_PATTERN
 from intecomm_form_validators import RECRUITING
-from intecomm_rando.constants import COMM_INTERVENTION
-from intecomm_rando.models import RandomizationList
 
 from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin
 
@@ -14,7 +14,10 @@ from ..admin_site import intecomm_group_admin
 from ..exceptions import PatientGroupNotRandomized
 from ..forms import PatientGroupForm
 from ..models import PatientGroup
-from ..utils import get_assignment_description_for_patient_group
+from ..utils import (
+    get_assignment_description_for_patient_group,
+    get_group_subject_dashboards_url,
+)
 
 p = inflect.engine()
 
@@ -44,8 +47,8 @@ class PatientGroupAdmin(BaseModelAdminMixin):
     list_display = (
         "__str__",
         "randomized_date",
-        "status",
-        "group_identifier",
+        "group_status",
+        "group_id",
         "to_subjects",
         "arm",
         "meetings",
@@ -88,6 +91,10 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         except AttributeError:
             return None
 
+    @admin.display(description="Status", ordering="status")
+    def group_status(self, obj):
+        return format_html(f'<span class="nowrap">{obj.get_status_display()}</span>')
+
     @admin.display(description="Randomization")
     def arm(self, obj=None):
         try:
@@ -100,7 +107,7 @@ class PatientGroupAdmin(BaseModelAdminMixin):
             )
             url = f"{url}?q={obj.name}"
             link = format_html(
-                f'<a title="Back to all patient groups" href="{url}">{arm_as_str}</a>'
+                f'<a title="Back to ALL patient groups" href="{url}">{arm_as_str}</a>'
             )
         return link
 
@@ -117,18 +124,11 @@ class PatientGroupAdmin(BaseModelAdminMixin):
 
     @admin.display(description="Dashboards")
     def to_subjects(self, obj=None):
-        if (
-            RandomizationList.objects.get(group_identifier=obj.group_identifier).assignment
-            == COMM_INTERVENTION
-        ):
-            url = reverse("intecomm_dashboard:comm_subject_listboard_url")
-        else:
-            url = reverse("intecomm_dashboard:inte_subject_listboard_url")
         cnt = obj.patients.all().count()
-        url = f"{url}?q={obj.group_identifier}"
+        url = get_group_subject_dashboards_url(obj)
         return format_html(
-            f'<a title="Go to subject dashboards" href="{url}">"'
-            f'{cnt}&nbsp;{p.plural("subject", cnt)}</a>'
+            f'<a title="Go to subject dashboards" href="{url}">'
+            f'<span class="nowrap">{cnt}&nbsp;{p.plural("subject", cnt)}</span></a>'
         )
 
     def get_queryset(self, request):
@@ -136,4 +136,10 @@ class PatientGroupAdmin(BaseModelAdminMixin):
             super()
             .get_queryset(request)
             .exclude(status__in=[NEW, RECRUITING, COMPLETE], randomized=False)
+        )
+
+    @admin.display(description="Group identifier", ordering="group_identifier")
+    def group_id(self, obj):
+        return (
+            None if re.match(UUID_PATTERN, str(obj.group_identifier)) else obj.group_identifier
         )
