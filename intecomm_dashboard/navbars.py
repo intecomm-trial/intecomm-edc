@@ -23,8 +23,8 @@ navbar.append_item(
 navbar.append_item(
     NavbarItem(
         name="comm_followup",
-        title="COMM",
-        label="COMM",
+        title="Community",
+        label="Community",
         fa_icon="fa-solid fa-users-between-lines",
         codename="edc_subject_dashboard.view_subject_listboard",
         url_name="followup_comm_url",
@@ -35,8 +35,8 @@ navbar.append_item(
 navbar.append_item(
     NavbarItem(
         name="inte_followup",
-        title="INTE",
-        label="INTE",
+        title="Facility",
+        label="Facility",
         fa_icon="fa-solid fa-user-circle",
         codename="edc_subject_dashboard.view_subject_listboard",
         url_name="followup_inte_url",

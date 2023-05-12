@@ -9,7 +9,7 @@ from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
-from edc_constants.constants import DM, HIV, HTN, UUID_PATTERN, YES
+from edc_constants.constants import COMPLETE, DM, HIV, HTN, UUID_PATTERN, YES
 from edc_utils.round_up import round_up
 from intecomm_form_validators.utils import get_group_size_for_ratio
 
@@ -66,7 +66,7 @@ class PatientGroupAdmin(BaseModelAdminMixin):
             {"fields": ("notes",)},
         ),
         (
-            "Status, Size, Ratio",
+            "Size, Ratio",
             {
                 "description": format_html(
                     "Please consult with your study coordinator before you "
@@ -74,23 +74,25 @@ class PatientGroupAdmin(BaseModelAdminMixin):
                     "NCD to HIV patients."
                 ),
                 "fields": (
-                    "status",
                     "bypass_group_size_min",
                     "bypass_group_ratio",
                 ),
             },
         ),
         (
-            "Randomize",
+            "Status",
             {
                 "description": format_html(
-                    "Complete this section when the group is COMPLETE and ready to "
-                    "RANDOMIZE. <BR>Please consult with your study coordinator before "
-                    "randomizing a group that does not meet the minimum group size and/or "
-                    "the ratio of NCD to HIV patients. <BR>"
-                    "<B>Important: THIS STEP CANNOT BE UNDONE</B>"
+                    "<P>Patients may be selected if <B>status</B> is "
+                    "set to <U>Recruiting</U>. Once patient selections are final, "
+                    "set <B>status</B> to <U>Complete</U>."
+                    "<BR>If you need to make changes after setting <B>status</B> "
+                    "to <U>Complete</U>:"
+                    "<BR>-set the <B>status</B> back to <U>Recruiting</U>;"
+                    "<BR>-save this form;"
+                    "<BR>-reopen this form and make your changes.</P>"
                 ),
-                "fields": ("randomize_now", "confirm_randomize_now"),
+                "fields": ("status",),
             },
         ),
         (
@@ -143,10 +145,7 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         "patients",
     )
 
-    radio_fields = {
-        "status": admin.VERTICAL,
-        "randomize_now": admin.VERTICAL,
-    }
+    radio_fields = {"status": admin.VERTICAL}
 
     readonly_fields = ("patients", "group_identifier", "randomized", "randomized_datetime")
 
@@ -216,7 +215,17 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         try:
             arm_as_str = get_assignment_description_for_patient_group(obj.group_identifier)
         except PatientGroupNotRandomized:
-            link = None
+            if obj.status == COMPLETE:
+                url = reverse(
+                    "intecomm_screening_admin:intecomm_screening_patientgrouprando_change",
+                    args=(obj.id,),
+                )
+                url = f"{url}?name={obj.name}"
+                link = format_html(
+                    f'<a title="Go to Patient group rando" href="{url}">Ready to randomize</a>'
+                )
+            else:
+                link = None
         else:
             url = reverse("intecomm_group_admin:intecomm_group_patientgroup_changelist")
             url = f"{url}?q={obj.name}"
@@ -240,6 +249,7 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         if (
             obj
             and not obj.randomized
+            # and obj.status in [NEW, RECRUITING, COMPLETE]
             and request.user.has_perm("intecomm_screening.change_patientlog")
         ):
             patient_log_model_cls = django_apps.get_model("intecomm_screening.patientlog")

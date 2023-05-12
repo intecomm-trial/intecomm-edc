@@ -74,6 +74,10 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
         max_length=25,
         choices=GROUP_STATUS_CHOICES,
         default=RECRUITING,
+        help_text=(
+            "Will reverted to 'Recruiting' if changes are made to the list of selected "
+            "patients"
+        ),
     )
 
     ratio = models.DecimalField(max_digits=10, decimal_places=4, null=True)
