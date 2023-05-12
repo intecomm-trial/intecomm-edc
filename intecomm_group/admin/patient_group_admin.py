@@ -5,8 +5,9 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
-from edc_constants.constants import COMPLETE, NEW, UUID_PATTERN
+from edc_constants.constants import COMPLETE, NEW, NOT_APPLICABLE, UUID_PATTERN
 from intecomm_form_validators import RECRUITING
+from intecomm_rando.constants import COMM_INTERVENTION
 
 from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin
 
@@ -46,12 +47,11 @@ class PatientGroupAdmin(BaseModelAdminMixin):
 
     list_display = (
         "__str__",
-        "randomized_date",
-        "group_status",
-        "group_id",
         "to_subjects",
         "arm",
         "meetings",
+        "group_id",
+        "randomized_date",
         "opened",
         "user_created",
         "created",
@@ -95,6 +95,16 @@ class PatientGroupAdmin(BaseModelAdminMixin):
     def group_status(self, obj):
         return format_html(f'<span class="nowrap">{obj.get_status_display()}</span>')
 
+    @admin.display(description="Group identifier", ordering="group_identifier")
+    def group_id(self, obj):
+        return (
+            None if re.match(UUID_PATTERN, str(obj.group_identifier)) else obj.group_identifier
+        )
+
+    @admin.display(description="Opened", ordering="report_datetime")
+    def opened(self, obj=None):
+        return obj.report_datetime.date()
+
     @admin.display(description="Randomization")
     def arm(self, obj=None):
         try:
@@ -111,16 +121,22 @@ class PatientGroupAdmin(BaseModelAdminMixin):
             )
         return link
 
-    @admin.display(description="Opened", ordering="report_datetime")
-    def opened(self, obj=None):
-        return obj.report_datetime.date()
-
     @admin.display(description="Meetings")
-    def meetings(self, obj=None):
-        name = "+".join(obj.name.split(" "))
-        url = reverse("intecomm_group_admin:intecomm_group_patientgroupmeeting_changelist")
-        url = f"{url}?q={name}"
-        return format_html(f'<a href="{url}">Meetings</a>')
+    def meetings(self, obj=None) -> str:
+        url = NOT_APPLICABLE
+        try:
+            arm_as_str = get_assignment_description_for_patient_group(obj.group_identifier)
+        except PatientGroupNotRandomized:
+            pass
+        else:
+            if arm_as_str == COMM_INTERVENTION:
+                name = "+".join(obj.name.split(" "))
+                url = reverse(
+                    "intecomm_group_admin:intecomm_group_patientgroupmeeting_changelist"
+                )
+                url = f"{url}?q={name}"
+                url = format_html(f'<a href="{url}">Meetings</a>')
+        return url
 
     @admin.display(description="Dashboards")
     def to_subjects(self, obj=None):
@@ -136,10 +152,4 @@ class PatientGroupAdmin(BaseModelAdminMixin):
             super()
             .get_queryset(request)
             .exclude(status__in=[NEW, RECRUITING, COMPLETE], randomized=False)
-        )
-
-    @admin.display(description="Group identifier", ordering="group_identifier")
-    def group_id(self, obj):
-        return (
-            None if re.match(UUID_PATTERN, str(obj.group_identifier)) else obj.group_identifier
         )

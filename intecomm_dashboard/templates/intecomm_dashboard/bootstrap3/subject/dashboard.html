@@ -11,7 +11,7 @@
 {% endblock top_bar %}
 
 {% block extra_demographic_title %}
-  Group: <A href="{{patient_group_url}}">{{ group_name }}</A>
+  <span class="badge"><i class="fas fa-users-between-lines fa-fw"></i> {{ group_name }} {{ patient_log.group_identifier }}</span><span class="badge"><i class="fas fa-file fa-fw"></i> {{ patient_log.filing_identifier }}</span>
 {% endblock extra_demographic_title %}
 
 {% block appointments %}
