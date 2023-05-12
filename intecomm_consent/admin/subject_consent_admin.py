@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 from typing import Tuple
 
 from django.contrib import admin
-from django.core.handlers.wsgi import WSGIRequest
+from django.urls import reverse
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_consent.actions import (
     flag_as_verified_against_paper,
@@ -11,7 +13,6 @@ from edc_consent.modeladmin_mixins import (
     ConsentModelAdminMixin,
     PiiNamesModelAdminMixin,
 )
-from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
@@ -54,7 +55,8 @@ class SubjectConsentAdmin(
                 "fields": (
                     "screening_identifier",
                     "subject_identifier",
-                    *name_fields,
+                    "legal_name",
+                    "familiar_name",
                     "initials",
                     "gender",
                     "language",
@@ -90,7 +92,14 @@ class SubjectConsentAdmin(
         audit_fieldset_tuple,
     )
 
-    search_fields = ("subject_identifier", "screening_identifier", "identity")
+    search_fields = (
+        "subject_identifier",
+        "screening_identifier",
+        "identity__exact",
+        "initials__exact",
+        "legal_name__exact",
+        "familiar_name__exact",
+    )
 
     radio_fields = {
         "gender": admin.VERTICAL,
@@ -117,14 +126,11 @@ class SubjectConsentAdmin(
             readonly_fields += ("group_identifier",)
         return readonly_fields
 
-    def get_search_fields(self, request: WSGIRequest) -> Tuple[str, ...]:
-        search_fields = super().get_search_fields(request)
-        for country in get_remove_patient_names_from_countries():
-            if request.site and request.site.id in [
-                s.site_id for s in self.all_sites.get(country)
-            ]:
-                search_fields = list(search_fields)
-                search_fields.remove("legal_name")
-                search_fields.remove("familiar_name")
-                search_fields = tuple(search_fields)
-        return search_fields
+    def response_post_save_change(self, request, obj):
+        if obj:
+            url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
+            return f"{url}?q={obj.subject_identifier}"
+        return reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
+
+    def redirect_url(self, request, obj, post_url_continue=None) -> str | None:
+        return self.response_post_save_change(request, obj)

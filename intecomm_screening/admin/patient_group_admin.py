@@ -249,7 +249,6 @@ class PatientGroupAdmin(BaseModelAdminMixin):
         if (
             obj
             and not obj.randomized
-            # and obj.status in [NEW, RECRUITING, COMPLETE]
             and request.user.has_perm("intecomm_screening.change_patientlog")
         ):
             patient_log_model_cls = django_apps.get_model("intecomm_screening.patientlog")

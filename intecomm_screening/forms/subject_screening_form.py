@@ -1,4 +1,8 @@
+from __future__ import annotations
+
 from django import forms
+from django.urls import reverse
+from edc_dashboard import url_names
 from edc_form_validators import FormValidatorMixin
 from edc_screening.modelform_mixins import AlreadyConsentedFormMixin
 from edc_sites.modelform_mixins import SiteModelFormMixin
@@ -14,6 +18,18 @@ class SubjectScreeningForm(
     form_validator_cls = SubjectScreeningFormValidator
 
     site = SiteField()
+
+    def already_consented_validation_url(self, cleaned_data: dict | None = None) -> str:
+        if self.instance.patient_log.group_identifier:
+            url_name = url_names.get("subject_dashboard_url")
+            url = reverse(
+                url_name,
+                kwargs={"subject_identifier": self.instance.subject_identifier},
+            )
+        else:
+            url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
+            url = f"{url}?q={self.instance.subject_identifier}"
+        return url
 
     class Meta:
         model = SubjectScreening
