@@ -194,7 +194,7 @@ class PatientLogReport(Report):
         t.hAlign = "LEFT"
         story.append(t)
 
-        story.append(Spacer(0.1 * cm, 0.5 * cm))
+        story.append(Spacer(0.1 * cm, 0.25 * cm))
 
         data = [
             [Paragraph("SECTION ONE", self.styles["section_heading"])],
@@ -233,6 +233,20 @@ class PatientLogReport(Report):
                 ],
             ),
             (
+                [Paragraph("CONTACT:", self.styles["line_data_large"])],
+                [
+                    Paragraph(
+                        (str(self.object.contact_number) or " ")
+                        + (
+                            f" / {str(self.object.alt_contact_number)}"
+                            if str(self.object.alt_contact_number)
+                            else ""
+                        ),
+                        self.styles["line_data_largest"],
+                    )
+                ],
+            ),
+            (
                 [Paragraph("HOSPITAL IDENTIFIER:", self.styles["line_data_large"])],
                 [
                     Paragraph(
@@ -247,7 +261,7 @@ class PatientLogReport(Report):
             TableStyle(
                 [
                     ("INNERGRID", (0, 0), (1, 0), 0.25, colors.black),
-                    ("INNERGRID", (0, 0), (1, 4), 0.25, colors.black),
+                    ("INNERGRID", (0, 0), (1, 5), 0.25, colors.black),
                     ("BOX", (0, 0), (-1, -1), 0.25, colors.black),
                     ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
                 ]
