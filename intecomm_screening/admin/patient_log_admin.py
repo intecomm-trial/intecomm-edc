@@ -79,7 +79,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
     all_sites = all_sites
 
     custom_form_codename = "edc_data_manager.special_bypassmodelform"
-    list_per_page = 20
+    list_per_page = 10
     show_object_tools = True
     show_cancel = True
     change_list_template: str = "intecomm_screening/admin/patientlog_change_list.html"
@@ -246,17 +246,17 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         "id",
         "screening_identifier",
         "subject_identifier",
-        "last_4_hospital_identifier__exact",
-        "last_4_contact_number__exact",
         "hospital_identifier__exact",
         "initials__exact",
-        "group_identifier",
         "filing_identifier",
         "patient_log_identifier",
-        "legal_name__exact",
-        "familiar_name__exact",
+        "group_identifier",
         "contact_number__exact",
         "alt_contact_number__exact",
+        "last_4_hospital_identifier__exact",
+        "last_4_contact_number__exact",
+        "legal_name__exact",
+        "familiar_name__exact",
     )
 
     radio_fields = {

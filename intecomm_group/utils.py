@@ -75,14 +75,15 @@ def get_group_subject_dashboards_url(patient_group: PatientGroup) -> str:
     """Returns a url to the listboard of subjects in followup
     for this group.
     """
+    url = None
     randomizer = site_randomizers.get("default")
-    if (
-        randomizer.model_cls()
-        .objects.get(group_identifier=patient_group.group_identifier)
-        .assignment
-        == COMM_INTERVENTION
+
+    for obj in randomizer.model_cls().objects.filter(
+        group_identifier=patient_group.group_identifier
     ):
-        url = reverse("intecomm_dashboard:comm_subject_listboard_url")
-    else:
+        if obj.assignment == COMM_INTERVENTION:
+            url = reverse("intecomm_dashboard:comm_subject_listboard_url")
+        break
+    if not url:
         url = reverse("intecomm_dashboard:inte_subject_listboard_url")
     return f"{url}?q={patient_group.group_identifier}"

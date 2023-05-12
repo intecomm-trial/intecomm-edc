@@ -32,10 +32,10 @@
       <div class="panel-heading">{{ protocol_name |default:project_name }} {{ site_title|default:request.site.name|title }}</div>
       <div class="list-group">
         <a href="#" class="list-group-item disabled">Screen / Group</a>
-        <a id="logs_list_group_home" href="{% url 'screen_group_url' %}" class="list-group-item"><i class="fas fa-users fa-lg fa-fw" aria-hidden="true"></i> Update Patient Log and Form Groups</a>
+        <a id="logs_list_group_home" href="{% url 'screen_group_url' %}" class="list-group-item"><i class="fas fa-users fa-lg fa-fw" aria-hidden="true"></i> Patient Logs / Patient Groups</a>
         <a href="#" class="list-group-item disabled">Follow-up</a>
-        <a id="followup_list_group_home" href="{% url 'followup_comm_url' %}" class="list-group-item"><i class="fas fa-users-between-lines fa-lg fa-fw" aria-hidden="true"></i> Community care (COMM)</a>
-        <a id="followup_list_group_home" href="{% url 'followup_inte_url' %}" class="list-group-item"><i class="fas fa-user-circle fa-lg fa-fw" aria-hidden="true"></i> Integrated Care (INTE)</a>
+        <a id="followup_list_group_home" href="{% url 'followup_comm_url' %}" class="list-group-item"><i class="fas fa-users-between-lines fa-lg fa-fw" aria-hidden="true"></i> Community care</a>
+        <a id="followup_list_group_home" href="{% url 'followup_inte_url' %}" class="list-group-item"><i class="fas fa-user-circle fa-lg fa-fw" aria-hidden="true"></i> Facility Care</a>
         <a href="#" class="list-group-item disabled">General</a>
         {% if perms.edc_action_item.nav_action_item_section %}
           <a href="{% url 'edc_action_item:home_url' %}" class="list-group-item"><i class="fas fa-bolt fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Action items</a>

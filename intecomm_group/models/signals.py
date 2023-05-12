@@ -39,7 +39,7 @@ def update_patientgroup_on_post_save(sender, instance, raw, update_fields, **kwa
                 instance.patients.all(), raise_on_outofrange=False
             )
         instance.ratio = ratio
-        instance.save_base(update_fields=["ratio"])
+        instance.save_base(update_fields=["ratio", "status"])
 
 
 @receiver(
@@ -78,7 +78,7 @@ def update_patientgroup_patients_from_patientlog_m2ms_on_m2m_changed(
                 instance.patients.all(), raise_on_outofrange=False
             )
             instance.ratio = ratio
-            instance.save_base(update_fields=["ratio"])
+            instance.save_base(update_fields=["ratio", "status"])
 
 
 @receiver(
