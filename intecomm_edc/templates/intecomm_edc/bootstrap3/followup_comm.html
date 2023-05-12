@@ -29,21 +29,9 @@
   <div class="col-sm-4">&nbsp;</div>
   <div class="col-sm-4">
     <div class="panel panel-default">
-      <div class="panel-heading"><i class="fas fa-users-between-lines fa-lg fa-fw" aria-hidden="true"></i> COMM Follow-up at {{ site_title|default:request.site.name|title }}</div>
+      <div class="panel-heading"><i class="fas fa-users-between-lines fa-lg fa-fw" aria-hidden="true"></i> Community-care at {{ site_title|default:request.site.name|title }}</div>
       <div class="list-group">
         <a id="home_list_group_home" href="{% url 'home_url' %}" class="list-group-item"><i class="fas fa-reply fa-1x fa-fw" aria-hidden="true"></i> Home</a>
-      {% if perms.intecomm_group.view_patientgroup %}
-        <a id="home_list_group_prn_patientgroup" href="{% url 'intecomm_group_admin:intecomm_group_patientgroup_changelist' %}" class="list-group-item"><i class="fas fa-users fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;
-          Manage Patient Groups (R)</a>
-      {% endif %}
-      {% if perms.intecomm_group.add_patientgroupappointment %}
-        <a id="home_list_group_group_patientgroupappointment" href="{% url 'intecomm_group_admin:intecomm_group_patientgroupappointment_changelist' %}" class="list-group-item"><i class="fas fa-calendar-alt fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;
-          Appointments (Patient Group)</a>
-      {% endif %}
-      {% if perms.intecomm_group.add_patientgroupmeeting %}
-        <a id="home_list_group_prn_patientgroupmeeting" href="{% url 'intecomm_group_admin:intecomm_group_patientgroupmeeting_changelist' %}" class="list-group-item"><i class="fas fa-house fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;
-          Meetings</a>
-      {% endif %}
       {% if perms.edc_subject_dashboard.view_subject_listboard %}
         <a id="home_list_group_subject_listboard" href="{% url subject_listboard_url|default:'subject_listboard_url_cannot_be_none' %}" class="list-group-item"><i class="fas fa-user-circle fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;
           Subjects</a>
