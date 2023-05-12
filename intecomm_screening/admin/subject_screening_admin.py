@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Tuple
 
 from django.contrib import admin
@@ -8,13 +10,15 @@ from django.urls.exceptions import NoReverseMatch
 from django.utils.html import format_html
 from django.utils.translation import gettext as _
 from django_audit_fields import audit_fieldset_tuple
-from edc_consent.utils import get_remove_patient_names_from_countries
+from edc_consent.modeladmin_mixins import PiiNamesModelAdminMixin
 from edc_constants.choices import GENDER
 from edc_dashboard.url_names import url_names
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_screening.utils import format_reasons_ineligible
 from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+
+from intecomm_sites import all_sites
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import SubjectScreeningForm
@@ -23,9 +27,17 @@ from ..models import PatientLog, SubjectScreening
 
 @admin.register(SubjectScreening, site=intecomm_screening_admin)
 class SubjectScreeningAdmin(
-    SiteModelAdminMixin, ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin
+    PiiNamesModelAdminMixin,
+    SiteModelAdminMixin,
+    ModelAdminSubjectDashboardMixin,
+    SimpleHistoryAdmin,
 ):
     form = SubjectScreeningForm
+
+    name_fields: list[str] = ["legal_name", "familiar_name"]
+    name_display_field: str = "familiar_name"
+    all_sites: dict = all_sites
+
     list_per_page = 15
     post_url_on_delete_name = "screening_listboard_url"
     subject_listboard_url_name = "screening_listboard_url"
@@ -194,11 +206,11 @@ class SubjectScreeningAdmin(
     search_fields = (
         "screening_identifier",
         "subject_identifier",
-        "hospital_identifier",
-        "initials",
+        "hospital_identifier__exact",
+        "initials__exact",
         "reasons_ineligible",
-        "legal_name",
-        "familiar_name",
+        "legal_name__exact",
+        "familiar_name__exact",
     )
 
     readonly_fields = (
@@ -246,6 +258,10 @@ class SubjectScreeningAdmin(
         return readonly_fields
 
     @staticmethod
+    def eligibility_status(obj=None):
+        return None
+
+    @staticmethod
     def demographics(obj=None):
         data = [
             f"{obj.get_gender_display()} {obj.age_in_years}yrs",
@@ -258,20 +274,6 @@ class SubjectScreeningAdmin(
         if not obj.reasons_ineligible:
             return self.dashboard(obj)
         return format_reasons_ineligible(obj.reasons_ineligible)
-
-    def eligibility_status(self, obj=None):
-        return None
-        # eligibility = ScreeningEligibility(update_model=False)
-        # screening_listboard_url = reverse(
-        #     url_names.get(self.subject_listboard_url_name), args=(obj.screening_identifier,)
-        # )
-        # context = dict(
-        #     title=_("Go to screening listboard"),
-        #     url=f"{screening_listboard_url}?q={obj.screening_identifier}",
-        #     label="Screening",
-        # )
-        # button = render_to_string("dashboard_button.html", context=context)
-        # return format_html(button + "<BR>" + eligibility.eligibility_status(add_urls=True))
 
     def dashboard(self, obj=None, label=None):
         try:
@@ -309,14 +311,11 @@ class SubjectScreeningAdmin(
             kwargs["choices"] = GENDER
         return super().formfield_for_choice_field(db_field, request, **kwargs)
 
-    def get_search_fields(self, request: WSGIRequest) -> Tuple[str, ...]:
-        search_fields = super().get_search_fields(request)
-        for country in get_remove_patient_names_from_countries():
-            if request.site and request.site.id in [
-                s.site_id for s in self.all_sites.get(country)
-            ]:
-                search_fields = list(search_fields)
-                search_fields.remove("legal_name")
-                search_fields.remove("familiar_name")
-                search_fields = tuple(search_fields)
-        return search_fields
+    def response_post_save_change(self, request, obj):
+        if obj:
+            url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
+            return f"{url}?q={obj.screening_identifier}"
+        return reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
+
+    def redirect_url(self, request, obj, post_url_continue=None) -> str | None:
+        return self.response_post_save_change(request, obj)

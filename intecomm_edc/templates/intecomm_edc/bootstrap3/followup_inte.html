@@ -29,7 +29,7 @@
   <div class="col-sm-4">&nbsp;</div>
   <div class="col-sm-4">
     <div class="panel panel-default">
-      <div class="panel-heading"><i class="fas fa-user-circle fa-lg fa-fw" aria-hidden="true"></i> INTE Follow-up at {{ site_title|default:request.site.name|title }}</div>
+      <div class="panel-heading"><i class="fas fa-user-circle fa-lg fa-fw" aria-hidden="true"></i> Facility-care at {{ site_title|default:request.site.name|title }}</div>
       <div class="list-group">
         <a id="home_list_group_home" href="{% url 'home_url' %}" class="list-group-item"><i class="fas fa-reply fa-1x fa-fw" aria-hidden="true"></i> Home</a>
       {% if perms.edc_subject_dashboard.view_subject_listboard %}

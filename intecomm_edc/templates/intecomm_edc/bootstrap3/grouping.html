@@ -39,15 +39,6 @@
       {% if perms.intecomm_screening.view_patientgroup %}
         <a id="home_list_group_patientgroup" href="{% url 'intecomm_screening_admin:intecomm_screening_patientgroup_changelist' %}" class="list-group-item"><i class="fas fa-users fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Manage Patient Groups</a>
       {% endif %}
-      {% if perms.edc_screening.view_screening_listboard %}
-        <a id="home_list_group_screening_listboard" href="{% url screening_listboard_url|default:'screening_listboard_url_cannot_be_none' %}" class="list-group-item"><i class="fas fa-user fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Screen</a>
-      {% endif %}
-      {% if perms.edc_screening.view_screening_listboard %}
-        <a id="home_list_group_screening_listboard" href="{% url screening_listboard_url|default:'screening_listboard_url_cannot_be_none' %}?f=not_consented" class="list-group-item"><i class="fas fa-user fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Consent</a>
-      {% endif %}
-      {% if perms.edc_screening.view_screening_listboard %}
-        <a id="home_list_group_screening_listboard" href="{% url screening_listboard_url|default:'screening_listboard_url_cannot_be_none' %}?f=grouped" class="list-group-item"><i class="fas fa-user fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Baseline</a>
-      {% endif %}
       </div>
     </div>
   </div>

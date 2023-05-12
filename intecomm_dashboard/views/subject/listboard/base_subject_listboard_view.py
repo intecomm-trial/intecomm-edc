@@ -25,9 +25,10 @@ class PatientLogModelWrapper(BaseModelWrapper):
 
 class BaseSubjectListboardView(SubjectListboardView):
     listboard_model = PatientLog
-    model_wrapper_cls = PatientLogModelWrapper  # SubjectConsentModelWrapper
+    model_wrapper_cls = PatientLogModelWrapper
     search_fields = [
         "group_identifier",
+        "patientgroup__name",
         "subject_identifier",
         "screening_identifier",
         "initials",
