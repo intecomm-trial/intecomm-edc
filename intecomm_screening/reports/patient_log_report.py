@@ -7,7 +7,7 @@ from edc_auth.auth_objects import PII
 from edc_constants.constants import UUID_PATTERN
 from edc_identifier.utils import convert_to_human_readable
 from edc_pdf_reports import Report
-from edc_utils import convert_php_dateformat
+from edc_utils import convert_php_dateformat, get_utcnow_as_date
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 from reportlab.lib.pagesizes import A4
@@ -52,7 +52,26 @@ class PatientLogReport(Report):
         if not user.groups.filter(name=PII):
             raise PatientLogReportError("User does not have permissions to access PII")
         self.image_folder = mkdtemp()
-        self.report_filename = f"{self.object.filing_identifier}.pdf"
+
+        # FIXME: DO NOT MERGE INTO DEVELOP - Use only to generate empty forms
+        # self.object.age_in_years  # edit at point of use
+        self.object.alt_contact_number = ""
+        self.object.contact_number = ""
+        # self.object.created   # edit at point of use
+        self.object.filing_identifier = ""
+        self.object.gender = ""
+        self.object.group_identifier = ""
+        self.object.hospital_identifier = ""
+        self.object.initials = ""
+        self.object.legal_name = ""
+        self.object.patient_log_identifier = ""
+        self.object.screening_identifier = ""
+        self.object.subject_identifier = ""
+        self.object.user_created = ""
+        # self.object.site_id = ""  # edit at point of use
+
+        # self.report_filename = f"{self.object.filing_identifier}.pdf"
+        self.report_filename = f"INTECOMM_Patient_Reference_{get_utcnow_as_date()}.pdf"
 
     def screening(self, attr):
         try:
@@ -177,7 +196,9 @@ class PatientLogReport(Report):
                 Paragraph("", self.styles["line_label"]),
                 [
                     Paragraph("EDC SITE:", self.styles["field_name_large"]),
-                    Paragraph(str(self.object.site_id) or "", self.styles["field_name_large"]),
+                    # Paragraph(str(self.object.site_id) or "",
+                    # self.styles["field_name_large"]),
+                    Paragraph("", self.styles["field_name_large"]),
                 ],
             ],
         ]
@@ -228,7 +249,9 @@ class PatientLogReport(Report):
                 [Paragraph("AGE IN YEARS:", self.styles["line_data_large"])],
                 [
                     Paragraph(
-                        str(self.object.age_in_years) or " ", self.styles["line_data_largest"]
+                        # str(self.object.age_in_years) or " ",
+                        "",
+                        self.styles["line_data_largest"],
                     )
                 ],
             ),
@@ -278,9 +301,10 @@ class PatientLogReport(Report):
                 [
                     Paragraph("Date completed:", self.styles["line_label"]),
                     Paragraph(
-                        self.object.created.strftime(
-                            convert_php_dateformat(settings.SHORT_DATETIME_FORMAT)
-                        ),
+                        # self.object.created.strftime(
+                        #     convert_php_dateformat(settings.SHORT_DATETIME_FORMAT)
+                        # ),
+                        "",
                         self.styles["line_label"],
                     ),
                 ],
@@ -345,9 +369,10 @@ class PatientLogReport(Report):
                         self.styles["line_label"],
                     ),
                     Paragraph(
-                        self.object.created.strftime(
-                            convert_php_dateformat(settings.SHORT_DATETIME_FORMAT)
-                        ),
+                        # self.object.created.strftime(
+                        #     convert_php_dateformat(settings.SHORT_DATETIME_FORMAT)
+                        # ),
+                        "",
                         self.styles["line_label"],
                     ),
                 ],
