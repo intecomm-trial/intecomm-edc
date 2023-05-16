@@ -75,8 +75,7 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
         choices=GROUP_STATUS_CHOICES,
         default=RECRUITING,
         help_text=(
-            "Will reverted to 'Recruiting' if changes are made to the list of selected "
-            "patients"
+            "Will revert to 'Recruiting' if changes are made to the list of selected patients"
         ),
     )
 
