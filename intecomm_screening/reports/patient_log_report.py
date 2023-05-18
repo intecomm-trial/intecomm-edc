@@ -271,7 +271,7 @@ class PatientLogReport(Report):
         data = [
             (
                 [
-                    Paragraph("Staff name", self.styles["line_label"]),
+                    Paragraph("Staff name:", self.styles["line_label"]),
                     Paragraph(self.object.user_created, self.styles["line_label"]),
                 ],
                 [Paragraph("Staff signature:", self.styles["line_label"])],
@@ -454,7 +454,7 @@ class PatientLogReport(Report):
 
         data = [
             (
-                [Paragraph("Staff name", self.styles["line_label"])],
+                [Paragraph("Staff name:", self.styles["line_label"])],
                 [Paragraph("Staff signature:", self.styles["line_label"])],
                 [Paragraph("Date verified:", self.styles["line_label"])],
             ),
