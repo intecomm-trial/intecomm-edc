@@ -34,7 +34,8 @@ def update_patientgroup_on_post_save(sender, instance, raw, update_fields, **kwa
                 instance.patients.all(), raise_on_outofrange=True
             )
         except PatientGroupRatioError:
-            instance.status = RECRUITING
+            if not instance.bypass_group_ratio:
+                instance.status = RECRUITING
             _, _, ratio = verify_patient_group_ratio_raise(
                 instance.patients.all(), raise_on_outofrange=False
             )
