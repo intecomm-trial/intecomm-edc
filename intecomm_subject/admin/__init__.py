@@ -20,8 +20,7 @@ from .drug_refill_htn_admin import DrugRefillHtnAdmin
 from .family_history_admin import FamilyHistoryAdmin
 from .glucose_admin import GlucoseAdmin
 from .hba1c_result_admin import Hba1cResultAdmin
-
-# from .health_economics_admin import HealthEconomicsAdmin
+from .health_economics_baseline_admin import HealthEconomicsBaselineAdmin
 from .hiv_initial_review_admin import HivInitialReviewAdmin
 from .hiv_medication_adherence_admin import HivMedicationAdherenceAdmin
 from .hiv_review_admin import HivReviewAdmin

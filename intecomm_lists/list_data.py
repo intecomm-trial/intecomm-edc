@@ -216,7 +216,7 @@ list_data = {
         ("need_to_think_about_it", "I haven't had a chance to think about it"),
         (OTHER, "Other, please specify"),
     ],
-    "intecomm_lists.insurancetypes": [
+    "edc_he.insurancetypes": [
         (OTHER, "Other, specify"),
     ],
     "edc_he.nationalities": [
