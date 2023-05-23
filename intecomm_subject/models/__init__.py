@@ -28,6 +28,7 @@ from .family_history import FamilyHistory
 from .glucose import Glucose
 from .hba1c_result import Hba1cResult
 from .health_economics import HealthEconomics
+from .health_economics_baseline import HealthEconomicsBaseline
 from .hiv_initial_review import HivInitialReview
 from .hiv_medication_adherence import HivMedicationAdherence
 from .hiv_review import HivReview

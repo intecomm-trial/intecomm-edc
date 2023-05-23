@@ -2,6 +2,8 @@ from edc_visit_schedule import Crf, FormsCollection
 
 # TODO: whats the difference between bloodresultsglu and glucose??
 
+# TODO: EQ5D, every visit
+
 crfs_prn = FormsCollection(
     Crf(show_order=10, model="intecomm_subject.bloodresultsfbc"),
     Crf(show_order=100, model="intecomm_subject.nextappointment"),
