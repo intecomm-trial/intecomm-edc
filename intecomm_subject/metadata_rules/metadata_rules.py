@@ -138,3 +138,45 @@ class MedicationsRuleGroup(CrfRuleGroup):
     class Meta:
         app_label = "intecomm_subject"
         source_model = "intecomm_subject.medications"
+
+
+@register()
+class HealthEconomicsGroup(CrfRuleGroup):
+    hoh = CrfRule(
+        predicate=pc.household_head_required,
+        consequence=REQUIRED,
+        alternative=NOT_REQUIRED,
+        target_models=["healtheconomicshouseholdhead"],
+    )
+
+    patient = CrfRule(
+        predicate=pc.patient_required,
+        consequence=REQUIRED,
+        alternative=NOT_REQUIRED,
+        target_models=["healtheconomicspatient"],
+    )
+
+    assets = CrfRule(
+        predicate=pc.assets_required,
+        consequence=REQUIRED,
+        alternative=NOT_REQUIRED,
+        target_models=["healtheconomicsassets"],
+    )
+
+    property = CrfRule(
+        predicate=pc.property_required,
+        consequence=REQUIRED,
+        alternative=NOT_REQUIRED,
+        target_models=["healtheconomicsproperty"],
+    )
+
+    income = CrfRule(
+        predicate=pc.income_required,
+        consequence=REQUIRED,
+        alternative=NOT_REQUIRED,
+        target_models=["healtheconomicsincome"],
+    )
+
+    class Meta:
+        app_label = "intecomm_subject"
+        source_model = "intecomm_subject.subjectvisit"
