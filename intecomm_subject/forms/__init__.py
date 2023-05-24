@@ -21,7 +21,13 @@ from .drug_refill_htn_form import DrugRefillHtnForm
 from .drug_supply_dm_form import DrugSupplyDmForm
 from .drug_supply_hiv_form import DrugSupplyHivForm
 from .drug_supply_htn_form import DrugSupplyHtnForm
-from .health_economics_form import HealthEconomicsForm
+from .health_economics import (
+    HealthEconomicsAssetsForm,
+    HealthEconomicsHouseholdHeadForm,
+    HealthEconomicsIncomeForm,
+    HealthEconomicsPatientForm,
+    HealthEconomicsPropertyForm,
+)
 from .hiv_initial_review_form import HivInitialReviewForm
 from .hiv_medication_adherence_form import HivMedicationAdherenceForm
 from .hiv_review_form import HivReviewForm

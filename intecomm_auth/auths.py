@@ -3,6 +3,7 @@ from edc_adverse_event.auth_objects import TMG_ROLE
 from edc_appointment.auth_objects import APPOINTMENT_EXPORT
 from edc_auth.auth_objects import (
     AUDITOR,
+    AUDITOR_ROLE,
     CLINIC,
     CLINIC_SUPER,
     CLINICIAN_ROLE,
@@ -11,6 +12,7 @@ from edc_auth.auth_objects import (
 from edc_auth.site_auths import site_auths
 from edc_data_manager.auth_objects import DATA_MANAGER_EXPORT, DATA_MANAGER_ROLE
 from edc_export.auth_objects import DATA_EXPORTER_ROLE
+from edc_he.auths import EDC_HEALTH_ECONOMICS_VIEW
 from edc_screening.auth_objects import SCREENING, SCREENING_SUPER, SCREENING_VIEW
 from edc_subject_dashboard.auths import SUBJECT_VIEW
 from edc_unblinding.auth_objects import UNBLINDING_REQUESTORS
@@ -27,11 +29,17 @@ site_auths.update_group(*screening_codenames, name=SCREENING_VIEW, view_only=Tru
 
 # update edc_auth default roles
 site_auths.update_role(
+    EDC_HEALTH_ECONOMICS_VIEW,
+    name=AUDITOR_ROLE,
+)
+site_auths.update_role(
     UNBLINDING_REQUESTORS,
+    EDC_HEALTH_ECONOMICS_VIEW,
     name=CLINICIAN_ROLE,
 )
 site_auths.update_role(
     UNBLINDING_REQUESTORS,
+    EDC_HEALTH_ECONOMICS_VIEW,
     name=CLINICIAN_SUPER_ROLE,
 )
 site_auths.update_role(
