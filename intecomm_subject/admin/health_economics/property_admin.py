@@ -27,11 +27,12 @@ class HealthEconomicsPropertyAdmin(
             "Property",
             {
                 "description": format_html(
+                    "<H5><B><font color='orange'>Interviewer to read</font></B></H5><p>"
                     "I would now like to know if you own any <B>land or other property</B> "
                     "– and the approximate value (amount). I know this is sensitive "
                     "information and will not share this with any persons outside of the "
                     "survey team. <B><U>There is no need to give details or show me any of "
-                    "the items.</U></B>"
+                    "the items.</U></B></P>"
                 ),
                 "fields": (
                     "land_owner",

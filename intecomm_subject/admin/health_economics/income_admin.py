@@ -99,7 +99,7 @@ class HealthEconomicsIncomeAdmin(
         "internal_remittance_value_known": admin.VERTICAL,
         "external_remittance": admin.VERTICAL,
         "external_remittance_value_known": admin.VERTICAL,
-        # "external_remittance_currency": admin.VERTICAL,
+        "external_remittance_currency": admin.VERTICAL,
         "more_sources": admin.VERTICAL,
         "more_sources_value_known": admin.VERTICAL,
         # "external_dependents": admin.VERTICAL,

@@ -13,5 +13,5 @@ class HealthEconomicsHouseholdHead(
     BaseUuidModel,
 ):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
-        verbose_name = "HE Baseline: Household head"
-        verbose_name_plural = "HE Baseline: Household head"
+        verbose_name = "Health Economics: Household head"
+        verbose_name_plural = "Health Economics: Household head"

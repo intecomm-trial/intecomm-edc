@@ -12,5 +12,5 @@ class HealthEconomicsProperty(
     BaseUuidModel,
 ):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
-        verbose_name = "HE Baseline: Property"
-        verbose_name_plural = "HE Baseline: Property"
+        verbose_name = "Health Economics: Property"
+        verbose_name_plural = "Health Economics: Property"
