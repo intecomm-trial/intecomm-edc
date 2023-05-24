@@ -27,7 +27,14 @@ from .eq5d3l import Eq5d3l
 from .family_history import FamilyHistory
 from .glucose import Glucose
 from .hba1c_result import Hba1cResult
-from .health_economics import HealthEconomics
+from .health_economics import (
+    HealthEconomicsAssets,
+    HealthEconomicsHouseholdHead,
+    HealthEconomicsIncome,
+    HealthEconomicsPatient,
+    HealthEconomicsProperty,
+)
+from .health_economics_old import HealthEconomics
 from .hiv_initial_review import HivInitialReview
 from .hiv_medication_adherence import HivMedicationAdherence
 from .hiv_review import HivReview

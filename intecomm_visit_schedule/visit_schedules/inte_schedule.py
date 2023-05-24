@@ -34,9 +34,14 @@ crfs_d1 = FormsCollection(
     Crf(show_order=155, model="intecomm_subject.drugrefillhiv", required=False),
     Crf(show_order=160, model="intecomm_subject.otherbaselinedata"),
     Crf(show_order=165, model="intecomm_subject.complicationsbaseline"),
-    # Crf(show_order=240, model="intecomm_subject.icecapa"),
-    # Crf(show_order=245, model="intecomm_subject.eq5d3l"),
+    Crf(show_order=240, model="intecomm_subject.icecapa"),
+    Crf(show_order=245, model="intecomm_subject.eq5d3l"),
     Crf(show_order=175, model="intecomm_subject.nextappointment"),
+    Crf(show_order=300, model="intecomm_subject.healtheconomicshouseholdhead"),
+    Crf(show_order=310, model="intecomm_subject.healtheconomicspatient"),
+    Crf(show_order=320, model="intecomm_subject.healtheconomicsassets"),
+    Crf(show_order=330, model="intecomm_subject.healtheconomicsproperty"),
+    Crf(show_order=340, model="intecomm_subject.healtheconomicsincome"),
     name="day1",
 )
 
@@ -53,6 +58,13 @@ crfs_followup = FormsCollection(
     Crf(show_order=165, model="intecomm_subject.complicationsfollowup"),
     Crf(show_order=175, model="intecomm_subject.healtheconomics"),
     Crf(show_order=185, model="intecomm_subject.nextappointment"),
+    Crf(show_order=300, model="intecomm_subject.healtheconomicshouseholdhead", required=False),
+    Crf(show_order=310, model="intecomm_subject.healtheconomicspatient", required=False),
+    Crf(show_order=320, model="intecomm_subject.healtheconomicsassets", required=False),
+    Crf(show_order=330, model="intecomm_subject.healtheconomicsproperty", required=False),
+    Crf(show_order=340, model="intecomm_subject.healtheconomicsincome", required=False),
+    Crf(show_order=240, model="intecomm_subject.icecapa"),
+    Crf(show_order=245, model="intecomm_subject.eq5d3l"),
     name="day1",
 )
 
