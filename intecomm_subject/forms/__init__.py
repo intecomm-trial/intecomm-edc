@@ -21,6 +21,7 @@ from .drug_refill_htn_form import DrugRefillHtnForm
 from .drug_supply_dm_form import DrugSupplyDmForm
 from .drug_supply_hiv_form import DrugSupplyHivForm
 from .drug_supply_htn_form import DrugSupplyHtnForm
+from .eq5d3l_form import Eq5d3lForm
 from .health_economics import (
     HealthEconomicsAssetsForm,
     HealthEconomicsHouseholdHeadForm,
@@ -34,6 +35,7 @@ from .hiv_review_form import HivReviewForm
 from .htn_initial_review_form import HtnInitialReviewForm
 from .htn_medication_adherence_form import HtnMedicationAdherenceForm
 from .htn_review_form import HtnReviewForm
+from .icecapa_form import IcecapaForm
 from .malaria_test_form import MalariaTestForm
 from .medications_form import MedicationsForm
 from .next_appointment_form import NextAppointmentForm
