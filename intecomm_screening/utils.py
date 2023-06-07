@@ -51,7 +51,7 @@ def get_add_or_change_consent_url(
 
 
 def get_consent_refusal_model_cls():
-    return django_apps.get_model("intecomm_screening_consentrefusal")
+    return django_apps.get_model("intecomm_screening.consentrefusal")
 
 
 def get_add_or_change_refusal_url(
