@@ -481,6 +481,10 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
                 change_consent_url,
                 subject_identifier,
             ) = get_add_or_change_consent_url(subject_screening)
+            (
+                add_consent_url,
+                change_consent_url,
+            ) = get_add_or_change_refusal_url(subject_screening)
         stable_display = (
             obj.get_stable_display()
             if obj.get_stable_display() != "To be determined"
@@ -492,6 +496,8 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
             change_screening_url=change_screening_url,
             add_consent_url=add_consent_url,
             change_consent_url=change_consent_url,
+            add_refusal_url=add_refusal_url,
+            change_refusal_url=change_refusal_url,
             filing_identifier=obj.filing_identifier,
             patient_log_identifier=obj.patient_log_identifier,
             screening_identifier=obj.screening_identifier,

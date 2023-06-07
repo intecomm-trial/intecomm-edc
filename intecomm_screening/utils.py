@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Tuple
 
+from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from edc_consent.utils import get_consent_model_cls
@@ -47,3 +48,32 @@ def get_add_or_change_consent_url(
         )
         change_consent_url = f"{url}?next={next_url_name}"
     return add_consent_url, change_consent_url, subject_identifier
+
+
+def get_consent_refusal_model_cls():
+    return django_apps.get_model("intecomm_screening_consentrefusal")
+
+
+def get_add_or_change_refusal_url(
+    obj: SubjectScreening, next_url_name: str | None = None
+) -> Tuple[str | None, str | None]:
+    add_url = None
+    change_url = None
+    next_url_name = (
+        next_url_name or "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
+    )
+
+    try:
+        consent_refusal = get_consent_refusal_model_cls().objects.get(
+            screening_identifier=obj.screening_identifier
+        )
+    except ObjectDoesNotExist:
+        url = reverse("intecomm_screening_admin:intecomm_screening_consentrefusal_add")
+        add_url = f"{url}?next={next_url_name}&screening_identifier={obj.screening_identifier}"
+    else:
+        url = reverse(
+            "intecomm_screening_admin:intecomm_screening_consentrefusal_change",
+            args=(consent_refusal.id,),
+        )
+        change_url = f"{url}?next={next_url_name}"
+    return add_url, change_url
