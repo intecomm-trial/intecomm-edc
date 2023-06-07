@@ -180,3 +180,6 @@ class HealthEconomicsGroup(CrfRuleGroup):
     class Meta:
         app_label = "intecomm_subject"
         source_model = "intecomm_subject.subjectvisit"
+
+
+# TODO: skip patient if HOH

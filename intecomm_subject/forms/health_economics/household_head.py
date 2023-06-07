@@ -6,6 +6,8 @@ from intecomm_form_validators.subject.health_economics import (
 from ...models import HealthEconomicsHouseholdHead
 from ..mixins import CrfModelFormMixin
 
+# TODO: Remove NHIF and CHF from insurance Q for uganda
+
 
 class HealthEconomicsHouseholdHeadForm(CrfModelFormMixin, forms.ModelForm):
     form_validator_cls = HealthEconomicsHouseholdHeadFormValidator
