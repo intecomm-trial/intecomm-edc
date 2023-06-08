@@ -1,6 +1,6 @@
 from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
-from edc_constants.constants import NO, YES
+from edc_constants.constants import NO
 from edc_metadata.metadata_rules import PredicateCollection
 
 
