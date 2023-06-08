@@ -35,10 +35,10 @@
       <tr>
         <td style="color:darkgreen;white-space: nowrap;">Consented</td><td style="white-space: nowrap;"><a title="Go to consent form" href="{{ change_consent_url }}"><span class="nowrap">{{ subject_identifier }}</span></a></td>
       </tr>
-{#    {% elif change_refusal_url %}#}
-{#      <tr>#}
-{#        <td style="color:darkred;white-space: nowrap;">Refused</td><td style="white-space: nowrap;"><a title="Go to refusal form" href="{{ change_refusal_url }}"><span class="nowrap">{{ screening_identifier }}</span></a></td>#}
-{#      </tr>#}
+    {% elif change_refusal_url %}
+      <tr>
+        <td style="color:darkred;white-space: nowrap;">Refused</td><td style="white-space: nowrap;"><a title="Go to refusal form" href="{{ change_refusal_url }}"><span class="nowrap">{{ screening_identifier }}</span></a></td>
+      </tr>
     {% endif  %}
   {% else %}
     {% if screening_identifier %}
