@@ -22,7 +22,7 @@ from ..models import (
     SubjectScreening,
 )
 from ..reports import PatientLogReport, PatientLogReportError
-from ..utils import get_add_or_change_consent_url
+from ..utils import get_add_or_change_consent_url, get_add_or_change_refusal_url
 from .list_filters import (
     AttendDateListFilter,
     ConsentedListFilter,
@@ -445,6 +445,8 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         change_screening_url = None
         add_consent_url = None
         change_consent_url = None
+        add_refusal_url = None
+        change_refusal_url = None
         subject_identifier = None
         subject_screening = None
         eligible = None
@@ -482,8 +484,8 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
                 subject_identifier,
             ) = get_add_or_change_consent_url(subject_screening)
             (
-                add_consent_url,
-                change_consent_url,
+                add_refusal_url,
+                change_refusal_url,
             ) = get_add_or_change_refusal_url(subject_screening)
         stable_display = (
             obj.get_stable_display()

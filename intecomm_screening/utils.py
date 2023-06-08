@@ -51,7 +51,7 @@ def get_add_or_change_consent_url(
 
 
 def get_consent_refusal_model_cls():
-    return django_apps.get_model("intecomm_screening_consentrefusal")
+    return django_apps.get_model("intecomm_screening.consentrefusal")
 
 
 def get_add_or_change_refusal_url(
@@ -69,7 +69,7 @@ def get_add_or_change_refusal_url(
         )
     except ObjectDoesNotExist:
         url = reverse("intecomm_screening_admin:intecomm_screening_consentrefusal_add")
-        add_url = f"{url}?next={next_url_name}&screening_identifier={obj.screening_identifier}"
+        add_url = f"{url}?next={next_url_name}&subject_screening={obj.id}"
     else:
         url = reverse(
             "intecomm_screening_admin:intecomm_screening_consentrefusal_change",

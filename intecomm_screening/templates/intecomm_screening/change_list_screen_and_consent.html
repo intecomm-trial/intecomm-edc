@@ -22,15 +22,23 @@
     </tr>
   {% endif  %}
   {% if screening_identifier and eligible %}
-    {% if add_consent_url %}
+    {% if add_consent_url and add_refusal_url %}
       <tr>
-        <td style="white-space: nowrap;"><a title="click to consent" href="{{ add_consent_url }}">Consent</a></td>
-        <td style="background-color: orange"><a title="click to consent" style="color: black" href="{{ add_consent_url }}">PENDING</a></td>
+        <td style="white-space: nowrap;">
+          <a title="click to consent" href="{{ add_consent_url }}">Consent</a>
+          or
+          <a title="click to refuse to consent" href="{{ add_refusal_url }}">refuse</a>
+        </td>
+        <td style="background-color: orange">PENDING</td>
       </tr>
-    {% else %}
+    {% elif change_consent_url %}
       <tr>
         <td style="color:darkgreen;white-space: nowrap;">Consented</td><td style="white-space: nowrap;"><a title="Go to consent form" href="{{ change_consent_url }}"><span class="nowrap">{{ subject_identifier }}</span></a></td>
       </tr>
+{#    {% elif change_refusal_url %}#}
+{#      <tr>#}
+{#        <td style="color:darkred;white-space: nowrap;">Refused</td><td style="white-space: nowrap;"><a title="Go to refusal form" href="{{ change_refusal_url }}"><span class="nowrap">{{ screening_identifier }}</span></a></td>#}
+{#      </tr>#}
     {% endif  %}
   {% else %}
     {% if screening_identifier %}
