@@ -8,6 +8,7 @@ from django.contrib import admin
 from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.http import urlencode
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_constants.constants import COMPLETE, DM, HIV, HTN, UUID_PATTERN, YES
 from edc_utils.round_up import round_up
@@ -204,7 +205,7 @@ class PatientGroupAdmin(BaseModelAdminMixin):
     def to_patients(self, obj=None):
         cnt = obj.patients.all().count()
         url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
-        url = f"{url}?q={obj.name}"
+        url = f"{url}?{urlencode({'q': obj.name})}"
         return format_html(
             f'<a title="Go to patient log" href="{url}">'
             f'<span class="nowrap">{cnt}&nbsp;{p.plural("patient", cnt)}</span></a>'
