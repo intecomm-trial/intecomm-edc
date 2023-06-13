@@ -44,3 +44,5 @@ class ConsentRefusalForm(
     class Meta:
         model = ConsentRefusal
         fields = "__all__"
+        help_texts = {"subject_screening": "(read-only)"}
+        widgets = {"subject_screening": forms.TextInput(attrs={"readonly": "readonly"})}

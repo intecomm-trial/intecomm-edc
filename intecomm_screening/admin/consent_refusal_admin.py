@@ -14,8 +14,6 @@ from ..models import ConsentRefusal
 class ConsentRefusalAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin):
     form = ConsentRefusalForm
 
-    autocomplete_fields = ["subject_screening"]
-
     post_url_on_delete_name = "screening_listboard_url"
     subject_listboard_url_name = "screening_listboard_url"
     subject_dashboard_url_name = "screening_listboard_url"
@@ -25,13 +23,17 @@ class ConsentRefusalAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin):
             None,
             {
                 "fields": (
-                    "subject_screening",
+                    "screening_identifier",
                     "report_datetime",
                     "reason",
                     "other_reason",
                 )
             },
         ],
+        (
+            "Screening",
+            {"classes": ("collapse",), "fields": ("subject_screening",)},
+        ),
         audit_fieldset_tuple,
     )
 
@@ -52,6 +54,8 @@ class ConsentRefusalAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin):
     )
 
     radio_fields = {"reason": admin.VERTICAL}
+
+    readonly_fields = ("screening_identifier",)
 
     def get_subject_dashboard_url_kwargs(self, obj):
         return dict(screening_identifier=obj.screening_identifier)
