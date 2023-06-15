@@ -247,7 +247,7 @@ class SubjectScreening(
             )
         if self.patient_log and self.patient_log.initials != self.initials:
             raise SubjectScreeningError(
-                "Initials does not match patient log. "
+                "Initials do not match patient log. "
                 f"Perhaps catch this in the form. Got {self.patient_log.initials}!="
                 f"{self.initials}"
             )
