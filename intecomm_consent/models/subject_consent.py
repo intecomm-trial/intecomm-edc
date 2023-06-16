@@ -20,6 +20,9 @@ from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 from edc_search.model_mixins import SearchSlugManager
 from edc_sites.models import SiteModelMixin
 
+from intecomm_screening.utils import raise_if_already_refused_consent
+
+from ..utils import raise_if_already_consented
 from .model_mixins import SearchSlugModelMixin
 
 
@@ -90,6 +93,10 @@ class SubjectConsent(
         return f"{self.subject_identifier} V{self.version}"
 
     def save(self, *args, **kwargs):
+        if not self.id:
+            raise_if_already_consented(screening_identifier=self.screening_identifier)
+        raise_if_already_refused_consent(screening_identifier=self.screening_identifier)
+
         if not kwargs.get("update_fields"):
             subject_screening = self.get_subject_screening()
             self.screening_datetime = subject_screening.report_datetime

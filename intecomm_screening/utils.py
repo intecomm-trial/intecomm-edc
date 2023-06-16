@@ -11,6 +11,10 @@ if TYPE_CHECKING:
     from intecomm_screening.models import SubjectScreening
 
 
+class AlreadyRefusedConsentError(Exception):
+    pass
+
+
 def get_add_or_change_consent_url(
     obj: SubjectScreening, next_url_name: str | None = None
 ) -> Tuple[str | None, str | None, str | None]:
@@ -77,3 +81,15 @@ def get_add_or_change_refusal_url(
         )
         change_url = f"{url}?next={next_url_name}"
     return add_url, change_url
+
+
+def raise_if_already_refused_consent(screening_identifier: str):
+    consent_refusal = get_consent_refusal_model_cls().objects.filter(
+        screening_identifier=screening_identifier
+    )
+    if consent_refusal:
+        raise AlreadyRefusedConsentError(
+            "Patient has already refused consent. "
+            f"See {consent_refusal[0].screening_identifier}. "
+            f"Perhaps catch this in the form."
+        )
