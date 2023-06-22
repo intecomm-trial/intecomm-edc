@@ -1,40 +1,62 @@
 from django import forms
 from django.urls.base import reverse
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from edc_dashboard.url_names import url_names
 from edc_form_validators import FormValidatorMixin
-from edc_screening.modelform_mixins import AlreadyConsentedFormMixin
 from intecomm_form_validators import ConsentRefusalFormValidator
 
+from intecomm_consent.utils import AlreadyConsentedError, raise_if_already_consented
+
 from ..models import ConsentRefusal, SubjectScreening
+from ..utils import get_add_or_change_consent_url
 
 
-class ScreeningFormMixin:
+class RefusalFormMixin:
     def clean(self):
         cleaned_data = super().clean()
-        screening_identifier = cleaned_data.get("screening_identifier")
-        if screening_identifier:
-            subject_screening = SubjectScreening.objects.get(
-                screening_identifier=screening_identifier
-            )
-            if not subject_screening.eligible:
-                url_name = url_names.get("screening_listboard_url")
-                url = reverse(
-                    url_name,
-                    kwargs={"screening_identifier": self.instance.screening_identifier},
-                )
-                msg = mark_safe(  # nosec B308 B703
-                    "Not allowed. Subject is not eligible. "
-                    f'See subject <A href="{url}?q={screening_identifier}">'
-                    f"{screening_identifier}</A>"
-                )
-                raise forms.ValidationError(msg)
+        subject_screening = cleaned_data.get("subject_screening")
+        if subject_screening:
+            self.validate_is_eligible(subject_screening=subject_screening)
+
+            self.validate_not_already_consented(subject_screening=subject_screening)
+
         return cleaned_data
 
+    @staticmethod
+    def validate_is_eligible(subject_screening: SubjectScreening) -> None:
+        if not subject_screening.eligible:
+            url_name = url_names.get("screening_listboard_url")
+            url = reverse(
+                url_name,
+                kwargs={"screening_identifier": subject_screening.screening_identifier},
+            )
+            msg = format_html(
+                'Not allowed. Subject is not eligible. See subject <A href="{}">{}</A>',
+                mark_safe(url),  # nosec B308 B703
+                subject_screening.screening_identifier,
+            )
+            raise forms.ValidationError(msg)
 
-class ConsentRefusalForm(
-    AlreadyConsentedFormMixin, ScreeningFormMixin, FormValidatorMixin, forms.ModelForm
-):
+    @staticmethod
+    def validate_not_already_consented(subject_screening: SubjectScreening) -> None:
+        try:
+            raise_if_already_consented(
+                screening_identifier=subject_screening.screening_identifier
+            )
+        except AlreadyConsentedError:
+            _, screening_url, subject_identifier = get_add_or_change_consent_url(
+                obj=subject_screening
+            )
+            msg = format_html(
+                'Not allowed. Subject has already consented. See subject <A href="{}">{}</A>',
+                mark_safe(screening_url),  # nosec B308 B703
+                subject_identifier,
+            )
+            raise forms.ValidationError(msg)
+
+
+class ConsentRefusalForm(RefusalFormMixin, FormValidatorMixin, forms.ModelForm):
     form_validator_cls = ConsentRefusalFormValidator
 
     def clean(self):

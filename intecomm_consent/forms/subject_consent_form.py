@@ -1,14 +1,57 @@
 from django import forms
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from edc_consent.modelform_mixins import ConsentModelFormMixin
 from edc_form_validators import FormValidatorMixin
 from edc_sites.forms import SiteModelFormMixin
 from intecomm_form_validators.consent import SubjectConsentFormValidator
 
+from intecomm_screening.models import SubjectScreening
+from intecomm_screening.utils import (
+    AlreadyRefusedConsentError,
+    get_add_or_change_refusal_url,
+    raise_if_already_refused_consent,
+)
+
 from ..models import SubjectConsent
 
 
+class ConsentFormMixin:
+    def clean(self):
+        cleaned_data = super().clean()
+        screening_identifier = cleaned_data.get("screening_identifier")
+        if screening_identifier:
+            subject_screening = SubjectScreening.objects.get(
+                screening_identifier=screening_identifier
+            )
+
+            self.validate_not_already_refused_consent(subject_screening=subject_screening)
+
+        return cleaned_data
+
+    @staticmethod
+    def validate_not_already_refused_consent(subject_screening: SubjectScreening) -> None:
+        try:
+            raise_if_already_refused_consent(
+                screening_identifier=subject_screening.screening_identifier
+            )
+        except AlreadyRefusedConsentError:
+            _, consent_refusal_url = get_add_or_change_refusal_url(obj=subject_screening)
+            msg = format_html(
+                "Not allowed. Patient has already refused consent. "
+                'See subject <A href="{}">{}</A>',
+                mark_safe(consent_refusal_url),  # nosec B308 B703
+                subject_screening.screening_identifier,
+            )
+            raise forms.ValidationError(msg)
+
+
 class SubjectConsentForm(
-    SiteModelFormMixin, FormValidatorMixin, ConsentModelFormMixin, forms.ModelForm
+    ConsentFormMixin,
+    SiteModelFormMixin,
+    FormValidatorMixin,
+    ConsentModelFormMixin,
+    forms.ModelForm,
 ):
     form_validator_cls = SubjectConsentFormValidator
 
