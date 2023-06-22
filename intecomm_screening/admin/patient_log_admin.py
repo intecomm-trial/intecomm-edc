@@ -463,7 +463,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
                 f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
                 f"&q={obj.screening_identifier}"
             )
-        else:
+        elif not obj.screening_refusal_reason:
             url = reverse("intecomm_screening_admin:intecomm_screening_subjectscreening_add")
             add_screening_url = (
                 f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
