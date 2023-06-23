@@ -1,5 +1,6 @@
 from django.test import TestCase, tag
 
+from intecomm_consent.utils import AlreadyConsentedError
 from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin
 from intecomm_screening.utils import AlreadyRefusedConsentError
 
@@ -29,14 +30,13 @@ class TestConsentRefusal(IntecommTestCaseMixin, TestCase):
             str(cm.exception),
         )
 
-    def test_refusing_consent_then_consenting_raises(self):
+    def test_refusing_consent_after_consenting_raises(self):
         subject_screening = self.get_subject_screening()
-        self.get_consent_refusal(subject_screening=subject_screening)
+        subject_consent = self.get_subject_consent(subject_screening)
 
-        with self.assertRaises(AlreadyRefusedConsentError) as cm:
-            self.get_subject_consent(subject_screening)
+        with self.assertRaises(AlreadyConsentedError) as cm:
+            self.get_consent_refusal(subject_screening=subject_screening)
         self.assertIn(
-            "Patient has already refused consent. "
-            f"See {subject_screening.screening_identifier}.",
+            f"Subject has already consented. See {subject_consent.subject_identifier}.",
             str(cm.exception),
         )
