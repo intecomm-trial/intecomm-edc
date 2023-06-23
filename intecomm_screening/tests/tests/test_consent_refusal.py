@@ -1,6 +1,12 @@
+from typing import Dict
+
 from django.test import TestCase, tag
+from edc_utils import get_utcnow
 
 from intecomm_consent.utils import AlreadyConsentedError
+from intecomm_lists.models import ConsentRefusalReasons
+from intecomm_screening.forms import ConsentRefusalForm
+from intecomm_screening.models import ConsentRefusal, SubjectScreening
 from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin
 from intecomm_screening.utils import AlreadyRefusedConsentError
 
@@ -40,3 +46,75 @@ class TestConsentRefusal(IntecommTestCaseMixin, TestCase):
             f"Subject has already consented. See {subject_consent.subject_identifier}.",
             str(cm.exception),
         )
+
+
+@tag("crf")
+class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
+    def get_refusal_data(self, subject_screening: SubjectScreening | None = None) -> Dict:
+        refusal_reason = ConsentRefusalReasons.objects.all()[0]
+        return {
+            "subject_screening": subject_screening or self.get_subject_screening(),
+            "report_datetime": get_utcnow(),
+            "reason": refusal_reason,
+            "other_reason": "",
+        }
+
+    def test_consent_refusal_ok(self):
+        form = ConsentRefusalForm(data=self.get_refusal_data(), instance=None)
+        form.is_valid()
+        self.assertEqual(form.errors, {})
+        form.save()
+        self.assertEqual(ConsentRefusal.objects.all().count(), 1)
+
+    def test_refusal_after_already_refused_raises(self):
+        subject_screening = self.get_subject_screening()
+        refusal_form = ConsentRefusalForm(
+            data=self.get_refusal_data(subject_screening=subject_screening),
+            instance=None,
+        )
+        refusal_form.is_valid()
+        self.assertEqual(refusal_form.errors, {})
+        refusal_form.save()
+        self.assertEqual(ConsentRefusal.objects.all().count(), 1)
+
+        refusal_form_two = ConsentRefusalForm(
+            data=self.get_refusal_data(subject_screening=subject_screening),
+            instance=None,
+        )
+        refusal_form_two.is_valid()
+        self.assertIn("subject_screening", refusal_form_two.errors)
+        self.assertEqual(
+            ["Consent Refusal with this Subject screening already exists."],
+            refusal_form_two.errors.get("subject_screening"),
+        )
+        with self.assertRaises(ValueError):
+            refusal_form_two.save()
+
+        self.assertEqual(ConsentRefusal.objects.all().count(), 1)
+
+    def test_refusal_after_already_consented_raises(self):
+        # TODO:
+        self.assertTrue(False, "TODO!")
+
+    def test_refusal_if_not_eligible_raises(self):
+        subject_screening = self.get_subject_screening()
+        subject_screening.in_care_6m = False
+        subject_screening.save()
+        self.assertEqual(SubjectScreening.objects.all().count(), 1)
+
+        refusal_form = ConsentRefusalForm(
+            data=self.get_refusal_data(subject_screening=subject_screening),
+            instance=None,
+        )
+        refusal_form.is_valid()
+        self.assertIn(
+            "Not allowed. Subject is not eligible. See subject ",
+            refusal_form.errors.get("__all__")[0],
+        )
+        self.assertIn(
+            subject_screening.screening_identifier,
+            refusal_form.errors.get("__all__")[0],
+        )
+        with self.assertRaises(ValueError):
+            refusal_form.save()
+        self.assertEqual(ConsentRefusal.objects.all().count(), 0)
