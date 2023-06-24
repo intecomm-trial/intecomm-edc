@@ -3,6 +3,7 @@ from typing import Dict
 from django.test import TestCase, tag
 from edc_utils import get_utcnow
 
+from intecomm_consent.models import SubjectConsent
 from intecomm_consent.utils import AlreadyConsentedError
 from intecomm_lists.models import ConsentRefusalReasons
 from intecomm_screening.forms import ConsentRefusalForm
@@ -93,8 +94,28 @@ class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
         self.assertEqual(ConsentRefusal.objects.all().count(), 1)
 
     def test_refusal_after_already_consented_raises(self):
-        # TODO:
-        self.assertTrue(False, "TODO!")
+        subject_screening = self.get_subject_screening()
+        self.get_subject_consent(subject_screening=subject_screening)
+        subject_screening.refresh_from_db()
+        self.assertEqual(SubjectConsent.objects.all().count(), 1)
+
+        refusal_form = ConsentRefusalForm(
+            data=self.get_refusal_data(subject_screening=subject_screening),
+            instance=ConsentRefusal(),
+        )
+        refusal_form.is_valid()
+        self.assertIn("__all__", refusal_form.errors)
+        self.assertIn(
+            "Not allowed. Subject has already consented. See subject ",
+            refusal_form.errors.get("__all__")[0],
+        )
+        self.assertIn(
+            subject_screening.subject_identifier,
+            refusal_form.errors.get("__all__")[0],
+        )
+        with self.assertRaises(ValueError):
+            refusal_form.save()
+        self.assertEqual(ConsentRefusal.objects.all().count(), 0)
 
     def test_refusal_if_not_eligible_raises(self):
         subject_screening = self.get_subject_screening()

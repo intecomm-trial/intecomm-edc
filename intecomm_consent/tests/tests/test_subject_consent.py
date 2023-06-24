@@ -3,12 +3,12 @@ from typing import Dict
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.test import TestCase, tag
+from edc_consent.constants import HOSPITAL_NUMBER
+from edc_constants.constants import NO, NOT_APPLICABLE, YES
 
 from intecomm_consent.forms import SubjectConsentForm
 from intecomm_consent.models import SubjectConsent
 from intecomm_consent.utils import AlreadyConsentedError
-from intecomm_lists.models import ConsentRefusalReasons
-from intecomm_screening.forms import ConsentRefusalForm
 from intecomm_screening.models import ConsentRefusal, Site, SubjectScreening
 from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin, now
 from intecomm_screening.utils import AlreadyRefusedConsentError
@@ -54,52 +54,110 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
         subject_screening = subject_screening or self.get_subject_screening()
         return {
             "screening_identifier": subject_screening.screening_identifier,
-            "subject_identifier": "not-sure-why-we-need-this",
+            "subject_identifier": "123-456-789",
             "report_datetime": now,
             "legal_name": subject_screening.legal_name,
             "familiar_name": subject_screening.familiar_name,
             "initials": subject_screening.initials,
             "gender": subject_screening.gender,
-            "dob": (now.date() - relativedelta(years=subject_screening.age_in_years)),
-            "site": Site.objects.get(id=settings.SITE_ID),
+            "language": "en",
+            "is_literate": YES,
             "consent_datetime": subject_screening.report_datetime,
+            "dob": (now.date() - relativedelta(years=subject_screening.age_in_years)),
+            "is_dob_estimated": "-",
+            "identity": "123/456/789",
+            "identity_type": HOSPITAL_NUMBER,
+            "confirm_identity": "123/456/789",
+            "is_incarcerated": NO,
+            # Review questions
+            "consent_reviewed": YES,
+            "study_questions": YES,
+            "assessment_score": YES,
+            "consent_signature": YES,
+            "consent_copy": YES,
+            # Group
+            "group_identifier": "G123-456",
+            # Other stuff not included in admin class
+            "site": Site.objects.get(id=settings.SITE_ID),
+            "citizen": NO,
+            "legal_marriage": NOT_APPLICABLE,
+            "marriage_certificate": NOT_APPLICABLE,
+            "subject_type": "subject",
+            "may_store_genetic_samples": NO,
+            "may_store_samples": NO,
         }
 
-    @tag("debug")
     def test_consent_ok(self):
         subject_screening = self.get_subject_screening()
         consent_form = SubjectConsentForm(
             data=self.get_consent_data(subject_screening=subject_screening),
-            instance=None,
+            initial={"screening_identifier": subject_screening.screening_identifier},
+            instance=SubjectConsent(),
         )
-        # TODO: fix
         consent_form.is_valid()
         self.assertEqual(consent_form.errors, {})
         consent_form.save()
         self.assertEqual(SubjectConsent.objects.all().count(), 1)
 
     def test_consent_after_already_consented_raises(self):
-        # TODO:
-        self.assertTrue(False, "TODO!")
+        subject_screening = self.get_subject_screening()
+        consent_form = SubjectConsentForm(
+            data=self.get_consent_data(subject_screening=subject_screening),
+            initial={"screening_identifier": subject_screening.screening_identifier},
+            instance=SubjectConsent(),
+        )
+        consent_form.is_valid()
+        self.assertEqual(consent_form.errors, {})
+        consent_form.save()
+        self.assertEqual(SubjectConsent.objects.all().count(), 1)
+
+        consent_form_two = SubjectConsentForm(
+            data=self.get_consent_data(subject_screening=subject_screening),
+            initial={"screening_identifier": subject_screening.screening_identifier},
+            instance=SubjectConsent(),
+        )
+        consent_form_two.is_valid()
+        self.assertNotEqual(consent_form_two.errors, {})
+        self.assertIn("__all__", consent_form_two.errors)
+        self.assertEqual(
+            [
+                "Subject Consent with this Subject identifier and Screening "
+                "identifier already exists."
+            ],
+            consent_form_two.errors.get("__all__"),
+        )
+        with self.assertRaises(ValueError):
+            consent_form_two.save()
+        self.assertEqual(SubjectConsent.objects.all().count(), 1)
 
     def test_consent_after_already_refused_raises(self):
         subject_screening = self.get_subject_screening()
-        refusal_form = ConsentRefusalForm(
-            data={
-                "subject_screening": subject_screening,
-                "report_datetime": now,
-                "reason": ConsentRefusalReasons.objects.all()[0],
-                "other_reason": "",
-            },
-            instance=None,
-        )
-        refusal_form.is_valid()
-        self.assertEqual(refusal_form.errors, {})
-        refusal_form.save()
+        self.get_consent_refusal(subject_screening=subject_screening)
         self.assertEqual(ConsentRefusal.objects.all().count(), 1)
 
-        # TODO:
-        self.assertTrue(False, "TODO!")
+        consent_form = SubjectConsentForm(
+            data=self.get_consent_data(subject_screening=subject_screening),
+            initial={"screening_identifier": subject_screening.screening_identifier},
+            instance=SubjectConsent(),
+        )
+        consent_form.is_valid()
+        self.assertNotEqual(consent_form.errors, {})
+        self.assertIn("__all__", consent_form.errors)
+        self.assertIn(
+            "Not allowed. Patient has already refused consent. See subject ",
+            consent_form.errors.get("__all__")[0],
+        )
+        self.assertIn(
+            str(ConsentRefusal.objects.get(subject_screening_id=subject_screening.id).id),
+            consent_form.errors.get("__all__")[0],
+        )
+        self.assertIn(
+            subject_screening.screening_identifier,
+            consent_form.errors.get("__all__")[0],
+        )
+        with self.assertRaises(ValueError):
+            consent_form.save()
+        self.assertEqual(SubjectConsent.objects.all().count(), 0)
 
     def test_consent_if_not_eligible_raises(self):
         subject_screening = self.get_subject_screening()
@@ -107,5 +165,19 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
         subject_screening.save()
         self.assertEqual(SubjectScreening.objects.all().count(), 1)
 
-        # TODO:
-        self.assertTrue(False, "TODO!")
+        consent_form = SubjectConsentForm(
+            data=self.get_consent_data(subject_screening=subject_screening),
+            initial={"screening_identifier": subject_screening.screening_identifier},
+            instance=SubjectConsent(),
+        )
+        consent_form.is_valid()
+        self.assertNotEqual(consent_form.errors, {})
+        self.assertIn("__all__", consent_form.errors)
+        self.assertIn(
+            "Unable to determine the eligibility datetime from the screening form. "
+            f"Got Subject Screening({subject_screening.screening_identifier}",
+            consent_form.errors.get("__all__")[0],
+        )
+        with self.assertRaises(ValueError):
+            consent_form.save()
+        self.assertEqual(SubjectConsent.objects.all().count(), 0)

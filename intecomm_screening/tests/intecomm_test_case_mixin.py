@@ -17,7 +17,6 @@ from edc_metadata import REQUIRED
 from edc_metadata.models import CrfMetadata
 from edc_randomization.site_randomizers import site_randomizers
 from edc_sites import add_or_update_django_sites, get_sites_by_country
-from edc_utils import get_utcnow
 from edc_visit_schedule.constants import DAY1
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
@@ -41,7 +40,7 @@ def get_eligible_options(patient_log: PatientLog):
     dm_dx = True if patient_log.conditions.filter(name=DM) else False
     htn_dx = True if patient_log.conditions.filter(name=HTN) else False
     return dict(
-        report_datetime=get_utcnow(),
+        report_datetime=now,
         patient_log=patient_log,
         legal_name=patient_log.legal_name,
         familiar_name=patient_log.familiar_name,
