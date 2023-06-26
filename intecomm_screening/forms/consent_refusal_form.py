@@ -6,7 +6,11 @@ from edc_dashboard.url_names import url_names
 from edc_form_validators import FormValidatorMixin
 from intecomm_form_validators import ConsentRefusalFormValidator
 
-from intecomm_consent.utils import AlreadyConsentedError, raise_if_already_consented
+from intecomm_consent.utils import (
+    AlreadyConsentedError,
+    MultipleConsentsDetectedError,
+    raise_if_already_consented,
+)
 
 from ..models import ConsentRefusal, SubjectScreening
 from ..utils import get_add_or_change_consent_url
@@ -45,15 +49,21 @@ class RefusalFormMixin:
                 screening_identifier=subject_screening.screening_identifier
             )
         except AlreadyConsentedError:
-            _, screening_url, subject_identifier = get_add_or_change_consent_url(
+            _, consent_url, subject_identifier = get_add_or_change_consent_url(
                 obj=subject_screening
             )
             msg = format_html(
                 'Not allowed. Subject has already consented. See subject <A href="{}">{}</A>',
-                mark_safe(screening_url),  # nosec B308 B703
+                mark_safe(consent_url),  # nosec B308 B703
                 subject_identifier,
             )
             raise forms.ValidationError(msg)
+        except MultipleConsentsDetectedError:
+            raise forms.ValidationError(
+                "Not allowed. Multiple subject consents detected "
+                f"for subject '{subject_screening.screening_identifier}'. "
+                "Inform data manager before continuing."
+            )
 
 
 class ConsentRefusalForm(RefusalFormMixin, FormValidatorMixin, forms.ModelForm):

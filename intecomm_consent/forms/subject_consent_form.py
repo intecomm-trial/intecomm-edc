@@ -9,6 +9,7 @@ from intecomm_form_validators.consent import SubjectConsentFormValidator
 from intecomm_screening.models import SubjectScreening
 from intecomm_screening.utils import (
     AlreadyRefusedConsentError,
+    MultipleConsentRefusalsDetectedError,
     get_add_or_change_refusal_url,
     raise_if_already_refused_consent,
 )
@@ -44,6 +45,12 @@ class ConsentFormMixin:
                 subject_screening.screening_identifier,
             )
             raise forms.ValidationError(msg)
+        except MultipleConsentRefusalsDetectedError:
+            raise forms.ValidationError(
+                "Not allowed. Multiple consents refusals detected "
+                f"for subject '{subject_screening.screening_identifier}'. "
+                "Inform data manager before continuing."
+            )
 
 
 class SubjectConsentForm(
