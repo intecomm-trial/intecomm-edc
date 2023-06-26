@@ -32,7 +32,7 @@ class TestConsentRefusal(IntecommTestCaseMixin, TestCase):
         with self.assertRaises(AlreadyRefusedConsentError) as cm:
             self.get_consent_refusal(subject_screening=subject_screening)
         self.assertIn(
-            "Patient has already refused consent. "
+            "Patient has already refused to consent. "
             f"See {subject_screening.screening_identifier}.",
             str(cm.exception),
         )

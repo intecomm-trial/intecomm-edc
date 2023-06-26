@@ -19,7 +19,7 @@ def raise_if_already_consented(screening_identifier: str):
         pass
     except MultipleObjectsReturned:
         raise MultipleConsentsDetectedError(
-            f"Multiple consents detected for {screening_identifier}. "
+            f"Multiple subject consents detected for {screening_identifier}. "
             f"Perhaps catch this in the form."
         )
     else:

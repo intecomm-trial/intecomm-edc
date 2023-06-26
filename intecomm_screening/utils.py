@@ -99,6 +99,6 @@ def raise_if_already_refused_consent(screening_identifier: str):
         )
     else:
         raise AlreadyRefusedConsentError(
-            f"Patient has already refused consent. See {screening_identifier}. "
+            f"Patient has already refused to consent. See {screening_identifier}. "
             "Perhaps catch this in the form."
         )
