@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Tuple
 
 from django.apps import apps as django_apps
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.urls import reverse
 from edc_consent.utils import get_consent_model_cls
 
@@ -12,6 +12,10 @@ if TYPE_CHECKING:
 
 
 class AlreadyRefusedConsentError(Exception):
+    pass
+
+
+class MultipleConsentRefusalsDetectedError(Exception):
     pass
 
 
@@ -84,12 +88,17 @@ def get_add_or_change_refusal_url(
 
 
 def raise_if_already_refused_consent(screening_identifier: str):
-    consent_refusal = get_consent_refusal_model_cls().objects.filter(
-        screening_identifier=screening_identifier
-    )
-    if consent_refusal:
+    try:
+        get_consent_refusal_model_cls().objects.get(screening_identifier=screening_identifier)
+    except ObjectDoesNotExist:
+        pass
+    except MultipleObjectsReturned:
+        raise MultipleConsentRefusalsDetectedError(
+            f"Multiple consent refusals detected for {screening_identifier}. "
+            "Perhaps catch this in the form."
+        )
+    else:
         raise AlreadyRefusedConsentError(
-            "Patient has already refused consent. "
-            f"See {consent_refusal[0].screening_identifier}. "
-            f"Perhaps catch this in the form."
+            f"Patient has already refused consent. See {screening_identifier}. "
+            "Perhaps catch this in the form."
         )

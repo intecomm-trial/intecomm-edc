@@ -1,8 +1,12 @@
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from edc_consent.utils import get_consent_model_cls
 
 
 class AlreadyConsentedError(Exception):
+    pass
+
+
+class MultipleConsentsDetectedError(Exception):
     pass
 
 
@@ -12,11 +16,14 @@ def raise_if_already_consented(screening_identifier: str):
             screening_identifier=screening_identifier
         )
     except ObjectDoesNotExist:
-        subject_consent = None
-
-    if subject_consent:
+        pass
+    except MultipleObjectsReturned:
+        raise MultipleConsentsDetectedError(
+            f"Multiple consents detected for {screening_identifier}. "
+            f"Perhaps catch this in the form."
+        )
+    else:
         raise AlreadyConsentedError(
-            "Subject has already consented. "
-            f"See {subject_consent.subject_identifier}. "
+            f"Subject has already consented. See {subject_consent.subject_identifier}. "
             f"Perhaps catch this in the form."
         )
