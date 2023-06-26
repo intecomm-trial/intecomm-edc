@@ -95,7 +95,7 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
             instance=SubjectConsent(),
         )
         consent_form.is_valid()
-        self.assertEqual(consent_form.errors, {})
+        self.assertEqual(consent_form._errors, {})
         consent_form.save()
         self.assertEqual(SubjectConsent.objects.all().count(), 1)
 
@@ -107,7 +107,7 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
             instance=SubjectConsent(),
         )
         consent_form.is_valid()
-        self.assertEqual(consent_form.errors, {})
+        self.assertEqual(consent_form._errors, {})
         consent_form.save()
         self.assertEqual(SubjectConsent.objects.all().count(), 1)
 
@@ -117,14 +117,14 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
             instance=SubjectConsent(),
         )
         consent_form_two.is_valid()
-        self.assertNotEqual(consent_form_two.errors, {})
-        self.assertIn("__all__", consent_form_two.errors)
+        self.assertNotEqual(consent_form_two._errors, {})
+        self.assertIn("__all__", consent_form_two._errors)
         self.assertEqual(
             [
                 "Subject Consent with this Subject identifier and Screening "
                 "identifier already exists."
             ],
-            consent_form_two.errors.get("__all__"),
+            consent_form_two._errors.get("__all__"),
         )
         with self.assertRaises(ValueError):
             consent_form_two.save()
@@ -141,19 +141,19 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
             instance=SubjectConsent(),
         )
         consent_form.is_valid()
-        self.assertNotEqual(consent_form.errors, {})
-        self.assertIn("__all__", consent_form.errors)
+        self.assertNotEqual(consent_form._errors, {})
+        self.assertIn("__all__", consent_form._errors)
         self.assertIn(
             "Not allowed. Patient has already refused consent. See subject ",
-            consent_form.errors.get("__all__")[0],
+            consent_form._errors.get("__all__")[0],
         )
         self.assertIn(
             str(ConsentRefusal.objects.get(subject_screening_id=subject_screening.id).id),
-            consent_form.errors.get("__all__")[0],
+            consent_form._errors.get("__all__")[0],
         )
         self.assertIn(
             subject_screening.screening_identifier,
-            consent_form.errors.get("__all__")[0],
+            consent_form._errors.get("__all__")[0],
         )
         with self.assertRaises(ValueError):
             consent_form.save()
@@ -171,12 +171,12 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
             instance=SubjectConsent(),
         )
         consent_form.is_valid()
-        self.assertNotEqual(consent_form.errors, {})
-        self.assertIn("__all__", consent_form.errors)
+        self.assertNotEqual(consent_form._errors, {})
+        self.assertIn("__all__", consent_form._errors)
         self.assertIn(
             "Unable to determine the eligibility datetime from the screening form. "
             f"Got Subject Screening({subject_screening.screening_identifier}",
-            consent_form.errors.get("__all__")[0],
+            consent_form._errors.get("__all__")[0],
         )
         with self.assertRaises(ValueError):
             consent_form.save()

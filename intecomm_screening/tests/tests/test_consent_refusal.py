@@ -61,9 +61,9 @@ class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
         }
 
     def test_consent_refusal_ok(self):
-        form = ConsentRefusalForm(data=self.get_refusal_data(), instance=None)
+        form = ConsentRefusalForm(data=self.get_refusal_data(), instance=ConsentRefusal())
         form.is_valid()
-        self.assertEqual(form.errors, {})
+        self.assertEqual(form._errors, {})
         form.save()
         self.assertEqual(ConsentRefusal.objects.all().count(), 1)
 
@@ -71,22 +71,22 @@ class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
         subject_screening = self.get_subject_screening()
         refusal_form = ConsentRefusalForm(
             data=self.get_refusal_data(subject_screening=subject_screening),
-            instance=None,
+            instance=ConsentRefusal(),
         )
         refusal_form.is_valid()
-        self.assertEqual(refusal_form.errors, {})
+        self.assertEqual(refusal_form._errors, {})
         refusal_form.save()
         self.assertEqual(ConsentRefusal.objects.all().count(), 1)
 
         refusal_form_two = ConsentRefusalForm(
             data=self.get_refusal_data(subject_screening=subject_screening),
-            instance=None,
+            instance=ConsentRefusal(),
         )
         refusal_form_two.is_valid()
-        self.assertIn("subject_screening", refusal_form_two.errors)
+        self.assertIn("subject_screening", refusal_form_two._errors)
         self.assertEqual(
             ["Consent Refusal with this Subject screening already exists."],
-            refusal_form_two.errors.get("subject_screening"),
+            refusal_form_two._errors.get("subject_screening"),
         )
         with self.assertRaises(ValueError):
             refusal_form_two.save()
@@ -104,14 +104,14 @@ class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
             instance=ConsentRefusal(),
         )
         refusal_form.is_valid()
-        self.assertIn("__all__", refusal_form.errors)
+        self.assertIn("__all__", refusal_form._errors)
         self.assertIn(
             "Not allowed. Subject has already consented. See subject ",
-            refusal_form.errors.get("__all__")[0],
+            refusal_form._errors.get("__all__")[0],
         )
         self.assertIn(
             subject_screening.subject_identifier,
-            refusal_form.errors.get("__all__")[0],
+            refusal_form._errors.get("__all__")[0],
         )
         with self.assertRaises(ValueError):
             refusal_form.save()
@@ -125,16 +125,16 @@ class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
 
         refusal_form = ConsentRefusalForm(
             data=self.get_refusal_data(subject_screening=subject_screening),
-            instance=None,
+            instance=ConsentRefusal(),
         )
         refusal_form.is_valid()
         self.assertIn(
             "Not allowed. Subject is not eligible. See subject ",
-            refusal_form.errors.get("__all__")[0],
+            refusal_form._errors.get("__all__")[0],
         )
         self.assertIn(
             subject_screening.screening_identifier,
-            refusal_form.errors.get("__all__")[0],
+            refusal_form._errors.get("__all__")[0],
         )
         with self.assertRaises(ValueError):
             refusal_form.save()
