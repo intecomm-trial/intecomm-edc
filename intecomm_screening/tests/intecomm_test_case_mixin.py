@@ -104,13 +104,14 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
 
     @staticmethod
     def get_patient_log(
+        legal_name: str | None = None,
         gender: str | None = None,
         age_in_years: int | None = None,
         conditions: list[Conditions] | None = None,
     ):
         patient_log = make_recipe(
             "intecomm_screening.patientlog",
-            legal_name="NAMEA AAA",
+            legal_name=legal_name or "NAMEA AAA",
             familiar_name="NAMEA",
             initials="NA",
             gender=gender or FEMALE,
@@ -153,6 +154,9 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             screening_identifier=screening_identifier
         )
         self.assertTrue(subject_screening.eligible)
+
+        patient_log.screening_identifier = screening_identifier
+        patient_log.save()
 
         if eligibility_datetime:
             subject_screening.eligibility_datetime = eligibility_datetime

@@ -9,9 +9,13 @@ from edc_constants.constants import NO, NOT_APPLICABLE, YES
 from intecomm_consent.forms import SubjectConsentForm
 from intecomm_consent.models import SubjectConsent
 from intecomm_consent.utils import AlreadyConsentedError
+from intecomm_lists.models import ScreeningRefusalReasons
 from intecomm_screening.models import ConsentRefusal, Site, SubjectScreening
 from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin, now
-from intecomm_screening.utils import AlreadyRefusedConsentError
+from intecomm_screening.utils import (
+    AlreadyRefusedConsentError,
+    ScreenedDespiteUnwillingToScreenError,
+)
 
 
 @tag("sc")
@@ -23,6 +27,26 @@ class TestSubjectConsent(IntecommTestCaseMixin, TestCase):
 
         subject_consent = self.get_subject_consent(subject_screening)
         self.assertIsNotNone(subject_consent.subject_identifier)
+
+    def test_consenting_when_screened_despite_unwilling_to_screen_raises(self):
+        patient_log = self.get_patient_log()
+        subject_screening = self.get_subject_screening(patient_log=patient_log)
+        patient_log.screening_refusal_reason = ScreeningRefusalReasons.objects.get(
+            name="dont_have_time"
+        )
+        patient_log.save()
+        self.assertTrue(patient_log.screening_refusal_reason)
+
+        with self.assertRaises(ScreenedDespiteUnwillingToScreenError) as cm:
+            self.get_subject_consent(subject_screening=subject_screening)
+        self.assertIn(
+            f"Patient '{patient_log.patient_log_identifier}' "
+            f"has screened ({subject_screening.screening_identifier}) "
+            "despite reporting as unwilling to screen. "
+            "Perhaps catch this in the form. "
+            f"Got reason 'I don't have time'",
+            str(cm.exception),
+        )
 
     def test_consenting_more_than_once_raises(self):
         subject_screening = self.get_subject_screening()
@@ -98,6 +122,34 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
         self.assertEqual(consent_form._errors, {})
         consent_form.save()
         self.assertEqual(SubjectConsent.objects.all().count(), 1)
+
+    def test_consent_when_screened_despite_unwilling_to_screen_raises(self):
+        patient_log = self.get_patient_log()
+        subject_screening = self.get_subject_screening(patient_log=patient_log)
+        patient_log.screening_refusal_reason = ScreeningRefusalReasons.objects.get(
+            name="dont_have_time"
+        )
+        patient_log.save()
+        self.assertTrue(patient_log.screening_refusal_reason)
+
+        consent_form = SubjectConsentForm(
+            data=self.get_consent_data(subject_screening=subject_screening),
+            initial={"screening_identifier": subject_screening.screening_identifier},
+            instance=SubjectConsent(),
+        )
+        consent_form.is_valid()
+        self.assertNotEqual(consent_form._errors, {})
+        self.assertIn("__all__", consent_form._errors)
+        self.assertEqual(
+            f"Not allowed. Patient '{patient_log.patient_log_identifier}' "
+            f"has screened ({subject_screening.screening_identifier}) "
+            "despite reporting as unwilling to screen. "
+            "Inform data manager before continuing.",
+            consent_form._errors.get("__all__")[0],
+        )
+        with self.assertRaises(ValueError):
+            consent_form.save()
+        self.assertEqual(SubjectConsent.objects.all().count(), 0)
 
     def test_consent_after_already_consented_raises(self):
         subject_screening = self.get_subject_screening()

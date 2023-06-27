@@ -9,7 +9,10 @@ from edc_utils import get_utcnow
 from intecomm_consent.utils import raise_if_already_consented
 from intecomm_lists.models import ConsentRefusalReasons
 
-from ..utils import raise_if_already_refused_consent
+from ..utils import (
+    raise_if_already_refused_consent,
+    raise_if_screened_despite_unwilling_to_screen,
+)
 from .subject_screening import SubjectScreening
 
 
@@ -44,6 +47,10 @@ class ConsentRefusal(SiteModelMixin, BaseUuidModel):
 
     def save(self, *args, **kwargs):
         self.screening_identifier = self.subject_screening.screening_identifier
+        raise_if_screened_despite_unwilling_to_screen(
+            screening_identifier=self.screening_identifier
+        )
+
         if not self.id:
             raise_if_already_refused_consent(screening_identifier=self.screening_identifier)
         raise_if_already_consented(screening_identifier=self.screening_identifier)

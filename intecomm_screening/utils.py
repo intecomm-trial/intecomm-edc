@@ -23,6 +23,10 @@ class MultipleConsentRefusalsDetectedError(Exception):
     pass
 
 
+class ScreenedDespiteUnwillingToScreenError(Exception):
+    pass
+
+
 def get_add_or_change_consent_url(
     obj: SubjectScreening, next_url_name: str | None = None
 ) -> Tuple[str | None, str | None, str | None]:
@@ -66,6 +70,10 @@ def get_consent_refusal_model_cls():
     return django_apps.get_model("intecomm_screening.consentrefusal")
 
 
+def get_patient_log_model_cls():
+    return django_apps.get_model("intecomm_screening.patientlog")
+
+
 def get_add_or_change_refusal_url(
     obj: SubjectScreening, next_url_name: str | None = None
 ) -> Tuple[str | None, str | None]:
@@ -91,7 +99,19 @@ def get_add_or_change_refusal_url(
     return add_url, change_url
 
 
-def raise_if_already_refused_consent(screening_identifier: str):
+def raise_if_screened_despite_unwilling_to_screen(screening_identifier: str) -> None:
+    obj = get_patient_log_model_cls().objects.get(screening_identifier=screening_identifier)
+    if obj.screening_refusal_reason:
+        raise ScreenedDespiteUnwillingToScreenError(
+            f"Patient '{obj.patient_log_identifier}' "
+            f"has screened ({screening_identifier}) "
+            "despite reporting as unwilling to screen. "
+            "Perhaps catch this in the form. "
+            f"Got reason '{obj.screening_refusal_reason}'"
+        )
+
+
+def raise_if_already_refused_consent(screening_identifier: str) -> None:
     try:
         get_consent_refusal_model_cls().objects.get(screening_identifier=screening_identifier)
     except ObjectDoesNotExist:
@@ -143,3 +163,40 @@ def validate_is_eligible(subject_screening: SubjectScreening) -> None:
             subject_screening.screening_identifier,
         )
         raise forms.ValidationError(msg)
+
+
+def validate_not_screened_despite_unwilling_to_screen(
+    subject_screening: SubjectScreening,
+) -> None:
+    try:
+        raise_if_screened_despite_unwilling_to_screen(
+            screening_identifier=subject_screening.screening_identifier
+        )
+    except ScreenedDespiteUnwillingToScreenError:
+        patient_log_identifier = None
+        try:
+            patient_log_identifier = (
+                get_patient_log_model_cls()
+                .objects.get(screening_identifier=subject_screening.screening_identifier)
+                .patient_log_identifier
+            )
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
+            pass
+
+        raise forms.ValidationError(
+            f"Not allowed. Patient '{patient_log_identifier}' "
+            f"has screened ({subject_screening.screening_identifier}) "
+            "despite reporting as unwilling to screen. "
+            "Inform data manager before continuing.",
+        )
+    except ObjectDoesNotExist:
+        raise forms.ValidationError(
+            f"Invalid. Patient Log associated with screening identifier "
+            f"'{subject_screening.screening_identifier}' not found"
+        )
+    except MultipleObjectsReturned:
+        raise forms.ValidationError(
+            f"Invalid. Multiple Patient Logs associated with screening identifier "
+            f"'{subject_screening.screening_identifier}' exist."
+            "Inform data manager before continuing.",
+        )

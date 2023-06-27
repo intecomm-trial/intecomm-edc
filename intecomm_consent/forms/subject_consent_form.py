@@ -8,6 +8,7 @@ from intecomm_screening.models import SubjectScreening
 from intecomm_screening.utils import (
     validate_is_eligible,
     validate_not_already_refused_consent,
+    validate_not_screened_despite_unwilling_to_screen,
 )
 
 from ..models import SubjectConsent
@@ -23,6 +24,9 @@ class ConsentFormMixin:
                 screening_identifier=screening_identifier
             )
 
+            validate_not_screened_despite_unwilling_to_screen(
+                subject_screening=subject_screening
+            )
             validate_is_eligible(subject_screening=subject_screening)
             validate_not_already_consented(subject_screening=subject_screening)
             validate_not_already_refused_consent(subject_screening=subject_screening)
