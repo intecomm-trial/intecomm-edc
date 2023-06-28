@@ -15,6 +15,7 @@ unreleased
 - Subject Consent and Consent Refusal forms:
     - validate eligible, not already consented, not already refused, not screened despite unwilling to screen
 - Extent intecomm_test_case_mixin to support creation of Patient Logs and Consent Refusals
+- bump to edc 0.4.99
 
 0.1.25
 ------
