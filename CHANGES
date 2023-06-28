@@ -1,6 +1,21 @@
 Changes
 =======
 
+unreleased
+----------
+- Patient Logs list:
+    - add 'Unwilling to screen' message for patients reported as unwilling to screen
+    - add refusal link to participants who have screened but not consented/refused (#572, #610)
+    - add change refusal link to participants who have refused to consent
+    - fix Consented = NO list filter
+- Subject Screening model:
+    - raise on save if reported as unwilling to screen in Patient Log
+- Subject Consent and Consent Refusal models:
+    - raise on save if not already consented, not already refused, not screened despite unwilling to screen
+- Subject Consent and Consent Refusal forms:
+    - validate eligible, not already consented, not already refused, not screened despite unwilling to screen
+- Extent intecomm_test_case_mixin to support creation of Patient Logs and Consent Refusals
+
 0.1.25
 ------
 - reorder Medications admin fields to be consistent with clinical review (hiv, dm, htn)
