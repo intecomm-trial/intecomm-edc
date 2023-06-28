@@ -15,6 +15,13 @@ unreleased
 - Subject Consent and Consent Refusal forms:
     - validate eligible, not already consented, not already refused, not screened despite unwilling to screen
 - Extent intecomm_test_case_mixin to support creation of Patient Logs and Consent Refusals
+- bump to intecomm-form-validators 0.1.25, includes:
+    - fix Hypertension Initial Review form incorrectly flagging medicine start date
+      as required when not managed by drugs (i.e. managed by diet, lifestyle or other) (#624)
+    - Subject Screening form:
+        - add validation to prevent those reported unwilling to screen in Patient Log, from screening
+        - use Patient Log link in errors referring to Patient Log
+- bump to edc 0.4.99
 
 0.1.25
 ------
