@@ -230,19 +230,25 @@ class SubjectScreening(
     )
 
     def save(self, *args, **kwargs):
+        if self.patient_log and self.patient_log.screening_refusal_reason:
+            raise SubjectScreeningError(
+                f"Patient '{self.patient_log.patient_log_identifier}' is unwilling to screen. "
+                f"Perhaps catch this in the form. "
+                f"Got reason '{self.patient_log.screening_refusal_reason}'"
+            )
         if (
             self.patient_log
             and self.patient_log.hospital_identifier != self.hospital_identifier
         ):
             raise SubjectScreeningError(
                 "Health facility identifier does not match patient log. "
-                f"Perhaps catch this in the form. Got{self.patient_log.hospital_identifier}!="
+                f"Perhaps catch this in the form. Got {self.patient_log.hospital_identifier}!="
                 f"{self.hospital_identifier}"
             )
         if self.patient_log and self.patient_log.initials != self.initials:
             raise SubjectScreeningError(
-                "Initials does not match patient log. "
-                f"Perhaps catch this in the form. Got{self.patient_log.initials}!="
+                "Initials do not match patient log. "
+                f"Perhaps catch this in the form. Got {self.patient_log.initials}!="
                 f"{self.initials}"
             )
         super().save(*args, **kwargs)

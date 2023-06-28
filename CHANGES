@@ -1,6 +1,29 @@
 Changes
 =======
 
+0.1.37
+------
+- fix "'+' char is removed from group names when clicking patient logs list" (#631)
+- Patient Logs list:
+    - add 'Unwilling to screen' message for patients reported as unwilling to screen
+    - add refusal link to participants who have screened but not consented/refused (#572, #610)
+    - add change refusal link to participants who have refused to consent
+    - fix Consented = NO list filter
+- Subject Screening model:
+    - raise on save if reported as unwilling to screen in Patient Log
+- Subject Consent and Consent Refusal models:
+    - raise on save if not already consented, not already refused, not screened despite unwilling to screen
+- Subject Consent and Consent Refusal forms:
+    - validate eligible, not already consented, not already refused, not screened despite unwilling to screen
+- Extent intecomm_test_case_mixin to support creation of Patient Logs and Consent Refusals
+- bump to intecomm-form-validators 0.1.25, includes:
+    - fix Hypertension Initial Review form incorrectly flagging medicine start date
+      as required when not managed by drugs (i.e. managed by diet, lifestyle or other) (#624)
+    - Subject Screening form:
+        - add validation to prevent those reported unwilling to screen in Patient Log, from screening
+        - use Patient Log link in errors referring to Patient Log
+- bump to edc 0.4.99
+
 0.1.25
 ------
 - reorder Medications admin fields to be consistent with clinical review (hiv, dm, htn)

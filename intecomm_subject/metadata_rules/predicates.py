@@ -1,5 +1,6 @@
 from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
+from edc_constants.constants import NO
 from edc_metadata.metadata_rules import PredicateCollection
 
 
@@ -19,10 +20,15 @@ class Predicates(PredicateCollection):
     @staticmethod
     def patient_required(visit, **kwargs):
         model_cls = django_apps.get_model("intecomm_subject.healtheconomicspatient")
+        hoh_model_cls = django_apps.get_model("intecomm_subject.healtheconomicshouseholdhead")
+        try:
+            hoh = hoh_model_cls.objects.get(subject_visit=visit).hoh
+        except ObjectDoesNotExist:
+            hoh = NO
         try:
             model_cls.objects.get(subject_visit__subject_identifier=visit.subject_identifier)
         except ObjectDoesNotExist:
-            return True
+            return True if hoh == NO else False
         return False
 
     @staticmethod

@@ -5,7 +5,9 @@ from faker import Faker
 from intecomm_form_validators import RECRUITING
 from model_bakery.recipe import Recipe
 
-from .models import PatientGroup, PatientLog
+from intecomm_lists.models import ConsentRefusalReasons
+
+from .models import ConsentRefusal, PatientGroup, PatientLog
 
 fake = Faker()
 
@@ -14,6 +16,12 @@ familiar_name = legal_name[0].upper()
 names = legal_name.split(" ")
 initials = f"{names[0][0]}{names[-1][0]}"
 
+
+consentrefusal = Recipe(
+    ConsentRefusal,
+    report_datetime=get_utcnow(),
+    reason=ConsentRefusalReasons.objects.get(name="dont_have_time"),
+)
 
 patientgroup = Recipe(
     PatientGroup,

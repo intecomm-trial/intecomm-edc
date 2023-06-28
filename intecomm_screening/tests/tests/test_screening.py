@@ -6,8 +6,9 @@ from edc_constants.constants import DM, HIV, HTN, NO, UUID_PATTERN
 from intecomm_form_validators import RECRUITING
 from model_bakery.baker import make_recipe
 
-from intecomm_lists.models import Conditions
-from intecomm_screening.models import PatientLog
+from intecomm_lists.models import Conditions, ScreeningRefusalReasons
+from intecomm_screening.models import PatientLog, SubjectScreening
+from intecomm_screening.models.subject_screening import SubjectScreeningError
 
 
 class TestScreening(TestCase):
@@ -71,3 +72,113 @@ class TestScreening(TestCase):
 
         # TODO: why does this fail?
         # self.assertEqual(patient_group.patients.count(), 14)
+
+    def test_screening_raises_if_unwilling_in_patient_log(self):
+        patient_log = make_recipe(
+            "intecomm_screening.patientlog",
+            legal_name="NAMEA AAA",
+            familiar_name="NAMEA",
+            initials="NA",
+            hospital_identifier=uuid4().hex,
+            contact_number="1234567890",
+            screening_refusal_reason=ScreeningRefusalReasons.objects.get(
+                name="dont_have_time"
+            ),
+        )
+        patient_log.conditions.add(Conditions.objects.get(name=HIV))
+        subject_screening = SubjectScreening(
+            patient_log=patient_log,
+            hospital_identifier=patient_log.hospital_identifier,
+            gender=patient_log.gender,
+            age_in_years=patient_log.age_in_years,
+            legal_name=patient_log.legal_name,
+            familiar_name=patient_log.familiar_name,
+            initials=patient_log.initials,
+        )
+
+        with self.assertRaises(SubjectScreeningError) as cm:
+            subject_screening.save()
+        self.assertIn(
+            f"Patient '{patient_log.patient_log_identifier}' is unwilling to screen.",
+            str(cm.exception),
+        )
+
+    def test_screening_ok_if_not_unwilling_in_patient_log(self):
+        patient_log = make_recipe(
+            "intecomm_screening.patientlog",
+            legal_name="NAMEA AAA",
+            familiar_name="NAMEA",
+            initials="NA",
+            hospital_identifier=uuid4().hex,
+            contact_number="1234567890",
+            screening_refusal_reason=None,
+        )
+        patient_log.conditions.add(Conditions.objects.get(name=HIV))
+        subject_screening = SubjectScreening(
+            patient_log=patient_log,
+            hospital_identifier=patient_log.hospital_identifier,
+            gender=patient_log.gender,
+            age_in_years=patient_log.age_in_years,
+            legal_name=patient_log.legal_name,
+            familiar_name=patient_log.familiar_name,
+            initials=patient_log.initials,
+        )
+
+        try:
+            subject_screening.save()
+        except SubjectScreeningError as e:
+            self.fail(f"SubjectScreeningError unexpectedly raised. Got {e}")
+
+    def test_screening_raises_if_hospital_identifier_mismatch(self):
+        patient_log = make_recipe(
+            "intecomm_screening.patientlog",
+            legal_name="NAMEA AAA",
+            familiar_name="NAMEA",
+            initials="NA",
+            hospital_identifier="56d2c5ebc7384309990ddc14ee2cf1b2",
+            contact_number="1234567890",
+        )
+        patient_log.conditions.add(Conditions.objects.get(name=HIV))
+        subject_screening = SubjectScreening(
+            patient_log=patient_log,
+            hospital_identifier="e8da3474883445cd906697d91e52a10a",
+            gender=patient_log.gender,
+            age_in_years=patient_log.age_in_years,
+            legal_name=patient_log.legal_name,
+            familiar_name=patient_log.familiar_name,
+            initials=patient_log.initials,
+        )
+
+        with self.assertRaises(SubjectScreeningError) as cm:
+            subject_screening.save()
+        self.assertIn(
+            "Health facility identifier does not match patient log. ",
+            str(cm.exception),
+        )
+
+    def test_screening_raises_if_initials_mismatch(self):
+        patient_log = make_recipe(
+            "intecomm_screening.patientlog",
+            legal_name="NAMEA AAA",
+            familiar_name="NAMEA",
+            initials="NA",
+            hospital_identifier=uuid4().hex,
+            contact_number="1234567890",
+        )
+        patient_log.conditions.add(Conditions.objects.get(name=HIV))
+        subject_screening = SubjectScreening(
+            patient_log=patient_log,
+            hospital_identifier=patient_log.hospital_identifier,
+            gender=patient_log.gender,
+            age_in_years=patient_log.age_in_years,
+            legal_name=patient_log.legal_name,
+            familiar_name=patient_log.familiar_name,
+            initials="XX",
+        )
+
+        with self.assertRaises(SubjectScreeningError) as cm:
+            subject_screening.save()
+        self.assertIn(
+            "Initials do not match patient log. ",
+            str(cm.exception),
+        )

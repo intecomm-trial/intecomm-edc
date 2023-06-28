@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from django.contrib.admin import SimpleListFilter
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from django.utils.translation import gettext_lazy as _
 from edc_constants.constants import DM, HIV, HTN, NCD, NO, TBD, YES
 from edc_model_admin.list_filters import FutureDateListFilter, PastDateListFilter
@@ -113,7 +113,12 @@ class ConsentedListFilter(SimpleListFilter):
                 subjectscreening__subject_identifier__startswith=Protocol().protocol_number,
             )
         if self.value() == NO:
-            qs = queryset.filter(subjectscreening__subject_identifier__isnull=True)
+            qs = queryset.filter(
+                Q(subjectscreening__subject_identifier__isnull=False)
+                & ~Q(
+                    subjectscreening__subject_identifier__startswith=Protocol().protocol_number
+                ),
+            )
         return qs
 
 

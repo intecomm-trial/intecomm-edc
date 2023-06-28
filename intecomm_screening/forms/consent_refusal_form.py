@@ -1,40 +1,33 @@
 from django import forms
-from django.urls.base import reverse
-from django.utils.safestring import mark_safe
-from edc_dashboard.url_names import url_names
 from edc_form_validators import FormValidatorMixin
-from edc_screening.modelform_mixins import AlreadyConsentedFormMixin
 from intecomm_form_validators import ConsentRefusalFormValidator
 
-from ..models import ConsentRefusal, SubjectScreening
+from intecomm_consent.utils import validate_not_already_consented
+
+from ..models import ConsentRefusal
+from ..utils import (
+    validate_is_eligible,
+    validate_not_already_refused_consent,
+    validate_not_screened_despite_unwilling_to_screen,
+)
 
 
-class ScreeningFormMixin:
+class RefusalFormMixin:
     def clean(self):
         cleaned_data = super().clean()
-        screening_identifier = cleaned_data.get("screening_identifier")
-        if screening_identifier:
-            subject_screening = SubjectScreening.objects.get(
-                screening_identifier=screening_identifier
+        subject_screening = cleaned_data.get("subject_screening")
+        if subject_screening:
+            validate_not_screened_despite_unwilling_to_screen(
+                subject_screening=subject_screening
             )
-            if not subject_screening.eligible:
-                url_name = url_names.get("screening_listboard_url")
-                url = reverse(
-                    url_name,
-                    kwargs={"screening_identifier": self.instance.screening_identifier},
-                )
-                msg = mark_safe(  # nosec B308 B703
-                    "Not allowed. Subject is not eligible. "
-                    f'See subject <A href="{url}?q={screening_identifier}">'
-                    f"{screening_identifier}</A>"
-                )
-                raise forms.ValidationError(msg)
+            validate_is_eligible(subject_screening=subject_screening)
+            validate_not_already_refused_consent(subject_screening=subject_screening)
+            validate_not_already_consented(subject_screening=subject_screening)
+
         return cleaned_data
 
 
-class ConsentRefusalForm(
-    AlreadyConsentedFormMixin, ScreeningFormMixin, FormValidatorMixin, forms.ModelForm
-):
+class ConsentRefusalForm(RefusalFormMixin, FormValidatorMixin, forms.ModelForm):
     form_validator_cls = ConsentRefusalFormValidator
 
     def clean(self):
@@ -44,3 +37,5 @@ class ConsentRefusalForm(
     class Meta:
         model = ConsentRefusal
         fields = "__all__"
+        help_texts = {"subject_screening": "(read-only)"}
+        widgets = {"subject_screening": forms.TextInput(attrs={"readonly": "readonly"})}

@@ -7,10 +7,11 @@ from edc_dashboard.url_names import url_names
 from edc_dashboard.utils import get_bootstrap_version
 from edc_screening.constants import ELIGIBLE, NOT_ELIGIBLE
 
-from intecomm_screening.models import ConsentRefusal, PatientLog
-from intecomm_screening.utils import get_add_or_change_consent_url
-
-from ..model_wrappers import ConsentRefusalModelWrapper
+from intecomm_screening.models import PatientLog
+from intecomm_screening.utils import (
+    get_add_or_change_consent_url,
+    get_add_or_change_refusal_url,
+)
 
 register = template.Library()
 
@@ -155,15 +156,15 @@ def patient_group_button(context, model_wrapper):
 )
 def refusal_button(context, model_wrapper):
     title = ["Capture patient's primary reason for not consenting."]
-    screening_identifier = model_wrapper.object.screening_identifier
-    try:
-        obj = ConsentRefusal.objects.get(screening_identifier=screening_identifier)
-    except ObjectDoesNotExist:
-        obj = ConsentRefusal()
-    model_wrapper = ConsentRefusalModelWrapper(model_obj=obj)
+    screening_obj = model_wrapper.object
+    (
+        add_refusal_url,
+        change_refusal_url,
+    ) = get_add_or_change_refusal_url(obj=screening_obj)
+
     return dict(
         perms=context["perms"],
-        href=model_wrapper.href,
+        href=change_refusal_url if change_refusal_url else add_refusal_url,
         title=" ".join(title),
     )
 

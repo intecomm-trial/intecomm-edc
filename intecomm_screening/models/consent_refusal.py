@@ -1,5 +1,4 @@
 from django.db import models
-from edc_identifier.model_mixins import NonUniqueSubjectIdentifierModelMixin
 from edc_model.models import BaseUuidModel
 from edc_model.models.historical_records import HistoricalRecords
 from edc_model_fields.fields.other_charfield import OtherCharField
@@ -7,20 +6,23 @@ from edc_search.model_mixins import SearchSlugManager
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
 from edc_utils import get_utcnow
 
+from intecomm_consent.utils import raise_if_already_consented
 from intecomm_lists.models import ConsentRefusalReasons
 
+from ..utils import (
+    raise_if_already_refused_consent,
+    raise_if_screened_despite_unwilling_to_screen,
+)
 from .subject_screening import SubjectScreening
 
 
 class ConsentRefusalManager(SearchSlugManager, models.Manager):
-    def get_by_natural_key(self, subject_identifier):
-        return self.get(subject_identifier=subject_identifier)
+    def get_by_natural_key(self, screening_identifier):
+        return self.get(screening_identifier=screening_identifier)
 
 
-class ConsentRefusal(NonUniqueSubjectIdentifierModelMixin, SiteModelMixin, BaseUuidModel):
-    subject_screening = models.ForeignKey(SubjectScreening, on_delete=models.PROTECT)
-
-    subject_identifier = models.CharField(max_length=50, editable=False)
+class ConsentRefusal(SiteModelMixin, BaseUuidModel):
+    subject_screening = models.OneToOneField(SubjectScreening, on_delete=models.PROTECT)
 
     screening_identifier = models.CharField(max_length=50, editable=False)
 
@@ -45,8 +47,13 @@ class ConsentRefusal(NonUniqueSubjectIdentifierModelMixin, SiteModelMixin, BaseU
 
     def save(self, *args, **kwargs):
         self.screening_identifier = self.subject_screening.screening_identifier
-        self.subject_identifier = self.subject_screening.subject_identifier
-        self.subject_identifier_as_pk = self.subject_screening.subject_identifier_as_pk
+        raise_if_screened_despite_unwilling_to_screen(
+            screening_identifier=self.screening_identifier
+        )
+
+        if not self.id:
+            raise_if_already_refused_consent(screening_identifier=self.screening_identifier)
+        raise_if_already_consented(screening_identifier=self.screening_identifier)
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -56,10 +63,10 @@ class ConsentRefusal(NonUniqueSubjectIdentifierModelMixin, SiteModelMixin, BaseU
         )
 
     def natural_key(self):
-        return (self.subject_identifier,)
+        return (self.screening_identifier,)
 
     def get_search_slug_fields(self):
-        return ["screening_identifier", "subject_identifier"]
+        return ["screening_identifier"]
 
     class Meta:
         verbose_name = "Consent Refusal"
