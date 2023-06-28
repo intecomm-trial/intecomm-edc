@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from datetime import datetime
+from uuid import uuid4
 from zoneinfo import ZoneInfo
 
 from dateutil.relativedelta import relativedelta
@@ -8,7 +10,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from edc_appointment.constants import IN_PROGRESS_APPT, INCOMPLETE_APPT
 from edc_appointment.tests.appointment_test_case_mixin import AppointmentTestCaseMixin
-from edc_constants.constants import YES
+from edc_constants.constants import DM, FEMALE, HIV, HTN, NO, NOT_APPLICABLE, YES
 from edc_facility.import_holidays import import_holidays
 from edc_list_data.site_list_data import site_list_data
 from edc_metadata import REQUIRED
@@ -19,16 +21,62 @@ from edc_visit_schedule.constants import DAY1
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 from model_bakery import baker
+from model_bakery.baker import make_recipe
 
+from intecomm_lists.models import Conditions
 from intecomm_sites.sites import fqdn
 from intecomm_sites.tests.site_test_case_mixin import SiteTestCaseMixin
 from intecomm_subject.models import SubjectVisit
 
-from ..models import SubjectScreening
+from ..models import PatientLog, SubjectScreening
 
 fake = Faker()
 now = datetime(2019, 5, 1).astimezone(ZoneInfo("UTC"))
 tomorrow = now + relativedelta(days=1)
+
+
+def get_eligible_options(patient_log: PatientLog):
+    hiv_dx = True if patient_log.conditions.filter(name=HIV) else False
+    dm_dx = True if patient_log.conditions.filter(name=DM) else False
+    htn_dx = True if patient_log.conditions.filter(name=HTN) else False
+    return dict(
+        report_datetime=now,
+        patient_log=patient_log,
+        legal_name=patient_log.legal_name,
+        familiar_name=patient_log.familiar_name,
+        initials=patient_log.initials,
+        hospital_identifier=patient_log.hospital_identifier,
+        gender=patient_log.gender,
+        age_in_years=patient_log.age_in_years,
+        in_care_6m=YES,
+        lives_nearby=YES,
+        staying_nearby_6=YES,
+        pregnant=NOT_APPLICABLE,
+        excluded_by_bp_history=NO,
+        excluded_by_gluc_history=NO,
+        requires_acute_care=NO,
+        hiv_dx=YES if hiv_dx else NO,
+        hiv_dx_6m=YES if hiv_dx else NOT_APPLICABLE,
+        hiv_dx_ago="1y" if hiv_dx else None,
+        art_unchanged_3m=YES if hiv_dx else NOT_APPLICABLE,
+        art_stable=YES if hiv_dx else NOT_APPLICABLE,
+        art_adherent=YES if hiv_dx else NOT_APPLICABLE,
+        dm_dx=YES if dm_dx else NO,
+        dm_dx_6m=YES if dm_dx else NO,
+        dm_dx_ago="1y" if dm_dx else None,
+        dm_complications=NO if dm_dx else NOT_APPLICABLE,
+        htn_dx=YES if htn_dx else NO,
+        htn_dx_6m=YES if htn_dx else NO,
+        htn_dx_ago="1y" if htn_dx else None,
+        htn_complications=NO if htn_dx else NOT_APPLICABLE,
+        sys_blood_pressure_one=120,
+        dia_blood_pressure_one=80,
+        sys_blood_pressure_two=120,
+        dia_blood_pressure_two=80,
+        consent_ability=YES,
+        unsuitable_for_study=NO,
+        unsuitable_agreed=NOT_APPLICABLE,
+    )
 
 
 class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
@@ -54,20 +102,45 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         site_list_data.initialize()
         site_list_data.autodiscover()
 
+    @staticmethod
+    def get_patient_log(
+        legal_name: str | None = None,
+        gender: str | None = None,
+        age_in_years: int | None = None,
+        conditions: list[Conditions] | None = None,
+    ):
+        patient_log = make_recipe(
+            "intecomm_screening.patientlog",
+            legal_name=legal_name or "NAMEA AAA",
+            familiar_name="NAMEA",
+            initials="NA",
+            gender=gender or FEMALE,
+            age_in_years=age_in_years or 20,
+            hospital_identifier=uuid4().hex,
+            contact_number="1234567890",
+        )
+        conditions = conditions or [HIV]
+        for condition in conditions:
+            patient_log.conditions.add(Conditions.objects.get(name=condition))
+        return patient_log
+
     def get_subject_screening(
         self,
+        patient_log: PatientLog | None = None,
         report_datetime: datetime | None = None,
         eligibility_datetime: datetime | None = None,
         gender: str | None = None,
-        ethnicity: str | None = None,
         age_in_years: int | None = None,
+        conditions: list[Conditions] | None = None,
     ):
-        eligible_options = {}
+        patient_log = patient_log or self.get_patient_log(
+            gender=gender,
+            age_in_years=age_in_years,
+            conditions=conditions,
+        )
+        eligible_options = deepcopy(get_eligible_options(patient_log=patient_log))
         if report_datetime:
             eligible_options.update(report_datetime=report_datetime)
-        eligible_options["age_in_years"] = age_in_years or eligible_options["age_in_years"]
-        eligible_options["gender"] = gender or eligible_options["gender"]
-        eligible_options["ethnicity"] = ethnicity or eligible_options["ethnicity"]
         subject_screening = SubjectScreening.objects.create(
             user_created="erikvw",
             user_modified="erikvw",
@@ -75,13 +148,15 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         )
         screening_identifier = subject_screening.screening_identifier
         self.assertEqual(subject_screening.reasons_ineligible, None)
-        self.assertEqual(subject_screening.eligible, YES)
+        self.assertTrue(subject_screening.eligible)
 
         subject_screening = SubjectScreening.objects.get(
             screening_identifier=screening_identifier
         )
-
         self.assertTrue(subject_screening.eligible)
+
+        patient_log.screening_identifier = screening_identifier
+        patient_log.save()
 
         if eligibility_datetime:
             subject_screening.eligibility_datetime = eligibility_datetime
@@ -98,6 +173,8 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             user_created="erikvw",
             user_modified="erikvw",
             screening_identifier=subject_screening.screening_identifier,
+            legal_name=subject_screening.legal_name,
+            familiar_name=subject_screening.familiar_name,
             initials=subject_screening.initials,
             gender=subject_screening.gender,
             dob=(now.date() - relativedelta(years=subject_screening.age_in_years)),
@@ -122,7 +199,6 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         reason = reason or SCHEDULED
         subject_screening = subject_screening or self.get_subject_screening(
             gender=gender,
-            ethnicity=ethnicity,
             age_in_years=age_in_years,
             report_datetime=screening_datetime,
             eligibility_datetime=eligibility_datetime,
@@ -175,4 +251,13 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             visit_code=subject_visit.visit_code,
             visit_code_sequence=subject_visit.visit_code_sequence,
             entry_status=REQUIRED,
+        )
+
+    @staticmethod
+    def get_consent_refusal(subject_screening):
+        return baker.make_recipe(
+            "intecomm_screening.consentrefusal",
+            user_created="jw",
+            user_modified="jw",
+            subject_screening=subject_screening,
         )
