@@ -1,8 +1,9 @@
 Changes
 =======
 
-unreleased
-----------
+0.1.37
+------
+- fix "'+' char is removed from group names when clicking patient logs list" (#631)
 - Patient Logs list:
     - add 'Unwilling to screen' message for patients reported as unwilling to screen
     - add refusal link to participants who have screened but not consented/refused (#572, #610)
