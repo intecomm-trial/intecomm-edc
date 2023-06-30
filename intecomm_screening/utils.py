@@ -1,21 +1,33 @@
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING, Tuple
 
 from django import forms
 from django.apps import apps as django_apps
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django.db import transaction
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from edc_consent.utils import get_consent_model_cls
+from edc_constants.constants import DM, HIV, HTN, UUID_PATTERN
 from edc_dashboard.url_names import url_names
+from edc_screening.utils import get_subject_screening_model_cls
 
 if TYPE_CHECKING:
-    from intecomm_screening.models import SubjectScreening
+    from intecomm_screening.models import ConsentRefusal, SubjectScreening
 
 
 class AlreadyRefusedConsentError(Exception):
+    pass
+
+
+class InvalidScreeningIdentifier(Exception):
+    pass
+
+
+class InvalidSubjectIdentifier(Exception):
     pass
 
 
@@ -74,83 +86,68 @@ def get_patient_log_model_cls():
     return django_apps.get_model("intecomm_screening.patientlog")
 
 
-def get_add_or_change_refusal_url(
-    obj: SubjectScreening, next_url_name: str | None = None
-) -> Tuple[str | None, str | None]:
-    add_url = None
-    change_url = None
+def get_consent_refusal_url(
+    consent_refusal: ConsentRefusal | None = None,
+    subject_screening: SubjectScreening | None = None,
+    next_url_name: str | None = None,
+) -> str | None:
     next_url_name = (
         next_url_name or "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
     )
-
-    try:
-        consent_refusal = get_consent_refusal_model_cls().objects.get(
-            screening_identifier=obj.screening_identifier
-        )
-    except ObjectDoesNotExist:
+    if not consent_refusal:
         url = reverse("intecomm_screening_admin:intecomm_screening_consentrefusal_add")
-        add_url = f"{url}?next={next_url_name}&subject_screening={obj.id}"
+        url = f"{url}?next={next_url_name}&subject_screening={subject_screening.id}"
     else:
         url = reverse(
             "intecomm_screening_admin:intecomm_screening_consentrefusal_change",
             args=(consent_refusal.id,),
         )
-        change_url = f"{url}?next={next_url_name}"
-    return add_url, change_url
+        url = f"{url}?next={next_url_name}"
+    return url
 
 
-def raise_if_screened_despite_unwilling_to_screen(screening_identifier: str) -> None:
-    obj = get_patient_log_model_cls().objects.get(screening_identifier=screening_identifier)
-    if obj.screening_refusal_reason:
+def raise_if_screened_despite_unwilling_to_screen(patient_log) -> None:
+    if patient_log.screening_refusal_reason:
         raise ScreenedDespiteUnwillingToScreenError(
-            f"Patient '{obj.patient_log_identifier}' "
-            f"has screened ({screening_identifier}) "
+            f"Patient '{patient_log.patient_log_identifier}' "
+            f"has screened ({patient_log.screening_identifier}) "
             "despite reporting as unwilling to screen. "
             "Perhaps catch this in the form. "
-            f"Got reason '{obj.screening_refusal_reason}'"
+            f"Got reason '{patient_log.screening_refusal_reason}'"
         )
 
 
-def raise_if_already_refused_consent(screening_identifier: str) -> None:
+def raise_if_consent_refusal_exists(
+    screening_identifier: str, is_modelform: bool | None = None
+) -> None:
+    """Raises an exception if the consent refusal model instance
+    exists.
+    """
     try:
-        get_consent_refusal_model_cls().objects.get(screening_identifier=screening_identifier)
+        consent_refusal = get_consent_refusal_model_cls().objects.get(
+            screening_identifier=screening_identifier
+        )
     except ObjectDoesNotExist:
         pass
-    except MultipleObjectsReturned:
-        raise MultipleConsentRefusalsDetectedError(
-            f"Multiple consent refusals detected for {screening_identifier}. "
-            "Perhaps catch this in the form."
-        )
     else:
-        raise AlreadyRefusedConsentError(
-            f"Patient has already refused to consent. See {screening_identifier}. "
-            "Perhaps catch this in the form."
-        )
+        if is_modelform:
+            consent_refusal_url = get_consent_refusal_url(consent_refusal=consent_refusal)
+            msg = format_html(
+                "Not allowed. Patient has already refused consent. "
+                'See subject <A href="{}">{}</A>',
+                mark_safe(consent_refusal_url),  # nosec B308 B703
+                screening_identifier,
+            )
+            raise forms.ValidationError(msg)
+
+        else:
+            raise AlreadyRefusedConsentError(
+                f"Patient has already refused to consent. See {screening_identifier}. "
+                "Perhaps catch this in the form."
+            )
 
 
-def validate_not_already_refused_consent(subject_screening: SubjectScreening) -> None:
-    try:
-        raise_if_already_refused_consent(
-            screening_identifier=subject_screening.screening_identifier
-        )
-    except AlreadyRefusedConsentError:
-        _, consent_refusal_url = get_add_or_change_refusal_url(obj=subject_screening)
-        msg = format_html(
-            "Not allowed. Patient has already refused consent. "
-            'See subject <A href="{}">{}</A>',
-            mark_safe(consent_refusal_url),  # nosec B308 B703
-            subject_screening.screening_identifier,
-        )
-        raise forms.ValidationError(msg)
-    except MultipleConsentRefusalsDetectedError:
-        raise forms.ValidationError(
-            "Not allowed. Multiple consents refusals detected "
-            f"for subject '{subject_screening.screening_identifier}'. "
-            "Inform data manager before continuing."
-        )
-
-
-def validate_is_eligible(subject_screening: SubjectScreening) -> None:
+def raise_if_not_eligible(subject_screening: SubjectScreening) -> None:
     if not subject_screening.eligible:
         url_name = url_names.get("screening_listboard_url")
         url = reverse(
@@ -200,3 +197,54 @@ def validate_not_screened_despite_unwilling_to_screen(
             f"'{subject_screening.screening_identifier}' exist."
             "Inform data manager before continuing.",
         )
+
+
+def validate_screening_identifier(screening_identifier: str, calling_model=None):
+    """Raise if non-uuid identifier is not found in SubjectScreening."""
+    if not screening_identifier or not re.match(UUID_PATTERN, screening_identifier):
+        try:
+            with transaction.atomic():
+                get_subject_screening_model_cls().objects.get(
+                    screening_identifier=screening_identifier
+                )
+        except ObjectDoesNotExist:
+            raise InvalidScreeningIdentifier(
+                f"Invalid screening identifier. See {calling_model._meta.verbose_name}. "
+                f"Got `{screening_identifier}`. Perhaps catch this in the form."
+            )
+
+
+def validate_subject_identifier(subject_identifier, calling_model=None):
+    """Raise if non-uuid identifier is not found in SubjectConsent."""
+    if not subject_identifier or not re.match(UUID_PATTERN, subject_identifier):
+        try:
+            with transaction.atomic():
+                get_consent_model_cls().objects.get(subject_identifier=subject_identifier)
+        except ObjectDoesNotExist:
+            raise InvalidSubjectIdentifier(
+                f"Invalid subject identifier. See {calling_model._meta.verbose_name}. "
+                f"Got `{subject_identifier}`. Perhaps catch this in the form."
+            )
+
+
+def abbrev_cond(c: list | None) -> str:
+    c = sorted(c, key=str.casefold)
+    if c == [DM]:
+        abbrev = "*d*"
+    elif c == [DM, HIV]:
+        abbrev = "hd*"
+    elif c == [DM, HTN]:
+        abbrev = "*dt"
+    elif c == [DM, HIV, HTN]:
+        abbrev = "hdt"
+    elif c == [HIV]:
+        abbrev = "h**"
+    elif c == [HIV, HTN]:
+        abbrev = "h*t"
+    elif c == [HTN]:
+        abbrev = "**t"
+    elif not c:
+        abbrev = "***"
+    else:
+        raise TypeError(f"Invalid list of conditions. Got c == {c}.")
+    return abbrev

@@ -10,7 +10,7 @@ from edc_screening.constants import ELIGIBLE, NOT_ELIGIBLE
 from intecomm_screening.models import PatientLog
 from intecomm_screening.utils import (
     get_add_or_change_consent_url,
-    get_add_or_change_refusal_url,
+    get_consent_refusal_url,
 )
 
 register = template.Library()
@@ -156,15 +156,12 @@ def patient_group_button(context, model_wrapper):
 )
 def refusal_button(context, model_wrapper):
     title = ["Capture patient's primary reason for not consenting."]
-    screening_obj = model_wrapper.object
-    (
-        add_refusal_url,
-        change_refusal_url,
-    ) = get_add_or_change_refusal_url(obj=screening_obj)
+    subject_screening = model_wrapper.object
+    url = get_consent_refusal_url(subject_screening=subject_screening)
 
     return dict(
         perms=context["perms"],
-        href=change_refusal_url if change_refusal_url else add_refusal_url,
+        href=url,
         title=" ".join(title),
     )
 

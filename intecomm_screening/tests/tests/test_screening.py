@@ -1,17 +1,22 @@
+from decimal import Decimal
 from uuid import uuid4
 
-from _decimal import Decimal
+from django.db import IntegrityError
 from django.test import TestCase
-from edc_constants.constants import DM, HIV, HTN, NO, UUID_PATTERN
+from edc_constants.constants import DM, FEMALE, HIV, HTN, MALE, NO, UUID_PATTERN, YES
 from intecomm_form_validators import RECRUITING
 from model_bakery.baker import make_recipe
 
 from intecomm_lists.models import Conditions, ScreeningRefusalReasons
+from intecomm_screening.forms import PatientLogForm
 from intecomm_screening.models import PatientLog, SubjectScreening
 from intecomm_screening.models.subject_screening import SubjectScreeningError
+from intecomm_screening.utils import InvalidScreeningIdentifier
+
+from ..intecomm_test_case_mixin import IntecommTestCaseMixin
 
 
-class TestScreening(TestCase):
+class TestScreening(IntecommTestCaseMixin, TestCase):
     def test_no_patients_ok(self):
         obj = make_recipe("intecomm_screening.patientgroup")
         self.assertEqual(obj.status, RECRUITING)
@@ -182,3 +187,32 @@ class TestScreening(TestCase):
             "Initials do not match patient log. ",
             str(cm.exception),
         )
+
+    def test_patient_log_gender_cannot_be_changed_after_screen(self):
+        patient_log = self.get_patient_log(willing_to_screen=YES, gender=FEMALE)
+        self.get_subject_screening(patient_log=patient_log, gender=FEMALE)
+        form = PatientLogForm(data=dict(gender=MALE), instance=patient_log)
+        form.is_valid()
+        self.assertIn("Patient has already screened. Gender", str(form._errors.get("__all__")))
+
+    def test_patient_log_initials_cannot_be_changed_after_screen(self):
+        patient_log = self.get_patient_log(willing_to_screen=YES, gender=FEMALE, initials="YY")
+        self.get_subject_screening(patient_log=patient_log, gender=FEMALE)
+        form = PatientLogForm(data=dict(gender=FEMALE, initials="XX"), instance=patient_log)
+        form.is_valid()
+        self.assertIn(
+            "Patient has already screened. Initials", str(form._errors.get("__all__"))
+        )
+
+    def test_screening_id_not_found_in_patient_log_raises(self):
+        patient_log = self.get_patient_log()
+        self.get_subject_screening(patient_log=patient_log)
+        patient_log.screening_identifier = "some_other_identifier"
+        self.assertRaises(InvalidScreeningIdentifier, patient_log.save)
+
+    def test_patient_log_screening_identifier_unique_constraint(self):
+        patient_log = self.get_patient_log()
+        self.get_subject_screening(patient_log=patient_log)
+        patient_log_two = self.get_patient_log(legal_name="NOTHER AME")
+        patient_log_two.screening_identifier = patient_log.screening_identifier
+        self.assertRaises(IntegrityError, patient_log_two.save)

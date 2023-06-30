@@ -8,17 +8,18 @@ from django.utils.html import format_html
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
 from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER, YES_NO_TBD
-from edc_constants.constants import DM, HIV, HTN, TBD, UUID_PATTERN
+from edc_constants.constants import TBD, UUID_PATTERN
 from edc_model.models import BaseUuidModel, HistoricalRecords, NameFieldsModelMixin
 from edc_model.validators.phone import phone_number
 from edc_model_fields.fields import InitialsField, OtherCharField
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
-from edc_utils import get_utcnow
+from edc_utils import get_utcnow, get_uuid
 
 from intecomm_lists.models import Conditions, ScreeningRefusalReasons
 from intecomm_sites import all_sites
 
 from ..identifiers import FilingIdentifier, PatientLogIdentifier
+from ..utils import validate_screening_identifier, validate_subject_identifier
 from .proxy_models import Site
 
 
@@ -27,29 +28,6 @@ class PatientLogManager(models.Manager):
 
     def get_by_natural_key(self, legal_name):
         return self.get(legal_name=legal_name)
-
-
-def abbrev_cond(c: list | None) -> str:
-    c = sorted(c, key=str.casefold)
-    if c == [DM]:
-        abbrev = "*d*"
-    elif c == [DM, HIV]:
-        abbrev = "hd*"
-    elif c == [DM, HTN]:
-        abbrev = "*dt"
-    elif c == [DM, HIV, HTN]:
-        abbrev = "hdt"
-    elif c == [HIV]:
-        abbrev = "h**"
-    elif c == [HIV, HTN]:
-        abbrev = "h*t"
-    elif c == [HTN]:
-        abbrev = "**t"
-    elif not c:
-        abbrev = "***"
-    else:
-        raise TypeError(f"Invalid list of conditions. Got c == {c}.")
-    return abbrev
 
 
 class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
@@ -77,9 +55,9 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     )
 
     screening_identifier = models.CharField(
-        max_length=25,
-        null=True,
-        blank=True,
+        max_length=36,
+        default=get_uuid,
+        unique=True,
         help_text="Auto populated when screening form is complete",
     )
 
@@ -90,9 +68,9 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     )
 
     subject_identifier = models.CharField(
-        max_length=25,
-        null=True,
-        blank=True,
+        max_length=36,
+        default=get_uuid,
+        unique=True,
         help_text="Auto populated when consent form is complete",
     )
 
@@ -277,6 +255,8 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
                 UUID_PATTERN, str(self.patient_log_identifier)
             ):
                 self.patient_log_identifier = PatientLogIdentifier().identifier
+        validate_screening_identifier(self.screening_identifier, calling_model=self)
+        validate_subject_identifier(self.subject_identifier, calling_model=self)
         super().save(*args, **kwargs)
 
     def natural_key(self):

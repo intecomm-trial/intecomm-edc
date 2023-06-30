@@ -22,7 +22,7 @@ from ..models import (
     SubjectScreening,
 )
 from ..reports import PatientLogReport, PatientLogReportError
-from ..utils import get_add_or_change_consent_url, get_add_or_change_refusal_url
+from ..utils import get_add_or_change_consent_url, get_consent_refusal_url
 from .list_filters import (
     AttendDateListFilter,
     ConsentedListFilter,
@@ -445,8 +445,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         change_screening_url = None
         add_consent_url = None
         change_consent_url = None
-        add_refusal_url = None
-        change_refusal_url = None
+        consent_refusal_url = None
         subject_identifier = None
         subject_screening = None
         eligible = None
@@ -483,10 +482,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
                 change_consent_url,
                 subject_identifier,
             ) = get_add_or_change_consent_url(subject_screening)
-            (
-                add_refusal_url,
-                change_refusal_url,
-            ) = get_add_or_change_refusal_url(subject_screening)
+            consent_refusal_url = get_consent_refusal_url(subject_screening=subject_screening)
         stable_display = (
             obj.get_stable_display()
             if obj.get_stable_display() != "To be determined"
@@ -498,8 +494,8 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
             change_screening_url=change_screening_url,
             add_consent_url=add_consent_url,
             change_consent_url=change_consent_url,
-            add_refusal_url=add_refusal_url,
-            change_refusal_url=change_refusal_url,
+            add_refusal_url=consent_refusal_url,
+            change_refusal_url=consent_refusal_url,
             filing_identifier=obj.filing_identifier,
             patient_log_identifier=obj.patient_log_identifier,
             screening_identifier=obj.screening_identifier,

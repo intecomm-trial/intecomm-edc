@@ -1,0 +1,2 @@
+class AlreadyConsentedError(Exception):
+    pass

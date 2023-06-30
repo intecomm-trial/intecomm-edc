@@ -6,13 +6,9 @@ from edc_search.model_mixins import SearchSlugManager
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
 from edc_utils import get_utcnow
 
-from intecomm_consent.utils import raise_if_already_consented
+from intecomm_consent.utils import raise_if_subject_consent_exists
 from intecomm_lists.models import ConsentRefusalReasons
 
-from ..utils import (
-    raise_if_already_refused_consent,
-    raise_if_screened_despite_unwilling_to_screen,
-)
 from .subject_screening import SubjectScreening
 
 
@@ -24,7 +20,7 @@ class ConsentRefusalManager(SearchSlugManager, models.Manager):
 class ConsentRefusal(SiteModelMixin, BaseUuidModel):
     subject_screening = models.OneToOneField(SubjectScreening, on_delete=models.PROTECT)
 
-    screening_identifier = models.CharField(max_length=50, editable=False)
+    screening_identifier = models.CharField(max_length=36, editable=False, unique=True)
 
     report_datetime = models.DateTimeField(
         verbose_name="Report date and time", default=get_utcnow
@@ -47,13 +43,7 @@ class ConsentRefusal(SiteModelMixin, BaseUuidModel):
 
     def save(self, *args, **kwargs):
         self.screening_identifier = self.subject_screening.screening_identifier
-        raise_if_screened_despite_unwilling_to_screen(
-            screening_identifier=self.screening_identifier
-        )
-
-        if not self.id:
-            raise_if_already_refused_consent(screening_identifier=self.screening_identifier)
-        raise_if_already_consented(screening_identifier=self.screening_identifier)
+        raise_if_subject_consent_exists(screening_identifier=self.screening_identifier)
         super().save(*args, **kwargs)
 
     def __str__(self):
