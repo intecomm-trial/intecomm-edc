@@ -1,3 +1,4 @@
+import re
 import urllib.parse
 
 from django.contrib import admin, messages
@@ -9,6 +10,7 @@ from django_audit_fields import audit_fieldset_tuple
 from edc_consent.modeladmin_mixins import PiiNamesModelAdminMixin
 from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER
+from edc_constants.constants import TBD, UUID_PATTERN, YES
 from edc_utils import get_utcnow
 
 from intecomm_sites.sites import all_sites
@@ -182,6 +184,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
                     "automatically updated by the EDC"
                 ),
                 "fields": (
+                    "willing_to_screen",
                     "screening_refusal_reason",
                     "screening_refusal_reason_other",
                 ),
@@ -225,6 +228,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
 
     list_filter = (
         "report_datetime",
+        "willing_to_screen",
         "call_attempts",
         InPatientGroup,
         DxListFilter,
@@ -266,6 +270,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         "second_health_talk": admin.VERTICAL,
         "stable": admin.VERTICAL,
         "screening_refusal_reason": admin.VERTICAL,
+        "willing_to_screen": admin.VERTICAL,
     }
 
     readonly_fields = (
@@ -446,12 +451,17 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         add_consent_url = None
         change_consent_url = None
         consent_refusal_url = None
-        subject_identifier = None
         subject_screening = None
         eligible = None
-        if obj.screening_identifier:
+
+        screening_identifier = self.get_valid_screening_identifier_or_none(
+            obj.screening_identifier
+        )
+        subject_identifier = self.get_valid_subject_identifier_or_none(obj.subject_identifier)
+
+        if screening_identifier:
             subject_screening = SubjectScreening.objects.get(
-                screening_identifier=obj.screening_identifier
+                screening_identifier=screening_identifier
             )
             eligible = subject_screening.eligible
             url = reverse(
@@ -460,9 +470,9 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
             )
             change_screening_url = (
                 f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
-                f"&q={obj.screening_identifier}"
+                f"&q={screening_identifier}"
             )
-        elif not obj.screening_refusal_reason:
+        elif obj.willing_to_screen == YES:
             url = reverse("intecomm_screening_admin:intecomm_screening_subjectscreening_add")
             add_screening_url = (
                 f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
@@ -474,7 +484,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
                 f"&legal_name={obj.legal_name}"
                 f"&familiar_name={obj.familiar_name}"
                 f"&patient_log={obj.id}"
-                f"&q={obj.screening_identifier}"
+                f"&q={screening_identifier}"
             )
         if subject_screening and subject_screening.eligible:
             (
@@ -483,11 +493,8 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
                 subject_identifier,
             ) = get_add_or_change_consent_url(subject_screening)
             consent_refusal_url = get_consent_refusal_url(subject_screening=subject_screening)
-        stable_display = (
-            obj.get_stable_display()
-            if obj.get_stable_display() != "To be determined"
-            else "TBD"
-        )
+        stable_display = obj.get_stable_display() if obj.stable != TBD else TBD.upper()
+
         return dict(
             stable=stable_display,
             add_screening_url=add_screening_url,
@@ -498,10 +505,12 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
             change_refusal_url=consent_refusal_url,
             filing_identifier=obj.filing_identifier,
             patient_log_identifier=obj.patient_log_identifier,
-            screening_identifier=obj.screening_identifier,
+            screening_identifier=screening_identifier,
             subject_identifier=subject_identifier,
             group_identifier=obj.group_identifier,
             eligible=eligible,
+            willing_to_screen=obj.willing_to_screen,
+            TBD=TBD,
         )
 
     @staticmethod
@@ -531,3 +540,17 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         dct = super().get_changeform_initial_data(request)
         dct.update({"patient_log_identifier": "custom_initial_value"})
         return dct
+
+    @staticmethod
+    def get_valid_screening_identifier_or_none(screening_identifier: str) -> str | None:
+        """Return None if screening_identifier is a UUIDs otherwise
+        the screening_identifier."""
+        return None if re.match(UUID_PATTERN, screening_identifier) else screening_identifier
+
+    @staticmethod
+    def get_valid_subject_identifier_or_none(subject_identifier: str) -> str | None:
+        """Return None if subject_identifier is a UUIDs otherwise
+        the subject_identifier."""
+        if subject_identifier:
+            return None if re.match(UUID_PATTERN, subject_identifier) else subject_identifier
+        return None

@@ -20,8 +20,16 @@
       <td style="color:darkgreen;white-space: nowrap;">Screened </td>
       <td style="white-space: nowrap;"><a title="Go to screening form" href="{{ change_screening_url }}"><span class="nowrap">{{ screening_identifier }}</span></a></td>
     </tr>
+  {% elif willing_to_screen == TBD %}
+    <tr>
+      <td style="background-color: orange">Screen</td>
+      <td style="color:darkred;white-space: nowrap;" colspan="2">TBD?</td>
+    </tr>
   {% else %}
-    <tr><td style="color:darkred;white-space: nowrap;" colspan="2">Unwilling to screen</td></tr>
+    <tr>
+      <td style="white-space: nowrap;">Screen</td>
+      <td style="color:darkred;white-space: nowrap;" colspan="2">Unwilling</td>
+    </tr>
   {% endif  %}
   {% if screening_identifier and eligible %}
     {% if add_consent_url and add_refusal_url %}

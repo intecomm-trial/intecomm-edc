@@ -205,7 +205,6 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
         max_length=15,
         choices=YES_NO_TBD,
         default=TBD,
-        help_text="If NO, explain below",
     )
 
     screening_refusal_reason = models.ForeignKey(
@@ -213,7 +212,7 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
         on_delete=models.PROTECT,
         verbose_name="Reason subject unwilling to screen",
         null=True,
-        blank=True,
+        blank=False,
     )
 
     screening_refusal_reason_other = OtherCharField()
