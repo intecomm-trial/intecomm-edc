@@ -23,19 +23,38 @@ from intecomm_group.utils import (
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientGroupForm
 from ..models import PatientGroup
-from .modeladmin_mixins import BaseModelAdminMixin
+from .modeladmin_mixins import (
+    BaseModelAdminMixin,
+    ChangeListTopBarModelAdminMixin,
+    RedirectAllToPatientLogModelAdminMixin,
+)
 
 p = inflect.engine()
 
 
 @admin.register(PatientGroup, site=intecomm_screening_admin)
-class PatientGroupAdmin(BaseModelAdminMixin):
+class PatientGroupAdmin(
+    ChangeListTopBarModelAdminMixin,
+    RedirectAllToPatientLogModelAdminMixin,
+    BaseModelAdminMixin,
+):
     form = PatientGroupForm
 
     show_object_tools = True
     change_list_template: str = "intecomm_screening/admin/patientgroup_change_list.html"
     change_list_help = "Searches on encrypted data work on exact uppercase matches only"
     change_list_title = PatientGroup._meta.verbose_name_plural
+
+    changelist_top_bar_selected = "patientgroup"
+    changelist_top_bar_add_url = "intecomm_screening_admin:intecomm_screening_patientgroup_add"
+
+    list_per_page = 5
+
+    changelist_url = "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
+    search_field_name = "group_identifier"
+    post_full_url_on_delete = (
+        "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
+    )
 
     fieldsets = (
         (

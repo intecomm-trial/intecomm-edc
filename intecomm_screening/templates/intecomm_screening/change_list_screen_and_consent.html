@@ -10,59 +10,66 @@
       <td style="{% if stable != "Yes"%}background-color: red{% endif %}">{{ stable }}</td>
     </tr>
 
-  {% if add_screening_url %}
-    <tr>
-      <td style="white-space: nowrap;"><a title="click to screen" href="{{ add_screening_url }}">Screen</a></td>
-      <td style="background-color: orange"><a title="click to screen" style="color: black" href="{{ add_screening_url }}">PENDING</a></td>
-    </tr>
-  {% elif change_screening_url %}
+  {#  screening #}
+  {% if screening_identifier %}
     <tr>
       <td style="color:darkgreen;white-space: nowrap;">Screened </td>
-      <td style="white-space: nowrap;"><a title="Go to screening form" href="{{ change_screening_url }}"><span class="nowrap">{{ screening_identifier }}</span></a></td>
+      <td style="white-space: nowrap;"><a title="Go to screening form" href="{{ subject_screening_url }}"><span class="nowrap">{{ screening_identifier }}</span></a></td>
     </tr>
-  {% elif willing_to_screen == TBD %}
+  {% elif not screening_identifier and willing_to_screen == YES %}
+    <tr>
+      <td style="white-space: nowrap;"><a title="click to screen" href="{{ subject_screening_url }}">Screen</a></td>
+      <td style="background-color: orange"><a title="click to screen" style="color: black" href="{{ subject_screening_url }}">PENDING</a></td>
+    </tr>
+  {% elif not screening_identifier and willing_to_screen == TBD %}
     <tr>
       <td style="background-color: orange">Screen</td>
-      <td style="color:darkred;white-space: nowrap;" colspan="2">TBD?</td>
+      <td style="color:darkred;white-space: nowrap;" colspan="2">TBD</td>
     </tr>
-  {% else %}
+  {% elif not screening_identifier and willing_to_screen == NO  %}
     <tr>
       <td style="white-space: nowrap;">Screen</td>
       <td style="color:darkred;white-space: nowrap;" colspan="2">Unwilling</td>
     </tr>
+  {% else%}
+    <tr>
+      <td style="white-space: nowrap;">Screen</td>
+      <td style="color:darkred;white-space: nowrap;" colspan="2">Error! Contact Admin</td>
+    </tr>
   {% endif  %}
+
+  {#  consent and refusal #}
   {% if screening_identifier and eligible %}
-    {% if add_consent_url and add_refusal_url %}
-      <tr>
-        <td style="white-space: nowrap;">
-          <a title="click to consent" href="{{ add_consent_url }}">Consent</a>
-          or
-          <a title="click to refuse to consent" href="{{ add_refusal_url }}">refuse</a>
-        </td>
-        <td style="background-color: orange">PENDING</td>
-      </tr>
-    {% elif change_consent_url %}
+    {% if subject_consent %}
       <tr>
         <td style="color:darkgreen;white-space: nowrap;">Consented</td>
         <td style="white-space: nowrap;">
-          <a title="Go to consent form" href="{{ change_consent_url }}"><span class="nowrap">{{ subject_identifier }}</span></a>
+          <a title="Go to consent form" href="{{ subject_consent_url }}"><span class="nowrap">{{ subject_identifier }}</span></a>
         </td>
       </tr>
-    {% elif change_refusal_url %}
+    {% elif consent_refusal %}
       <tr>
         <td style="color:darkred;white-space: nowrap;">Refused</td>
         <td style="white-space: nowrap;">
-          <a title="Go to refusal form" href="{{ change_refusal_url }}"><span class="nowrap">Refusal form</span></a>
+          <a title="Go to refusal form" href="{{ consent_refusal_url }}"><span class="nowrap">Refusal form</span></a>
         </td>
       </tr>
+    {% else %}
+      <tr>
+        <td style="white-space: nowrap;">
+          <a title="click to consent" href="{{ subject_consent_url }}">Consent</a>
+          or
+          <a title="click to refuse to consent" href="{{ consent_refusal_url }}">Refuse</a>
+        </td>
+        <td style="background-color: orange">PENDING</td>
+      </tr>
     {% endif  %}
-  {% else %}
-    {% if screening_identifier %}
+  {% elif screening_identifier and not eligible %}
       <tr>
         <td colspan="2">INELIGIBLE</td>
       </tr>
-    {% endif  %}
   {% endif  %}
+
   {% if group_identifier %}
     <tr>
       <td style="white-space: nowrap;">Group</td><td>{{ group_identifier }}</td>

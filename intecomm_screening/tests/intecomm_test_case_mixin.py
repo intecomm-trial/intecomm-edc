@@ -28,7 +28,7 @@ from intecomm_sites.sites import fqdn
 from intecomm_sites.tests.site_test_case_mixin import SiteTestCaseMixin
 from intecomm_subject.models import SubjectVisit
 
-from ..models import PatientLog, SubjectScreening
+from ..models import ConsentRefusal, PatientLog, SubjectScreening
 
 fake = Faker()
 now = datetime(2019, 5, 1).astimezone(ZoneInfo("UTC"))
@@ -149,6 +149,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         eligible_options = deepcopy(get_eligible_options(patient_log=patient_log))
         eligible_options.update(report_datetime=report_datetime or now)
         subject_screening = SubjectScreening.objects.create(
+            patient_log_identifier=patient_log.patient_log_identifier,
             user_created="erikvw",
             user_modified="erikvw",
             **eligible_options,
@@ -185,6 +186,8 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             initials=subject_screening.initials,
             gender=subject_screening.gender,
             dob=(now.date() - relativedelta(years=subject_screening.age_in_years)),
+            identity=subject_screening.hospital_identifier,
+            confirm_identity=subject_screening.hospital_identifier,
             site=Site.objects.get(id=site_id or settings.SITE_ID),
             consent_datetime=consent_datetime or subject_screening.report_datetime,
             version=1,
@@ -262,10 +265,9 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         )
 
     @staticmethod
-    def get_consent_refusal(subject_screening):
-        return baker.make_recipe(
-            "intecomm_screening.consentrefusal",
+    def get_consent_refusal(screening_identifier: str):
+        return ConsentRefusal.objects.create(
             user_created="jw",
             user_modified="jw",
-            subject_screening=subject_screening,
+            screening_identifier=screening_identifier,
         )

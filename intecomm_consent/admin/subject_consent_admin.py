@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Tuple
 
 from django.contrib import admin
-from django.urls import reverse
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_consent.actions import (
     flag_as_verified_against_paper,
@@ -18,6 +17,9 @@ from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
+from intecomm_screening.admin.modeladmin_mixins import (
+    RedirectAllToPatientLogModelAdminMixin,
+)
 from intecomm_sites import all_sites
 
 from ..admin_site import intecomm_consent_admin
@@ -27,6 +29,7 @@ from ..models import SubjectConsent
 
 @admin.register(SubjectConsent, site=intecomm_consent_admin)
 class SubjectConsentAdmin(
+    RedirectAllToPatientLogModelAdminMixin,
     PiiNamesModelAdminMixin,
     SiteModelAdminMixin,
     ConsentModelAdminMixin,
@@ -38,6 +41,7 @@ class SubjectConsentAdmin(
     name_fields: list[str] = ["legal_name", "familiar_name"]
     name_display_field: str = "familiar_name"
     all_sites = all_sites
+    list_per_page = 5
 
     show_object_tools = False
     show_cancel = True
@@ -125,12 +129,3 @@ class SubjectConsentAdmin(
         if "group_identifier" not in readonly_fields:
             readonly_fields += ("group_identifier",)
         return readonly_fields
-
-    def response_post_save_change(self, request, obj):
-        if obj:
-            url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
-            return f"{url}?q={obj.subject_identifier}"
-        return reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
-
-    def redirect_url(self, request, obj, post_url_continue=None) -> str | None:
-        return self.response_post_save_change(request, obj)

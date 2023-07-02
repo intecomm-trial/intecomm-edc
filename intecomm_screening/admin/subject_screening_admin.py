@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import re
 from typing import Tuple
 
 from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
 from django.template.loader import render_to_string
 from django.urls.base import reverse
@@ -12,6 +14,7 @@ from django.utils.translation import gettext as _
 from django_audit_fields import audit_fieldset_tuple
 from edc_consent.modeladmin_mixins import PiiNamesModelAdminMixin
 from edc_constants.choices import GENDER
+from edc_constants.constants import UUID_PATTERN
 from edc_dashboard.url_names import url_names
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
@@ -23,10 +26,13 @@ from intecomm_sites import all_sites
 from ..admin_site import intecomm_screening_admin
 from ..forms import SubjectScreeningForm
 from ..models import PatientLog, SubjectScreening
+from ..utils import get_consent_refusal_model_cls
+from .modeladmin_mixins import RedirectAllToPatientLogModelAdminMixin
 
 
 @admin.register(SubjectScreening, site=intecomm_screening_admin)
 class SubjectScreeningAdmin(
+    RedirectAllToPatientLogModelAdminMixin,
     PiiNamesModelAdminMixin,
     SiteModelAdminMixin,
     ModelAdminSubjectDashboardMixin,
@@ -38,7 +44,7 @@ class SubjectScreeningAdmin(
     name_display_field: str = "familiar_name"
     all_sites: dict = all_sites
 
-    list_per_page = 15
+    list_per_page = 5
     post_url_on_delete_name = "screening_listboard_url"
     subject_listboard_url_name = "screening_listboard_url"
 
@@ -58,7 +64,7 @@ class SubjectScreeningAdmin(
                 "fields": (
                     "report_datetime",
                     "site",
-                    "patient_log",
+                    "patient_log_identifier",
                 )
             },
         ),
@@ -311,11 +317,23 @@ class SubjectScreeningAdmin(
             kwargs["choices"] = GENDER
         return super().formfield_for_choice_field(db_field, request, **kwargs)
 
-    def response_post_save_change(self, request, obj):
-        if obj:
-            url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
-            return f"{url}?q={obj.screening_identifier}"
-        return reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        obj = self.model.objects.get(id=object_id)
+        if not re.match(UUID_PATTERN, obj.subject_identifier) or self.consent_refusal(obj):
+            extra_context = extra_context or {}
+            extra_context["show_delete"] = False
+        elif extra_context:
+            del extra_context["show_delete"]
+        return super().change_view(
+            request, object_id, form_url=form_url, extra_context=extra_context
+        )
 
-    def redirect_url(self, request, obj, post_url_continue=None) -> str | None:
-        return self.response_post_save_change(request, obj)
+    @staticmethod
+    def consent_refusal(obj):
+        try:
+            consent_refusal = get_consent_refusal_model_cls().objects.get(
+                screening_identifier=obj.screening_identifier
+            )
+        except ObjectDoesNotExist:
+            consent_refusal = None
+        return consent_refusal

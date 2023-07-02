@@ -1,9 +1,10 @@
 from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.html import format_html
 from django_crypto_fields.fields import EncryptedCharField
 from edc_constants.choices import PREG_YES_NO_NA, SELECTION_METHOD, YES_NO, YES_NO_NA
-from edc_constants.constants import NOT_APPLICABLE, PURPOSIVELY_SELECTED
+from edc_constants.constants import NO, NOT_APPLICABLE, PURPOSIVELY_SELECTED, TBD
 from edc_model.models import BaseUuidModel, DurationYMDField, NameFieldsModelMixin
 from edc_screening.model_mixins import EligibilityModelMixin, ScreeningModelMixin
 from edc_screening.screening_identifier import (
@@ -42,8 +43,14 @@ class SubjectScreening(
         unique=True,
     )
 
+    patient_log_identifier = models.CharField(
+        verbose_name="Patient log identifier",
+        max_length=50,
+        unique=True,
+    )
+
     patient_log = models.OneToOneField(
-        PatientLog, on_delete=models.PROTECT, null=True, blank=False
+        PatientLog, on_delete=models.PROTECT, null=True, blank=True
     )
 
     selection_method = models.CharField(
@@ -230,27 +237,39 @@ class SubjectScreening(
     )
 
     def save(self, *args, **kwargs):
-        if self.patient_log and self.patient_log.screening_refusal_reason:
-            raise SubjectScreeningError(
-                f"Patient '{self.patient_log.patient_log_identifier}' is unwilling to screen. "
-                f"Perhaps catch this in the form. "
-                f"Got reason '{self.patient_log.screening_refusal_reason}'"
+        try:
+            self.patient_log = PatientLog.objects.get(
+                patient_log_identifier=self.patient_log_identifier
             )
-        if (
-            self.patient_log
-            and self.patient_log.hospital_identifier != self.hospital_identifier
-        ):
+        except ObjectDoesNotExist:
             raise SubjectScreeningError(
-                "Health facility identifier does not match patient log. "
-                f"Perhaps catch this in the form. Got {self.patient_log.hospital_identifier}!="
-                f"{self.hospital_identifier}"
+                f"Invalid patient log identifier. Got `{self.patient_log_identifier}`. "
+                "Perhaps catch this in the form."
             )
-        if self.patient_log and self.patient_log.initials != self.initials:
-            raise SubjectScreeningError(
-                "Initials do not match patient log. "
-                f"Perhaps catch this in the form. Got {self.patient_log.initials}!="
-                f"{self.initials}"
-            )
+        if self.patient_log:
+            if self.patient_log.willing_to_screen == NO:
+                raise SubjectScreeningError(
+                    f"Patient '{self.patient_log.patient_log_identifier}' is unwilling to "
+                    f"screen. Got reason '{self.patient_log.screening_refusal_reason}' "
+                    "Perhaps catch this in the form."
+                )
+            elif self.patient_log.willing_to_screen == TBD:
+                raise SubjectScreeningError(
+                    f"Patient '{self.patient_log.patient_log_identifier}' has not indicated "
+                    f"willingness to screen. Got `{TBD}`. Perhaps catch this in the form. "
+                )
+            if self.patient_log.hospital_identifier != self.hospital_identifier:
+                raise SubjectScreeningError(
+                    "Health facility identifier does not match patient log. "
+                    f"Got {self.patient_log.hospital_identifier}!={self.hospital_identifier}. "
+                    "Perhaps catch this in the form."
+                )
+            if self.patient_log.initials != self.initials:
+                raise SubjectScreeningError(
+                    "Initials do not match patient log. "
+                    f"Got {self.patient_log.initials}!={self.initials}. "
+                    "Perhaps catch this in the form."
+                )
         super().save(*args, **kwargs)
 
     @property

@@ -1,6 +1,7 @@
 from django import forms
 from edc_consent.modelform_mixins import ConsentModelFormMixin
 from edc_form_validators import FormValidatorMixin
+from edc_screening.utils import is_eligible_or_raise
 from edc_sites.forms import SiteModelFormMixin
 from intecomm_form_validators.consent import SubjectConsentFormValidator
 
@@ -35,6 +36,15 @@ class SubjectConsentForm(
     def clean_guardian_and_dob(self):
         """Override method from form validator"""
         pass
+
+    def validate_is_eligible_or_raise(self) -> None:
+        screening_identifier = self.get_field_or_raise(
+            "screening_identifier", "Screening identifier is required."
+        )
+        is_eligible_or_raise(
+            screening_identifier=screening_identifier,
+            url_name="intecomm_screening_admin:intecomm_screening_patientlog_changelist",
+        )
 
     class Meta:
         model = SubjectConsent

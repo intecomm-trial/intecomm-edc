@@ -9,15 +9,19 @@ from ..admin_site import intecomm_screening_admin
 from ..forms import PatientCallForm
 from ..models import PatientCall
 from .list_filters import LastApptListFilter, NextApptListFilter
-from .modeladmin_mixins import BaseModelAdminMixin
+from .modeladmin_mixins import BaseModelAdminMixin, ChangeListTopBarModelAdminMixin
 
 
 @admin.register(PatientCall, site=intecomm_screening_admin)
-class PatientCallAdmin(BaseModelAdminMixin):
+class PatientCallAdmin(ChangeListTopBarModelAdminMixin, BaseModelAdminMixin):
     form = PatientCallForm
     show_object_tools = False
     change_list_template: str = "intecomm_screening/admin/patientcall_change_list.html"
     change_list_title = PatientCall._meta.verbose_name
+    changelist_top_bar_selected = "patientcall"
+    changelist_top_bar_add_url = "intecomm_screening_admin:intecomm_screening_patientcall_add"
+
+    list_per_page = 5
 
     fieldsets = (
         (

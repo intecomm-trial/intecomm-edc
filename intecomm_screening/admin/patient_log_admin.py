@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 import urllib.parse
 
@@ -10,21 +12,15 @@ from django_audit_fields import audit_fieldset_tuple
 from edc_consent.modeladmin_mixins import PiiNamesModelAdminMixin
 from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER
-from edc_constants.constants import TBD, UUID_PATTERN, YES
+from edc_constants.constants import UUID_PATTERN
 from edc_utils import get_utcnow
 
 from intecomm_sites.sites import all_sites
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientLogForm
-from ..models import (
-    PatientGroup,
-    PatientLog,
-    PatientLogReportPrintHistory,
-    SubjectScreening,
-)
+from ..models import PatientGroup, PatientLog, PatientLogReportPrintHistory
 from ..reports import PatientLogReport, PatientLogReportError
-from ..utils import get_add_or_change_consent_url, get_consent_refusal_url
 from .list_filters import (
     AttendDateListFilter,
     ConsentedListFilter,
@@ -35,8 +31,13 @@ from .list_filters import (
     ScreenedListFilter,
     StableListFilter,
 )
-from .modeladmin_mixins import BaseModelAdminMixin
+from .modeladmin_mixins import (
+    BaseModelAdminMixin,
+    ChangeListTopBarModelAdminMixin,
+    RedirectAllToPatientLogModelAdminMixin,
+)
 from .patient_call_inlines import AddPatientCallInline, ViewPatientCallInline
+from .utils import ChangeListTemplateContext
 
 
 @admin.action(description="Print patient reference")
@@ -71,7 +72,12 @@ def render_pdf_action(modeladmin, request, queryset, **kwargs):  # noqa
 
 
 @admin.register(PatientLog, site=intecomm_screening_admin)
-class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
+class PatientLogAdmin(
+    ChangeListTopBarModelAdminMixin,
+    RedirectAllToPatientLogModelAdminMixin,
+    PiiNamesModelAdminMixin,
+    BaseModelAdminMixin,
+):
     form = PatientLogForm
 
     actions = [render_pdf_action]
@@ -81,7 +87,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
     all_sites = all_sites
 
     custom_form_codename = "edc_data_manager.special_bypassmodelform"
-    list_per_page = 10
+    list_per_page = 5
     show_object_tools = True
     show_cancel = True
     change_list_template: str = "intecomm_screening/admin/patientlog_change_list.html"
@@ -94,6 +100,9 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         "Searches on encrypted data work on exact uppercase matches only. When "
         'searching on a full name, put the full name in quotations, for example, "JOHN SMITH".'
     )
+
+    changelist_top_bar_selected = "patientlog"
+    changelist_top_bar_add_url = "intecomm_screening_admin:intecomm_screening_patientlog_add"
 
     autocomplete_fields = ["site"]
 
@@ -222,8 +231,8 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         "user_created",
         "created",
         "modified",
-        "screening_identifier",
-        "subject_identifier",
+        "screening_id",
+        "subject_id",
     )
 
     list_filter = (
@@ -323,6 +332,20 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
             )
         )
 
+    @admin.display(description="Screening ID", ordering="screening_identifier")
+    def screening_id(self, obj=None):
+        return (
+            None
+            if re.match(UUID_PATTERN, obj.screening_identifier)
+            else obj.screening_identifier
+        )
+
+    @admin.display(description="Subject ID", ordering="subject_identifier")
+    def subject_id(self, obj=None):
+        return (
+            None if re.match(UUID_PATTERN, obj.subject_identifier) else obj.subject_identifier
+        )
+
     @admin.display(description="DX")
     def dx(self, obj=None):
         context = dict(
@@ -386,7 +409,7 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
         return format_html(
             render_to_string(
                 "intecomm_screening/change_list_screen_and_consent.html",
-                context=self.get_screening_context(obj),
+                context=self.get_screen_and_consent_template_context(obj),
             )
         )
 
@@ -435,83 +458,22 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
             queryset,
             search_term,
         )
-        queryset_pks = [obj.pk for obj in queryset.all()]
         try:
-            patient_group = PatientGroup.objects.get(name__iexact=search_term)
+            patient_group = PatientGroup.objects.prefetch_related("patients").get(
+                name__iexact=search_term
+            )
         except ObjectDoesNotExist:
             qs = qs1
         else:
-            pks = [obj.pk for obj in patient_group.patients.filter(pk__in=queryset_pks)]
+            pks = [v[0] for v in queryset.values_list("id")]
+            pks = [v[0] for v in patient_group.patients.filter(pk__in=pks).values_list("id")]
             qs = qs1 | self.model.objects.filter(id__in=pks)
         return qs, True
 
-    def get_screening_context(self, obj) -> dict:
-        add_screening_url = None
-        change_screening_url = None
-        add_consent_url = None
-        change_consent_url = None
-        consent_refusal_url = None
-        subject_screening = None
-        eligible = None
-
-        screening_identifier = self.get_valid_screening_identifier_or_none(
-            obj.screening_identifier
-        )
-        subject_identifier = self.get_valid_subject_identifier_or_none(obj.subject_identifier)
-
-        if screening_identifier:
-            subject_screening = SubjectScreening.objects.get(
-                screening_identifier=screening_identifier
-            )
-            eligible = subject_screening.eligible
-            url = reverse(
-                "intecomm_screening_admin:intecomm_screening_subjectscreening_change",
-                args=(subject_screening.id,),
-            )
-            change_screening_url = (
-                f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
-                f"&q={screening_identifier}"
-            )
-        elif obj.willing_to_screen == YES:
-            url = reverse("intecomm_screening_admin:intecomm_screening_subjectscreening_add")
-            add_screening_url = (
-                f"{url}?next=intecomm_screening_admin:intecomm_screening_patientlog_changelist"
-                f"&hospital_identifier={obj.hospital_identifier}"
-                f"&initials={obj.initials}"
-                f"&site={obj.site.id}"
-                f"&gender={obj.gender}"
-                f"&age_in_years={obj.age_in_years}"
-                f"&legal_name={obj.legal_name}"
-                f"&familiar_name={obj.familiar_name}"
-                f"&patient_log={obj.id}"
-                f"&q={screening_identifier}"
-            )
-        if subject_screening and subject_screening.eligible:
-            (
-                add_consent_url,
-                change_consent_url,
-                subject_identifier,
-            ) = get_add_or_change_consent_url(subject_screening)
-            consent_refusal_url = get_consent_refusal_url(subject_screening=subject_screening)
-        stable_display = obj.get_stable_display() if obj.stable != TBD else TBD.upper()
-
-        return dict(
-            stable=stable_display,
-            add_screening_url=add_screening_url,
-            change_screening_url=change_screening_url,
-            add_consent_url=add_consent_url,
-            change_consent_url=change_consent_url,
-            add_refusal_url=consent_refusal_url,
-            change_refusal_url=consent_refusal_url,
-            filing_identifier=obj.filing_identifier,
-            patient_log_identifier=obj.patient_log_identifier,
-            screening_identifier=screening_identifier,
-            subject_identifier=subject_identifier,
-            group_identifier=obj.group_identifier,
-            eligible=eligible,
-            willing_to_screen=obj.willing_to_screen,
-            TBD=TBD,
-        )
+    @staticmethod
+    def get_screen_and_consent_template_context(obj) -> dict:
+        """Context for change_list_screen_and_consent.html"""
+        return ChangeListTemplateContext(obj).context
 
     @staticmethod
     def get_subject_dashboard_url(obj):
@@ -523,34 +485,20 @@ class PatientLogAdmin(PiiNamesModelAdminMixin, BaseModelAdminMixin):
             )
         return subject_dashboard_url
 
+    def report(self, obj=None):
+        return format_html(
+            render_to_string(
+                "intecomm_screening/change_list_screen_and_consent.html",
+                context=self.get_screen_and_consent_template_context(obj),
+            )
+        )
+
     def formfield_for_choice_field(self, db_field, request, **kwargs):
         if db_field.name == "gender":
             kwargs["choices"] = GENDER
         return super().formfield_for_choice_field(db_field, request, **kwargs)
 
-    def report(self, obj=None):
-        return format_html(
-            render_to_string(
-                "intecomm_screening/change_list_screen_and_consent.html",
-                context=self.get_screening_context(obj),
-            )
-        )
-
     def get_changeform_initial_data(self, request) -> dict:
         dct = super().get_changeform_initial_data(request)
         dct.update({"patient_log_identifier": "custom_initial_value"})
         return dct
-
-    @staticmethod
-    def get_valid_screening_identifier_or_none(screening_identifier: str) -> str | None:
-        """Return None if screening_identifier is a UUIDs otherwise
-        the screening_identifier."""
-        return None if re.match(UUID_PATTERN, screening_identifier) else screening_identifier
-
-    @staticmethod
-    def get_valid_subject_identifier_or_none(subject_identifier: str) -> str | None:
-        """Return None if subject_identifier is a UUIDs otherwise
-        the subject_identifier."""
-        if subject_identifier:
-            return None if re.match(UUID_PATTERN, subject_identifier) else subject_identifier
-        return None

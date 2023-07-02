@@ -58,6 +58,7 @@ urlpatterns = [
     *paths_for_urlpatterns("intecomm_group"),
     *paths_for_urlpatterns("intecomm_screening"),
     *paths_for_urlpatterns("intecomm_subject"),
+    # path("__debug__/", include("debug_toolbar.urls")),
 ]
 
 if settings.DEFENDER_ENABLED:

@@ -265,7 +265,6 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     def patient_group(self):
         return self.patientgroup_set.all().first()
 
-
-class Meta(SiteModelMixin.Meta, BaseUuidModel.Meta):
-    verbose_name = "Patient Log"
-    verbose_name_plural = "Patient Log"
+    class Meta(SiteModelMixin.Meta, BaseUuidModel.Meta):
+        verbose_name = "Patient Log"
+        verbose_name_plural = "Patient Log"

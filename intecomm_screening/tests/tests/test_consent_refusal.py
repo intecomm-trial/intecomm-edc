@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Dict
 
 from django.db import IntegrityError
-from django.test import TestCase, tag
+from django.test import TestCase
 from edc_constants.constants import FEMALE, MALE, NO, YES
 from edc_utils import get_utcnow
 
@@ -22,10 +22,14 @@ from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMi
 
 class TestConsentRefusalModel(IntecommTestCaseMixin, TestCase):
     def test_consent_refusal_ok(self):
-        subject_screening = self.get_subject_screening()
+        subject_screening = self.get_subject_screening(
+            patient_log_options=dict(willing_to_screen=YES)
+        )
         self.assertEqual(subject_screening.reasons_ineligible, None)
         self.assertTrue(subject_screening.eligible)
-        consent_refusal = self.get_consent_refusal(subject_screening=subject_screening)
+        consent_refusal = self.get_consent_refusal(
+            screening_identifier=subject_screening.screening_identifier
+        )
         self.assertEqual(
             consent_refusal.screening_identifier,
             subject_screening.screening_identifier,
@@ -33,27 +37,29 @@ class TestConsentRefusalModel(IntecommTestCaseMixin, TestCase):
 
     def test_consent_refusal_is_unique_by_screening_identifier(self):
         subject_screening = self.get_subject_screening()
-        self.get_consent_refusal(subject_screening=subject_screening)
+        self.get_consent_refusal(screening_identifier=subject_screening.screening_identifier)
         self.assertRaises(
-            IntegrityError, self.get_consent_refusal, subject_screening=subject_screening
+            IntegrityError,
+            self.get_consent_refusal,
+            screening_identifier=subject_screening.screening_identifier,
         )
 
-    @tag("1")
     def test_refusing_consent_after_consenting_raises(self):
         subject_screening = self.get_subject_screening()
         self.get_subject_consent(subject_screening)
         self.assertRaises(
             AlreadyConsentedError,
             self.get_consent_refusal,
-            subject_screening=subject_screening,
+            screening_identifier=subject_screening.screening_identifier,
         )
 
 
 class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
-    def get_refusal_data(self, subject_screening: SubjectScreening | None = None) -> Dict:
+    @staticmethod
+    def get_refusal_data(screening_identifier: str | None = None) -> Dict:
         refusal_reason = ConsentRefusalReasons.objects.all()[0]
         return {
-            "subject_screening": subject_screening or self.get_subject_screening(),
+            "screening_identifier": screening_identifier,
             "report_datetime": get_utcnow(),
             "reason": refusal_reason,
             "other_reason": "",
@@ -61,10 +67,12 @@ class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
 
     def test_consent_refusal_ok(self):
         subject_screening = self.get_subject_screening(
-            patient_log_options=dict(willing_to_screen=NO)
+            patient_log_options=dict(willing_to_screen=YES)
         )
         form = ConsentRefusalForm(
-            data=self.get_refusal_data(subject_screening=subject_screening),
+            data=self.get_refusal_data(
+                screening_identifier=subject_screening.screening_identifier
+            ),
             instance=ConsentRefusal(),
         )
         form.is_valid()
@@ -95,30 +103,14 @@ class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
         form.is_valid()
         self.assertIn("Patient has already screened", str(form._errors.get("__all__")))
 
-        # refusal_form = ConsentRefusalForm(
-        #     data=self.get_refusal_data(subject_screening=subject_screening),
-        #     instance=ConsentRefusal(),
-        # )
-        # refusal_form.is_valid()
-        # self.assertNotEqual(refusal_form._errors, {})
-        # self.assertIn("__all__", refusal_form._errors)
-        # self.assertEqual(
-        #     f"Not allowed. Patient '{patient_log.patient_log_identifier}' "
-        #     f"has screened ({subject_screening.screening_identifier}) "
-        #     "despite reporting as unwilling to screen. "
-        #     "Inform data manager before continuing.",
-        #     refusal_form._errors.get("__all__")[0],
-        # )
-        # with self.assertRaises(ValueError):
-        #     refusal_form.save()
-        # self.assertEqual(ConsentRefusal.objects.all().count(), 0)
-
     def test_refusal_after_already_refused_raises(self):
         subject_screening = self.get_subject_screening(
-            patient_log_options=dict(willing_to_screen=NO)
+            patient_log_options=dict(willing_to_screen=YES)
         )
         refusal_form = ConsentRefusalForm(
-            data=self.get_refusal_data(subject_screening=subject_screening),
+            data=self.get_refusal_data(
+                screening_identifier=subject_screening.screening_identifier
+            ),
             instance=ConsentRefusal(),
         )
         refusal_form.is_valid()
@@ -127,14 +119,15 @@ class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
         self.assertEqual(ConsentRefusal.objects.all().count(), 1)
 
         refusal_form_two = ConsentRefusalForm(
-            data=self.get_refusal_data(subject_screening=subject_screening),
+            data=self.get_refusal_data(
+                screening_identifier=subject_screening.screening_identifier
+            ),
             instance=ConsentRefusal(),
         )
         refusal_form_two.is_valid()
-        self.assertIn("subject_screening", refusal_form_two._errors)
         self.assertEqual(
-            ["Consent Refusal with this Subject screening already exists."],
-            refusal_form_two._errors.get("subject_screening"),
+            ["Consent Refusal with this Screening identifier already exists."],
+            refusal_form_two._errors.get("screening_identifier"),
         )
         with self.assertRaises(ValueError):
             refusal_form_two.save()
@@ -150,7 +143,9 @@ class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
         self.assertEqual(SubjectConsent.objects.all().count(), 1)
 
         refusal_form = ConsentRefusalForm(
-            data=self.get_refusal_data(subject_screening=subject_screening),
+            data=self.get_refusal_data(
+                screening_identifier=subject_screening.screening_identifier
+            ),
             instance=ConsentRefusal(),
         )
         refusal_form.is_valid()
@@ -174,12 +169,14 @@ class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
         self.assertEqual(SubjectScreening.objects.all().count(), 1)
 
         refusal_form = ConsentRefusalForm(
-            data=self.get_refusal_data(subject_screening=subject_screening),
+            data=self.get_refusal_data(
+                screening_identifier=subject_screening.screening_identifier
+            ),
             instance=ConsentRefusal(),
         )
         refusal_form.is_valid()
         self.assertIn(
-            "Not allowed. Subject is not eligible. See subject ",
+            "Not allowed. Subject is not eligible.",
             refusal_form._errors.get("__all__")[0],
         )
         self.assertIn(

@@ -2,6 +2,7 @@ from django.db import models
 from edc_model.models import BaseUuidModel
 from edc_model.models.historical_records import HistoricalRecords
 from edc_model_fields.fields.other_charfield import OtherCharField
+from edc_screening.utils import get_subject_screening_or_raise
 from edc_search.model_mixins import SearchSlugManager
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
 from edc_utils import get_utcnow
@@ -18,9 +19,11 @@ class ConsentRefusalManager(SearchSlugManager, models.Manager):
 
 
 class ConsentRefusal(SiteModelMixin, BaseUuidModel):
-    subject_screening = models.OneToOneField(SubjectScreening, on_delete=models.PROTECT)
+    subject_screening = models.OneToOneField(
+        SubjectScreening, on_delete=models.PROTECT, blank=True
+    )
 
-    screening_identifier = models.CharField(max_length=36, editable=False, unique=True)
+    screening_identifier = models.CharField(max_length=36, unique=True)
 
     report_datetime = models.DateTimeField(
         verbose_name="Report date and time", default=get_utcnow
@@ -42,7 +45,7 @@ class ConsentRefusal(SiteModelMixin, BaseUuidModel):
     history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
-        self.screening_identifier = self.subject_screening.screening_identifier
+        self.subject_screening = get_subject_screening_or_raise(self.screening_identifier)
         raise_if_subject_consent_exists(screening_identifier=self.screening_identifier)
         super().save(*args, **kwargs)
 

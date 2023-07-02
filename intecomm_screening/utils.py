@@ -1,22 +1,21 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING
 
 from django import forms
 from django.apps import apps as django_apps
-from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from edc_consent.utils import get_consent_model_cls
-from edc_constants.constants import DM, HIV, HTN, UUID_PATTERN
-from edc_dashboard.url_names import url_names
+from edc_constants.constants import UUID_PATTERN
 from edc_screening.utils import get_subject_screening_model_cls
 
 if TYPE_CHECKING:
-    from intecomm_screening.models import ConsentRefusal, SubjectScreening
+    from intecomm_consent.models import SubjectConsent
+    from intecomm_screening.models import PatientLog, SubjectScreening
 
 
 class AlreadyRefusedConsentError(Exception):
@@ -39,45 +38,6 @@ class ScreenedDespiteUnwillingToScreenError(Exception):
     pass
 
 
-def get_add_or_change_consent_url(
-    obj: SubjectScreening, next_url_name: str | None = None
-) -> Tuple[str | None, str | None, str | None]:
-    add_consent_url = None
-    change_consent_url = None
-    subject_identifier = None
-
-    next_url_name = (
-        next_url_name or "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
-    )
-
-    try:
-        subject_consent = get_consent_model_cls().objects.get(
-            screening_identifier=obj.screening_identifier
-        )
-    except ObjectDoesNotExist:
-        url = reverse("intecomm_consent_admin:intecomm_consent_subjectconsent_add")
-        # TODO: remove sensitive data from url!!
-        add_consent_url = (
-            f"{url}?next={next_url_name}"
-            f"&screening_identifier={obj.screening_identifier}"
-            f"&identity={obj.hospital_identifier}"
-            f"&initials={obj.initials}"
-            f"&site={obj.site.id}"
-            f"&gender={obj.gender}"
-            f"&age_in_years={obj.age_in_years}"
-            f"&legal_name={obj.legal_name}"
-            f"&familiar_name={obj.familiar_name}"
-        )
-    else:
-        subject_identifier = subject_consent.subject_identifier
-        url = reverse(
-            "intecomm_consent_admin:intecomm_consent_subjectconsent_change",
-            args=(subject_consent.id,),
-        )
-        change_consent_url = f"{url}?next={next_url_name}"
-    return add_consent_url, change_consent_url, subject_identifier
-
-
 def get_consent_refusal_model_cls():
     return django_apps.get_model("intecomm_screening.consentrefusal")
 
@@ -86,35 +46,84 @@ def get_patient_log_model_cls():
     return django_apps.get_model("intecomm_screening.patientlog")
 
 
-def get_consent_refusal_url(
-    consent_refusal: ConsentRefusal | None = None,
+def get_subject_screening_url(
+    patient_log: PatientLog,
     subject_screening: SubjectScreening | None = None,
     next_url_name: str | None = None,
 ) -> str | None:
-    next_url_name = (
-        next_url_name or "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
-    )
-    if not consent_refusal:
-        url = reverse("intecomm_screening_admin:intecomm_screening_consentrefusal_add")
-        url = f"{url}?next={next_url_name}&subject_screening={subject_screening.id}"
+    url = None
+    if subject_screening:
+        url = subject_screening.get_absolute_url()
     else:
-        url = reverse(
-            "intecomm_screening_admin:intecomm_screening_consentrefusal_change",
-            args=(consent_refusal.id,),
+        url = get_subject_screening_model_cls()().get_absolute_url()
+        # TODO: remove sensitive data from url!!
+        url = (
+            f"{url}?hospital_identifier={patient_log.hospital_identifier}"
+            f"&initials={patient_log.initials}"
+            f"&site={patient_log.site.id}"
+            f"&gender={patient_log.gender}"
+            f"&age_in_years={patient_log.age_in_years}"
+            f"&legal_name={patient_log.legal_name}"
+            f"&familiar_name={patient_log.familiar_name}"
+            f"&patient_log_identifier={patient_log.patient_log_identifier}"
         )
-        url = f"{url}?next={next_url_name}"
+    if next_url_name:
+        url = f"{url.split('?')[0]}?next={next_url_name}&{url.split('?')[1]}"
     return url
 
 
-def raise_if_screened_despite_unwilling_to_screen(patient_log) -> None:
-    if patient_log.screening_refusal_reason:
-        raise ScreenedDespiteUnwillingToScreenError(
-            f"Patient '{patient_log.patient_log_identifier}' "
-            f"has screened ({patient_log.screening_identifier}) "
-            "despite reporting as unwilling to screen. "
-            "Perhaps catch this in the form. "
-            f"Got reason '{patient_log.screening_refusal_reason}'"
+def get_subject_consent_url(
+    subject_screening: SubjectScreening,
+    subject_consent: SubjectConsent | None = None,
+    next_url_name: str | None = None,
+) -> str:
+    """Returns an add url if subject is screened eligible or a change
+    url if subject consent exists.
+    """
+    url = None
+    try:
+        subject_consent = subject_consent or get_consent_model_cls().objects.get(
+            screening_identifier=subject_screening.screening_identifier
         )
+    except ObjectDoesNotExist:
+        if subject_screening and subject_screening.eligible:
+            url = get_consent_model_cls()().get_absolute_url()
+            # TODO: remove sensitive data from url!!
+            url = (
+                f"{url}?screening_identifier={subject_screening.screening_identifier}"
+                f"&identity={subject_screening.hospital_identifier}"
+                f"&initials={subject_screening.initials}"
+                f"&site={subject_screening.site.id}"
+                f"&gender={subject_screening.gender}"
+                f"&age_in_years={subject_screening.age_in_years}"
+                f"&legal_name={subject_screening.legal_name}"
+                f"&familiar_name={subject_screening.familiar_name}"
+            )
+    else:
+        url = subject_consent.get_absolute_url()
+    if next_url_name:
+        url = f"{url.split('?')[0]}?next={next_url_name}&{url.split('?')[1]}"
+    return url
+
+
+def get_consent_refusal_url(
+    screening_identifier: str,
+    consent_refusal=None,
+    next_url_name: str | None = None,
+) -> str:
+    get_consent_refusal_model_cls()
+    try:
+        consent_refusal = consent_refusal or get_consent_refusal_model_cls().objects.get(
+            screening_identifier=screening_identifier
+        )
+    except ObjectDoesNotExist:
+        url = get_consent_refusal_model_cls()().get_absolute_url()
+        url = f"{url}?screening_identifier={screening_identifier}"
+    else:
+        url = consent_refusal.get_absolute_url()
+    if next_url_name:
+        url = f"{url.split('?')[0]}?next={next_url_name}&{url.split('?')[1]}"
+    return url
 
 
 def raise_if_consent_refusal_exists(
@@ -124,14 +133,14 @@ def raise_if_consent_refusal_exists(
     exists.
     """
     try:
-        consent_refusal = get_consent_refusal_model_cls().objects.get(
-            screening_identifier=screening_identifier
-        )
+        get_consent_refusal_model_cls().objects.get(screening_identifier=screening_identifier)
     except ObjectDoesNotExist:
         pass
     else:
         if is_modelform:
-            consent_refusal_url = get_consent_refusal_url(consent_refusal=consent_refusal)
+            consent_refusal_url = get_consent_refusal_url(
+                screening_identifier=screening_identifier
+            )
             msg = format_html(
                 "Not allowed. Patient has already refused consent. "
                 'See subject <A href="{}">{}</A>',
@@ -145,58 +154,6 @@ def raise_if_consent_refusal_exists(
                 f"Patient has already refused to consent. See {screening_identifier}. "
                 "Perhaps catch this in the form."
             )
-
-
-def raise_if_not_eligible(subject_screening: SubjectScreening) -> None:
-    if not subject_screening.eligible:
-        url_name = url_names.get("screening_listboard_url")
-        url = reverse(
-            url_name,
-            kwargs={"screening_identifier": subject_screening.screening_identifier},
-        )
-        msg = format_html(
-            'Not allowed. Subject is not eligible. See subject <A href="{}">{}</A>',
-            mark_safe(url),  # nosec B308 B703
-            subject_screening.screening_identifier,
-        )
-        raise forms.ValidationError(msg)
-
-
-def validate_not_screened_despite_unwilling_to_screen(
-    subject_screening: SubjectScreening,
-) -> None:
-    try:
-        raise_if_screened_despite_unwilling_to_screen(
-            screening_identifier=subject_screening.screening_identifier
-        )
-    except ScreenedDespiteUnwillingToScreenError:
-        patient_log_identifier = None
-        try:
-            patient_log_identifier = (
-                get_patient_log_model_cls()
-                .objects.get(screening_identifier=subject_screening.screening_identifier)
-                .patient_log_identifier
-            )
-        except (ObjectDoesNotExist, MultipleObjectsReturned):
-            pass
-
-        raise forms.ValidationError(
-            f"Not allowed. Patient '{patient_log_identifier}' "
-            f"has screened ({subject_screening.screening_identifier}) "
-            "despite reporting as unwilling to screen. "
-            "Inform data manager before continuing.",
-        )
-    except ObjectDoesNotExist:
-        raise forms.ValidationError(
-            f"Invalid. Patient Log associated with screening identifier "
-            f"'{subject_screening.screening_identifier}' not found"
-        )
-    except MultipleObjectsReturned:
-        raise forms.ValidationError(
-            f"Invalid. Multiple Patient Logs associated with screening identifier "
-            f"'{subject_screening.screening_identifier}' exist."
-            "Inform data manager before continuing.",
-        )
 
 
 def validate_screening_identifier(screening_identifier: str, calling_model=None):
@@ -225,26 +182,3 @@ def validate_subject_identifier(subject_identifier, calling_model=None):
                 f"Invalid subject identifier. See {calling_model._meta.verbose_name}. "
                 f"Got `{subject_identifier}`. Perhaps catch this in the form."
             )
-
-
-def abbrev_cond(c: list | None) -> str:
-    c = sorted(c, key=str.casefold)
-    if c == [DM]:
-        abbrev = "*d*"
-    elif c == [DM, HIV]:
-        abbrev = "hd*"
-    elif c == [DM, HTN]:
-        abbrev = "*dt"
-    elif c == [DM, HIV, HTN]:
-        abbrev = "hdt"
-    elif c == [HIV]:
-        abbrev = "h**"
-    elif c == [HIV, HTN]:
-        abbrev = "h*t"
-    elif c == [HTN]:
-        abbrev = "**t"
-    elif not c:
-        abbrev = "***"
-    else:
-        raise TypeError(f"Invalid list of conditions. Got c == {c}.")
-    return abbrev

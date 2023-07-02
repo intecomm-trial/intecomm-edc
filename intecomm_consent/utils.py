@@ -10,7 +10,7 @@ from edc_consent.utils import get_consent_model_cls
 from edc_screening.utils import get_subject_screening_model_cls
 
 from intecomm_screening.exceptions import AlreadyConsentedError
-from intecomm_screening.utils import get_add_or_change_consent_url
+from intecomm_screening.utils import get_subject_consent_url
 
 if TYPE_CHECKING:
     from intecomm_screening.models import SubjectScreening
@@ -35,13 +35,11 @@ def raise_if_subject_consent_exists(
                 subject_screening = get_subject_screening_model_cls().objects.get(
                     screening_identifier=screening_identifier
                 )
-            _, consent_url, subject_identifier = get_add_or_change_consent_url(
-                obj=subject_screening
-            )
+            consent_url = get_subject_consent_url(subject_screening=subject_screening)
             msg = format_html(
                 'Not allowed. Subject has already consented. See subject <A href="{}">{}</A>',
                 mark_safe(consent_url),  # nosec B308 B703
-                subject_identifier,
+                subject_screening.subject_identifier,
             )
             raise forms.ValidationError(msg)
 

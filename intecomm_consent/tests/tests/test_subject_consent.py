@@ -46,7 +46,7 @@ class TestSubjectConsent(IntecommTestCaseMixin, TestCase):
 
     def test_consenting_after_refusing_consent_raises(self):
         subject_screening = self.get_subject_screening()
-        self.get_consent_refusal(subject_screening=subject_screening)
+        self.get_consent_refusal(screening_identifier=subject_screening.screening_identifier)
 
         with self.assertRaises(AlreadyRefusedConsentError) as cm:
             self.get_subject_consent(subject_screening)
@@ -140,7 +140,7 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
 
     def test_consent_after_already_refused_raises(self):
         subject_screening = self.get_subject_screening()
-        self.get_consent_refusal(subject_screening=subject_screening)
+        self.get_consent_refusal(screening_identifier=subject_screening.screening_identifier)
         self.assertEqual(ConsentRefusal.objects.all().count(), 1)
 
         consent_form = SubjectConsentForm(
