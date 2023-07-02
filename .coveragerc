@@ -1,6 +1,6 @@
 [run]
 include = intecomm_*
-omit = intecomm_*/tests/*
+omit = intecomm_*/tests/*,intecomm_*/migrations/*,_version.py,intecomm_edc/settings/*,intecomm_edc/wsgi*.py,manage.py,runtests.py
 branch = 1
 
 [report]

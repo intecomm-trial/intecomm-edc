@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from django.db.models.signals import post_delete, post_save, pre_delete
 from django.dispatch import receiver
+from edc_utils import get_uuid
 
 from . import PatientLog
 from .patient_call import PatientCall
@@ -64,7 +65,7 @@ def subjectscreening_on_pre_delete(sender, instance, **kwargs):
     dispatch_uid="subjectscreening_on_post_delete",
 )
 def subjectscreening_on_post_delete(sender, instance, **kwargs):
-    instance.patient_log.screening_identifier = None
+    instance.patient_log.screening_identifier = get_uuid()
     instance.patient_log.screening_datetime = None
     instance.patient_log.save_base(
         update_fields=["screening_identifier", "screening_datetime"]

@@ -1,41 +1,16 @@
 from django import forms
 from edc_consent.modelform_mixins import ConsentModelFormMixin
 from edc_form_validators import FormValidatorMixin
+from edc_screening.utils import is_eligible_or_raise
 from edc_sites.forms import SiteModelFormMixin
 from intecomm_form_validators.consent import SubjectConsentFormValidator
 
-from intecomm_screening.models import SubjectScreening
-from intecomm_screening.utils import (
-    validate_is_eligible,
-    validate_not_already_refused_consent,
-    validate_not_screened_despite_unwilling_to_screen,
-)
+from intecomm_screening.utils import raise_if_consent_refusal_exists
 
 from ..models import SubjectConsent
-from ..utils import validate_not_already_consented
-
-
-class ConsentFormMixin:
-    def clean(self):
-        cleaned_data = super().clean()
-        screening_identifier = cleaned_data.get("screening_identifier")
-        if screening_identifier:
-            subject_screening = SubjectScreening.objects.get(
-                screening_identifier=screening_identifier
-            )
-
-            validate_not_screened_despite_unwilling_to_screen(
-                subject_screening=subject_screening
-            )
-            validate_is_eligible(subject_screening=subject_screening)
-            validate_not_already_consented(subject_screening=subject_screening)
-            validate_not_already_refused_consent(subject_screening=subject_screening)
-
-        return cleaned_data
 
 
 class SubjectConsentForm(
-    ConsentFormMixin,
     SiteModelFormMixin,
     FormValidatorMixin,
     ConsentModelFormMixin,
@@ -48,13 +23,28 @@ class SubjectConsentForm(
         widget=forms.TextInput(attrs={"readonly": "readonly"}),
     )
 
+    def clean(self):
+        raise_if_consent_refusal_exists(
+            self.cleaned_data.get("screening_identifier"), is_modelform=True
+        )
+        return super().clean()
+
     def validate_guardian_and_dob(self):
         """Override method from modelform"""
         pass
 
     def clean_guardian_and_dob(self):
         """Override method from form validator"""
-        return None
+        pass
+
+    def validate_is_eligible_or_raise(self) -> None:
+        screening_identifier = self.get_field_or_raise(
+            "screening_identifier", "Screening identifier is required."
+        )
+        is_eligible_or_raise(
+            screening_identifier=screening_identifier,
+            url_name="intecomm_screening_admin:intecomm_screening_patientlog_changelist",
+        )
 
     class Meta:
         model = SubjectConsent

@@ -8,10 +8,7 @@ from edc_dashboard.utils import get_bootstrap_version
 from edc_screening.constants import ELIGIBLE, NOT_ELIGIBLE
 
 from intecomm_screening.models import PatientLog
-from intecomm_screening.utils import (
-    get_add_or_change_consent_url,
-    get_add_or_change_refusal_url,
-)
+from intecomm_screening.utils import get_consent_refusal_url, get_subject_consent_url
 
 register = template.Library()
 
@@ -76,13 +73,8 @@ def eligibility_button(subject_screening_model_wrapper):
 def add_consent_button(context, model_wrapper):
     title = ["Consent subject to participate."]
     consent_version = model_wrapper.consent.version
-
-    (
-        add_consent_url,
-        change_consent_url,
-        subject_identifier,
-    ) = get_add_or_change_consent_url(
-        model_wrapper.object,
+    url = get_subject_consent_url(
+        subject_screening=model_wrapper.object,
         next_url_name="intecomm_dashboard:screening_listboard_url,screening_identifier",
     )
     return dict(
@@ -91,9 +83,9 @@ def add_consent_button(context, model_wrapper):
         href=model_wrapper.consent.href,
         consent_version=consent_version,
         title=" ".join(title),
-        add_consent_url=add_consent_url,
-        change_consent_url=change_consent_url,
-        subject_identifier=subject_identifier,
+        add_consent_url=url,
+        change_consent_url=url,
+        subject_identifier=model_wrapper.object.subject_identifier,
     )
 
 
@@ -156,15 +148,12 @@ def patient_group_button(context, model_wrapper):
 )
 def refusal_button(context, model_wrapper):
     title = ["Capture patient's primary reason for not consenting."]
-    screening_obj = model_wrapper.object
-    (
-        add_refusal_url,
-        change_refusal_url,
-    ) = get_add_or_change_refusal_url(obj=screening_obj)
+    subject_screening = model_wrapper.object
+    url = get_consent_refusal_url(screening_identifier=subject_screening.screening_identifier)
 
     return dict(
         perms=context["perms"],
-        href=change_refusal_url if change_refusal_url else add_refusal_url,
+        href=url,
         title=" ".join(title),
     )
 
@@ -183,3 +172,12 @@ def dashboard_button(model_wrapper):
         subject_identifier=model_wrapper.subject_identifier,
         title=title,
     )
+
+
+@register.inclusion_tag(
+    f"intecomm_dashboard/bootstrap{get_bootstrap_version()}/changelist_topbar.html",
+    takes_context=True,
+)
+def intecomm_changelist_topbar(context, selected: str):
+    context["selected"] = selected
+    return context

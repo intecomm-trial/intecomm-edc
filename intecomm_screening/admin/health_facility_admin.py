@@ -7,16 +7,21 @@ from intecomm_sites import all_sites
 from ..admin_site import intecomm_screening_admin
 from ..forms import HealthFacilityForm
 from ..models import HealthFacility
-from .modeladmin_mixins import BaseModelAdminMixin
+from .modeladmin_mixins import BaseModelAdminMixin, ChangeListTopBarModelAdminMixin
 
 
 @admin.register(HealthFacility, site=intecomm_screening_admin)
-class HealthFacilityAdmin(BaseModelAdminMixin):
+class HealthFacilityAdmin(ChangeListTopBarModelAdminMixin, BaseModelAdminMixin):
     form = HealthFacilityForm
     show_object_tools = True
     change_list_template: str = "intecomm_screening/admin/healthfacility_change_list.html"
     change_list_title = HealthFacility._meta.verbose_name_plural
     change_list_note = "These are health facilites within a hospital"
+
+    changelist_top_bar_selected = "healthfacility"
+    changelist_top_bar_add_url = (
+        "intecomm_screening_admin:intecomm_screening_healthfacility_add"
+    )
 
     fieldsets = (
         (

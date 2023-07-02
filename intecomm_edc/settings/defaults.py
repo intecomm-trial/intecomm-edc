@@ -63,7 +63,7 @@ ETC_DIR = env.str("DJANGO_ETC_FOLDER")
 
 TEST_DIR = os.path.join(BASE_DIR, APP_NAME, "tests")
 
-# INTERNAL_IPS = ["127.0.0.1"]
+# INTERNAL_IPS = ["127.0.0.1"] # for djdt
 ALLOWED_HOSTS = ["*"]  # env.list('DJANGO_ALLOWED_HOSTS')
 
 ENFORCE_RELATED_ACTION_ITEM_EXISTS = False
@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     "django_crypto_fields.apps.AppConfig",
     "django_revision.apps.AppConfig",
     # "django_extensions",
+    # "debug_toolbar",
     "logentry_admin",
     "simple_history",
     "storages",
@@ -167,6 +168,7 @@ if not DEFENDER_ENABLED:
     INSTALLED_APPS.pop(INSTALLED_APPS.index("defender"))
 
 MIDDLEWARE = [
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -500,7 +502,7 @@ if env("AWS_ENABLED"):
     STATIC_URL = f"{os.path.join(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)}/"
     STATIC_ROOT = ""
 elif DEBUG:
-    STATIC_URL = env.str("DJANGO_STATIC_URL")
+    STATIC_URL = "static/"  # env.str("DJANGO_STATIC_URL")
     STATIC_ROOT = env.str("DJANGO_STATIC_ROOT") or os.path.expanduser(
         "~/source/edc_source/intecomm-edc/static/"
     )
