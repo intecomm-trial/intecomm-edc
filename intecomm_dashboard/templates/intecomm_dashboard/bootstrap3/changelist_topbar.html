@@ -1,0 +1,43 @@
+  <li>
+    <a href="{% url "screen_group_url" %}" class="changelink">Home</a>
+  </li>
+  <li>
+    {% if selected == "patientlog" %}
+      <a href="#" class="changelink" style="background-color: black;">Patients</a>
+    {% else %}
+      <a href="{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist" %}" class="changelink">Patients</a>
+    {% endif %}
+  </li>
+  <li>
+    {% if selected == "patientgroup" %}
+      <a href="#" class="changelink" style="background-color: black;">Groups</a>
+    {% else %}
+      <a href="{% url "intecomm_screening_admin:intecomm_screening_patientgroup_changelist" %}" class="changelink">Groups</a>
+    {% endif %}
+  </li>
+  <li>
+    {% if selected == "patientcall" %}
+      <a href="#" class="changelink" style="background-color: black;">Calls</a>
+    {% else %}
+      <a href="{% url "intecomm_screening_admin:intecomm_screening_patientcall_changelist" %}" class="changelink">Calls</a>
+    {% endif %}
+  </li>
+  <li>
+    {% if selected == "healthtalklog" %}
+      <a href="#" class="changelink" style="background-color: black;">Talks</a>
+    {% else %}
+      <a href="{% url "intecomm_screening_admin:intecomm_screening_healthtalklog_changelist" %}" class="changelink">Talks</a>
+    {% endif %}
+  </li>
+  <li>
+    {% if selected == "healthfacility" %}
+      <a href="#" class="changelink" style="background-color: black;">Facilities</a>
+    {% else %}
+      <a href="{% url "intecomm_screening_admin:intecomm_screening_healthfacility_changelist" %}" class="changelink">Facilities</a>
+    {% endif %}
+  </li>
+  <li>
+    <a href="{{  changelist_top_bar_add_url }}" class="addlink" style="background-color: darkorange;">
+      Add
+    </a>
+  </li>

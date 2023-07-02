@@ -37,8 +37,8 @@ patientlog = Recipe(
     familiar_name=familiar_name,
     initials=initials,
     report_datetime=get_utcnow(),
-    screening_identifier=None,
-    subject_identifier=None,
+    # screening_identifier=None,
+    # subject_identifier=None,
     consent_datetime=None,
     gender=MALE,
     may_contact=YES,
@@ -48,4 +48,6 @@ patientlog = Recipe(
     first_health_talk=YES,
     second_health_talk=YES,
     call_attempts=1,
+    willing_to_screen=YES,
+    screening_refusal_reason=None,
 )

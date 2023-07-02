@@ -7,15 +7,21 @@ from intecomm_sites import all_sites
 from ..admin_site import intecomm_screening_admin
 from ..forms import HealthTalkLogForm
 from ..models import HealthTalkLog
-from .modeladmin_mixins import BaseModelAdminMixin
+from .modeladmin_mixins import BaseModelAdminMixin, ChangeListTopBarModelAdminMixin
 
 
 @admin.register(HealthTalkLog, site=intecomm_screening_admin)
-class HealthTalkLogAdmin(BaseModelAdminMixin):
+class HealthTalkLogAdmin(ChangeListTopBarModelAdminMixin, BaseModelAdminMixin):
     form = HealthTalkLogForm
     show_object_tools = True
     change_list_template: str = "intecomm_screening/admin/healthtalklog_change_list.html"
     change_list_title = HealthTalkLog._meta.verbose_name
+    list_per_page = 5
+
+    changelist_top_bar_selected = "healthtalklog"
+    changelist_top_bar_add_url = (
+        "intecomm_screening_admin:intecomm_screening_healthtalklog_add"
+    )
 
     autocomplete_fields = ["health_facility"]
 

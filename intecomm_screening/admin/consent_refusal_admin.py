@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.contrib import admin
 from django.urls.base import reverse
 from django.urls.exceptions import NoReverseMatch
@@ -8,13 +10,16 @@ from edc_model_admin.history import SimpleHistoryAdmin
 from ..admin_site import intecomm_screening_admin
 from ..forms import ConsentRefusalForm
 from ..models import ConsentRefusal
+from .modeladmin_mixins import RedirectAllToPatientLogModelAdminMixin
 
 
 @admin.register(ConsentRefusal, site=intecomm_screening_admin)
-class ConsentRefusalAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin):
+class ConsentRefusalAdmin(
+    RedirectAllToPatientLogModelAdminMixin, ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin
+):
     form = ConsentRefusalForm
+    list_per_page = 5
 
-    post_url_on_delete_name = "screening_listboard_url"
     subject_listboard_url_name = "screening_listboard_url"
     subject_dashboard_url_name = "screening_listboard_url"
 
@@ -48,14 +53,16 @@ class ConsentRefusalAdmin(ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin):
     list_filter = ("report_datetime", "subject_screening__gender", "reason")
 
     search_fields = (
-        "subject_screening__screening_identifier",
+        "screening_identifier",
         "subject_screening__hospital_identifier",
         "subject_screening__initials",
     )
 
-    radio_fields = {"reason": admin.VERTICAL}
+    radio_fields = {
+        "reason": admin.VERTICAL,
+    }
 
-    readonly_fields = ("screening_identifier",)
+    readonly_fields = ("subject_screening",)
 
     def get_subject_dashboard_url_kwargs(self, obj):
         return dict(screening_identifier=obj.screening_identifier)

@@ -1,5 +1,5 @@
-from django.apps import apps as django_apps
 from django.contrib.sites.managers import CurrentSiteManager
+from django.core.validators import RegexValidator
 from django.db import models
 from edc_consent.field_mixins import (
     CitizenFieldsMixin,
@@ -17,15 +17,15 @@ from edc_identifier.model_mixins import NonUniqueSubjectIdentifierModelMixin
 from edc_identifier.subject_identifier import SubjectIdentifier as BaseSubjectIdentifier
 from edc_model.models import BaseUuidModel, HistoricalRecords
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
+from edc_screening.utils import (
+    get_subject_screening_or_raise,
+    validate_screening_identifier_format_or_raise,
+)
 from edc_search.model_mixins import SearchSlugManager
 from edc_sites.models import SiteModelMixin
 
-from intecomm_screening.utils import (
-    raise_if_already_refused_consent,
-    raise_if_screened_despite_unwilling_to_screen,
-)
+from intecomm_screening.utils import raise_if_consent_refusal_exists
 
-from ..utils import raise_if_already_consented
 from .model_mixins import SearchSlugModelMixin
 
 
@@ -60,10 +60,11 @@ class SubjectConsent(
 
     subject_identifier_cls = SubjectIdentifier
 
-    subject_screening_model = "intecomm_screening.subjectscreening"
-
     screening_identifier = models.CharField(
-        verbose_name="Screening identifier", max_length=50, unique=True
+        verbose_name="Screening identifier",
+        max_length=50,
+        unique=True,
+        validators=[RegexValidator(r"^[A-Z0-9]+$")],
     )
 
     screening_datetime = models.DateTimeField(
@@ -96,16 +97,10 @@ class SubjectConsent(
         return f"{self.subject_identifier} V{self.version}"
 
     def save(self, *args, **kwargs):
-        raise_if_screened_despite_unwilling_to_screen(
-            screening_identifier=self.screening_identifier
-        )
-
-        if not self.id:
-            raise_if_already_consented(screening_identifier=self.screening_identifier)
-        raise_if_already_refused_consent(screening_identifier=self.screening_identifier)
-
+        validate_screening_identifier_format_or_raise(self.screening_identifier)
+        subject_screening = get_subject_screening_or_raise(self.screening_identifier)
+        raise_if_consent_refusal_exists(screening_identifier=self.screening_identifier)
         if not kwargs.get("update_fields"):
-            subject_screening = self.get_subject_screening()
             self.screening_datetime = subject_screening.report_datetime
             self.subject_type = "subject"
             self.citizen = NOT_APPLICABLE
@@ -113,15 +108,6 @@ class SubjectConsent(
 
     def natural_key(self):
         return self.subject_identifier, self.version
-
-    def get_subject_screening(self):
-        """Returns the subject screening model instance.
-
-        Instance must exist since SubjectScreening is completed
-        before consent.
-        """
-        model_cls = django_apps.get_model(self.subject_screening_model)
-        return model_cls.objects.get(screening_identifier=self.screening_identifier)
 
     @property
     def registration_unique_field(self):
