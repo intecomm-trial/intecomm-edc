@@ -1,6 +1,21 @@
 Changes
 =======
 
+0.1.38
+------
+- add unique constraint on identifier fields in subject screening
+- pass screening identifier to consent refusal form instead of subject screening id
+- pass patient log identifier to subject screening instead of patient log id
+- fix performance issue with PatientLog changelist
+- configure all forms referenced on the PatientLog changelist to redirect back to the
+  changelist for save, delete, cancel
+- hide modelform DELETE button on subject screening when subject consent or consent refused
+  exists
+- use template tag for PatientLog changelist top bar
+- move subject screening validation to modelform from form_validators when referencing
+  patient log model instance
+- bump to edc 0.5.1
+
 0.1.37
 ------
 - fix "'+' char is removed from group names when clicking patient logs list" (#631)
@@ -22,18 +37,7 @@ Changes
     - Subject Screening form:
         - add validation to prevent those reported unwilling to screen in Patient Log, from screening
         - use Patient Log link in errors referring to Patient Log
-- add unique constraint on identifier fields in subject screening
-- pass screening identifier to consent refusal form instead of subject screening id
-- pass patient log identifier to subject screening instead of patient log id
-- fix performance issue with PatientLog changelist
-- configure all forms referenced on the PatientLog changelist to redirect back to the
-  changelist for save, delete, cancel
-- hide modelform DELETE button on subject screening when subject consent or consent refused
-  exists
-- use template tag for PatientLog changelist top bar
-- move subject screening validation to modelform from form_validators when referencing
-  patient log model instance
-- bump to edc 0.5.1
+- bump to edc 0.4.99
 
 0.1.25
 ------
