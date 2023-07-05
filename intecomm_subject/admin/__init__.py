@@ -20,7 +20,6 @@ from .drug_refill_htn_admin import DrugRefillHtnAdmin
 from .eq5d3l_admin import Eq5d3lAdmin
 from .family_history_admin import FamilyHistoryAdmin
 from .glucose_admin import GlucoseAdmin
-from .hba1c_result_admin import Hba1cResultAdmin
 from .health_economics import (
     HealthEconomicsAssetsAdmin,
     HealthEconomicsHouseholdHeadAdmin,

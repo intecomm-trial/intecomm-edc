@@ -5,7 +5,6 @@ from edc_model import models as edc_models
 from intecomm_screening.models import HealthFacility
 
 from ..choices import APPT_DATE_INFO_SOURCES
-from ..constants import INTEGRATED
 from ..model_mixins import CrfModelMixin
 
 
@@ -26,7 +25,6 @@ class NextAppointment(CrfModelMixin, edc_models.BaseUuidModel):
     health_facility = models.ForeignKey(
         HealthFacility,
         on_delete=PROTECT,
-        limit_choices_to={"health_facility_type__name": INTEGRATED},
         null=True,
         blank=True,
     )

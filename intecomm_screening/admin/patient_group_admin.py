@@ -5,12 +5,13 @@ from typing import Tuple
 import inflect
 from django.apps import apps as django_apps
 from django.contrib import admin
-from django.db.models import Count, Q
+from django.db.models import Count
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.http import urlencode
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_constants.constants import COMPLETE, DM, HIV, HTN, UUID_PATTERN, YES
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 from edc_utils.round_up import round_up
 from intecomm_form_validators.utils import get_group_size_for_ratio
 
@@ -34,8 +35,9 @@ p = inflect.engine()
 
 @admin.register(PatientGroup, site=intecomm_screening_admin)
 class PatientGroupAdmin(
-    ChangeListTopBarModelAdminMixin,
+    SiteModelAdminMixin,
     RedirectAllToPatientLogModelAdminMixin,
+    ChangeListTopBarModelAdminMixin,
     BaseModelAdminMixin,
 ):
     form = PatientGroupForm
@@ -47,14 +49,17 @@ class PatientGroupAdmin(
 
     changelist_top_bar_selected = "patientgroup"
     changelist_top_bar_add_url = "intecomm_screening_admin:intecomm_screening_patientgroup_add"
+    change_search_field_name = "group_identifier"
+    add_search_field_name = "group_identifier"
 
     list_per_page = 5
 
     changelist_url = "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
-    search_field_name = "group_identifier"
     post_full_url_on_delete = (
         "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
     )
+
+    limit_m2m_field_to_current_site = ["patients"]
 
     fieldsets = (
         (
@@ -264,33 +269,56 @@ class PatientGroupAdmin(
             ratio_str = f" ({str(ratio)})"
         return f"{ncd}:{hiv}{ratio_str}"
 
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        if (
-            obj
-            and not obj.randomized
-            and request.user.has_perm("intecomm_screening.change_patientlog")
-        ):
-            patient_log_model_cls = django_apps.get_model("intecomm_screening.patientlog")
-            conditions = [HIV, DM, HTN]
-            q_lookup = Q(patientgroup__isnull=True) | Q(patientgroup__name=obj.name)
-            for cond in conditions:
-                form.base_fields[
-                    f"{cond.lower()}_patients"
-                ].queryset = patient_log_model_cls.objects.filter(
-                    q_lookup, stable=YES, site_id=obj.site_id, conditions__name=cond
-                ).exclude(
-                    Q(conditions__name__in=[c for c in conditions if c != cond])
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        patient_log_cls = django_apps.get_model("intecomm_screening.patientlog")
+        if db_field.name == "hiv_patients":
+            kwargs["queryset"] = (
+                patient_log_cls.on_site.filter(
+                    stable=YES,
+                    conditions__name__in=[HIV],
+                    willing_to_screen=YES,
+                    group_identifier__isnull=True,
                 )
-
-            # multimorbidity
+                .exclude(conditions__name__in=[HTN, DM])
+                .order_by("initials")
+            )
+        elif db_field.name == "htn_patients":
+            kwargs["queryset"] = (
+                patient_log_cls.on_site.filter(
+                    stable=YES,
+                    conditions__name__in=[HTN],
+                    willing_to_screen=YES,
+                    group_identifier__isnull=True,
+                )
+                .exclude(conditions__name__in=[HIV, DM])
+                .order_by("initials")
+            )
+        elif db_field.name == "dm_patients":
+            kwargs["queryset"] = (
+                patient_log_cls.on_site.filter(
+                    stable=YES,
+                    conditions__name__in=[DM],
+                    willing_to_screen=YES,
+                    group_identifier__isnull=True,
+                )
+                .exclude(conditions__name__in=[HTN, HIV])
+                .order_by("initials")
+            )
+        elif db_field.name == "multi_patients":
             qs = (
-                patient_log_model_cls.objects.filter(q_lookup, stable=YES, site_id=obj.site_id)
+                patient_log_cls.on_site.filter(
+                    stable=YES,
+                    willing_to_screen=YES,
+                    group_identifier__isnull=True,
+                )
                 .values("id")
                 .annotate(conditions_count=Count("conditions__name"))
             )
             multi_morbidity_pks = [o.get("id") for o in qs if o.get("conditions_count") > 1]
-            form.base_fields["multi_patients"].queryset = patient_log_model_cls.objects.filter(
-                pk__in=multi_morbidity_pks
-            )
-        return form
+            kwargs["queryset"] = patient_log_cls.on_site.filter(
+                stable=YES,
+                id__in=multi_morbidity_pks,
+                willing_to_screen=YES,
+                group_identifier__isnull=True,
+            ).order_by("initials")
+        return super().formfield_for_manytomany(db_field, request, **kwargs)

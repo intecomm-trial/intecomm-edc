@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django_audit_fields import audit_fieldset_tuple
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..admin_site import intecomm_screening_admin
 from ..models import PatientLogReportPrintHistory
@@ -7,7 +8,7 @@ from .modeladmin_mixins import BaseModelAdminMixin
 
 
 @admin.register(PatientLogReportPrintHistory, site=intecomm_screening_admin)
-class PatientLogReportPrintHistoryAdmin(BaseModelAdminMixin):
+class PatientLogReportPrintHistoryAdmin(SiteModelAdminMixin, BaseModelAdminMixin):
     show_object_tools = False
 
     fieldsets = (

@@ -9,8 +9,6 @@ from ...forms import BloodResultsGluForm
 from ...models import BloodResultsGlu
 from ..modeladmin_mixins import CrfModelAdmin
 
-# TODO: add is poc? YES
-
 
 @admin.register(BloodResultsGlu, site=intecomm_subject_admin)
 class BloodResultsGluAdmin(BloodResultsModelAdminMixin, CrfModelAdmin):

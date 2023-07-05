@@ -76,8 +76,8 @@ class PatientCallModelMixin(models.Model):
 
     comment = EncryptedTextField(verbose_name="Note", null=True, blank=True)
 
-    on_site = CurrentSiteManager()
     objects = Manager()
+    on_site = CurrentSiteManager()
     history = HistoricalRecords(inherit=True)
 
     class Meta:

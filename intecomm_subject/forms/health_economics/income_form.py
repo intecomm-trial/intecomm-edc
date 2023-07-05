@@ -5,9 +5,12 @@ from intecomm_form_validators.subject.health_economics import (
 
 from ...models import HealthEconomicsIncome
 from ..mixins import CrfModelFormMixin
+from .modelform_mixins import HealthEconomicsModelFormMixin
 
 
-class HealthEconomicsIncomeForm(CrfModelFormMixin, forms.ModelForm):
+class HealthEconomicsIncomeForm(
+    HealthEconomicsModelFormMixin, CrfModelFormMixin, forms.ModelForm
+):
     form_validator_cls = HealthEconomicsIncomeFormValidator
 
     class Meta:

@@ -10,6 +10,7 @@ def update_willing_to_screen(apps, schema_editor):
     patientlog_cls = apps.get_model("intecomm_screening.patientlog")
     subjectscreening_cls = apps.get_model("intecomm_screening.subjectscreening")
     screeningrefusalreasons_cls = apps.get_model("intecomm_lists.screeningrefusalreasons")
+    # may fail here if post-migrate needs to run
     not_applicable = screeningrefusalreasons_cls.objects.get(name=NOT_APPLICABLE)
     qs = patientlog_cls.objects.all()
     for patientlog in tqdm(qs, total=qs.count()):

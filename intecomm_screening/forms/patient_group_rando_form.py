@@ -8,6 +8,8 @@ from ..models import PatientGroupRando
 class PatientGroupRandoForm(FormValidatorMixin, forms.ModelForm):
     form_validator_cls = PatientGroupRandoFormValidator
 
+    # TODO: check if any in more than one group
+
     name = forms.CharField(
         label="Group name",
         required=False,

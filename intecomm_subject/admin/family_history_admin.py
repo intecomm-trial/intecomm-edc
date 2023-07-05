@@ -9,7 +9,6 @@ from .modeladmin_mixins import CrfModelAdmin
 
 @admin.register(FamilyHistory, site=intecomm_subject_admin)
 class FamilyHistoryAdmin(CrfModelAdmin):
-    # form = FamilyHistoryForm
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
         (

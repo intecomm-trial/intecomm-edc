@@ -5,19 +5,12 @@ from typing import Tuple
 
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.handlers.wsgi import WSGIRequest
-from django.template.loader import render_to_string
-from django.urls.base import reverse
-from django.urls.exceptions import NoReverseMatch
 from django.utils.html import format_html
-from django.utils.translation import gettext as _
 from django_audit_fields import audit_fieldset_tuple
 from edc_consent.modeladmin_mixins import PiiNamesModelAdminMixin
 from edc_constants.choices import GENDER
 from edc_constants.constants import UUID_PATTERN
-from edc_dashboard.url_names import url_names
-from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
-from edc_model_admin.history import SimpleHistoryAdmin
+from edc_model_admin.mixins import ModelAdminHideDeleteButtonOnCondition
 from edc_screening.utils import format_reasons_ineligible
 from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
@@ -25,32 +18,37 @@ from intecomm_sites import all_sites
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import SubjectScreeningForm
-from ..models import PatientLog, SubjectScreening
+from ..models import SubjectScreening
 from ..utils import get_consent_refusal_model_cls
-from .modeladmin_mixins import RedirectAllToPatientLogModelAdminMixin
+from .modeladmin_mixins import (
+    BaseModelAdminMixin,
+    RedirectAllToPatientLogModelAdminMixin,
+)
 
 
 @admin.register(SubjectScreening, site=intecomm_screening_admin)
 class SubjectScreeningAdmin(
-    RedirectAllToPatientLogModelAdminMixin,
-    PiiNamesModelAdminMixin,
     SiteModelAdminMixin,
-    ModelAdminSubjectDashboardMixin,
-    SimpleHistoryAdmin,
+    RedirectAllToPatientLogModelAdminMixin,
+    ModelAdminHideDeleteButtonOnCondition,
+    PiiNamesModelAdminMixin,
+    BaseModelAdminMixin,
 ):
     form = SubjectScreeningForm
+    list_per_page = 5
+    autocomplete_fields = ["site"]
+    show_object_tools = True
+    show_cancel = True
+    change_list_template: str = "intecomm_screening/admin/subjectscreening_change_list.html"
 
+    # PiiNamesModelAdminMixin attrs
     name_fields: list[str] = ["legal_name", "familiar_name"]
     name_display_field: str = "familiar_name"
     all_sites: dict = all_sites
 
-    list_per_page = 5
-    post_url_on_delete_name = "screening_listboard_url"
-    subject_listboard_url_name = "screening_listboard_url"
-
-    subject_dashboard_url_name = "screening_listboard_url"
-
-    change_list_template: str = "intecomm_screening/admin/subjectscreening_change_list.html"
+    # RedirectAllToPatientLogModelAdminMixin attr
+    add_search_field_name = "patient_log_identifier"
+    change_search_field_name = "screening_identifier"
 
     additional_instructions = (
         "Patients must meet ALL of the inclusion criteria and NONE of the "
@@ -199,6 +197,7 @@ class SubjectScreeningAdmin(
         "report_datetime",
         "user_created",
         "created",
+        "site_code",
     )
 
     list_filter = (
@@ -229,29 +228,29 @@ class SubjectScreeningAdmin(
     )
 
     radio_fields = {
+        "art_adherent": admin.VERTICAL,
+        "art_stable": admin.VERTICAL,
+        "art_unchanged_3m": admin.VERTICAL,
         "consent_ability": admin.VERTICAL,
+        "dm_complications": admin.VERTICAL,
         "dm_dx": admin.VERTICAL,
         "dm_dx_6m": admin.VERTICAL,
+        "excluded_by_bp_history": admin.VERTICAL,
+        "excluded_by_gluc_history": admin.VERTICAL,
         "gender": admin.VERTICAL,
         "hiv_dx": admin.VERTICAL,
         "hiv_dx_6m": admin.VERTICAL,
+        "htn_complications": admin.VERTICAL,
         "htn_dx": admin.VERTICAL,
         "htn_dx_6m": admin.VERTICAL,
-        "selection_method": admin.VERTICAL,
-        "lives_nearby": admin.VERTICAL,
-        "staying_nearby_6": admin.VERTICAL,
         "in_care_6m": admin.VERTICAL,
-        "art_unchanged_3m": admin.VERTICAL,
-        "art_stable": admin.VERTICAL,
-        "art_adherent": admin.VERTICAL,
-        "dm_complications": admin.VERTICAL,
-        "htn_complications": admin.VERTICAL,
+        "lives_nearby": admin.VERTICAL,
         "pregnant": admin.VERTICAL,
-        "excluded_by_bp_history": admin.VERTICAL,
-        "excluded_by_gluc_history": admin.VERTICAL,
         "requires_acute_care": admin.VERTICAL,
-        "unsuitable_for_study": admin.VERTICAL,
+        "selection_method": admin.VERTICAL,
+        "staying_nearby_6": admin.VERTICAL,
         "unsuitable_agreed": admin.VERTICAL,
+        "unsuitable_for_study": admin.VERTICAL,
     }
 
     def post_url_on_delete_kwargs(self, request, obj):
@@ -281,59 +280,22 @@ class SubjectScreeningAdmin(
             return self.dashboard(obj)
         return format_reasons_ineligible(obj.reasons_ineligible)
 
-    def dashboard(self, obj=None, label=None):
-        try:
-            url = reverse(
-                self.get_subject_dashboard_url_name(),
-                kwargs=self.get_subject_dashboard_url_kwargs(obj),
-            )
-        except NoReverseMatch:
-            url = reverse(url_names.get("screening_listboard_url"), kwargs={})
-            context = dict(
-                title=_("Go to screening and consent"),
-                url=f"{url}?q={obj.screening_identifier}",
-                label=label,
-            )
-        else:
-            context = dict(title=_("Go to subject dashboard"), url=url, label=label)
-        return render_to_string("dashboard_button.html", context=context)
-
-    def formfield_for_foreignkey(self, db_field, request: WSGIRequest, **kwargs):
-        db = kwargs.get("using")
-        if db_field.name == "patient_log":
-            if request.GET.get("patient_log"):
-                kwargs["queryset"] = PatientLog.objects.using(db).filter(
-                    id__exact=request.GET.get("patient_log", 0)
-                )
-            else:
-                kwargs["queryset"] = PatientLog.objects.none()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-    def view_on_site(self, obj) -> str:
-        return reverse(self.get_subject_listboard_url_name())
-
-    def formfield_for_choice_field(self, db_field, request, **kwargs):
-        if db_field.name == "gender":
-            kwargs["choices"] = GENDER
-        return super().formfield_for_choice_field(db_field, request, **kwargs)
-
-    def change_view(self, request, object_id, form_url="", extra_context=None):
+    def hide_delete_button_on_condition(self, request, object_id) -> bool:
+        """Hide delete button on form if subject identifier not
+        set or consent_refusal exists.
+        """
         obj = self.model.objects.get(id=object_id)
-        if not re.match(UUID_PATTERN, obj.subject_identifier) or self.consent_refusal(obj):
-            extra_context = extra_context or {}
-            extra_context["show_delete"] = False
-        elif extra_context:
-            del extra_context["show_delete"]
-        return super().change_view(
-            request, object_id, form_url=form_url, extra_context=extra_context
-        )
-
-    @staticmethod
-    def consent_refusal(obj):
         try:
             consent_refusal = get_consent_refusal_model_cls().objects.get(
                 screening_identifier=obj.screening_identifier
             )
         except ObjectDoesNotExist:
             consent_refusal = None
-        return consent_refusal
+        if not re.match(UUID_PATTERN, obj.subject_identifier) or consent_refusal:
+            return True
+        return super().hide_delete_button_on_condition(request, object_id)
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        if db_field.name == "gender":
+            kwargs["choices"] = GENDER
+        return super().formfield_for_choice_field(db_field, request, **kwargs)

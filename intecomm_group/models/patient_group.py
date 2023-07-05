@@ -110,9 +110,9 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
 
     notes = models.TextField(null=True, blank=True)
 
-    on_site = CurrentSiteManager()
-
     objects = PatientGroupManager()
+
+    on_site = CurrentSiteManager()
 
     history = HistoricalRecords()
 

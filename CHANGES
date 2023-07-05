@@ -1,6 +1,17 @@
 Changes
 =======
 
+0.1.39
+------
+- default model manager changed from `on_site` to `objects`
+- fix modelform not raising ValidationError for IntegrityErrors for  unique
+  field across sites.
+- fix forms not redirecting to PatientLog changelist on cancel / delete
+- add validation to prevent adding patient_log to a second group
+- fix where FKs not limiting for current site on modelform
+- fix inconsistent ModelAdmin class declarations
+- add missing form class to some ModelAdmin classes
+
 0.1.38
 ------
 - add unique constraint on identifier fields in subject screening

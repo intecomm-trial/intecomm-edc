@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from edc_sites import get_site_name
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from intecomm_sites import all_sites
 
@@ -11,7 +12,9 @@ from .modeladmin_mixins import BaseModelAdminMixin, ChangeListTopBarModelAdminMi
 
 
 @admin.register(HealthFacility, site=intecomm_screening_admin)
-class HealthFacilityAdmin(ChangeListTopBarModelAdminMixin, BaseModelAdminMixin):
+class HealthFacilityAdmin(
+    SiteModelAdminMixin, ChangeListTopBarModelAdminMixin, BaseModelAdminMixin
+):
     form = HealthFacilityForm
     show_object_tools = True
     change_list_template: str = "intecomm_screening/admin/healthfacility_change_list.html"

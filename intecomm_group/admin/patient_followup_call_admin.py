@@ -4,6 +4,7 @@ from django.apps import apps as django_apps
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from intecomm_screening.admin.list_filters import LastApptListFilter, NextApptListFilter
 from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin
@@ -13,7 +14,7 @@ from ..models import PatientFollowupCall
 
 
 @admin.register(PatientFollowupCall, site=intecomm_group_admin)
-class PatientFollowupCallAdmin(BaseModelAdminMixin):
+class PatientFollowupCallAdmin(SiteModelAdminMixin, BaseModelAdminMixin):
     # form = PatientCallForm
     show_object_tools = False
     change_list_template: str = "intecomm_group/admin/patientfollowupcall_change_list.html"

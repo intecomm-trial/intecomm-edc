@@ -4,24 +4,46 @@ from django.apps import apps as django_apps
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
+from edc_model_admin.mixins import ModelAdminLimitToSelectedForeignkey
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientCallForm
-from ..models import PatientCall
+from ..models import PatientCall, PatientLog
 from .list_filters import LastApptListFilter, NextApptListFilter
-from .modeladmin_mixins import BaseModelAdminMixin, ChangeListTopBarModelAdminMixin
+from .modeladmin_mixins import (
+    BaseModelAdminMixin,
+    ChangeListTopBarModelAdminMixin,
+    RedirectAllToPatientLogModelAdminMixin,
+)
 
 
 @admin.register(PatientCall, site=intecomm_screening_admin)
-class PatientCallAdmin(ChangeListTopBarModelAdminMixin, BaseModelAdminMixin):
+class PatientCallAdmin(
+    SiteModelAdminMixin,
+    ModelAdminLimitToSelectedForeignkey,
+    RedirectAllToPatientLogModelAdminMixin,
+    ChangeListTopBarModelAdminMixin,
+    BaseModelAdminMixin,
+):
     form = PatientCallForm
-    show_object_tools = False
-    change_list_template: str = "intecomm_screening/admin/patientcall_change_list.html"
+    show_object_tools = True
+    list_per_page = 5
+
+    # TemplatesModelAdminMixin attr
     change_list_title = PatientCall._meta.verbose_name
+
+    # ChangeListTopBarModelAdminMixin attrs
     changelist_top_bar_selected = "patientcall"
     changelist_top_bar_add_url = "intecomm_screening_admin:intecomm_screening_patientcall_add"
 
-    list_per_page = 5
+    # RedirectAllToPatientLogModelAdminMixin attrs
+    change_search_field_name = "patient_log__patient_log_identifier"
+    add_search_field_name = "patient_log__patient_log_identifier"
+
+    # ModelAdminLimitToSelectedForeignkey attrs
+    limit_fk_field_to_current_site = ["patient_log"]
+    limit_fk_field_to_selected = [("patient_log", PatientLog)]
 
     fieldsets = (
         (
@@ -130,22 +152,6 @@ class PatientCallAdmin(ChangeListTopBarModelAdminMixin, BaseModelAdminMixin):
     def patient_log_model_cls(self):
         return django_apps.get_model("intecomm_screening.patientlog")
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "patient_log":
-            if request.GET.get("patient_log"):
-                kwargs["queryset"] = self.patient_log_model_cls.objects.filter(
-                    id__exact=request.GET.get("patient_log", 0)
-                )
-            else:
-                kwargs["queryset"] = self.patient_log_model_cls.objects.none()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-    def get_readonly_fields(self, request, obj=None) -> Tuple[str, ...]:
-        readonly = super().get_readonly_fields(request, obj=obj)
-        if obj and "patient_log" not in readonly:
-            readonly = readonly + ("patient_log",)
-        return readonly
-
     @admin.display(description="Alive", ordering="survival_status")
     def alive(self, obj=None):
         return obj.survival_status
@@ -153,3 +159,9 @@ class PatientCallAdmin(ChangeListTopBarModelAdminMixin, BaseModelAdminMixin):
     @admin.display(description="In Area", ordering="catchment_area")
     def in_area(self, obj=None):
         return obj.catchment_area
+
+    def get_readonly_fields(self, request, obj=None) -> Tuple[str, ...]:
+        readonly = super().get_readonly_fields(request, obj=obj)
+        if obj and "patient_log" not in readonly:
+            readonly = readonly + ("patient_log",)
+        return readonly

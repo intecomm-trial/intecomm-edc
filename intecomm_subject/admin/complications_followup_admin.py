@@ -2,6 +2,8 @@ from django.contrib import admin
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_crf.admin import crf_status_fieldset_tuple
 
+from intecomm_subject.forms import ComplicationsFollowupForm
+
 from ..admin_site import intecomm_subject_admin
 from ..models import ComplicationsFollowup
 from .modeladmin_mixins import CrfModelAdmin
@@ -9,7 +11,7 @@ from .modeladmin_mixins import CrfModelAdmin
 
 @admin.register(ComplicationsFollowup, site=intecomm_subject_admin)
 class ComplicationsFollowupAdmin(CrfModelAdmin):
-    # form = ComplicationsFollowupForm
+    form = ComplicationsFollowupForm
 
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),

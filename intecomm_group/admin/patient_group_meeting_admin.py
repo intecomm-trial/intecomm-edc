@@ -8,6 +8,7 @@ from edc_model_admin.mixins import (
     ModelAdminInstitutionMixin,
     TemplatesModelAdminMixin,
 )
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..admin_site import intecomm_group_admin
 from ..forms import PatientGroupMeetingForm
@@ -16,6 +17,7 @@ from ..models import PatientGroupMeeting
 
 @admin.register(PatientGroupMeeting, site=intecomm_group_admin)
 class PatientGroupMeetingAdmin(
+    SiteModelAdminMixin,
     TemplatesModelAdminMixin,
     ModelAdminFormInstructionsMixin,
     ModelAdminFormAutoNumberMixin,

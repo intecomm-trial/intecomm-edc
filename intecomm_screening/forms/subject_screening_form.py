@@ -9,7 +9,6 @@ from edc_dashboard import url_names
 from edc_form_validators import INVALID_ERROR, FormValidatorMixin
 from edc_screening.modelform_mixins import AlreadyConsentedFormMixin
 from edc_sites.modelform_mixins import SiteModelFormMixin
-from edc_sites.widgets import SiteField
 from intecomm_form_validators import SubjectScreeningFormValidator
 
 from ..models import PatientLog, SubjectScreening
@@ -19,8 +18,6 @@ class SubjectScreeningForm(
     AlreadyConsentedFormMixin, SiteModelFormMixin, FormValidatorMixin, forms.ModelForm
 ):
     form_validator_cls = SubjectScreeningFormValidator
-
-    site = SiteField()
 
     def __init__(self, *args, **kwargs):
         self._patient_log = None
@@ -190,7 +187,8 @@ class SubjectScreeningForm(
         model = SubjectScreening
         fields = "__all__"
         labels = {
-            "consent_ability": "Is the patient able and willing to give informed consent."
+            "consent_ability": "Is the patient able and willing to give informed consent.",
+            "site": "Which study site is this?",
         }
         widgets = {
             "patient_log_identifier": forms.TextInput(attrs={"readonly": "readonly"}),
@@ -200,4 +198,7 @@ class SubjectScreeningForm(
             "age_in_years": forms.TextInput(attrs={"readonly": "readonly"}),
             "hospital_identifier": forms.TextInput(attrs={"readonly": "readonly"}),
         }
-        help_texts = {"patient_log_identifier": "(read-only)"}
+        help_texts = {
+            "patient_log_identifier": "(read-only)",
+            "site": "This question is asked to confirm you are logged in to the correct site.",
+        }

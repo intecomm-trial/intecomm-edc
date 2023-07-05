@@ -19,8 +19,8 @@ print(f"Settings file {__file__}")
 # SITE_ID = SiteID(default=110)  # Wakiso
 
 # TZ
-SITE_ID = SiteID(default=201)  # Amana
-# SITE_ID = SiteID(default=202)  # Bagamoyo
+# SITE_ID = SiteID(default=201)  # Amana
+SITE_ID = SiteID(default=202)  # Bagamoyo
 # SITE_ID = SiteID(default=203)  # Rugambwa
 # SITE_ID = SiteID(default=204)  # Hindu_Mandal
 # SITE_ID = SiteID(default=205)  # Kisarawe

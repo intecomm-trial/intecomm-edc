@@ -1,7 +1,5 @@
 from django.contrib import admin
-from edc_form_label import FormLabelModelAdminMixin
 from edc_he.modeladmin_mixins import HealthEconomicsPatientModelAdminMixin
-from edc_model_admin.history import SimpleHistoryAdmin
 
 from ...admin_site import intecomm_subject_admin
 from ...choices import (
@@ -12,16 +10,11 @@ from ...choices import (
 )
 from ...forms import HealthEconomicsPatientForm
 from ...models import HealthEconomicsPatient
-from ..modeladmin_mixins import CrfModelAdminMixin
+from ..modeladmin_mixins import CrfModelAdmin
 
 
 @admin.register(HealthEconomicsPatient, site=intecomm_subject_admin)
-class HealthEconomicsPatientAdmin(
-    HealthEconomicsPatientModelAdminMixin,
-    CrfModelAdminMixin,
-    FormLabelModelAdminMixin,
-    SimpleHistoryAdmin,
-):
+class HealthEconomicsPatientAdmin(HealthEconomicsPatientModelAdminMixin, CrfModelAdmin):
     form = HealthEconomicsPatientForm
 
     def formfield_for_choice_field(self, db_field, request, **kwargs):

@@ -30,7 +30,7 @@ class PatientFollowupCall(PatientCallModelMixin, SiteModelMixin, BaseUuidModel):
         "intecomm_screening.patientlog",
     ]
 
-    class Meta:
+    class Meta(BaseUuidModel.Meta):
         verbose_name = "Patient Followup Call"
         verbose_name_plural = "Patient Followup Calls"
         ordering = ["report_datetime"]

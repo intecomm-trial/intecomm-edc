@@ -13,6 +13,7 @@ from edc_consent.modeladmin_mixins import PiiNamesModelAdminMixin
 from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER
 from edc_constants.constants import UUID_PATTERN
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 from edc_utils import get_utcnow
 
 from intecomm_sites.sites import all_sites
@@ -73,6 +74,7 @@ def render_pdf_action(modeladmin, request, queryset, **kwargs):  # noqa
 
 @admin.register(PatientLog, site=intecomm_screening_admin)
 class PatientLogAdmin(
+    SiteModelAdminMixin,
     ChangeListTopBarModelAdminMixin,
     RedirectAllToPatientLogModelAdminMixin,
     PiiNamesModelAdminMixin,
@@ -80,16 +82,23 @@ class PatientLogAdmin(
 ):
     form = PatientLogForm
 
+    autocomplete_fields = ["site"]
+    inlines = [AddPatientCallInline, ViewPatientCallInline]
     actions = [render_pdf_action]
+    list_per_page = 5
+    show_object_tools = True
+    show_cancel = True
 
+    # PiiNamesModelAdminMixin attrs
     name_fields: list[str] = ["legal_name", "familiar_name"]
     name_display_field: str = "familiar_name"
     all_sites = all_sites
 
+    # ChangeListTopBarModelAdminMixin attrs
+    changelist_top_bar_selected = "patientlog"
+    changelist_top_bar_add_url = "intecomm_screening_admin:intecomm_screening_patientlog_add"
+
     custom_form_codename = "edc_data_manager.special_bypassmodelform"
-    list_per_page = 5
-    show_object_tools = True
-    show_cancel = True
     change_list_template: str = "intecomm_screening/admin/patientlog_change_list.html"
     change_list_title = PatientLog._meta.verbose_name
     change_list_note = format_html(
@@ -100,13 +109,6 @@ class PatientLogAdmin(
         "Searches on encrypted data work on exact uppercase matches only. When "
         'searching on a full name, put the full name in quotations, for example, "JOHN SMITH".'
     )
-
-    changelist_top_bar_selected = "patientlog"
-    changelist_top_bar_add_url = "intecomm_screening_admin:intecomm_screening_patientlog_add"
-
-    autocomplete_fields = ["site"]
-
-    inlines = [AddPatientCallInline, ViewPatientCallInline]
 
     additional_instructions = format_html(
         "Only include patients that are known to have a qualifying "
@@ -233,6 +235,7 @@ class PatientLogAdmin(
         "modified",
         "screening_id",
         "subject_id",
+        "site",
     )
 
     list_filter = (
@@ -277,6 +280,7 @@ class PatientLogAdmin(
         "gender": admin.VERTICAL,
         "may_contact": admin.VERTICAL,
         "second_health_talk": admin.VERTICAL,
+        "site": admin.VERTICAL,
         "stable": admin.VERTICAL,
         "screening_refusal_reason": admin.VERTICAL,
         "willing_to_screen": admin.VERTICAL,
@@ -459,7 +463,7 @@ class PatientLogAdmin(
             search_term,
         )
         try:
-            patient_group = PatientGroup.objects.prefetch_related("patients").get(
+            patient_group = PatientGroup.on_site.prefetch_related("patients").get(
                 name__iexact=search_term
             )
         except ObjectDoesNotExist:
@@ -467,7 +471,7 @@ class PatientLogAdmin(
         else:
             pks = [v[0] for v in queryset.values_list("id")]
             pks = [v[0] for v in patient_group.patients.filter(pk__in=pks).values_list("id")]
-            qs = qs1 | self.model.objects.filter(id__in=pks)
+            qs = qs1 | self.model.on_site.filter(id__in=pks)
         return qs, True
 
     @staticmethod

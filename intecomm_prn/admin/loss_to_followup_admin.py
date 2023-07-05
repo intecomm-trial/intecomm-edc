@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_action_item import ActionItemModelAdminMixin, action_fieldset_tuple
-from edc_data_manager.modeladmin_mixins import DataManagerModelAdminMixin
+from edc_data_manager.modeladmin_mixins import DataManagerSiteModelAdminMixin
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 
@@ -12,7 +12,7 @@ from ..models import LossToFollowup
 
 @admin.register(LossToFollowup, site=intecomm_prn_admin)
 class LossToFollowupAdmin(
-    DataManagerModelAdminMixin,
+    DataManagerSiteModelAdminMixin,
     ActionItemModelAdminMixin,
     ModelAdminSubjectDashboardMixin,
     SimpleHistoryAdmin,

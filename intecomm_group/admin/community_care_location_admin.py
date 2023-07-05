@@ -4,6 +4,7 @@ from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_prn.modeladmin_mixins import PrnModelAdminMixin
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..admin_site import intecomm_group_admin
 from ..forms import CommunityCareLocationForm
@@ -12,6 +13,7 @@ from ..models import CommunityCareLocation
 
 @admin.register(CommunityCareLocation, site=intecomm_group_admin)
 class CommunityCareLocationAdmin(
+    SiteModelAdminMixin,
     PrnModelAdminMixin,
     SimpleHistoryAdmin,
 ):

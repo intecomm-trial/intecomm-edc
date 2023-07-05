@@ -1,17 +1,23 @@
 from django.contrib import admin
 from django_audit_fields.admin import audit_fieldset_tuple
+from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 from edc_visit_schedule.fieldsets import visit_schedule_fieldset_tuple
 from edc_visit_tracking.modeladmin_mixins import VisitModelAdminMixin
 
 from ..admin_site import intecomm_subject_admin
 from ..forms import SubjectVisitForm
 from ..models import SubjectVisit
-from .modeladmin_mixins import ModelAdminMixin
 
 
 @admin.register(SubjectVisit, site=intecomm_subject_admin)
-class SubjectVisitAdmin(VisitModelAdminMixin, ModelAdminMixin, SimpleHistoryAdmin):
+class SubjectVisitAdmin(
+    SiteModelAdminMixin,
+    VisitModelAdminMixin,
+    ModelAdminSubjectDashboardMixin,
+    SimpleHistoryAdmin,
+):
     show_dashboard_in_list_display_pos = 2
 
     form = SubjectVisitForm

@@ -1,8 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from edc_sites import get_site_name
-
-from intecomm_sites import all_sites
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import HealthTalkLogForm
@@ -11,19 +9,23 @@ from .modeladmin_mixins import BaseModelAdminMixin, ChangeListTopBarModelAdminMi
 
 
 @admin.register(HealthTalkLog, site=intecomm_screening_admin)
-class HealthTalkLogAdmin(ChangeListTopBarModelAdminMixin, BaseModelAdminMixin):
+class HealthTalkLogAdmin(
+    SiteModelAdminMixin, ChangeListTopBarModelAdminMixin, BaseModelAdminMixin
+):
     form = HealthTalkLogForm
     show_object_tools = True
+    list_per_page = 5
+    autocomplete_fields = ["health_facility"]
+
+    # TemplatesModelAdminMixin attrs
     change_list_template: str = "intecomm_screening/admin/healthtalklog_change_list.html"
     change_list_title = HealthTalkLog._meta.verbose_name
-    list_per_page = 5
 
+    # ChangeListTopBarModelAdminMixin attrs
     changelist_top_bar_selected = "healthtalklog"
     changelist_top_bar_add_url = (
         "intecomm_screening_admin:intecomm_screening_healthtalklog_add"
     )
-
-    autocomplete_fields = ["health_facility"]
 
     fieldsets = (
         (
@@ -72,11 +74,6 @@ class HealthTalkLogAdmin(ChangeListTopBarModelAdminMixin, BaseModelAdminMixin):
     @admin.display(description="Attended", ordering="number_attended")
     def attended(self, obj=None):
         return obj.number_attended
-
-    @staticmethod
-    def site_name(obj=None):
-        get_site_name(obj.site.id, all_sites)
-        return obj.name
 
     @admin.display(description="Map")
     def map(self, obj=None):
