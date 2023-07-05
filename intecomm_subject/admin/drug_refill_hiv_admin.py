@@ -3,6 +3,7 @@ from django_audit_fields import audit_fieldset_tuple
 from edc_crf.admin import crf_status_fieldset_tuple
 from edc_model_admin.mixins import TabularInlineMixin
 from edc_rx.modeladmin_mixins import DrugRefillAdminMixin, DrugSupplyInlineMixin
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..admin_site import intecomm_subject_admin
 from ..forms import DrugRefillHivForm, DrugSupplyHivForm
@@ -10,7 +11,9 @@ from ..models import DrugRefillHiv, DrugSupplyHiv
 from .modeladmin_mixins import CrfModelAdmin
 
 
-class DrugSupplyHivInline(DrugSupplyInlineMixin, TabularInlineMixin, admin.TabularInline):
+class DrugSupplyHivInline(
+    SiteModelAdminMixin, DrugSupplyInlineMixin, TabularInlineMixin, admin.TabularInline
+):
     model = DrugSupplyHiv
     form = DrugSupplyHivForm
 

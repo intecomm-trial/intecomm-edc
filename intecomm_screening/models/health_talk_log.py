@@ -36,9 +36,9 @@ class HealthTalkLog(SiteModelMixin, BaseUuidModel):
 
     notes = models.TextField(null=True, blank=True)
 
+    objects = Manager()
     on_site = CurrentSiteManager()
     history = HistoricalRecords()
-    objects = Manager()
 
     def __str__(self):
         dt = formatted_date(self.report_date)
@@ -50,15 +50,7 @@ class HealthTalkLog(SiteModelMixin, BaseUuidModel):
             self.report_date,
         )
 
-    class Meta(SiteModelMixin.Meta, BaseUuidModel.Meta):
+    class Meta(BaseUuidModel.Meta):
         verbose_name = "Health talk log"
         verbose_name_plural = "Health talk logs"
         unique_together = ("health_facility", "report_date")
-        # constraints = [
-        #     UniqueConstraint(
-        #         "health_facility",
-        #         "report_date",
-        #         name="unique_health_facility_report_date",
-        #         violation_error_message="Only one report expected per facility per day.",
-        #     )
-        # ]

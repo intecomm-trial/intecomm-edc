@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django_audit_fields import ModelAdminAuditFieldsMixin
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..forms import PatientCallForm
 from ..models import PatientCall
@@ -20,7 +21,10 @@ class PatientCallInlineMixin:
 
 
 class AddPatientCallInline(
-    ModelAdminAuditFieldsMixin, PatientCallInlineMixin, admin.StackedInline
+    SiteModelAdminMixin,
+    ModelAdminAuditFieldsMixin,
+    PatientCallInlineMixin,
+    admin.StackedInline,
 ):
     fieldsets = (
         [None, {"fields": ("report_datetime",)}],
@@ -51,7 +55,10 @@ class AddPatientCallInline(
 
 
 class ViewPatientCallInline(
-    ModelAdminAuditFieldsMixin, PatientCallInlineMixin, admin.StackedInline
+    SiteModelAdminMixin,
+    ModelAdminAuditFieldsMixin,
+    PatientCallInlineMixin,
+    admin.StackedInline,
 ):
     fieldsets = (
         (

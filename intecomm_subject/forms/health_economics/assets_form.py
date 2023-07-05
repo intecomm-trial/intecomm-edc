@@ -3,9 +3,12 @@ from intecomm_form_validators.subject import HealthEconomicsAssetsFormValidator
 
 from ...models import HealthEconomicsAssets
 from ..mixins import CrfModelFormMixin
+from .modelform_mixins import HealthEconomicsModelFormMixin
 
 
-class HealthEconomicsAssetsForm(CrfModelFormMixin, forms.ModelForm):
+class HealthEconomicsAssetsForm(
+    HealthEconomicsModelFormMixin, CrfModelFormMixin, forms.ModelForm
+):
     form_validator_cls = HealthEconomicsAssetsFormValidator
 
     class Meta:

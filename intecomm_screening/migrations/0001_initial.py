@@ -1027,7 +1027,7 @@ class Migration(migrations.Migration):
                 ("on_site", edc_sites.models.CurrentSiteManager()),
                 (
                     "objects",
-                    edc_screening.model_mixins.screening_fields_model_mixin.ScreeningManager(),
+                    edc_screening.model_mixins.screening_model_mixin.ScreeningManager(),
                 ),
             ],
         ),

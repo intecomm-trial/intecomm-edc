@@ -1,4 +1,3 @@
-from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.html import format_html
@@ -14,6 +13,7 @@ from edc_vitals.model_mixins import BloodPressureModelMixin
 from intecomm_eligibility import ScreeningEligibility
 
 from .patient_log import PatientLog
+from .proxy_models import Site
 
 
 class SubjectScreeningError(Exception):
@@ -34,6 +34,8 @@ class SubjectScreening(
     identifier_cls = ScreeningIdentifier
     eligibility_cls = ScreeningEligibility
 
+    # declare `site` explicitly as editable by user
+    # (instead of using modelmixin)
     site = models.ForeignKey(Site, on_delete=models.PROTECT, null=True, related_name="+")
 
     screening_identifier = models.CharField(

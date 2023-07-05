@@ -2,11 +2,13 @@ from edc_constants.constants import (
     CLINICAL_WITHDRAWAL,
     DEAD,
     DM,
+    DONT_KNOW,
     FREE_OF_CHARGE,
     HIV,
     HTN,
     INSURANCE,
     NCD,
+    NONE,
     NOT_APPLICABLE,
     OTHER,
     OWN_CASH,
@@ -15,6 +17,7 @@ from edc_constants.constants import (
     RELATIVE,
 )
 from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS, INSULIN
+from edc_he.constants import CHF, NHIF
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_offstudy.constants import COMPLETED_FOLLOWUP, CONSENT_WITHDRAWAL
 from edc_transfer.constants import TRANSFERRED
@@ -215,5 +218,57 @@ list_data = {
         ("dont_want_to_join", "I don't want to take part"),
         ("need_to_think_about_it", "I haven't had a chance to think about it"),
         (OTHER, "Other, please specify"),
+    ],
+    "intecomm_lists.nonadherencereasons": [
+        ("forgot_to_take", "I simply forgot to take my medication"),
+        ("travelled", "I travelled and forgot my medication"),
+        ("feel_better", "I felt better and stopped taking my medication"),
+        (
+            "insufficient_supply",
+            "I did not get enough medication from hospital/clinic, could not buy more",
+        ),
+        ("feel_ill", "The medications were making me feel sick"),
+        ("too_many_pills", "Too many pills so I stopped / reduced"),
+        (OTHER, "Other, please specify ..."),
+    ],
+    "edc_he.insurancetypes": [
+        ("private", "Private/work-place/voluntary health insurance"),
+        (NHIF, "NHIF (National Health Insurance Fund)"),
+        (CHF, "CHF (Community Health Insurance Fund)"),
+        ("club", "Patient support group / club"),
+        (NONE, "None"),
+        (DONT_KNOW, "Don’t know"),
+        (OTHER, "Other, specify"),
+    ],
+    "edc_he.nationalities": [
+        ("tanzania", "Tanzanian"),
+        ("uganda", "Ugandan"),
+        (NONE, "None of the above"),
+    ],
+    "edc_he.religions": [
+        ("muslim", "Muslim"),
+        ("seventh-day-adventist", "Seventh day Adventist"),
+        ("assemblies-of-god", "Tanzanian Assemblies of God"),
+        ("catholic", "Catholic"),
+        ("lutheran", "Lutheran"),
+        ("moravian", "Moravian"),
+        ("pentecostal", "Pentecostal"),
+        ("african-inland-church", "African Inland Church"),
+        (NONE, "No religion"),
+        (OTHER, "Other, specify"),
+    ],
+    "edc_he.ethnicities": [
+        ("msukuma", "Msukuma"),
+        ("mjita", "Mjita"),
+        ("mzinza", "Mzinza"),
+        ("myiramba", "Myiramba"),
+        ("mkara-mkerewe", "Mkara/Mkerewe"),
+        ("mhaya", "Mhaya"),
+        ("mjaluo", "Mjaluo"),
+        ("mkuria-mshashi", "Mkuria/Mshashi"),
+        ("mchaga", "Mchaga"),
+        ("mhindi", "Mhindi"),
+        ("mwarabu", "Mwarabu"),
+        (OTHER, "Other, specify"),
     ],
 }

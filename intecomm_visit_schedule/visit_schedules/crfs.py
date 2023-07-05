@@ -1,11 +1,8 @@
 from edc_visit_schedule import Crf, FormsCollection
 
-# TODO: whats the difference between bloodresultsglu and glucose??
-
 crfs_prn = FormsCollection(
     Crf(show_order=10, model="intecomm_subject.bloodresultsfbc"),
     Crf(show_order=100, model="intecomm_subject.nextappointment"),
-    Crf(show_order=150, model="intecomm_subject.glucose"),
     Crf(show_order=220, model="intecomm_subject.bloodresultsglu"),
     Crf(show_order=230, model="intecomm_subject.bloodresultshba1c"),
     Crf(show_order=240, model="intecomm_subject.bloodresultsrft"),

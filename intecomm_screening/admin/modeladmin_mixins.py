@@ -5,27 +5,29 @@ from django_audit_fields import ModelAdminAuditFieldsMixin
 from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_model_admin.mixins import (
+    ModelAdminBypassDefaultFormClsMixin,
     ModelAdminFormAutoNumberMixin,
     ModelAdminFormInstructionsMixin,
-    ModelAdminGetFormClsMixin,
     ModelAdminInstitutionMixin,
     ModelAdminNextUrlRedirectMixin,
     ModelAdminRedirectAllToChangelistMixin,
+    ModelAdminRedirectOnDeleteMixin,
     TemplatesModelAdminMixin,
 )
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_notification import NotificationModelAdminMixin
 
 
 class BaseModelAdminMixin(
     TemplatesModelAdminMixin,
+    ModelAdminRedirectOnDeleteMixin,
     ModelAdminFormInstructionsMixin,
     ModelAdminFormAutoNumberMixin,
     ModelAdminRevisionMixin,
     ModelAdminInstitutionMixin,
     ModelAdminNextUrlRedirectMixin,
+    NotificationModelAdminMixin,
     ModelAdminAuditFieldsMixin,
-    SiteModelAdminMixin,
-    ModelAdminGetFormClsMixin,
+    ModelAdminBypassDefaultFormClsMixin,
     SimpleHistoryAdmin,
 ):
     show_cancel = True
@@ -35,7 +37,8 @@ class BaseModelAdminMixin(
 
 class RedirectAllToPatientLogModelAdminMixin(ModelAdminRedirectAllToChangelistMixin):
     changelist_url = "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
-    search_field_name = "screening_identifier"
+    change_search_field_name = "screening_identifier"
+    add_search_field_name = "screening_identifier"
 
 
 class ChangeListTopBarModelAdminMixin:

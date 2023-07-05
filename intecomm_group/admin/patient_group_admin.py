@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_constants.constants import COMPLETE, NEW, NOT_APPLICABLE, UUID_PATTERN
+from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 from intecomm_form_validators import RECRUITING
 from intecomm_rando.constants import COMM_INTERVENTION
 
@@ -24,7 +26,9 @@ p = inflect.engine()
 
 
 @admin.register(PatientGroup, site=intecomm_group_admin)
-class PatientGroupAdmin(BaseModelAdminMixin):
+class PatientGroupAdmin(
+    SiteModelAdminMixin, ModelAdminRedirectAllToChangelistMixin, BaseModelAdminMixin
+):
 
     """Modeladmin for patient groups in follow-up or dissolved.
 
@@ -36,6 +40,10 @@ class PatientGroupAdmin(BaseModelAdminMixin):
     change_list_template: str = "intecomm_group/admin/patientgroup_change_list.html"
     show_save_next = False
     show_cancel = True
+
+    changelist_url = "intecomm_group_admin:intecomm_group_patientgroup_changelist"
+    change_search_field_name = "group_identifier"
+    add_search_field_name = "group_identifier"
 
     fieldsets = (
         (

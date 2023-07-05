@@ -6,9 +6,10 @@ from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_action_item import ActionItemModelAdminMixin, action_fieldset_tuple
 from edc_constants.constants import OTHER
-from edc_data_manager.modeladmin_mixins import DataManagerModelAdminMixin
+from edc_data_manager.modeladmin_mixins import DataManagerSiteModelAdminMixin
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from intecomm_ae.models import DeathReport
 from intecomm_consent.models import SubjectConsent
@@ -20,7 +21,8 @@ from ..models import EndOfStudy, LossToFollowup
 
 @admin.register(EndOfStudy, site=intecomm_prn_admin)
 class EndOfStudyAdmin(
-    DataManagerModelAdminMixin,
+    DataManagerSiteModelAdminMixin,
+    SiteModelAdminMixin,
     ModelAdminSubjectDashboardMixin,
     ActionItemModelAdminMixin,
     SimpleHistoryAdmin,

@@ -8,6 +8,7 @@ from edc_model_admin.mixins import (
     ModelAdminInstitutionMixin,
     TemplatesModelAdminMixin,
 )
+from edc_sites.modeladmin_mixins import SiteModelAdminMixin
 
 from ..admin_site import intecomm_group_admin
 from ..forms import PatientGroupAppointmentForm
@@ -16,6 +17,7 @@ from ..models import PatientGroupAppointment
 
 @admin.register(PatientGroupAppointment, site=intecomm_group_admin)
 class PatientGroupAppointmentAdmin(
+    SiteModelAdminMixin,
     TemplatesModelAdminMixin,
     ModelAdminFormInstructionsMixin,
     ModelAdminFormAutoNumberMixin,
@@ -24,6 +26,8 @@ class PatientGroupAppointmentAdmin(
     SimpleHistoryAdmin,
 ):
     form = PatientGroupAppointmentForm
+
+    limit_fk_field_to_current_site = ["patient_group", "community_care_location"]
 
     show_object_tools = True
     change_list_template: str = "intecomm_group/admin/patientgroupappointment_change_list.html"

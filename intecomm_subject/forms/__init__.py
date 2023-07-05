@@ -11,6 +11,7 @@ from .cd4_result_form import Cd4ResultForm
 from .clinical_review_baseline_form import ClinicalReviewBaselineForm
 from .clinical_review_form import ClinicalReviewForm
 from .complications_baseline_form import ComplicationsBaselineForm
+from .complications_followup_form import ComplicationsFollowupForm
 from .concomitant_medication_form import ConcomitantMedicationForm
 from .dm_initial_review_form import DmInitialReviewForm
 from .dm_medication_adherence_form import DmMedicationAdherenceForm

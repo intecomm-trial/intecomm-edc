@@ -29,9 +29,9 @@ from ..models import SubjectConsent
 
 @admin.register(SubjectConsent, site=intecomm_consent_admin)
 class SubjectConsentAdmin(
+    SiteModelAdminMixin,
     RedirectAllToPatientLogModelAdminMixin,
     PiiNamesModelAdminMixin,
-    SiteModelAdminMixin,
     ConsentModelAdminMixin,
     ModelAdminSubjectDashboardMixin,
     SimpleHistoryAdmin,

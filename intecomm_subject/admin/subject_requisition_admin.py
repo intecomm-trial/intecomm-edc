@@ -12,13 +12,14 @@ from edc_lab.admin import (
 )
 
 from ..admin_site import intecomm_subject_admin
+from ..forms import SubjectRequisitionForm
 from ..models import SubjectRequisition
 from .modeladmin_mixins import CrfModelAdmin
 
 
 @admin.register(SubjectRequisition, site=intecomm_subject_admin)
 class SubjectRequisitionAdmin(RequisitionAdminMixin, CrfModelAdmin):
-    # form = SubjectRequisitionForm
+    form = SubjectRequisitionForm
 
     fieldsets = (
         (None, {"fields": ("subject_visit", "requisition_datetime", "panel")}),

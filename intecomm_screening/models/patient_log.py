@@ -100,10 +100,10 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
 
     site = models.ForeignKey(
         Site,
-        verbose_name="Health center",
+        verbose_name="Which site is this?",
         on_delete=models.PROTECT,
         blank=False,
-        related_name="+",
+        help_text="This question is asked to confirm you are logged in to the correct site.",
     )
 
     hospital_identifier = EncryptedCharField(
@@ -219,12 +219,13 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
 
     printed = models.BooleanField(default=False)
 
-    on_site = CurrentSiteManager()
     objects = PatientLogManager()
+    on_site = CurrentSiteManager()
     history = HistoricalRecords()
 
     def __str__(self):
         remove_patient_names = False
+        g = "G" if self.group_identifier else ""
         for country in get_remove_patient_names_from_countries():
             if self.site and self.site.id in [s.site_id for s in all_sites.get(country)]:
                 remove_patient_names = True
@@ -232,11 +233,11 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
         if remove_patient_names or re.match(UUID_PATTERN, str(self.legal_name)):
             return format_html(
                 f"{self.filing_identifier} {self.initials} "
-                f"{self.age_in_years}{self.gender}"
+                f"{self.age_in_years}{self.gender} ({self.site.id}){g}"
             )
         return format_html(
             f"{self.legal_name.upper()}-{self.contact_number[-4:]} {self.initials} "
-            f"{self.age_in_years}{self.gender}"
+            f"{self.age_in_years}{self.gender} ({self.site.id}){g}"
         )
 
     def save(self, *args, **kwargs):
@@ -265,6 +266,6 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     def patient_group(self):
         return self.patientgroup_set.all().first()
 
-    class Meta(SiteModelMixin.Meta, BaseUuidModel.Meta):
+    class Meta(BaseUuidModel.Meta):
         verbose_name = "Patient Log"
         verbose_name_plural = "Patient Log"
