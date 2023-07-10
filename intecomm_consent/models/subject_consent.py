@@ -137,8 +137,7 @@ class SubjectConsent(
                 "screening_identifier",
             ),
             (
-                "familiar_name",
-                "dob",
+                "legal_name",
                 "initials",
                 "version",
             ),

@@ -1,6 +1,20 @@
 Changes
 =======
 
+0.1.40
+------
+- remove unique constraint on legal_name, replace with legal_name + initials
+- AeFollowup inspect arm when getting next action
+- use SiteModelMixin, SiteModelAdminMixin consistently
+- use BaseUuidModel.Meta consistently
+- inspect arm on redirects to listboards
+- offschedule next action set to EndOfStudy action
+- remove DataManager special perms mixin
+- refactor navigation between changelists and forms
+- update visit schedule to include gap days
+- add hiv_test, dm_test, htn_test to reference config
+- bump edc 0.5.4
+
 0.1.39
 ------
 - default model manager changed from `on_site` to `objects`
