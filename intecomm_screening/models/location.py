@@ -8,6 +8,6 @@ class Location(SiteModelMixin, ListModelMixin):
     history = HistoricalRecords()
     objects = ListModelManager()
 
-    class Meta:
+    class Meta(ListModelMixin.Meta):
         verbose_name = "Location"
         verbose_name_plural = "Locations"

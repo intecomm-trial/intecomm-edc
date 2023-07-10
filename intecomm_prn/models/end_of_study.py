@@ -107,6 +107,6 @@ class EndOfStudy(SiteModelMixin, ActionModelMixin, OffstudyModelMixin, BaseUuidM
         null=True,
     )
 
-    class Meta(OffstudyModelMixin.Meta):
+    class Meta(OffstudyModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "End of Study"
         verbose_name_plural = "End of Study"

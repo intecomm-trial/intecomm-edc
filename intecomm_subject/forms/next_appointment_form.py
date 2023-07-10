@@ -3,12 +3,10 @@ from zoneinfo import ZoneInfo
 
 from django import forms
 from django.conf import settings
-from edc_appointment.utils import (
-    AppointmentDateWindowPeriodGapError,
-    get_appointment_by_datetime,
-)
+from edc_appointment.utils import get_appointment_by_datetime
 from edc_crf.modelform_mixins import CrfModelFormMixin
 from edc_utils import convert_php_dateformat
+from edc_visit_schedule.schedule.window import ScheduledVisitWindowError
 from intecomm_form_validators.subject import NextAppointmentFormValidator
 
 from ..models import NextAppointment
@@ -31,8 +29,9 @@ class NextAppointmentForm(CrfModelFormMixin, forms.ModelForm):
                     subject_identifier=subject_visit.subject_identifier,
                     visit_schedule_name=subject_visit.visit_schedule.name,
                     schedule_name=subject_visit.schedule.name,
+                    raise_if_in_gap=False,
                 )
-            except AppointmentDateWindowPeriodGapError as e:
+            except ScheduledVisitWindowError as e:
                 raise forms.ValidationError({"appt_date": str(e)})
             if not appointment:
                 raise forms.ValidationError(
@@ -64,9 +63,9 @@ class NextAppointmentForm(CrfModelFormMixin, forms.ModelForm):
             appt_date.year,
             appt_date.month,
             appt_date.day,
-            0,
-            0,
-            0,
+            23,
+            59,
+            59,
             tzinfo=ZoneInfo("UTC"),
         )
 

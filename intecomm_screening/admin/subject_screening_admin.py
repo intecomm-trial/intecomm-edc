@@ -12,7 +12,7 @@ from edc_constants.choices import GENDER
 from edc_constants.constants import UUID_PATTERN
 from edc_model_admin.mixins import ModelAdminHideDeleteButtonOnCondition
 from edc_screening.utils import format_reasons_ineligible
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_sites.admin import SiteModelAdminMixin
 
 from intecomm_sites import all_sites
 

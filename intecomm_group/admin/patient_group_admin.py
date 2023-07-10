@@ -7,7 +7,7 @@ from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_constants.constants import COMPLETE, NEW, NOT_APPLICABLE, UUID_PATTERN
 from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_sites.admin import SiteModelAdminMixin
 from intecomm_form_validators import RECRUITING
 from intecomm_rando.constants import COMM_INTERVENTION
 

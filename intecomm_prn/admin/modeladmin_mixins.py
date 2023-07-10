@@ -3,15 +3,15 @@ from typing import Tuple
 from django.utils.html import format_html
 from django_audit_fields import audit_fieldset_tuple
 from edc_action_item import ActionItemModelAdminMixin, action_fieldset_tuple
-from edc_data_manager.modeladmin_mixins import DataManagerSiteModelAdminMixin
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
+from edc_sites.admin import SiteModelAdminMixin
 
 from ..models import EndOfStudy
 
 
 class OffScheduleAdmin(
-    DataManagerSiteModelAdminMixin,
+    SiteModelAdminMixin,
     ActionItemModelAdminMixin,
     ModelAdminSubjectDashboardMixin,
     SimpleHistoryAdmin,
@@ -42,7 +42,9 @@ class OffScheduleAdmin(
 
 
 class OnScheduleModelAdmin(
-    DataManagerSiteModelAdminMixin, ModelAdminSubjectDashboardMixin, SimpleHistoryAdmin
+    SiteModelAdminMixin,
+    ModelAdminSubjectDashboardMixin,
+    SimpleHistoryAdmin,
 ):
     instructions = None
 

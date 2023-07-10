@@ -8,7 +8,6 @@ from edc_protocol_incident.action_items import (
     ProtocolIncidentAction as BaseProtocolIncidentAction,
 )
 from edc_transfer.action_items import SubjectTransferAction as BaseSubjectTransferAction
-from edc_visit_schedule.constants import OFFSCHEDULE_ACTION
 
 from intecomm_subject.constants import MISSED_VISIT_ACTION
 
@@ -17,8 +16,8 @@ from .constants import OFFSCHEDULE_COMM_ACTION, OFFSCHEDULE_INTE_ACTION
 
 class OffscheduleInteAction(ActionWithNotification):
     name = OFFSCHEDULE_INTE_ACTION
-    display_name = "Submit Off-Schedule INTE"
-    notification_display_name = "Off-Schedule INTE"
+    display_name = "Submit Off-Schedule (Facility)"
+    notification_display_name = "Off-Schedule (Facility)"
     parent_action_names = [
         DEATH_REPORT_ACTION,
         LTFU_ACTION,
@@ -28,12 +27,13 @@ class OffscheduleInteAction(ActionWithNotification):
     admin_site_name = "intecomm_prn_admin"
     priority = HIGH_PRIORITY
     singleton = True
+    next_actions = [END_OF_STUDY_ACTION]
 
 
 class OffscheduleCommAction(ActionWithNotification):
     name = OFFSCHEDULE_COMM_ACTION
-    display_name = "Submit Off-Schedule COMM"
-    notification_display_name = "Off-Schedule COMM"
+    display_name = "Submit Off-Schedule (Community)"
+    notification_display_name = "Off-Schedule (Community)"
     parent_action_names = [
         DEATH_REPORT_ACTION,
         LTFU_ACTION,
@@ -43,13 +43,14 @@ class OffscheduleCommAction(ActionWithNotification):
     admin_site_name = "intecomm_prn_admin"
     priority = HIGH_PRIORITY
     singleton = True
+    next_actions = [END_OF_STUDY_ACTION]
 
 
 class EndOfStudyAction(ActionWithNotification):
     name = END_OF_STUDY_ACTION
     display_name = "Submit End of Study Report"
     notification_display_name = "End of Study Report"
-    parent_action_names = [OFFSCHEDULE_ACTION]
+    parent_action_names = [OFFSCHEDULE_INTE_ACTION, OFFSCHEDULE_COMM_ACTION]
     reference_model = "intecomm_prn.endofstudy"
     show_link_to_changelist = True
     admin_site_name = "intecomm_prn_admin"

@@ -19,8 +19,8 @@ from .model_mixins import SearchSlugModelMixin
 
 
 class SubjectReconsent(
-    UniqueSubjectIdentifierModelMixin,
     SiteModelMixin,
+    UniqueSubjectIdentifierModelMixin,
     ReviewFieldsMixin,
     SearchSlugModelMixin,
     ActionModelMixin,
@@ -100,5 +100,5 @@ class SubjectReconsent(
         """Required for UpdatesOrCreatesRegistrationModelMixin."""
         return "subject_identifier"
 
-    class Meta:
+    class Meta(BaseUuidModel.Meta):
         verbose_name = "Subject re-consent"

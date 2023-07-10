@@ -2,7 +2,7 @@ from decimal import Decimal
 from uuid import uuid4
 
 from django.db import IntegrityError
-from django.test import TestCase, tag
+from django.test import TestCase
 from edc_constants.constants import (
     DM,
     FEMALE,
@@ -26,7 +26,6 @@ from intecomm_screening.utils import InvalidScreeningIdentifier
 from ..intecomm_test_case_mixin import IntecommTestCaseMixin
 
 
-@tag("1")
 class TestScreening(IntecommTestCaseMixin, TestCase):
     def test_no_patients_ok(self):
         obj = make_recipe("intecomm_screening.patientgroup")

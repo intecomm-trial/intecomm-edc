@@ -8,7 +8,7 @@ from edc_model_admin.mixins import (
     ModelAdminInstitutionMixin,
     TemplatesModelAdminMixin,
 )
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_sites.admin import SiteModelAdminMixin
 
 from ..admin_site import intecomm_group_admin
 from ..forms import PatientGroupMeetingForm

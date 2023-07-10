@@ -4,7 +4,7 @@ from django_audit_fields import audit_fieldset_tuple
 from edc_crf.admin import CrfStatusModelAdminMixin, crf_status_fieldset_tuple
 from edc_model_admin.dashboard import ModelAdminCrfDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_sites.admin import SiteModelAdminMixin
 
 medication_adherence_description = """
 <H5><B><font color="orange">Interviewer to read</font></B></H5>

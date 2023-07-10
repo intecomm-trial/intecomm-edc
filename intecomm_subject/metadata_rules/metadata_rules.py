@@ -37,42 +37,42 @@ class ClinicalReviewBaselineRuleGroup(CrfRuleGroup):
 
 @register()
 class ClinicalReviewRuleGroup(CrfRuleGroup):
-    hiv_dx = CrfRule(
+    hiv_initial = CrfRule(
         predicate=P("hiv_dx", "eq", YES),
         consequence=REQUIRED,
         alternative=NOT_REQUIRED,
         target_models=["hivinitialreview"],
     )
 
-    dm_dx = CrfRule(
+    dm_initial = CrfRule(
         predicate=P("dm_dx", "eq", YES),
         consequence=REQUIRED,
         alternative=NOT_REQUIRED,
         target_models=["dminitialreview"],
     )
 
-    htn_dx = CrfRule(
+    htn_initial = CrfRule(
         predicate=P("htn_dx", "eq", YES),
         consequence=REQUIRED,
         alternative=NOT_REQUIRED,
         target_models=["htninitialreview"],
     )
 
-    hiv_test = CrfRule(
+    hiv_review = CrfRule(
         predicate=P("hiv_test", "eq", NOT_APPLICABLE),
         consequence=REQUIRED,
         alternative=NOT_REQUIRED,
         target_models=["hivreview"],
     )
 
-    dm_test = CrfRule(
+    dm_review = CrfRule(
         predicate=P("dm_test", "eq", NOT_APPLICABLE),
         consequence=REQUIRED,
         alternative=NOT_REQUIRED,
         target_models=["dmreview"],
     )
 
-    htn_test = CrfRule(
+    htn_review = CrfRule(
         predicate=P("htn_test", "eq", NOT_APPLICABLE),
         consequence=REQUIRED,
         alternative=NOT_REQUIRED,

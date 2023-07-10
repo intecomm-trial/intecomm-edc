@@ -9,9 +9,11 @@ def update_patient_log_identifier(apps, schema_editor):
     historical_cls = apps.get_model("intecomm_screening.historicalsubjectscreening")
     qs = subjectscreening_cls.objects.all()
     for subjectscreening in tqdm(qs, total=qs.count()):
-        historical_cls.objects.filter(
+        for obj in historical_cls.objects.filter(
             screening_identifier=subjectscreening.screening_identifier
-        ).update(patient_log_identifier=subjectscreening.patient_log.patient_log_identifier)
+        ):
+            obj.patient_log_identifier = subjectscreening.patient_log.patient_log_identifier
+            obj.save_base(update_fields="patient_log_identifier")
 
 
 class Migration(migrations.Migration):

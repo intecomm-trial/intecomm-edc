@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_constants.constants import UUID_PATTERN
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_sites.admin import SiteModelAdminMixin
 
 from intecomm_group.exceptions import PatientGroupNotRandomized
 from intecomm_group.utils import get_assignment_description_for_patient_group

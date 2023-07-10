@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django_audit_fields import ModelAdminAuditFieldsMixin
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_sites.admin import SiteModelAdminMixin
 
 from ..forms import PatientCallForm
 from ..models import PatientCall

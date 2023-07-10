@@ -42,8 +42,8 @@ class SubjectConsentManager(SearchSlugManager, models.Manager):
 
 
 class SubjectConsent(
-    ConsentModelMixin,
     SiteModelMixin,
+    ConsentModelMixin,
     UpdatesOrCreatesRegistrationModelMixin,
     NonUniqueSubjectIdentifierModelMixin,
     IdentityFieldsMixin,
@@ -143,30 +143,3 @@ class SubjectConsent(
                 "version",
             ),
         )
-        # constraints = [
-        #     UniqueConstraint(
-        #         "subject_identifier",
-        #         "version",
-        #         name="unique_consent_subject_id_and_version",
-        #         violation_error_message=(
-        #             "A subject with this identifier has already completed this "
-        #             "version of the consent"
-        #         ),
-        #     ),
-        #     UniqueConstraint(
-        #         "subject_identifier",
-        #         "screening_identifier",
-        #         name="unique_consent_subject_id_screening_id",
-        #     ),
-        #     UniqueConstraint(
-        #         "familiar_name",
-        #         "dob",
-        #         "initials",
-        #         "version",
-        #         name="unique_consent_name_dob_initials",
-        #         violation_error_message=(
-        #             "A subject with this 'familiar' name, dob and initials has already "
-        #             "completed this version of the consent"
-        #         ),
-        #     ),
-        # ]

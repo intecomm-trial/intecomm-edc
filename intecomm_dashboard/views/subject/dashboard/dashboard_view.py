@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from edc_subject_dashboard.views import SubjectDashboardView
@@ -35,10 +37,6 @@ class DashboardView(SubjectDashboardView):
                 "intecomm_group_admin:intecomm_group_patientgroup_changelist"
             )
             patient_group_url = f"{patient_group_url}?q={group.name}"
-        patient_log_url = reverse(
-            "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
-        )
-        patient_log_url = f"{patient_log_url}?q={self.patient_log.filing_identifier}"
         context.update(
             subject_listboard_url="screen_group_url",
             group_identifier=group_identifier,
@@ -46,11 +44,27 @@ class DashboardView(SubjectDashboardView):
             patient_group_url=patient_group_url,
             NOT_SCHEDULED_FOR_FACILITY=NOT_SCHEDULED_FOR_FACILITY,
             patient_log=self.patient_log,
-            patient_log_url=patient_log_url,
+            patient_log_url=self.patient_log_url,
             group_subject_dashboards_url=get_group_subject_dashboards_url(self.patient_log),
         )
         return context
 
     @property
     def patient_log(self):
-        return PatientLog.objects.get(subject_identifier=self.subject_identifier)
+        try:
+            return PatientLog.objects.get(subject_identifier=self.subject_identifier)
+        except ObjectDoesNotExist:
+            return None
+
+    @property
+    def patient_log_url(self) -> str:
+        patient_log_url = reverse(
+            "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
+        )
+        return f"{patient_log_url}?q={self.filing_identifier}"
+
+    @property
+    def filing_identifier(self) -> str | None:
+        if self.patient_log:
+            return self.patient_log.filing_identifier
+        return None

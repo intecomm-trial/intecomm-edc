@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 from edc_model_admin.mixins import ModelAdminLimitToSelectedForeignkey
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_sites.admin import SiteModelAdminMixin
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import PatientCallForm
@@ -41,8 +41,10 @@ class PatientCallAdmin(
     change_search_field_name = "patient_log__patient_log_identifier"
     add_search_field_name = "patient_log__patient_log_identifier"
 
+    # SiteModelAdminMixin attr
+    limit_related_to_current_site = ["patient_log"]
+
     # ModelAdminLimitToSelectedForeignkey attrs
-    limit_fk_field_to_current_site = ["patient_log"]
     limit_fk_field_to_selected = [("patient_log", PatientLog)]
 
     fieldsets = (

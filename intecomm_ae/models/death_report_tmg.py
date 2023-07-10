@@ -3,5 +3,5 @@ from edc_model.models import BaseUuidModel
 
 
 class DeathReportTmg(DeathReportTmgModelMixin, BaseUuidModel):
-    class Meta(DeathReportTmgModelMixin.Meta):
+    class Meta(DeathReportTmgModelMixin.Meta, BaseUuidModel.Meta):
         pass

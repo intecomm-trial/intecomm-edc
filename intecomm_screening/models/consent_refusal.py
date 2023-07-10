@@ -61,6 +61,6 @@ class ConsentRefusal(SiteModelMixin, BaseUuidModel):
     def get_search_slug_fields(self):
         return ["screening_identifier"]
 
-    class Meta:
+    class Meta(BaseUuidModel.Meta):
         verbose_name = "Consent Refusal"
         verbose_name_plural = "Consent Refusals"

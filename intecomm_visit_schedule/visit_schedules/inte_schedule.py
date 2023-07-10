@@ -88,14 +88,17 @@ visit00 = Visit(
 )
 visits = [visit00]
 for month in range(1, 12):
+    rlower = relativedelta(days=13)
+    rupper = relativedelta(days=15)
     visits.append(
         Visit(
             code=get_visit_code(month),
             title=f"Followup month {month}",
             timepoint=month,
             rbase=relativedelta(months=month),
-            rlower=relativedelta(days=14),
-            rupper=relativedelta(days=15),
+            rlower=rlower,
+            rupper=rupper,
+            add_window_gap_to_lower=True,
             requisitions=requisitions_d1,
             crfs=crfs_followup,
             # crfs_unscheduled=crfs_followup,

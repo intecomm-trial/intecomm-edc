@@ -24,7 +24,7 @@ class PatientCall(PatientCallModelMixin, SiteModelMixin, BaseUuidModel):
         "intecomm_screening.patientlog",
     ]
 
-    class Meta:
+    class Meta(BaseUuidModel.Meta):
         verbose_name = "Patient Call"
         verbose_name_plural = "Patient Calls"
         ordering = ["report_datetime"]

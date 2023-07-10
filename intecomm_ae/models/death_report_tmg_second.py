@@ -10,9 +10,9 @@ from .death_report_tmg import DeathReportTmg
 class DeathReportTmgSecond(DeathReportTmg):
     action_name = DEATH_REPORT_TMG_SECOND_ACTION
 
-    on_site = DeathReportTmgSecondSiteManager()
-
     objects = DeathReportTmgSecondManager()
+
+    on_site = DeathReportTmgSecondSiteManager()
 
     class Meta:
         proxy = True
