@@ -3,5 +3,5 @@ from edc_model.models import BaseUuidModel
 
 
 class AeTmg(AeTmgModelMixin, BaseUuidModel):
-    class Meta(AeTmgModelMixin.Meta):
+    class Meta(AeTmgModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "AE TMG Report"

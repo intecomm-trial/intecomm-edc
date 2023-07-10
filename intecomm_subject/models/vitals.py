@@ -1,7 +1,7 @@
 from django.db import models
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NO
-from edc_model import models as edc_models
+from edc_model.models import BaseUuidModel
 from edc_vitals.model_mixins import BloodPressureModelMixin
 from edc_vitals.models import (
     HeartRateField,
@@ -19,7 +19,7 @@ from ..model_mixins import CrfModelMixin
 class Vitals(
     BloodPressureModelMixin,
     CrfModelMixin,
-    edc_models.BaseUuidModel,
+    BaseUuidModel,
 ):
     weight = WeightField(null=True, blank=True)
 
@@ -82,6 +82,6 @@ class Vitals(
 
     comments = models.TextField(null=True, blank=True)
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Vitals"
         verbose_name_plural = "Vitals"

@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import PROTECT
-from edc_model import models as edc_models
+from edc_model.models import BaseUuidModel
 
 from intecomm_screening.models import HealthFacility
 
@@ -21,7 +21,7 @@ def visit_code_choices():
     return tuple([(code, code) for code in codes])
 
 
-class NextAppointment(CrfModelMixin, edc_models.BaseUuidModel):
+class NextAppointment(CrfModelMixin, BaseUuidModel):
     health_facility = models.ForeignKey(
         HealthFacility,
         on_delete=PROTECT,
@@ -55,6 +55,6 @@ class NextAppointment(CrfModelMixin, edc_models.BaseUuidModel):
         ),
     )
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Next Appointment"
         verbose_name_plural = "Next Appointments"

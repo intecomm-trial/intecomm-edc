@@ -15,7 +15,7 @@ from edc_consent.modeladmin_mixins import (
 from edc_constants.choices import GENDER
 from edc_model_admin.dashboard import ModelAdminSubjectDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_sites.admin import SiteModelAdminMixin
 
 from intecomm_screening.admin.modeladmin_mixins import (
     RedirectAllToPatientLogModelAdminMixin,

@@ -9,4 +9,5 @@ class PatientLogReportPrintHistory(BaseUuidModel):
     printed_user = models.CharField(max_length=25)
 
     class Meta(BaseUuidModel.Meta):
-        pass
+        verbose_name = "Patient Log Report Print History"
+        verbose_name_plural = "Patient Log Report Print History"

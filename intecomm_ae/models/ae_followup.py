@@ -3,5 +3,5 @@ from edc_model.models.base_uuid_model import BaseUuidModel
 
 
 class AeFollowup(AeFollowupModelMixin, BaseUuidModel):
-    class Meta(AeFollowupModelMixin.Meta):
+    class Meta(AeFollowupModelMixin.Meta, BaseUuidModel.Meta):
         pass

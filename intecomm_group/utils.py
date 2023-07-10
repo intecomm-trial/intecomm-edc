@@ -51,16 +51,6 @@ def verify_patient_group_ratio_raise(
     return ncd, hiv, ratio
 
 
-def get_assignment_description_for_patient_group(group_identifier: str | None) -> str:
-    try:
-        description = get_assignment_description_for_subject(
-            group_identifier, randomizer_name="default", identifier_fld="group_identifier"
-        )
-    except SubjectNotRandomization:
-        raise PatientGroupNotRandomized("Group is not randomized")
-    return description
-
-
 def get_assignment_for_patient_group(group_identifier: str | None) -> str:
     try:
         description = get_assignment_for_subject(
@@ -71,19 +61,31 @@ def get_assignment_for_patient_group(group_identifier: str | None) -> str:
     return description
 
 
-def get_group_subject_dashboards_url(patient_group: PatientGroup) -> str:
+def get_assignment_description_for_patient_group(group_identifier: str | None) -> str:
+    try:
+        description = get_assignment_description_for_subject(
+            group_identifier, randomizer_name="default", identifier_fld="group_identifier"
+        )
+    except SubjectNotRandomization:
+        raise PatientGroupNotRandomized("Group is not randomized")
+    return description
+
+
+def get_group_subject_dashboards_url(patient_group: PatientGroup | None) -> str | None:
     """Returns a url to the listboard of subjects in followup
     for this group.
     """
     url = None
     randomizer = site_randomizers.get("default")
 
-    for obj in randomizer.model_cls().objects.filter(
-        group_identifier=patient_group.group_identifier
-    ):
-        if obj.assignment == COMM_INTERVENTION:
-            url = reverse("intecomm_dashboard:comm_subject_listboard_url")
-        break
-    if not url:
-        url = reverse("intecomm_dashboard:inte_subject_listboard_url")
-    return f"{url}?q={patient_group.group_identifier}"
+    if patient_group:
+        for obj in randomizer.model_cls().objects.filter(
+            group_identifier=patient_group.group_identifier
+        ):
+            if obj.assignment == COMM_INTERVENTION:
+                url = reverse("intecomm_dashboard:comm_subject_listboard_url")
+            break
+        if not url:
+            url = reverse("intecomm_dashboard:inte_subject_listboard_url")
+        return f"{url}?q={patient_group.group_identifier}"
+    return None

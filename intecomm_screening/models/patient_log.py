@@ -269,3 +269,10 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     class Meta(BaseUuidModel.Meta):
         verbose_name = "Patient Log"
         verbose_name_plural = "Patient Log"
+
+        unique_together = (
+            (
+                "legal_name",
+                "initials",
+            ),
+        )

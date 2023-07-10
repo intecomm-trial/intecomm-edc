@@ -4,7 +4,7 @@ from django.apps import apps as django_apps
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_sites.admin import SiteModelAdminMixin
 
 from intecomm_screening.admin.list_filters import LastApptListFilter, NextApptListFilter
 from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin

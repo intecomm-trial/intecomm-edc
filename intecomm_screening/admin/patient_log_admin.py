@@ -13,7 +13,7 @@ from edc_consent.modeladmin_mixins import PiiNamesModelAdminMixin
 from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER
 from edc_constants.constants import UUID_PATTERN
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_sites.admin import SiteModelAdminMixin
 from edc_utils import get_utcnow
 
 from intecomm_sites.sites import all_sites

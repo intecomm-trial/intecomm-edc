@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_sites.admin import SiteModelAdminMixin
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import HealthTalkLogForm

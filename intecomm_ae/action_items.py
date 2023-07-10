@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
@@ -13,8 +17,14 @@ from edc_constants.constants import CLOSED, DEAD, HIGH_PRIORITY, NO, YES
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_notification.utils import get_email_contacts
 from edc_reportable import GRADE3, GRADE4, GRADE5
-from edc_visit_schedule.constants import OFFSCHEDULE_ACTION
 from edc_visit_schedule.utils import get_offschedule_models
+from intecomm_rando.constants import CLINIC_CONTROL, COMM_INTERVENTION
+
+from intecomm_group.utils import get_assignment_for_patient_group
+from intecomm_prn.constants import OFFSCHEDULE_COMM_ACTION, OFFSCHEDULE_INTE_ACTION
+
+if TYPE_CHECKING:
+    from intecomm_prn.models import OffScheduleComm, OffScheduleInte
 
 
 class AeFollowupAction(ActionWithNotification):
@@ -180,16 +190,34 @@ class DeathReportAction(ActionWithNotification):
     dirty_fields = ["cause_of_death"]
 
     def get_next_actions(self):
-        """Adds 1 DEATHReportTMG if not yet created and
-        END_OF_STUDY_ACTION if required.
-        """
         next_actions = []
-        off_schedule_cls = django_apps.get_model("intecomm_prn.endofstudy")
         try:
-            off_schedule_cls.objects.get(subject_identifier=self.subject_identifier)
+            self.off_schedule_cls.objects.get(subject_identifier=self.subject_identifier)
         except ObjectDoesNotExist:
-            next_actions.extend([OFFSCHEDULE_ACTION])
+            if self.assignment == COMM_INTERVENTION:
+                next_actions.extend([OFFSCHEDULE_COMM_ACTION])
+            elif self.assignment == CLINIC_CONTROL:
+                next_actions.extend([OFFSCHEDULE_INTE_ACTION])
         return next_actions
+
+    @property
+    def group_identifier(self) -> str:
+        return (
+            django_apps.get_model("intecomm_screening.patientlog")
+            .objects.get(subject_identifier=self.subject_identifier)
+            .group_identifier
+        )
+
+    @property
+    def assignment(self) -> str:
+        return get_assignment_for_patient_group(self.group_identifier)
+
+    @property
+    def off_schedule_cls(self) -> OffScheduleComm | OffScheduleInte:
+        if self.assignment == COMM_INTERVENTION:
+            return django_apps.get_model("intecomm_prn.offschedulecomm")
+        elif self.assignment == CLINIC_CONTROL:
+            return django_apps.get_model("intecomm_prn.offscheduleinte")
 
 
 site_action_items.register(DeathReportAction)

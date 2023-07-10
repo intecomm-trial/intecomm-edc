@@ -3,7 +3,7 @@ from django.utils.html import format_html
 from edc_adverse_event.modeladmin_mixins import AeInitialModelAdminMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_notification.utils import get_email_contacts
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_sites.admin import SiteModelAdminMixin
 
 from ..admin_site import intecomm_ae_admin
 from ..forms import AeInitialForm

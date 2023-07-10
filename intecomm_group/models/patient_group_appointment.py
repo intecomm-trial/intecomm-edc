@@ -1,6 +1,7 @@
 from django.db import models
 from edc_appointment.constants import NEW_APPT
 from edc_model.models import BaseUuidModel
+from edc_sites.model_mixins import SiteModelMixin
 from edc_utils import get_utcnow
 
 from ..choices import APPT_STATUS
@@ -8,7 +9,7 @@ from .community_care_location import CommunityCareLocation
 from .patient_group import PatientGroup
 
 
-class PatientGroupAppointment(BaseUuidModel):
+class PatientGroupAppointment(SiteModelMixin, BaseUuidModel):
     report_datetime = models.DateTimeField(default=get_utcnow)
 
     patient_group = models.ForeignKey(

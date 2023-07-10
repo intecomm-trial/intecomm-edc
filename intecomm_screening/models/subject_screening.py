@@ -278,6 +278,13 @@ class SubjectScreening(
     def patient_group(self):
         return self.patient_log.patientgroup_set.all().first()
 
-    class Meta:
+    class Meta(BaseUuidModel.Meta):
         verbose_name = "Subject Screening"
         verbose_name_plural = "Subject Screening"
+
+        unique_together = (
+            (
+                "legal_name",
+                "initials",
+            ),
+        )

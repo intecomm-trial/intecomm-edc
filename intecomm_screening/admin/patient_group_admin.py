@@ -11,7 +11,7 @@ from django.utils.html import format_html
 from django.utils.http import urlencode
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_constants.constants import COMPLETE, DM, HIV, HTN, UUID_PATTERN, YES
-from edc_sites.modeladmin_mixins import SiteModelAdminMixin
+from edc_sites.admin import SiteModelAdminMixin
 from edc_utils.round_up import round_up
 from intecomm_form_validators.utils import get_group_size_for_ratio
 
@@ -43,23 +43,27 @@ class PatientGroupAdmin(
     form = PatientGroupForm
 
     show_object_tools = True
+    list_per_page = 5
+
     change_list_template: str = "intecomm_screening/admin/patientgroup_change_list.html"
     change_list_help = "Searches on encrypted data work on exact uppercase matches only"
     change_list_title = PatientGroup._meta.verbose_name_plural
 
-    changelist_top_bar_selected = "patientgroup"
-    changelist_top_bar_add_url = "intecomm_screening_admin:intecomm_screening_patientgroup_add"
-    change_search_field_name = "group_identifier"
-    add_search_field_name = "group_identifier"
-
-    list_per_page = 5
-
-    changelist_url = "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
     post_full_url_on_delete = (
         "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
     )
 
-    limit_m2m_field_to_current_site = ["patients"]
+    # ChangeListTopBarModelAdminMixin
+    changelist_top_bar_selected = "patientgroup"
+    changelist_top_bar_add_url = "intecomm_screening_admin:intecomm_screening_patientgroup_add"
+
+    # RedirectAllToPatientLogModelAdminMixin
+    change_search_field_name = "group_identifier"
+    add_search_field_name = "group_identifier"
+    changelist_url = "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
+
+    # SiteModelAdminMixin
+    limit_related_to_current_site = ["patients"]
 
     fieldsets = (
         (
@@ -69,6 +73,10 @@ class PatientGroupAdmin(
         (
             "Patients",
             {
+                "description": (
+                    "Only showing patients who are reported as stable and willing to screen "
+                    "on the Patient log and not already in another group."
+                ),
                 "fields": (
                     "hiv_patients",
                     "dm_patients",

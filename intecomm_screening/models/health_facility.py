@@ -95,6 +95,6 @@ class HealthFacility(SiteModelMixin, BaseUuidModel):
             days.append(6)
         return days
 
-    class Meta(SiteModelMixin.Meta, BaseUuidModel.Meta):
+    class Meta(BaseUuidModel.Meta):
         verbose_name = "Health Facility"
         verbose_name_plural = "Health Facilities"

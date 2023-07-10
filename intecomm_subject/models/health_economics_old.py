@@ -9,6 +9,8 @@ from intecomm_lists.models import DrugPaySources, TransportChoices
 from ..choices import ACTIVITY_CHOICES, CHILDCARE_CHOICES
 from ..model_mixins import CrfModelMixin
 
+# Not used
+
 
 class HealthEconomics(CrfModelMixin, BaseUuidModel):
     occupation = models.CharField(

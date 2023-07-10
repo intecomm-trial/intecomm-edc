@@ -1,3 +1,4 @@
+from .autocomplete_admin import SiteAdmin
 from .consent_refusal_admin import ConsentRefusalAdmin
 from .health_facility_admin import HealthFacilityAdmin
 from .health_talk_log_admin import HealthTalkLogAdmin
@@ -8,5 +9,4 @@ from .patient_group_admin import PatientGroupAdmin
 from .patient_group_rando_admin import PatientGroupRandoAdmin
 from .patient_log_admin import PatientLogAdmin
 from .patient_log_report_print_history_admin import PatientLogReportPrintHistoryAdmin
-from .site_admin import SiteAdmin
 from .subject_screening_admin import SubjectScreeningAdmin

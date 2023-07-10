@@ -3,5 +3,5 @@ from edc_model.models import BaseUuidModel
 
 
 class AeSusar(AeSusarModelMixin, BaseUuidModel):
-    class Meta(AeSusarModelMixin.Meta):
+    class Meta(AeSusarModelMixin.Meta, BaseUuidModel.Meta):
         pass

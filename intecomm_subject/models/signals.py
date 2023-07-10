@@ -41,7 +41,7 @@ def update_appointments(instance):
                     tzinfo=ZoneInfo(settings.TIME_ZONE),
                 )
             )
-            appointment.save()
+            appointment.save(update_fields=["appt_datetime"])
             break
         else:
             if appointment.appt_status != NEW_APPT:
@@ -49,7 +49,7 @@ def update_appointments(instance):
                 continue
             appointment.appt_status = IN_PROGRESS_APPT
             appointment.appt_timing = MISSED_APPT
-            appointment.save()
+            appointment.save(update_fields=["appt_status", "appt_timing"])
 
             subject_visit = SubjectVisit.objects.get(appointment=appointment)
             subject_visit.report_datetime = appointment.appt_datetime
@@ -67,7 +67,7 @@ def update_appointments(instance):
             subject_visit_missed.comment = "[auto-completed by EDC]"
             subject_visit_missed.save()
             appointment.appt_status = COMPLETE_APPT
-            appointment.save()
+            appointment.save(update_fields=["appt_status"])
         appointment = appointment.next
 
 
