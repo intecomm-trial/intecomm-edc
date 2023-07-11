@@ -1,21 +1,7 @@
 from edc_visit_schedule import Schedule
 
 from ..constants import COMM_SCHEDULE
-from .visits import (
-    visit00,
-    visit01,
-    visit02,
-    visit03,
-    visit04,
-    visit05,
-    visit06,
-    visit07,
-    visit08,
-    visit09,
-    visit10,
-    visit11,
-    visit12,
-)
+from .visits import get_followup_visit, visit00, visit12
 
 comm_schedule = Schedule(
     name=COMM_SCHEDULE,
@@ -26,20 +12,10 @@ comm_schedule = Schedule(
     appointment_model="edc_appointment.appointment",
 )
 
+visits = [visit00]
+for month in range(1, 12):
+    visits.append(get_followup_visit(month))
+visits.append(visit12)
 
-for visit in [
-    visit00,
-    visit01,
-    visit02,
-    visit03,
-    visit04,
-    visit05,
-    visit06,
-    visit07,
-    visit08,
-    visit09,
-    visit10,
-    visit11,
-    visit12,
-]:
+for visit in visits:
     comm_schedule.add_visit(visit=visit)
