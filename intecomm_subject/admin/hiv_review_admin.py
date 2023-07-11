@@ -18,14 +18,20 @@ class HivReviewAdmin(CrfModelAdmin):
         care_delivery_fieldset_tuple,
         (
             "Anit-retroviral therapy (ART)",
-            {"fields": ("arv_initiated", "arv_initiation_actual_date")},
+            {
+                "fields": (
+                    "rx_init",
+                    "rx_init_date",
+                    "rx_init_ago",
+                )
+            },
         ),
         crf_status_fieldset_tuple,
         audit_fieldset_tuple,
     )
 
     radio_fields = {
-        "arv_initiated": admin.VERTICAL,
+        "rx_init": admin.VERTICAL,
         "care_delivery": admin.VERTICAL,
         "crf_status": admin.VERTICAL,
         "dx": admin.VERTICAL,

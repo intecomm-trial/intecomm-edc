@@ -1,6 +1,14 @@
 Changes
 =======
 
+0.1.41
+------
+- use rx_init factory on model HivReview to match those used on
+  HivInitialReview
+- remove redundant BP measures from HtnReview, see Vitals
+- set missing changelist template on PatientCallAdmin
+- bump edc to 0.5.5
+
 0.1.40
 ------
 - remove unique constraint on legal_name, replace with legal_name + initials

@@ -31,6 +31,7 @@ class PatientCallAdmin(
     list_per_page = 5
 
     # TemplatesModelAdminMixin attr
+    change_list_template: str = "intecomm_screening/admin/patientcall_change_list.html"
     change_list_title = PatientCall._meta.verbose_name
 
     # ChangeListTopBarModelAdminMixin attrs
