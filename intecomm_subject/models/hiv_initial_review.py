@@ -101,7 +101,7 @@ class HivInitialReview(
 
     @property
     def best_art_initiation_date(self):
-        return self.arv_initiation_actual_date or self.arv_initiation_estimated_date
+        return self.rx_init_date or self.rx_init_calculated_date
 
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "HIV Initial Review"

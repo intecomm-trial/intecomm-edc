@@ -15,15 +15,6 @@ class HtnReviewAdmin(CrfModelAdmin):
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
         ("Care", {"fields": ("managed_by", "care_delivery", "care_delivery_other")}),
-        (
-            "Blood Pressure Measurement",
-            {
-                "fields": (
-                    "sys_blood_pressure",
-                    "dia_blood_pressure",
-                )
-            },
-        ),
         crf_status_fieldset_tuple,
         audit_fieldset_tuple,
     )
