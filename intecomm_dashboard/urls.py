@@ -1,7 +1,7 @@
 from edc_protocol import Protocol
 
 from .patterns import screening_identifier
-from .views import (  # SubjectListboardView,
+from .views import (
     AeListboardView,
     CommSubjectListboardView,
     DeathReportListboardView,
@@ -12,11 +12,6 @@ from .views import (  # SubjectListboardView,
 
 app_name = "intecomm_dashboard"
 
-# urlpatterns = SubjectListboardView.urls(
-#     namespace=app_name,
-#     label="subject_listboard",
-#     identifier_pattern=Protocol().subject_identifier_pattern,
-# )
 urlpatterns = InteSubjectListboardView.urls(
     namespace=app_name,
     label="inte_subject_listboard",

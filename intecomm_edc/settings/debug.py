@@ -6,9 +6,11 @@ from .defaults import *  # noqa
 
 print(f"Settings file {__file__}")
 
+# IF UAT, PATIENT IDENTIFIERS MAY START WITH 999
+EDC_PROTOCOL_NUMBER = 999
 # UG
-# SITE_ID = SiteID(default=101)  # Kasangati
-SITE_ID = SiteID(default=102)  # Kisugu
+SITE_ID = SiteID(default=101)  # Kasangati
+# SITE_ID = SiteID(default=102)  # Kisugu
 # SITE_ID = SiteID(default=103)  # Kiswa
 # SITE_ID = SiteID(default=104)  # Kyazanga
 # SITE_ID = SiteID(default=105)  # Mpigi
