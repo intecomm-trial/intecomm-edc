@@ -10,6 +10,7 @@ class Predicates(PredicateCollection):
 
     @staticmethod
     def household_head_required(visit, **kwargs):
+        """Note: this is a singleton"""
         model_cls = django_apps.get_model("intecomm_subject.healtheconomicshouseholdhead")
         try:
             model_cls.objects.get(subject_visit__subject_identifier=visit.subject_identifier)
@@ -19,17 +20,22 @@ class Predicates(PredicateCollection):
 
     @staticmethod
     def patient_required(visit, **kwargs):
-        model_cls = django_apps.get_model("intecomm_subject.healtheconomicspatient")
+        """Note: this is a singleton"""
+        required = False
+        patient_model_cls = django_apps.get_model("intecomm_subject.healtheconomicspatient")
         hoh_model_cls = django_apps.get_model("intecomm_subject.healtheconomicshouseholdhead")
         try:
-            hoh = hoh_model_cls.objects.get(subject_visit=visit).hoh
+            hoh_obj = hoh_model_cls.objects.get(
+                subject_visit__subject_identifier=visit.subject_identifier
+            )
         except ObjectDoesNotExist:
-            hoh = NO
-        try:
-            model_cls.objects.get(subject_visit__subject_identifier=visit.subject_identifier)
-        except ObjectDoesNotExist:
-            return True if hoh == NO else False
-        return False
+            pass
+        else:
+            if not patient_model_cls.objects.filter(
+                subject_visit__subject_identifier=visit.subject_identifier
+            ).exists():
+                required = hoh_obj.hoh == NO
+        return required
 
     @staticmethod
     def assets_required(visit, **kwargs):

@@ -1,5 +1,6 @@
 from django import forms
 from edc_consent.utils import get_consent_model_cls
+from edc_constants.constants import YES
 from edc_he.constants import CHF, NHIF
 from edc_sites import get_sites_by_country
 from edc_utils import age
@@ -24,7 +25,7 @@ class HealthEconomicsHouseholdHeadForm(CrfModelFormMixin, forms.ModelForm):
     def clean_hoh_gender(self):
         hoh = self.cleaned_data.get("hoh")
         hoh_gender = self.cleaned_data.get("hoh_gender")
-        if hoh and hoh_gender and hoh_gender != self.subject_consent.gender:
+        if hoh and hoh == YES and hoh_gender and hoh_gender != self.subject_consent.gender:
             raise forms.ValidationError(
                 "Mismatch. Subject is the head of household and "
                 f"is {self.subject_consent.get_gender_display().lower()}."
@@ -34,7 +35,7 @@ class HealthEconomicsHouseholdHeadForm(CrfModelFormMixin, forms.ModelForm):
     def clean_hoh_age(self):
         hoh = self.cleaned_data.get("hoh")
         hoh_age = self.cleaned_data.get("hoh_age")
-        if hoh and hoh_age:
+        if hoh and hoh == YES and hoh_age:
             if (
                 hoh_age
                 != age(
