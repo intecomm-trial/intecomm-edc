@@ -1,6 +1,10 @@
 Changes
 =======
 
+0.1.42
+------
+- bump edc to 0.5.6
+
 0.1.41
 ------
 - use rx_init factory on model HivReview to match those used on
