@@ -127,6 +127,7 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
             initials="NA",
             hospital_identifier=uuid4().hex,
             contact_number="1234567890",
+            willing_to_screen=YES,
             screening_refusal_reason=None,
         )
         patient_log.conditions.add(Conditions.objects.get(name=HIV))

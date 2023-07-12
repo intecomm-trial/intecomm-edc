@@ -44,7 +44,7 @@ class DrugRefillHivAdmin(
             "Drug Supply: HIV",
             {
                 "fields": (
-                    "return_in_days",
+                    "rx_days",
                     "clinic_days",
                     "club_days",
                     "purchased_days",
