@@ -2,7 +2,6 @@ from edc_visit_schedule import Crf, FormsCollection
 
 crfs_prn = FormsCollection(
     Crf(show_order=10, model="intecomm_subject.bloodresultsfbc"),
-    Crf(show_order=100, model="intecomm_subject.nextappointment"),
     Crf(show_order=220, model="intecomm_subject.bloodresultsglu"),
     Crf(show_order=230, model="intecomm_subject.bloodresultshba1c"),
     Crf(show_order=240, model="intecomm_subject.bloodresultsrft"),
@@ -38,6 +37,7 @@ crfs_d1 = FormsCollection(
     Crf(show_order=320, model="intecomm_subject.healtheconomicsassets"),
     Crf(show_order=330, model="intecomm_subject.healtheconomicsproperty"),
     Crf(show_order=340, model="intecomm_subject.healtheconomicsincome"),
+    Crf(show_order=400, model="intecomm_subject.nextappointment"),
     name="day1",
 )
 
@@ -66,6 +66,7 @@ crfs_followup = FormsCollection(
     Crf(show_order=320, model="intecomm_subject.healtheconomicsassets", required=False),
     Crf(show_order=330, model="intecomm_subject.healtheconomicsproperty", required=False),
     Crf(show_order=340, model="intecomm_subject.healtheconomicsincome", required=False),
+    Crf(show_order=400, model="intecomm_subject.nextappointment"),
     name="followup",
 )
 
