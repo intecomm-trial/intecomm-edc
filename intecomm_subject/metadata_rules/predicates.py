@@ -39,27 +39,39 @@ class Predicates(PredicateCollection):
 
     @staticmethod
     def assets_required(visit, **kwargs):
+        assets_model_cls = django_apps.get_model("intecomm_subject.healtheconomicsassets")
         model_cls = django_apps.get_model("intecomm_subject.healtheconomicsassets")
         try:
             model_cls.objects.get(subject_visit__subject_identifier=visit.subject_identifier)
         except ObjectDoesNotExist:
-            return True
+            if not assets_model_cls.objects.filter(
+                subject_visit__subject_identifier=visit.subject_identifier
+            ).exists():
+                return True
         return False
 
     @staticmethod
     def property_required(visit, **kwargs):
+        property_model_cls = django_apps.get_model("intecomm_subject.healtheconomicsproperty")
         model_cls = django_apps.get_model("intecomm_subject.healtheconomicsproperty")
         try:
             model_cls.objects.get(subject_visit__subject_identifier=visit.subject_identifier)
         except ObjectDoesNotExist:
-            return True
+            if not property_model_cls.objects.filter(
+                subject_visit__subject_identifier=visit.subject_identifier
+            ).exists():
+                return True
         return False
 
     @staticmethod
     def income_required(visit, **kwargs):
+        income_model_cls = django_apps.get_model("intecomm_subject.healtheconomicsincome")
         model_cls = django_apps.get_model("intecomm_subject.healtheconomicsincome")
         try:
             model_cls.objects.get(subject_visit__subject_identifier=visit.subject_identifier)
         except ObjectDoesNotExist:
-            return True
+            if not income_model_cls.objects.filter(
+                subject_visit__subject_identifier=visit.subject_identifier
+            ).exists():
+                return True
         return False

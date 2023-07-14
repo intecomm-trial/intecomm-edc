@@ -1,4 +1,5 @@
 from edc_constants.constants import (
+    DONT_KNOW,
     ESTIMATED,
     MEASURED,
     NEVER,
@@ -219,6 +220,8 @@ APPT_DATE_INFO_SOURCES = (
     ("estimated", "I estimated the date"),
 )
 
+# HEALTH ECON
+
 UG_RELIGION_CHOICES = (
     ("catholic", "Catholic"),
     ("protestant", "Protestant"),
@@ -274,3 +277,47 @@ TZ_ETHNICITY_CHOICES = (
     ("mwarabu", "Mwarabu"),
     (OTHER, "Other, specify ..."),
 )
+
+EMPLOYMENT_CHOICES = (
+    ("1", "Chief executives, managers, senior officials and legislators"),
+    (
+        "2",
+        "Professionals, technicians and associate professionals  (e.g. science/engineering "
+        "professionals, architects, nurses, doctors, teachers, technicians, construction/"
+        "mining supervisors, etc.)",
+    ),
+    (
+        "4",
+        "Clerks (e.g. clerical support workers, receptionist, secretary, postman/woman etc.)",
+    ),
+    (
+        "5",
+        "Service workers and shop sale workers (e.g. shop sales, cooks, waiter/bartenders, "
+        "hairdressers, caretakers, street food/stall salespersons, childcare workers, "
+        "teachers aides, healthcare/personal care assistants etc.)",
+    ),
+    ("6", "Large-scale agricultural, forestry and fishery workers"),
+    ("7", "Subsistence farmers, fishers, etc."),
+    (
+        "8",
+        "Craft and related workers (e.g. builders, plumbers, painters, mechanics, craftsmen, "
+        "potters, welders, etc.)",
+    ),
+    (
+        "9",
+        "Plant and machine operators and assemblers, drivers (e.g. factory/plant operators, "
+        "miners, truck/bus "
+        "drivers, taxi drivers, train drivers, etc.)",
+    ),
+    (
+        "10",
+        "Elementary occupations (e.g. cleaners, farm pickers/labourers, rickshaw drivers, "
+        "builder assistants, hawkers, shoe shiners, street car cleaners, garbage collectors, "
+        "street sweepers, etc.)",
+    ),
+    (OTHER, "Other, specify ..."),
+    (DONT_KNOW, "Don’t know"),
+    (NOT_APPLICABLE, "NA"),
+)
+
+TZ_EMPLOYMENT_CHOICES = ()

@@ -3,6 +3,7 @@ from edc_he.modeladmin_mixins import HealthEconomicsHouseholdHeadModelAdminMixin
 
 from ...admin_site import intecomm_subject_admin
 from ...choices import (
+    EMPLOYMENT_CHOICES,
     TZ_ETHNICITY_CHOICES,
     TZ_RELIGION_CHOICES,
     UG_ETHNICITY_CHOICES,
@@ -19,6 +20,8 @@ class HealthEconomicsHouseholdHeadAdmin(
 ):
     form = HealthEconomicsHouseholdHeadForm
 
+    limit_related_to_current_country = ["hoh_insurance"]
+
     def formfield_for_choice_field(self, db_field, request, **kwargs):
         if getattr(request, "site", None):
             if db_field.name == "hoh_religion":
@@ -31,4 +34,6 @@ class HealthEconomicsHouseholdHeadAdmin(
                     kwargs["choices"] = UG_ETHNICITY_CHOICES
                 elif request.site.siteprofile.country == "tanzania":
                     kwargs["choices"] = TZ_ETHNICITY_CHOICES
+            if db_field.name == "hoh_employment_type":
+                kwargs["choices"] = EMPLOYMENT_CHOICES
         return super().formfield_for_choice_field(db_field, request, **kwargs)
