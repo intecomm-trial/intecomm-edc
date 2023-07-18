@@ -43,7 +43,7 @@ class OtherBaselineData(CrfModelMixin, BaseUuidModel):
         blank=True,
     )
 
-    smoker_current_duration = DurationYMDField(
+    smoker_duration = DurationYMDField(
         verbose_name="If you are still smoking, how long have you been smoking?",
         null=True,
         blank=True,
@@ -55,7 +55,7 @@ class OtherBaselineData(CrfModelMixin, BaseUuidModel):
         editable=False,
     )
 
-    smoker_current_duration_estimated_date = models.DateField(
+    smoker_duration_estimated_date = models.DateField(
         verbose_name="Estimated date smoker has been smoking since?",
         null=True,
         blank=True,
@@ -152,9 +152,9 @@ class OtherBaselineData(CrfModelMixin, BaseUuidModel):
             self.smoker_quit_estimated_date = edc_model_utils.duration_to_date(
                 self.smoker_quit_ago, self.report_datetime
             )
-        if self.smoker_current_duration:
-            self.smoker_current_duration_estimated_date = edc_model_utils.duration_to_date(
-                self.smoker_current_duration, self.report_datetime
+        if self.smoker_duration:
+            self.smoker_duration_estimated_date = edc_model_utils.duration_to_date(
+                self.smoker_duration, self.report_datetime
             )
         super().save(*args, **kwargs)
 

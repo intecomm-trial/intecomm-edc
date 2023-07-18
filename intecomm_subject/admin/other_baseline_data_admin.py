@@ -16,7 +16,7 @@ class OtherBaselineDataAdmin(CrfModelAdmin):
         (None, {"fields": ("subject_visit", "report_datetime")}),
         (
             "Smoking",
-            {"fields": ("smoking_status", "smoker_quit_ago", "smoker_current_duration")},
+            {"fields": ("smoking_status", "smoker_quit_ago", "smoker_duration")},
         ),
         ("Alcohol", {"fields": ("alcohol", "alcohol_consumption")}),
         (
