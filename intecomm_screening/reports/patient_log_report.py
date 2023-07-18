@@ -2,6 +2,7 @@ import re
 from tempfile import mkdtemp
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from edc_auth.auth_objects import PII
 from edc_constants.constants import UUID_PATTERN
@@ -37,7 +38,7 @@ class PatientLogReport(Report):
         pagesize=A4,
     )
 
-    def __init__(self, patient_log=None, user=None, **kwargs):
+    def __init__(self, patient_log=None, user: User = None, **kwargs):
         super().__init__(**kwargs)
         self.object = patient_log
         if not patient_log.filing_identifier or re.match(

@@ -223,6 +223,13 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     on_site = CurrentSiteManager()
     history = HistoricalRecords()
 
+    def __str_safe__(self):
+        g = "G" if self.group_identifier else ""
+        return (
+            f"{self.patient_log_identifier} {self.age_in_years}{self.gender} "
+            f"({self.site.id}){g}"
+        )
+
     def __str__(self):
         remove_patient_names = False
         g = "G" if self.group_identifier else ""

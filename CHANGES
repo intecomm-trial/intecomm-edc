@@ -1,6 +1,13 @@
 Changes
 =======
 
+0.1.45
+------
+- add management command to print patient log reference PDF
+- shorten long field names
+- bump intecomm-form-validators to 0.1.34
+- bump edc to 0.5.8
+
 0.1.42
 ------
 - bump edc to 0.5.6
