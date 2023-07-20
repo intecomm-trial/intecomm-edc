@@ -5,4 +5,5 @@ from .offschedule_inte_admin import OffScheduleInteAdmin
 from .onschedule_comm_admin import OnScheduleCommAdmin
 from .onschedule_inte_admin import OnScheduleInteAdmin
 from .protocol_incident_admin import ProtocolIncidentAdmin
+from .subject_locator_admin import SubjectLocatorAdmin
 from .subject_transfer_admin import SubjectTransferAdmin

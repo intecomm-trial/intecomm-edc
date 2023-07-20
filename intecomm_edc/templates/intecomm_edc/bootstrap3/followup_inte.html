@@ -39,6 +39,9 @@
       {% if perms.edc_review_dashboard.view_subject_review_listboard %}
         <a id="home_list_group_subject_review_listboard" href="{% url subject_review_listboard_url|default:'subject_review_listboard_url_cannot_be_none' %}" class="list-group-item"><i class="fas fa-calendar fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Subject Review</a>
       {% endif %}
+      {% if perms.edc_locator.view_subjectlocator %}
+        <a id="home_list_group_subject_locator" href="{% url 'intecomm_prn_admin:intecomm_prn_subjectlocator_changelist' %}" class="list-group-item"><i class="fas fa-location-dot fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Subject Locator</a>
+      {% endif %}
       {% if perms.edc_adverse_event.nav_ae_section %}
         <a id="home_list_group_ae" href="{% url 'edc_adverse_event:ae_home_url' %}" class="list-group-item"><i class="fas fa-heartbeat fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Adverse events</a>
       {% endif %}

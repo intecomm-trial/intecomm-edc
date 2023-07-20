@@ -4,20 +4,33 @@ from django.apps import apps as django_apps
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
+from edc_model_admin.dashboard import ModelAdminDashboardMixin
+from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
+from edc_registration.models import RegisteredSubject
 from edc_sites.admin import SiteModelAdminMixin
 
 from intecomm_screening.admin.list_filters import LastApptListFilter, NextApptListFilter
 from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin
 
 from ..admin_site import intecomm_group_admin
+from ..forms import PatientFollowupCallForm
 from ..models import PatientFollowupCall
 
 
 @admin.register(PatientFollowupCall, site=intecomm_group_admin)
-class PatientFollowupCallAdmin(SiteModelAdminMixin, BaseModelAdminMixin):
-    # form = PatientCallForm
+class PatientFollowupCallAdmin(
+    ModelAdminRedirectAllToChangelistMixin,
+    ModelAdminDashboardMixin,
+    SiteModelAdminMixin,
+    BaseModelAdminMixin,
+):
+    form = PatientFollowupCallForm
     show_object_tools = False
     change_list_template: str = "intecomm_group/admin/patientfollowupcall_change_list.html"
+
+    changelist_url = "intecomm_group_admin:intecomm_group_patientfollowupcall_changelist"
+    change_search_field_name = "patient_log__subject_identifier"
+    add_search_field_name = "patient_log"
 
     fieldsets = (
         (
@@ -44,11 +57,11 @@ class PatientFollowupCallAdmin(SiteModelAdminMixin, BaseModelAdminMixin):
                 "fields": (
                     "answered",
                     "respondent",
+                    "call_again",
                     "survival_status",
                     "catchment_area",
                     "last_appt_date",
                     "next_appt_date",
-                    "call_again",
                     "comment",
                 )
             },
@@ -56,14 +69,16 @@ class PatientFollowupCallAdmin(SiteModelAdminMixin, BaseModelAdminMixin):
     )
 
     list_display = (
-        "patient_log",
-        "patient_log_link",
-        "report_datetime",
+        "subject_identifier",
+        "dashboard",
+        "last_call",
         "answered",
-        "survival_status",
-        "catchment_area",
-        "call_again",
         "respondent",
+        "alive",
+        "in_catchment_area",
+        "may_call_again",
+        "last_appt",
+        "next_appt",
     )
 
     list_filter = (
@@ -86,6 +101,7 @@ class PatientFollowupCallAdmin(SiteModelAdminMixin, BaseModelAdminMixin):
     }
 
     search_fields = (
+        "patient_log__subject_identifier",
         "patient_log__id",
         "patient_log__legal_name__exact",
         "patient_log__familiar_name__exact",
@@ -116,3 +132,41 @@ class PatientFollowupCallAdmin(SiteModelAdminMixin, BaseModelAdminMixin):
         if obj and "patient_log" not in readonly:
             readonly = readonly + ("patient_log",)
         return readonly
+
+    @admin.display(
+        description="Subject identifier", ordering="patient_log__subject_identifier"
+    )
+    def subject_identifier(self, obj):
+        return obj.patient_log.subject_identifier
+
+    def get_subject_dashboard_url_kwargs(self, obj) -> dict:
+        return dict(subject_identifier=obj.patient_log.subject_identifier)
+
+    def get_registered_subject(self, obj) -> RegisteredSubject:
+        return RegisteredSubject.objects.get(
+            subject_identifier=obj.patient_log.subject_identifier
+        )
+
+    @admin.display(description="Last call", ordering="report_datetime")
+    def last_call(self, obj):
+        return obj.report_datetime
+
+    @admin.display(description="Alive", ordering="survival_status")
+    def alive(self, obj):
+        return obj.survival_status
+
+    @admin.display(description="Catchment", ordering="catchment_area")
+    def in_catchment_area(self, obj):
+        return obj.catchment_area
+
+    @admin.display(description="Call again?", ordering="call_again")
+    def may_call_again(self, obj):
+        return obj.call_again
+
+    @admin.display(description="Last appt", ordering="last_appt_date")
+    def last_appt(self, obj):
+        return obj.last_appt_date
+
+    @admin.display(description="Next appt", ordering="next_appt_date")
+    def next_appt(self, obj):
+        return obj.next_appt_date

@@ -4,9 +4,7 @@ from edc_constants.constants import YES
 from edc_he.constants import CHF, NHIF
 from edc_sites import get_sites_by_country
 from edc_utils import age
-from intecomm_form_validators.subject.health_economics import (
-    HealthEconomicsHouseholdHeadFormValidator,
-)
+from intecomm_form_validators.subject import HealthEconomicsHouseholdHeadFormValidator
 
 from intecomm_sites import all_sites
 

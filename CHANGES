@@ -1,6 +1,19 @@
 Changes
 =======
 
+0.1.46
+------
+- use ModelAdmin mixin to remove PII/encrypted data if user does not have perms
+- set EDC_LOCATOR_LOCATOR_MODEL to local proxy model of
+  SubjectLocator
+- create local SubjectLocatorAction class so site_prns and locator links
+  point to the changelist of the local proxy model of SubjectLocator
+- link subject locator changelist to patient followup call
+- improve patient followup call changelist
+- add familiar_name to Patient Log Report
+- bump edc to 0.5.9
+
+
 0.1.45
 ------
 - add management command to print patient log reference PDF

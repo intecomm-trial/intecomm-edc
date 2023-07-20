@@ -218,18 +218,29 @@ class PatientLogReport(Report):
                 [Paragraph(self.object.legal_name or " ", self.styles["line_data_largest"])],
             ),
             (
+                [
+                    Paragraph("FAMILIAR NAME:", self.styles["line_data_large"]),
+                    Paragraph(
+                        "Not available in the EDC",
+                        self.styles["row_instructions"],
+                    ),
+                ],
+                [
+                    Paragraph(
+                        self.object.familiar_name or " ", self.styles["line_data_largest"]
+                    )
+                ],
+            ),
+            (
                 [Paragraph("INITIALS (2-3 letters):", self.styles["line_data_large"])],
                 [Paragraph(self.object.initials or " ", self.styles["line_data_largest"])],
             ),
             (
-                [Paragraph("GENDER:", self.styles["line_data_large"])],
-                [Paragraph(self.object.gender or " ", self.styles["line_data_largest"])],
-            ),
-            (
-                [Paragraph("AGE IN YEARS:", self.styles["line_data_large"])],
+                [Paragraph("GENDER/AGE:", self.styles["line_data_large"])],
                 [
                     Paragraph(
-                        str(self.object.age_in_years) or " ", self.styles["line_data_largest"]
+                        f"{self.object.gender or '?'}{self.object.age_in_years or '?'}",
+                        self.styles["line_data_largest"],
                     )
                 ],
             ),
