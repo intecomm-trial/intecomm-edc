@@ -1,6 +1,10 @@
 Changes
 =======
 
+0.1.48
+------
+- add migrations for subject locator Meta verbose name
+
 0.1.47
 ------
 - bump edc to 0.5.10
