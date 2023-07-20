@@ -2,6 +2,7 @@ from edc_action_item.action_with_notification import ActionWithNotification
 from edc_action_item.site_action_items import site_action_items
 from edc_adverse_event.constants import DEATH_REPORT_ACTION
 from edc_constants.constants import HIGH_PRIORITY
+from edc_locator.action_items import SubjectLocatorAction as BaseSubjectLocatorAction
 from edc_ltfu.constants import LTFU_ACTION
 from edc_offstudy.constants import END_OF_STUDY_ACTION
 from edc_protocol_incident.action_items import (
@@ -12,6 +13,13 @@ from edc_transfer.action_items import SubjectTransferAction as BaseSubjectTransf
 from intecomm_subject.constants import MISSED_VISIT_ACTION
 
 from .constants import OFFSCHEDULE_COMM_ACTION, OFFSCHEDULE_INTE_ACTION
+
+site_action_items.unregister(BaseSubjectLocatorAction)
+
+
+class SubjectLocatorAction(BaseSubjectLocatorAction):
+    reference_model = "intecomm_prn.subjectlocator"
+    admin_site_name = "intecomm_prn_admin"
 
 
 class OffscheduleInteAction(ActionWithNotification):
@@ -87,3 +95,4 @@ site_action_items.register(OffscheduleInteAction)
 site_action_items.register(OffscheduleCommAction)
 site_action_items.register(ProtocolIncidentAction)
 site_action_items.register(SubjectTransferAction)
+site_action_items.register(SubjectLocatorAction)

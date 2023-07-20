@@ -5,4 +5,5 @@ from .offschedule_inte import OffScheduleInte
 from .onschedule_comm import OnScheduleComm
 from .onschedule_inte import OnScheduleInte
 from .protocol_incident import ProtocolIncident
+from .proxy import SubjectLocator
 from .subject_transfer import SubjectTransfer
