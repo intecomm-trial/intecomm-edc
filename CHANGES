@@ -1,6 +1,10 @@
 Changes
 =======
 
+0.1.47
+------
+- bump edc to 0.5.10
+
 0.1.46
 ------
 - use ModelAdmin mixin to remove PII/encrypted data if user does not have perms
