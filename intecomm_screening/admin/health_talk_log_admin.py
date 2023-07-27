@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.utils.html import format_html
 from edc_sites.admin import SiteModelAdminMixin
 
+from intecomm_facility.models import HealthFacility
+
 from ..admin_site import intecomm_screening_admin
 from ..forms import HealthTalkLogForm
 from ..models import HealthTalkLog
@@ -15,7 +17,6 @@ class HealthTalkLogAdmin(
     form = HealthTalkLogForm
     show_object_tools = True
     list_per_page = 5
-    autocomplete_fields = ["health_facility"]
 
     # TemplatesModelAdminMixin attrs
     change_list_template: str = "intecomm_screening/admin/healthtalklog_change_list.html"
@@ -84,3 +85,13 @@ class HealthTalkLogAdmin(
                 '<i class="fas fa-location-dot"></i>'
             )
         return None
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "health_facility":
+            try:
+                site_id = request.site.id
+            except AttributeError:
+                pass
+            else:
+                kwargs["health_facility"] = HealthFacility.objects.filter(site_id=site_id)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)

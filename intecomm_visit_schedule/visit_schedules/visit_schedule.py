@@ -1,3 +1,4 @@
+from edc_locator.utils import get_locator_model
 from edc_visit_schedule import VisitSchedule
 
 from ..constants import VISIT_SCHEDULE
@@ -9,7 +10,7 @@ visit_schedule = VisitSchedule(
     verbose_name="INTECOMM",
     offstudy_model="edc_offstudy.subjectoffstudy",
     death_report_model="intecomm_ae.deathreport",
-    locator_model="edc_locator.subjectlocator",
+    locator_model=get_locator_model(),
     previous_visit_schedule=None,
 )
 visit_schedule.add_schedule(comm_schedule)

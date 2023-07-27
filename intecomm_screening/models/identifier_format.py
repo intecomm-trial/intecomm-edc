@@ -1,13 +1,18 @@
 from django.db import models
 from edc_model.models import BaseUuidModel
 
-from intecomm_screening.models import HealthFacility
+from intecomm_facility.models import HealthFacility
 
 
-class IdenfifierFormat(BaseUuidModel):
+# TODO: not used, Remove after migrations are squashed/reset
+class IdentifierFormat(BaseUuidModel):
+    old_health_facility = models.CharField(max_length=100, null=True)
+
     health_facility = models.ForeignKey(
         HealthFacility,
+        verbose_name="Health facility",
         on_delete=models.PROTECT,
+        null=True,
     )
 
     format_name = models.CharField(max_length=50)

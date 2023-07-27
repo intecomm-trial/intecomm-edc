@@ -9,6 +9,7 @@ from .blood_results import (
     BloodResultsRft,
 )
 from .cd4_result import Cd4Result
+from .clinic_note import ClinicalNote
 from .clinical_review import ClinicalReview
 from .clinical_review_baseline import ClinicalReviewBaseline
 from .complications_baseline import ComplicationsBaseline

@@ -2,7 +2,7 @@ from django import forms
 from edc_form_validators import FormValidatorMixin
 from intecomm_form_validators import HealthFacilityFormValidator
 
-from ..models import HealthFacility
+from .models import HealthFacility
 
 
 class HealthFacilityForm(FormValidatorMixin, forms.ModelForm):

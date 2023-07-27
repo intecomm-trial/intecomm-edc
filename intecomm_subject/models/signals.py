@@ -25,12 +25,12 @@ from .subject_visit_missed import SubjectVisitMissed
 def update_appointments(instance):
     appointment = instance.subject_visit.appointment.next
     while appointment:
+        if appointment.appt_status != NEW_APPT:
+            break
         if (
             appointment.visit_code == instance.best_visit_code
             and appointment.visit_code_sequence == 0
         ):
-            if appointment.appt_status != NEW_APPT:
-                break
             appointment.appt_datetime = to_utc(
                 datetime(
                     instance.appt_date.year,
@@ -44,9 +44,6 @@ def update_appointments(instance):
             appointment.save(update_fields=["appt_datetime"])
             break
         else:
-            if appointment.appt_status != NEW_APPT:
-                appointment = appointment.next
-                continue
             appointment.appt_status = IN_PROGRESS_APPT
             appointment.appt_timing = MISSED_APPT
             appointment.save(update_fields=["appt_status", "appt_timing"])

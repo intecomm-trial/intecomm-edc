@@ -1,6 +1,5 @@
 from .autocomplete_admin import SiteAdmin
 from .consent_refusal_admin import ConsentRefusalAdmin
-from .health_facility_admin import HealthFacilityAdmin
 from .health_talk_log_admin import HealthTalkLogAdmin
 from .modeladmin_mixins import BaseModelAdminMixin
 from .patient_call_admin import PatientCallAdmin

@@ -1,6 +1,7 @@
 from django import forms
 from edc_consent.utils import get_consent_model_cls
 from edc_constants.constants import YES
+from edc_crf.modelform_mixins import CrfSingletonModelFormMixin
 from edc_he.constants import CHF, NHIF
 from edc_sites import get_sites_by_country
 from edc_utils import age
@@ -14,10 +15,13 @@ from ..mixins import CrfModelFormMixin
 # TODO: Remove NHIF and CHF from insurance Q for uganda
 
 
-class HealthEconomicsHouseholdHeadForm(CrfModelFormMixin, forms.ModelForm):
+class HealthEconomicsHouseholdHeadForm(
+    CrfSingletonModelFormMixin, CrfModelFormMixin, forms.ModelForm
+):
     form_validator_cls = HealthEconomicsHouseholdHeadFormValidator
 
     def clean(self):
+        self.raise_if_singleton_exists()
         return super().clean()
 
     def clean_hoh_gender(self):

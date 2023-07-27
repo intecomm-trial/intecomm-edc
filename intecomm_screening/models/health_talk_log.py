@@ -4,8 +4,8 @@ from edc_model_fields.fields import OtherCharField
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
 from edc_utils import formatted_date
 
+from intecomm_facility.models import HealthFacility
 from intecomm_lists.models import HealthTalkTypes
-from intecomm_screening.models import HealthFacility
 
 
 class Manager(models.Manager):
@@ -16,10 +16,14 @@ class Manager(models.Manager):
 
 
 class HealthTalkLog(SiteModelMixin, BaseUuidModel):
+    # TODO: Remove field after migrations are squashed/reset
+    old_health_facility = models.CharField(max_length=100, null=True)
+
     health_facility = models.ForeignKey(
         HealthFacility,
         verbose_name="Health facility",
         on_delete=models.PROTECT,
+        null=True,
     )
 
     health_talk_type = models.ForeignKey(

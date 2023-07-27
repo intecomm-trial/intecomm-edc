@@ -25,8 +25,8 @@ import simple_history.models
 from django.conf import settings
 from django.db import migrations, models
 
-import intecomm_screening.models.health_facility
 import intecomm_screening.models.health_talk_log
+import intecomm_screening.models.old_health_facility
 import intecomm_screening.models.patient_call
 import intecomm_screening.models.patient_log
 
@@ -208,7 +208,7 @@ class Migration(migrations.Migration):
             },
             managers=[
                 ("on_site", edc_sites.models.CurrentSiteManager()),
-                ("objects", intecomm_screening.models.health_facility.Manager()),
+                ("objects", intecomm_screening.models.old_health_facility.Manager()),
             ],
         ),
         migrations.CreateModel(
