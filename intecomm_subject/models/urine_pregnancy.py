@@ -37,4 +37,5 @@ class UrinePregnancy(CrfModelMixin, edc_models.BaseUuidModel):
     )
 
     class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
-        verbose_name = "Urine Pregnancy"
+        verbose_name = "Urine pregnancy test"
+        verbose_name_plural = "Urine pregnancy tests"

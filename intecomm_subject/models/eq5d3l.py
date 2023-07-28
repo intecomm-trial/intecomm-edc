@@ -10,4 +10,5 @@ class Eq5d3l(
     BaseUuidModel,
 ):
     class Meta(Eq5d3lModelMixin.Meta, CrfModelMixin.Meta, BaseUuidModel.Meta):
-        pass
+        verbose_name = "EuroQol EQ-5D-3L Instrument"
+        verbose_name_plural = "EuroQol EQ-5D-3L Instrument"

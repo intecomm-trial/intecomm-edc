@@ -11,3 +11,4 @@ class CommSubjectListboardView(BaseSubjectListboardView):
     listboard_fa_icon = "fas fa-users-between-lines fa-2x"
     assignment = COMM_INTERVENTION
     followup_url = "followup_comm_url"
+    listboard_panel_title = "Community group participants"

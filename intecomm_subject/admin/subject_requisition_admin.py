@@ -40,8 +40,8 @@ class SubjectRequisitionAdmin(RequisitionAdminMixin, CrfModelAdmin):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
         path = urlsplit(request.META.get("HTTP_REFERER")).path
         query = urlsplit(request.META.get("HTTP_REFERER")).query
-        if "bloodresult" in path:
-            attrs = parse_qs(query)
+        if "bloodresult" in str(path):
+            attrs = parse_qs(str(query))
             try:
                 subject_visit = attrs.get("subject_visit")[0]
             except (TypeError, IndexError):

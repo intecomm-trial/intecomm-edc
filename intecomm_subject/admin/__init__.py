@@ -2,10 +2,14 @@ from .arv_regimens_admin import ArvRegimensAdmin
 from .blood_results import (
     BloodResultsFbcAdmin,
     BloodResultsGluAdmin,
+    BloodResultsHba1cAdmin,
+    BloodResultsInsAdmin,
     BloodResultsLftAdmin,
+    BloodResultsLipidAdmin,
     BloodResultsRftAdmin,
 )
 from .cd4_result_admin import Cd4ResultAdmin
+from .clinic_note_admin import ClinicalNoteAdmin
 from .clinical_review_admin import ClinicalReviewAdmin
 from .clinical_review_baseline_admin import ClinicalReviewBaselineAdmin
 from .complications_baseline_admin import ComplicationsBaselineAdmin
