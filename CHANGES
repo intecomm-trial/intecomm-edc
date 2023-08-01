@@ -1,6 +1,18 @@
 Changes
 =======
 
+0.1.49
+------
+- refactor next appointment
+    - move some logic to edc-next-appointment and require
+      edc-next-appointment
+    - move HealthFacility and HealthFacilityType to edc-facility
+    - use data migrations to change FKs to healthfacility on models
+      NextAppointment, HealthTalkLog, IdentifierFormat
+- improve patient_followup_call changelist
+- health economics WIP
+- edc == 0.5.14
+
 0.1.48
 ------
 - add migrations for subject locator Meta verbose name
@@ -11,11 +23,13 @@ Changes
 
 0.1.46
 ------
-- use ModelAdmin mixin to remove PII/encrypted data if user does not have perms
+- use ModelAdmin mixin to remove PII/encrypted data if user
+  does not have perms
 - set EDC_LOCATOR_LOCATOR_MODEL to local proxy model of
   SubjectLocator
-- create local SubjectLocatorAction class so site_prns and locator links
-  point to the changelist of the local proxy model of SubjectLocator
+- create local SubjectLocatorAction class so site_prns and locator
+  links point to the changelist of the local proxy model of
+  SubjectLocator
 - link subject locator changelist to patient followup call
 - improve patient followup call changelist
 - add familiar_name to Patient Log Report
@@ -43,7 +57,8 @@ Changes
 
 0.1.40
 ------
-- remove unique constraint on legal_name, replace with legal_name + initials
+- remove unique constraint on legal_name, replace with
+  legal_name + initials
 - AeFollowup inspect arm when getting next action
 - use SiteModelMixin, SiteModelAdminMixin consistently
 - use BaseUuidModel.Meta consistently
@@ -58,8 +73,8 @@ Changes
 0.1.39
 ------
 - default model manager changed from `on_site` to `objects`
-- fix modelform not raising ValidationError for IntegrityErrors for  unique
-  field across sites.
+- fix modelform not raising ValidationError for IntegrityErrors
+  for unique field across sites.
 - fix forms not redirecting to PatientLog changelist on cancel / delete
 - add validation to prevent adding patient_log to a second group
 - fix where FKs not limiting for current site on modelform
@@ -69,16 +84,18 @@ Changes
 0.1.38
 ------
 - add unique constraint on identifier fields in subject screening
-- pass screening identifier to consent refusal form instead of subject screening id
-- pass patient log identifier to subject screening instead of patient log id
+- pass screening identifier to consent refusal form instead of
+  subject screening id
+- pass patient log identifier to subject screening instead of patient
+  log id
 - fix performance issue with PatientLog changelist
-- configure all forms referenced on the PatientLog changelist to redirect back to the
-  changelist for save, delete, cancel
-- hide modelform DELETE button on subject screening when subject consent or consent refused
-  exists
+- configure all forms referenced on the PatientLog changelist to
+  redirect back to the changelist for save, delete, cancel
+- hide modelform DELETE button on subject screening when subject
+  consent or consent refused exists
 - use template tag for PatientLog changelist top bar
-- move subject screening validation to modelform from form_validators when referencing
-  patient log model instance
+- move subject screening validation to modelform from form_validators
+  when referencing patient log model instance
 - bump to edc 0.5.1
 
 0.1.37

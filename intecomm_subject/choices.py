@@ -9,6 +9,7 @@ from edc_constants.constants import (
     YES,
 )
 from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS, THIS_CLINIC
+from edc_facility.constants import HEALTH_FACILITY
 from edc_reportable import (
     MILLIGRAMS_PER_DECILITER,
     MILLIMOLES_PER_LITER,
@@ -16,7 +17,7 @@ from edc_reportable import (
 )
 from edc_visit_tracking.constants import MISSED_VISIT, SCHEDULED, UNSCHEDULED
 
-from .constants import COMMUNITY_CLINIC, GTE_3HRS, HEALTH_FACILITY, NURSE, SITTING
+from .constants import COMMUNITY_CLINIC, GTE_3HRS, NURSE, SITTING
 
 ALCOHOL_CONSUMPTION = (
     ("occasionally", "Occasionally"),

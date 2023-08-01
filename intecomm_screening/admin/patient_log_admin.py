@@ -13,6 +13,7 @@ from edc_consent.modeladmin_mixins import PiiNamesModelAdminMixin
 from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER
 from edc_constants.constants import UUID_PATTERN
+from edc_model_admin.mixins import ModelAdminProtectPiiMixin
 from edc_sites.admin import SiteModelAdminMixin
 
 from intecomm_sites.sites import all_sites
@@ -42,6 +43,7 @@ from .utils import ChangeListTemplateContext
 
 @admin.register(PatientLog, site=intecomm_screening_admin)
 class PatientLogAdmin(
+    ModelAdminProtectPiiMixin,
     SiteModelAdminMixin,
     ChangeListTopBarModelAdminMixin,
     RedirectAllToPatientLogModelAdminMixin,
@@ -56,6 +58,9 @@ class PatientLogAdmin(
     list_per_page = 5
     show_object_tools = True
     show_cancel = True
+
+    extra_pii_attrs = ["first_column"]
+    # extra_pii_attrs = [("first_column", "__str__"), ("screened", "screened_no_links")]
 
     # PiiNamesModelAdminMixin attrs
     name_fields: list[str] = ["legal_name", "familiar_name"]
@@ -190,7 +195,6 @@ class PatientLogAdmin(
 
     list_display = (
         "first_column",
-        "hf_id",
         "dx",
         "group_name",
         "screened",
@@ -269,10 +273,25 @@ class PatientLogAdmin(
 
     @admin.display(description="Patient log", ordering="-modified")
     def first_column(self, obj=None):
+        context = dict(
+            legal_name=obj.legal_name,
+            filing_identifier=obj.filing_identifier,
+            last_4_hospital_identifier=obj.last_4_hospital_identifier,
+            last_4_contact_number=obj.last_4_contact_number,
+            initials=obj.initials,
+            gender=obj.gender.upper(),
+            age_in_years=obj.age_in_years,
+        )
         for country in get_remove_patient_names_from_countries():
             if obj and obj.site.id in [s.site_id for s in self.all_sites.get(country)]:
-                return f"{obj.filing_identifier}-{obj.contact_number[-4:]}"
-        return str(obj)
+                context.pop("legal_name")
+                break
+        return format_html(
+            render_to_string(
+                "intecomm_screening/change_list_patient_log_first_column.html",
+                context=context,
+            )
+        )
 
     @admin.display(description="Date logged", ordering="report_datetime")
     def date_logged(self, obj=None):
@@ -286,14 +305,14 @@ class PatientLogAdmin(
     def last_appt(self, obj=None):
         return obj.last_appt_date
 
-    @admin.display(description="HF ID", ordering="hospital_identifier")
-    def hf_id(self, obj=None):
-        context = dict(hospital_identifier=obj.hospital_identifier)
-        return format_html(
-            render_to_string(
-                "intecomm_screening/change_list_hospital_identifier.html", context=context
-            )
-        )
+    # @admin.display(description="HF ID", ordering="hospital_identifier")
+    # def hf_id(self, obj=None):
+    #     context = dict(hospital_identifier=obj.hospital_identifier)
+    #     return format_html(
+    #         render_to_string(
+    #             "intecomm_screening/change_list_hospital_identifier.html", context=context
+    #         )
+    #     )
 
     @admin.display(description="FILE", ordering="filing_identifier")
     def filing_id(self, obj=None):
@@ -378,6 +397,15 @@ class PatientLogAdmin(
 
     @admin.display(description="Log/Scr/Consent", ordering="screening_datetime")
     def screened(self, obj=None):
+        return format_html(
+            render_to_string(
+                "intecomm_screening/change_list_screen_and_consent.html",
+                context=self.get_screen_and_consent_template_context(obj),
+            )
+        )
+
+    @admin.display(description="Log/Scr/Consent", ordering="screening_datetime")
+    def screened_no_links(self, obj=None):
         return format_html(
             render_to_string(
                 "intecomm_screening/change_list_screen_and_consent.html",

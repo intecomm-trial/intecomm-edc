@@ -15,7 +15,9 @@ class Manager(models.Manager):
         return self.get(name=name)
 
 
-class HealthFacility(SiteModelMixin, BaseUuidModel):
+# TODO: This model is not used. See proxy in intecomm_facility
+#   Remove after migrations are squashed/reset
+class OldHealthFacility(SiteModelMixin, BaseUuidModel):
     report_datetime = models.DateTimeField(default=get_utcnow)
 
     name = models.CharField(max_length=25, unique=True)

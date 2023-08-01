@@ -1,5 +1,4 @@
 from .consent_refusal_form import ConsentRefusalForm
-from .health_facility_form import HealthFacilityForm
 from .health_talk_log_form import HealthTalkLogForm
 from .patient_call_form import PatientCallForm
 from .patient_group_form import PatientGroupForm

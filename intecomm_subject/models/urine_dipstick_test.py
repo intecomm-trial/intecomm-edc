@@ -39,4 +39,5 @@ class UrineDipstickTest(CrfModelMixin, edc_models.BaseUuidModel):
     )
 
     class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
-        verbose_name = "Urine Dipstick Test"
+        verbose_name = "Urine dipstick test"
+        verbose_name_plural = "Urine dipstick tests"

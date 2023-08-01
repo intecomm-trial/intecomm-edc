@@ -12,6 +12,11 @@ from edc_auth.auth_objects import (
 from edc_auth.site_auths import site_auths
 from edc_data_manager.auth_objects import DATA_MANAGER_EXPORT, DATA_MANAGER_ROLE
 from edc_export.auth_objects import DATA_EXPORTER_ROLE
+from edc_facility.auth_objects import (
+    EDC_FACILITY,
+    EDC_FACILITY_SUPER,
+    EDC_FACILITY_VIEW,
+)
 from edc_he.auths import EDC_HEALTH_ECONOMICS_VIEW
 from edc_screening.auth_objects import SCREENING, SCREENING_SUPER, SCREENING_VIEW
 from edc_subject_dashboard.auths import SUBJECT_VIEW
@@ -29,26 +34,22 @@ site_auths.update_group(*screening_codenames, name=SCREENING, no_delete=True)
 site_auths.update_group(*screening_codenames, name=SCREENING_SUPER)
 site_auths.update_group(*screening_codenames, name=SCREENING_VIEW, view_only=True)
 
-# site_auths.remove_model_from_group(AUDITOR, "edc_locator.subjectlocator")
-# site_auths.remove_model_from_group(CLINIC, "edc_locator.subjectlocator")
-# site_auths.remove_model_from_group(CLINIC_SUPER, "edc_locator.subjectlocator")
-# site_auths.remove_model_from_group(SCREENING, "edc_locator.subjectlocator")
-# site_auths.remove_model_from_group(SCREENING_SUPER, "edc_locator.subjectlocator")
-# site_auths.remove_model_from_group(SCREENING_VIEW, "edc_locator.subjectlocator")
-
 # update edc_auth default roles
 site_auths.update_role(
     EDC_HEALTH_ECONOMICS_VIEW,
+    EDC_FACILITY_VIEW,
     name=AUDITOR_ROLE,
 )
 site_auths.update_role(
     UNBLINDING_REQUESTORS,
     EDC_HEALTH_ECONOMICS_VIEW,
+    EDC_FACILITY,
     name=CLINICIAN_ROLE,
 )
 site_auths.update_role(
     UNBLINDING_REQUESTORS,
     EDC_HEALTH_ECONOMICS_VIEW,
+    EDC_FACILITY_SUPER,
     name=CLINICIAN_SUPER_ROLE,
 )
 site_auths.update_role(

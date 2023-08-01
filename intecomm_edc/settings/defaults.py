@@ -124,6 +124,7 @@ INSTALLED_APPS = [
     "edc_model_fields.apps.AppConfig",
     "edc_model_admin.apps.AppConfig",
     "edc_navbar.apps.AppConfig",
+    "edc_next_appointment.apps.AppConfig",
     "edc_notification.apps.AppConfig",
     "edc_offstudy.apps.AppConfig",
     "edc_pharmacy.apps.AppConfig",
@@ -151,6 +152,7 @@ INSTALLED_APPS = [
     "intecomm_consent.apps.AppConfig",
     "intecomm_lists.apps.AppConfig",
     "intecomm_dashboard.apps.AppConfig",
+    "intecomm_facility.apps.AppConfig",
     "intecomm_labs.apps.AppConfig",
     "intecomm_subject.apps.AppConfig",
     "intecomm_visit_schedule.apps.AppConfig",
@@ -328,7 +330,7 @@ EDC_APPOINTMENT_APPT_REASON_CHOICES = (
 
 # edc-export
 EDC_EXPORT_EXPORT_PII_USERS = env.list("EDC_EXPORT_EXPORT_PII_USERS")
-
+EDC_FACILITY_HEALTH_FACILITY_MODEL = "intecomm_facility.healthfacility"
 # edc-pdutils
 EXPORT_FILENAME_TIMESTAMP_FORMAT = "%Y%m%d"
 
@@ -360,7 +362,7 @@ LIST_MODEL_APP_LABEL = env.str("EDC_LIST_MODEL_APP_LABEL")
 SUBJECT_APP_LABEL = env.str("EDC_SUBJECT_APP_LABEL")
 SUBJECT_SCREENING_MODEL = env.str("EDC_SUBJECT_SCREENING_MODEL")
 SUBJECT_CONSENT_MODEL = env.str("EDC_SUBJECT_CONSENT_MODEL")
-EDC_LOCATOR_LOCATOR_MODEL = env.str("EDC_LOCATOR_LOCATOR_MODEL", "intecomm_prn.subjectlocator")
+SUBJECT_LOCATOR_MODEL = "intecomm_prn.subjectlocator"
 SUBJECT_REFUSAL_MODEL = env.str("EDC_REFUSAL_SUBJECT_REFUSAL_MODEL")
 SUBJECT_REQUISITION_MODEL = env.str("EDC_SUBJECT_REQUISITION_MODEL")
 SUBJECT_VISIT_MODEL = env.str("EDC_SUBJECT_VISIT_MODEL")

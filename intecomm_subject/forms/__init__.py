@@ -8,6 +8,7 @@ from .blood_results import (
     BloodResultsRftForm,
 )
 from .cd4_result_form import Cd4ResultForm
+from .clinical_note_form import ClinicalNoteForm
 from .clinical_review_baseline_form import ClinicalReviewBaselineForm
 from .clinical_review_form import ClinicalReviewForm
 from .complications_baseline_form import ComplicationsBaselineForm

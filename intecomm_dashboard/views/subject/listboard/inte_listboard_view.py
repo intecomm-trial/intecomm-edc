@@ -10,3 +10,4 @@ class InteSubjectListboardView(BaseSubjectListboardView):
     search_form_url = "inte_subject_listboard_url"
     assignment = CLINIC_CONTROL
     followup_url = "followup_inte_url"
+    listboard_panel_title = "Facility-based participants"

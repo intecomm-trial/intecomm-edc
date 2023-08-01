@@ -10,4 +10,5 @@ class Icecapa(
     BaseUuidModel,
 ):
     class Meta(IcecapaModelMixin.Meta, CrfModelMixin.Meta, BaseUuidModel.Meta):
-        pass
+        verbose_name = "Overall quality of life (ICECAP-A V2)"
+        verbose_name_plural = "Overall quality of life (ICECAP-A V2)"

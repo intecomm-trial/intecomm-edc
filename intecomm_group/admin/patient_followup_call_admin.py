@@ -1,13 +1,17 @@
 from typing import Tuple
 
 from django.apps import apps as django_apps
+from django.conf import settings
 from django.contrib import admin
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from edc_model_admin.dashboard import ModelAdminDashboardMixin
 from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
 from edc_registration.models import RegisteredSubject
 from edc_sites.admin import SiteModelAdminMixin
+from edc_utils import convert_php_dateformat
+from edc_utils.date import to_local
 
 from intecomm_screening.admin.list_filters import LastApptListFilter, NextApptListFilter
 from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin
@@ -15,6 +19,7 @@ from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin
 from ..admin_site import intecomm_group_admin
 from ..forms import PatientFollowupCallForm
 from ..models import PatientFollowupCall
+from .list_filters import PatientGroupLastCallListFilter
 
 
 @admin.register(PatientFollowupCall, site=intecomm_group_admin)
@@ -27,6 +32,7 @@ class PatientFollowupCallAdmin(
     form = PatientFollowupCallForm
     show_object_tools = False
     change_list_template: str = "intecomm_group/admin/patientfollowupcall_change_list.html"
+    ordering = ["-report_datetime", "patient_log__subject_identifier"]
 
     changelist_url = "intecomm_group_admin:intecomm_group_patientfollowupcall_changelist"
     change_search_field_name = "patient_log__subject_identifier"
@@ -71,18 +77,14 @@ class PatientFollowupCallAdmin(
     list_display = (
         "subject_identifier",
         "dashboard",
-        "last_call",
-        "answered",
-        "respondent",
-        "alive",
-        "in_catchment_area",
-        "may_call_again",
+        "subject_locator",
+        "call_summary",
         "last_appt",
         "next_appt",
     )
 
     list_filter = (
-        "report_datetime",
+        PatientGroupLastCallListFilter,
         LastApptListFilter,
         NextApptListFilter,
         "answered",
@@ -117,6 +119,29 @@ class PatientFollowupCallAdmin(
     def patient_log_model_cls(self):
         return django_apps.get_model("intecomm_screening.patientlog")
 
+    @admin.display(description="Locator", ordering="subject_identifier")
+    def subject_locator(self, obj=None):
+        url = reverse("intecomm_prn_admin:intecomm_prn_subjectlocator_changelist")
+        context = dict(url=f"{url}?q={obj.patient_log.subject_identifier}")
+        return render_to_string(
+            "intecomm_group/patient_followup_call_locator.html", context=context
+        )
+
+    @admin.display(description="Summary", ordering="report_datetime")
+    def call_summary(self, obj=None):
+        date_format = convert_php_dateformat(settings.SHORT_DATE_FORMAT)
+        context = dict(
+            last_call=to_local(obj.report_datetime).date().strftime(date_format),
+            answered=obj.answered,
+            survival_status=obj.survival_status,
+            catchment_area=obj.catchment_area,
+            call_again=obj.call_again,
+            respondent=obj.get_respondent_display(),
+        )
+        return render_to_string(
+            "intecomm_group/patient_followup_call_summary.html", context=context
+        )
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "patient_log":
             if request.GET.get("patient_log"):
@@ -147,10 +172,6 @@ class PatientFollowupCallAdmin(
             subject_identifier=obj.patient_log.subject_identifier
         )
 
-    @admin.display(description="Last call", ordering="report_datetime")
-    def last_call(self, obj):
-        return obj.report_datetime
-
     @admin.display(description="Alive", ordering="survival_status")
     def alive(self, obj):
         return obj.survival_status
@@ -165,8 +186,20 @@ class PatientFollowupCallAdmin(
 
     @admin.display(description="Last appt", ordering="last_appt_date")
     def last_appt(self, obj):
-        return obj.last_appt_date
+        if obj.last_appt_date:
+            date_format = convert_php_dateformat(settings.SHORT_DATE_FORMAT)
+            return format_html(
+                f'<span style="white-space:nowrap;">'
+                f"{obj.last_appt_date.strftime(date_format)}</span>"
+            )
+        return None
 
     @admin.display(description="Next appt", ordering="next_appt_date")
     def next_appt(self, obj):
-        return obj.next_appt_date
+        if obj.next_appt_date:
+            date_format = convert_php_dateformat(settings.SHORT_DATE_FORMAT)
+            return format_html(
+                f'<span style="white-space:nowrap;">'
+                f"{obj.next_appt_date.strftime(date_format)}</span>"
+            )
+        return None

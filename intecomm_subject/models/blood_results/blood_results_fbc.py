@@ -1,5 +1,5 @@
 from django.db import models
-from edc_crf.model_mixins import CrfWithActionModelMixin
+from edc_crf.model_mixins import CrfStatusModelMixin, CrfWithActionModelMixin
 from edc_lab.model_mixins import CrfWithRequisitionModelMixin, requisition_fk_options
 from edc_lab_panel.panels import fbc_panel
 from edc_lab_results import BLOOD_RESULTS_FBC_ACTION
@@ -29,6 +29,7 @@ class BloodResultsFbc(
     MchcModelMixin,
     McvModelMixin,
     BloodResultsModelMixin,
+    CrfStatusModelMixin,
     BaseUuidModel,
 ):
     action_name = BLOOD_RESULTS_FBC_ACTION

@@ -3,4 +3,5 @@
   <tr style="white-space: nowrap"><td>Cell2</td><td><A href="{% url 'intecomm_group_admin:intecomm_group_patientfollowupcall_add' %}?patient_log={{ patient_log.id }}&contact_number={{ subject_cell_alt}}">{{subject_cell_alt|default:''}}</A></td></tr>
   <tr style="white-space: nowrap"><td>Tele1</td><td><A href="{% url 'intecomm_group_admin:intecomm_group_patientfollowupcall_add' %}?patient_log={{ patient_log.id }}&contact_number={{ subject_phone}}">{{subject_phone|default:''}}</A></td></tr>
   <tr style="white-space: nowrap"><td>Tele2</td><td><A href="{% url 'intecomm_group_admin:intecomm_group_patientfollowupcall_add' %}?patient_log={{ patient_log.id }}&contact_number={{ subject_phone_alt}}">{{subject_phone_alt|default:''}}</A></td></tr>
+  <tr style="white-space: nowrap"><td colspan="2"><A class="button" style="white-space: nowrap;background-color: #0b58a2" href="{% url 'intecomm_group_admin:intecomm_group_patientfollowupcall_changelist' %}?q={{ patient_log.subject_identifier }}">Call history</A></td></tr>
 </table>

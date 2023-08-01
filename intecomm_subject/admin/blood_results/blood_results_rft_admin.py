@@ -80,7 +80,7 @@ class BloodResultsRftAdmin(BloodResultsModelAdminMixin, CrfModelAdmin):
                 baseline_egfr_value=baseline_egfr_value,
                 formula_name="ckd-epi",
                 reference_range_collection_name="meta",
-                subject_visit=obj.related_visit,
+                related_visit=obj.related_visit,
                 creatinine_units=obj.creatinine_units,
                 creatinine_value=obj.creatinine_value,
                 assay_datetime=obj.assay_datetime,

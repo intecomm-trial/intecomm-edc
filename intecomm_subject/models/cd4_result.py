@@ -1,6 +1,5 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from edc_crf.model_mixins import CrfModelMixin
 from edc_lab.model_mixins import CrfWithRequisitionModelMixin, requisition_fk_options
 from edc_lab_panel.panels import cd4_panel
 from edc_model.models import BaseUuidModel
@@ -8,6 +7,8 @@ from edc_reportable import (
     CELLS_PER_MILLIMETER_CUBED,
     CELLS_PER_MILLIMETER_CUBED_DISPLAY,
 )
+
+from ..model_mixins import CrfModelMixin
 
 
 class Cd4Result(CrfWithRequisitionModelMixin, CrfModelMixin, BaseUuidModel):

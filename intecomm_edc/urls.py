@@ -53,6 +53,7 @@ urlpatterns = [
     *paths_for_urlpatterns("intecomm_ae"),
     *paths_for_urlpatterns("intecomm_consent"),
     *paths_for_urlpatterns("intecomm_export"),
+    *paths_for_urlpatterns("intecomm_facility"),
     *paths_for_urlpatterns("intecomm_lists"),
     *paths_for_urlpatterns("intecomm_prn"),
     *paths_for_urlpatterns("intecomm_group"),

@@ -1,18 +1,22 @@
 from edc_constants.constants import (
     CLINICAL_WITHDRAWAL,
+    COMMUNITY,
     DEAD,
     DM,
     DONT_KNOW,
+    DWTA,
+    ESTIMATED,
     FREE_OF_CHARGE,
     HIV,
     HTN,
     INSURANCE,
-    NCD,
     NONE,
     NOT_APPLICABLE,
     OTHER,
     OWN_CASH,
+    PATIENT,
     PATIENT_CLUB,
+    PATIENT_REPRESENTATIVE,
     PREGNANCY,
     RELATIVE,
 )
@@ -22,7 +26,8 @@ from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_offstudy.constants import COMPLETED_FOLLOWUP, CONSENT_WITHDRAWAL
 from edc_transfer.constants import TRANSFERRED
 
-from intecomm_subject.constants import INTEGRATED, VIT_B_FOLIC_ACID
+from intecomm_lists.constants import HEALTH_RECORDS
+from intecomm_subject.constants import VIT_B_FOLIC_ACID
 
 list_data = {
     "intecomm_lists.drugpaysources": [
@@ -81,14 +86,6 @@ list_data = {
         (HIV, "HIV"),
         (DM, "Diabetes"),
         (HTN, "Hypertension"),
-    ],
-    "intecomm_lists.healthfacilitytypes": [
-        (DM, "Diabetes Clinic"),
-        (HIV, "HIV Clinic"),
-        (HTN, "Hypertension Clinic"),
-        (INTEGRATED, "Integrated Clinic (HIV/NCD)"),
-        (NCD, "NCD Clinic"),
-        (OTHER, "Other (specify below)"),
     ],
     "intecomm_lists.locationtypes": [
         ("school", "School"),
@@ -231,6 +228,15 @@ list_data = {
         ("too_many_pills", "Too many pills so I stopped / reduced"),
         (OTHER, "Other, please specify ..."),
     ],
+    "intecomm_lists.transferreasons": [
+        ("moved", "Moved away from the area"),
+        ("unhappy_with_care", "Was unhappy with the care they are receiving"),
+        ("need_specialized_treatment", "Needed more specialist treatment"),
+        ("drug_supply", "Due to drug supply "),
+        ("stigma", "Concerned about stigma"),
+        (DWTA, "No reason provided"),
+        (OTHER, "Other reason (specify below)"),
+    ],
     "edc_he.insurancetypes": [
         ("private", "Private/work-place/voluntary health insurance"),
         (NHIF, "NHIF (National Health Insurance Fund)"),
@@ -270,5 +276,16 @@ list_data = {
         ("mhindi", "Mhindi"),
         ("mwarabu", "Mwarabu"),
         (OTHER, "Other, specify"),
+    ],
+    "edc_next_appointment.infosources": [
+        (COMMUNITY, "Community group"),
+        (PATIENT, "Patient"),
+        (
+            PATIENT_REPRESENTATIVE,
+            "Patient representative (e.g., next of kin, relative, guardian)",
+        ),
+        (HEALTH_RECORDS, "Health records"),
+        (ESTIMATED, "Estimated by research staff"),
+        (OTHER, "Other"),
     ],
 }

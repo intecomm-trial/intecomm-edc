@@ -1,11 +1,12 @@
-from edc_auth.get_clinic_codenames import get_clinic_codenames
+from edc_auth.get_app_codenames import get_app_codenames
 
-clinic_codenames = get_clinic_codenames(
+clinic_codenames = get_app_codenames(
     "intecomm_prn",
     "intecomm_group",
     "intecomm_subject",
     "intecomm_consent",
     "intecomm_screening",
+    "intecomm_facility",
     "edc_qol",
     list_app="intecomm_lists",
 )
@@ -20,7 +21,7 @@ clinic_codenames = [
     and codename != "intecomm_group.add_patientgroup"
     and codename != "intecomm_group.change_patientgroup"
 ]
-screening_codenames = get_clinic_codenames(
+screening_codenames = get_app_codenames(
     "intecomm_screening",
     list_app="intecomm_lists",
 )

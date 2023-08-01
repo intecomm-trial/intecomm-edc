@@ -1,0 +1,9 @@
+{% load edc_admin_modify %}
+<table>
+    <tr style="white-space: nowrap"><td>Last call</td><td>{{ last_call }}</td></tr>
+    <tr style="white-space: nowrap"><td>Answered</td><td>{%  yes_no_coloring  answered %}</td></tr>
+    <tr style="white-space: nowrap"><td>Respondent</td><td>{{ respondent }}</td></tr>
+    <tr style="white-space: nowrap"><td>Call again?</td><td>{%  yes_no_coloring  call_again %}</td></tr>
+    <tr style="white-space: nowrap"><td>Alive</td><td>{%  yes_no_coloring  survival_status %}</td></tr>
+    <tr style="white-space: nowrap"><td>Catchment</td><td>{%  yes_no_coloring  catchment_area %}</td></tr>
+</table>

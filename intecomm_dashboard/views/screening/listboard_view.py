@@ -55,6 +55,7 @@ class ListboardView(ScreeningListboardView):
     model_wrapper_cls = SubjectScreeningModelWrapper
     navbar_selected_item = "screen_group"
     listboard_view_filters = ListboardViewFilters()
+    listboard_panel_title = "Screening"
 
     def get_context_data(self, **kwargs) -> dict:
         context_data = super().get_context_data(**kwargs)

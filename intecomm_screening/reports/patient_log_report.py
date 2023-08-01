@@ -4,10 +4,12 @@ from tempfile import mkdtemp
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from edc_auth.auth_objects import PII
+from edc_auth.auth_objects import PII, PII_VIEW
+from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.constants import UUID_PATTERN
 from edc_identifier.utils import convert_to_human_readable
 from edc_pdf_reports import Report
+from edc_sites import get_sites_by_country
 from edc_utils import convert_php_dateformat
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
@@ -215,7 +217,7 @@ class PatientLogReport(Report):
                         self.styles["row_instructions"],
                     ),
                 ],
-                [Paragraph(self.object.legal_name or " ", self.styles["line_data_largest"])],
+                [Paragraph(self.legal_name or " ", self.styles["line_data_largest"])],
             ),
             (
                 [
@@ -225,11 +227,7 @@ class PatientLogReport(Report):
                         self.styles["row_instructions"],
                     ),
                 ],
-                [
-                    Paragraph(
-                        self.object.familiar_name or " ", self.styles["line_data_largest"]
-                    )
-                ],
+                [Paragraph(self.familiar_name or " ", self.styles["line_data_largest"])],
             ),
             (
                 [Paragraph("INITIALS (2-3 letters):", self.styles["line_data_large"])],
@@ -482,3 +480,27 @@ class PatientLogReport(Report):
         )
         story.append(t)
         return story
+
+    @property
+    def familiar_name(self) -> str | None:
+        if self.has_pii_perms():
+            return self.object.familiar_name
+        return ""
+
+    @property
+    def legal_name(self) -> str | None:
+        if self.has_pii_perms():
+            return self.object.legal_name
+        return ""
+
+    def has_pii_perms(self) -> bool:
+        has_pii_perms: bool | None = None
+        user_sites = set([s.id for s in self.user.userprofile.sites.all()])
+        for country in get_remove_patient_names_from_countries():
+            country_sites = set([s.site_id for s in get_sites_by_country(country)])
+            if user_sites & country_sites:
+                has_pii_perms = False
+                break
+        if has_pii_perms is None and self.user.groups.filter(name__in=[PII, PII_VIEW]):
+            has_pii_perms = True
+        return has_pii_perms
