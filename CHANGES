@@ -1,8 +1,8 @@
 Changes
 =======
 
-unreleased
-----------
+0.1.49
+------
 - refactor next appointment
     - move some logic to edc-next-appointment and require
       edc-next-appointment
@@ -11,6 +11,7 @@ unreleased
       NextAppointment, HealthTalkLog, IdentifierFormat
 - improve patient_followup_call changelist
 - health economics WIP
+- edc == 0.5.14
 
 0.1.48
 ------

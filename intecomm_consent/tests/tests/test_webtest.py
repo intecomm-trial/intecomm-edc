@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.test import tag
 from django.urls import reverse
 from django_webtest import WebTest
 from edc_dashboard import url_names
@@ -32,7 +31,6 @@ class TestSubjectDashboard(IntecommTestCaseMixin, WebTest):
         form["password"] = "pass"  # nosec B105
         return form.submit()
 
-    @tag("1")
     def test_dashboard_ok(self):
         subject_screening = self.get_subject_screening()
         self.assertEqual(subject_screening.reasons_ineligible, None)

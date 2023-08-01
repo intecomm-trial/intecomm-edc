@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.test import tag
 from django.urls import reverse
 from django_webtest import WebTest
 from edc_dashboard import url_names
@@ -37,7 +36,6 @@ class TestViews(WebTest):
         form["password"] = "pass"  # nosec B105
         return form.submit()
 
-    @tag("1")
     def test_listboards_ok(self):
         self.login()
 
