@@ -14,7 +14,7 @@ def update_employment_type_and_education_on_he(apps, schema_editor):
 
     print("employment healtheconomicshouseholdhead\n")
     # employment
-    list_model_cls = apps.get_model("edc_he.employment")
+    list_model_cls = apps.get_model("edc_he.employmenttype")
     householdhead_cls = apps.get_model("intecomm_subject.healtheconomicshouseholdhead")
     total = householdhead_cls.objects.all().count()
     for obj in tqdm(householdhead_cls.objects.all(), total=total):
