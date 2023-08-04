@@ -1,6 +1,12 @@
 Changes
 =======
 
+0.1.50
+------
+- change HE householdhead/patient choices to FKs: ethnicity,
+  employment, religion; filter list_data for these FKs by country
+  in admin; migrate data.
+
 0.1.49
 ------
 - refactor next appointment

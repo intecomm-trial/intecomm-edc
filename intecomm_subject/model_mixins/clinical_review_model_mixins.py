@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from datetime import datetime
+
 from django.db import models
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
@@ -6,21 +10,21 @@ from edc_model.validators import date_not_future
 
 
 class ClinicalReviewModelMixin(models.Model):
-    def get_best_hiv_test_date(self):
+    def get_best_hiv_test_date(self) -> datetime:
         return self.hiv_test_date or self.hiv_test_estimated_datetime
 
-    def get_best_dm_test_date(self):
-        self.dm_test_date or self.dm_test_estimated_datetime
+    def get_best_dm_test_date(self) -> datetime:
+        return self.dm_test_date or self.dm_test_estimated_datetime
 
-    def get_best_htn_test_date(self):
-        self.htn_test_date or self.htn_test_estimated_datetime
+    def get_best_htn_test_date(self) -> datetime:
+        return self.htn_test_date or self.htn_test_estimated_datetime
 
     @property
-    def diagnoses(self):
+    def diagnoses(self) -> dict[str]:
         return dict(hiv=self.hiv_dx, htn=self.htn_dx, dm=self.dm_dx)
 
     @property
-    def diagnoses_labels(self):
+    def diagnoses_labels(self) -> dict[str]:
         return dict(hiv="HIV", htn="Hypertension", dm="Diabetes")
 
     class Meta:

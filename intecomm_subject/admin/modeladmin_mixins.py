@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django_audit_fields import audit_fieldset_tuple
-from edc_crf.admin import CrfStatusModelAdminMixin, crf_status_fieldset_tuple
+from edc_crf.admin import crf_status_fieldset_tuple
+from edc_crf.modeladmin_mixins import CrfStatusModelAdminMixin
 from edc_model_admin.dashboard import ModelAdminCrfDashboardMixin
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_model_admin.mixins import ModelAdminProtectPiiMixin
