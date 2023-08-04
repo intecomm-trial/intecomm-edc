@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 def update_employment_type_and_education_on_he(apps, schema_editor):
     ld = {
-        "edc_he.employment": list_data.get("edc_he.employment"),
+        "edc_he.employmenttype": list_data.get("edc_he.employmenttype"),
         "edc_he.education": list_data.get("edc_he.education"),
     }
     PreloadData(list_data=ld, apps=apps)
