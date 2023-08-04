@@ -1,8 +1,6 @@
 from django import forms
 from edc_crf.modelform_mixins import CrfSingletonModelFormMixin
-from intecomm_form_validators.subject.health_economics import (
-    HealthEconomicsPropertyFormValidator,
-)
+from edc_he.form_validators import HealthEconomicsPropertyFormValidator
 
 from ...models import HealthEconomicsProperty
 from ..mixins import CrfModelFormMixin
