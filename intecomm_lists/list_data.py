@@ -248,6 +248,7 @@ list_data = {
         (NONE, "None"),
         (DONT_KNOW, "Don’t know"),
         (OTHER, "Other, specify"),
+        (NOT_APPLICABLE, "Not applicable"),
     ],
     "edc_he.nationalities": [
         ("tanzania", "Tanzanian"),
@@ -266,6 +267,7 @@ list_data = {
         Row(("tz_assemblies_of_god", "Tanzanian Assemblies of God"), extra="tanzania"),
         ("no_religion", "No religion"),
         (OTHER, "Other, specify"),
+        (NOT_APPLICABLE, "Not applicable"),
     ],
     "edc_he.ethnicities": [
         Row(("acholi", "Acholi"), extra="uganda"),
@@ -293,6 +295,7 @@ list_data = {
         Row(("myiramba", "Myiramba"), extra="tanzania"),
         Row(("mzinza", "Mzinza"), extra="tanzania"),
         (OTHER, "Other, specify"),
+        (NOT_APPLICABLE, "Not applicable"),
     ],
     "edc_next_appointment.infosources": [
         (COMMUNITY, "Community group"),
