@@ -6,7 +6,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("edc_he", "0004_historicalemployment_historicaleducation_employment_and_more"),
+        ("edc_he", "0006_historicalhealtheconomicsproperty_and_more"),
         ("intecomm_subject", "0081_healtheconomicshouseholdhead_hoh_education_old_and_more"),
     ]
 
@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 null=True,
                 on_delete=django.db.models.deletion.PROTECT,
-                to="edc_he.employment",
+                to="edc_he.employmenttype",
                 verbose_name="Household head’s type of employment",
             ),
         ),
@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 null=True,
                 on_delete=django.db.models.deletion.PROTECT,
-                to="edc_he.employment",
+                to="edc_he.employmenttype",
                 verbose_name="What is your type of employment?",
             ),
         ),
@@ -73,7 +73,7 @@ class Migration(migrations.Migration):
                 null=True,
                 on_delete=django.db.models.deletion.DO_NOTHING,
                 related_name="+",
-                to="edc_he.employment",
+                to="edc_he.employmenttype",
                 verbose_name="Household head’s type of employment",
             ),
         ),
@@ -99,7 +99,7 @@ class Migration(migrations.Migration):
                 null=True,
                 on_delete=django.db.models.deletion.DO_NOTHING,
                 related_name="+",
-                to="edc_he.employment",
+                to="edc_he.employmenttype",
                 verbose_name="What is your type of employment?",
             ),
         ),

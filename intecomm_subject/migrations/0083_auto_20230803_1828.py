@@ -7,14 +7,14 @@ from tqdm import tqdm
 
 def update_employment_type_and_education_on_he(apps, schema_editor):
     ld = {
-        "edc_he.employment": list_data.get("edc_he.employment"),
+        "edc_he.employmenttype": list_data.get("edc_he.employmenttype"),
         "edc_he.education": list_data.get("edc_he.education"),
     }
     PreloadData(list_data=ld, apps=apps)
 
     print("employment healtheconomicshouseholdhead\n")
     # employment
-    list_model_cls = apps.get_model("edc_he.employment")
+    list_model_cls = apps.get_model("edc_he.employmenttype")
     householdhead_cls = apps.get_model("intecomm_subject.healtheconomicshouseholdhead")
     total = householdhead_cls.objects.all().count()
     for obj in tqdm(householdhead_cls.objects.all(), total=total):

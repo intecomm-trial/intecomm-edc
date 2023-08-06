@@ -1,10 +1,9 @@
 from edc_constants.constants import NO, NOT_APPLICABLE, YES
+from edc_he.rule_groups import HealthEconomicsRuleGroup as BaseHealthEconomicsRuleGroup
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.metadata_rules import CrfRule, CrfRuleGroup, P, register
 
-from .predicates import Predicates
-
-pc = Predicates()
+from .predicates import HealthEconomicsPredicates
 
 
 @register()
@@ -141,42 +140,8 @@ class MedicationsRuleGroup(CrfRuleGroup):
 
 
 @register()
-class HealthEconomicsGroup(CrfRuleGroup):
-    hoh = CrfRule(
-        predicate=pc.household_head_required,
-        consequence=REQUIRED,
-        alternative=NOT_REQUIRED,
-        target_models=["healtheconomicshouseholdhead"],
-    )
-
-    patient = CrfRule(
-        predicate=pc.patient_required,
-        consequence=REQUIRED,
-        alternative=NOT_REQUIRED,
-        target_models=["healtheconomicspatient"],
-    )
-
-    assets = CrfRule(
-        predicate=pc.assets_required,
-        consequence=REQUIRED,
-        alternative=NOT_REQUIRED,
-        target_models=["healtheconomicsassets"],
-    )
-
-    property = CrfRule(
-        predicate=pc.property_required,
-        consequence=REQUIRED,
-        alternative=NOT_REQUIRED,
-        target_models=["healtheconomicsproperty"],
-    )
-
-    income = CrfRule(
-        predicate=pc.income_required,
-        consequence=REQUIRED,
-        alternative=NOT_REQUIRED,
-        target_models=["healtheconomicsincome"],
-    )
-
+class HealthEconomicsRuleGroup(BaseHealthEconomicsRuleGroup):
     class Meta:
         app_label = "intecomm_subject"
         source_model = "intecomm_subject.subjectvisit"
+        predicates = HealthEconomicsPredicates()
