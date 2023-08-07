@@ -14,8 +14,6 @@ from intecomm_sites import all_sites
 from ...models import HealthEconomicsHouseholdHead
 from ..mixins import CrfModelFormMixin
 
-# TODO: Remove NHIF and CHF from insurance Q for uganda
-
 
 class HealthEconomicsHouseholdHeadForm(
     CrfSingletonModelFormMixin, CrfModelFormMixin, forms.ModelForm

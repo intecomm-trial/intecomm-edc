@@ -1,6 +1,15 @@
 Changes
 =======
 
+0.1.52
+------
+- minor fix where HE patient not showing as required when expected
+- fix where model form were only looking for completed HE forms
+  within the same visit.
+- move more logic out to edc-he and re-import as base classes
+- add EDC_HE_xxxx settings attributes
+- bump edc-he to 0.1.16
+
 0.1.50
 ------
 - change HE householdhead/patient choices to FKs: ethnicity,
