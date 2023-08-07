@@ -22,3 +22,4 @@ class HealthEconomicsIncomeForm(
     class Meta:
         model = HealthEconomicsIncome
         fields = "__all__"
+        help_texts = {"external_remit_value": ""}

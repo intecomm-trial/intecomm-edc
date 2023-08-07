@@ -240,7 +240,7 @@ list_data = {
         (OTHER, "Other reason (specify below)"),
     ],
     "edc_he.insurancetypes": [
-        Row((PRIVATE, "Private/work-place/voluntary health insurance"), extra="tanzania"),
+        (PRIVATE, "Private/work-place/voluntary health insurance"),
         Row((NHIF, "NHIF (National Health Insurance Fund)"), extra="tanzania"),
         Row((CHF, "CHF (Community Health Insurance Fund)"), extra="tanzania"),
         Row((COMMUNITY, "Community-based health insurance"), extra="uganda"),
