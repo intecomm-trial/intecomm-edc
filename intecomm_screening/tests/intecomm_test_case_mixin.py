@@ -24,11 +24,15 @@ from model_bakery import baker
 from model_bakery.baker import make_recipe
 
 from intecomm_lists.models import Conditions
+from intecomm_screening.models import (
+    ConsentRefusal,
+    PatientGroup,
+    PatientLog,
+    SubjectScreening,
+)
 from intecomm_sites.sites import fqdn
 from intecomm_sites.tests.site_test_case_mixin import SiteTestCaseMixin
 from intecomm_subject.models import SubjectVisit
-
-from ..models import ConsentRefusal, PatientLog, SubjectScreening
 
 fake = Faker()
 now = datetime(2019, 5, 1).astimezone(ZoneInfo("UTC"))
@@ -271,3 +275,34 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             user_modified="jw",
             screening_identifier=screening_identifier,
         )
+
+    def get_patient_group(self, conditions: list[str] | None = None):
+        conditions = conditions or ([HIV] * 4) + ([HTN] * 5) + ([DM] * 5)
+        for i, condition_name in enumerate(conditions):
+            first_name = fake.first_name()
+            last_name = fake.last_name()
+            legal_name = f"{first_name} {last_name}"
+            initials = f"{first_name[0]}{last_name[0]}"
+            patient_log_options = dict(
+                legal_name=legal_name,
+                familiar_name=legal_name,
+                initials=initials,
+                gender=FEMALE,
+                age_in_years=20,
+                hospital_identifier=uuid4().hex,
+                contact_number=f"12345678{i}",
+                conditions=[condition_name],
+            )
+            subject_screening = self.get_subject_screening(
+                patient_log_options=patient_log_options
+            )
+            self.get_subject_consent(subject_screening)
+
+        patient_group = PatientGroup.objects.create(name="BRANDX")
+        for obj in PatientLog.objects.filter(conditions__name__in=[HIV]):
+            patient_group.hiv_patients.add(obj)
+        for obj in PatientLog.objects.filter(conditions__name__in=[HTN]):
+            patient_group.htn_patients.add(obj)
+        for obj in PatientLog.objects.filter(conditions__name__in=[DM]):
+            patient_group.dm_patients.add(obj)
+        return patient_group

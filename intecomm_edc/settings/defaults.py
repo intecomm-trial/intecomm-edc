@@ -331,6 +331,14 @@ EDC_APPOINTMENT_APPT_REASON_CHOICES = (
 # edc-export
 EDC_EXPORT_EXPORT_PII_USERS = env.list("EDC_EXPORT_EXPORT_PII_USERS")
 EDC_FACILITY_HEALTH_FACILITY_MODEL = "intecomm_facility.healthfacility"
+
+# edc-he
+EDC_HE_ASSETS_MODEL = "intecomm_subject.healtheconomicsassets"
+EDC_HE_HOUSEHOLDHEAD_MODEL = "intecomm_subject.healtheconomicshouseholdhead"
+EDC_HE_INCOME_MODEL = "intecomm_subject.healtheconomicsincome"
+EDC_HE_PATIENT_MODEL = "intecomm_subject.healtheconomicspatient"
+EDC_HE_PROPERTY_MODEL = "intecomm_subject.healtheconomicsproperty"
+
 # edc-pdutils
 EXPORT_FILENAME_TIMESTAMP_FORMAT = "%Y%m%d"
 
