@@ -1,4 +1,4 @@
-from django.test import TestCase, tag
+from django.test import TestCase
 from edc_appointment.models import Appointment
 from edc_constants.constants import (
     COMPLETE,
@@ -44,7 +44,6 @@ def get_obj(model_cls, name: str = None):
 
 
 class TestHe(IntecommTestCaseMixin, TestCase):
-    @tag("1")
     def test_ok(self):
         patient_group = self.get_patient_group()
 
