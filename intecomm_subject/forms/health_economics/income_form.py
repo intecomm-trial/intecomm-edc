@@ -15,10 +15,6 @@ class HealthEconomicsIncomeForm(
 ):
     form_validator_cls = HealthEconomicsIncomeFormValidator
 
-    def clean(self):
-        self.raise_if_singleton_exists()
-        return super().clean()
-
     class Meta:
         model = HealthEconomicsIncome
         fields = "__all__"

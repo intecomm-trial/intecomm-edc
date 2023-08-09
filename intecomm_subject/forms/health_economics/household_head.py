@@ -3,7 +3,6 @@ from django.utils.html import format_html
 from edc_consent.utils import get_consent_model_cls
 from edc_constants.constants import YES
 from edc_crf.modelform_mixins import CrfSingletonModelFormMixin
-from edc_dx_review.utils import raise_if_clinical_review_does_not_exist
 from edc_he.constants import CHF, NHIF
 from edc_he.form_validators import HealthEconomicsHouseholdHeadFormValidator
 from edc_sites import get_sites_by_country
@@ -19,11 +18,6 @@ class HealthEconomicsHouseholdHeadForm(
     CrfSingletonModelFormMixin, CrfModelFormMixin, forms.ModelForm
 ):
     form_validator_cls = HealthEconomicsHouseholdHeadFormValidator
-
-    def clean(self):
-        self.raise_if_singleton_exists()
-        raise_if_clinical_review_does_not_exist(self.cleaned_data.get("subject_visit"))
-        return super().clean()
 
     def clean_hoh_gender(self):
         hoh = self.cleaned_data.get("hoh")

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 from copy import deepcopy
 from datetime import datetime
 from uuid import uuid4
@@ -9,30 +10,43 @@ from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.sites.models import Site
 from edc_appointment.constants import IN_PROGRESS_APPT, INCOMPLETE_APPT
+from edc_appointment.models import Appointment
 from edc_appointment.tests.test_case_mixins import AppointmentTestCaseMixin
-from edc_constants.constants import DM, FEMALE, HIV, HTN, NO, NOT_APPLICABLE, YES
+from edc_constants.constants import (
+    COMPLETE,
+    DM,
+    FEMALE,
+    HIV,
+    HTN,
+    MALE,
+    NO,
+    NOT_APPLICABLE,
+    YES,
+)
 from edc_facility.import_holidays import import_holidays
 from edc_list_data.site_list_data import site_list_data
-from edc_metadata import REQUIRED
 from edc_metadata.models import CrfMetadata
 from edc_randomization.site_randomizers import site_randomizers
 from edc_sites import add_or_update_django_sites, get_sites_by_country
+from edc_utils import get_utcnow
 from edc_visit_schedule.constants import DAY1
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 from model_bakery import baker
 from model_bakery.baker import make_recipe
+from tqdm import tqdm
 
 from intecomm_lists.models import Conditions
 from intecomm_screening.models import (
     ConsentRefusal,
     PatientGroup,
+    PatientGroupRando,
     PatientLog,
     SubjectScreening,
 )
 from intecomm_sites.sites import fqdn
 from intecomm_sites.tests.site_test_case_mixin import SiteTestCaseMixin
-from intecomm_subject.models import SubjectVisit
+from intecomm_subject.models import ClinicalReviewBaseline, SubjectVisit
 
 fake = Faker()
 now = datetime(2019, 5, 1).astimezone(ZoneInfo("UTC"))
@@ -106,8 +120,9 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         site_list_data.initialize()
         site_list_data.autodiscover()
 
-    @staticmethod
+    @classmethod
     def get_patient_log(
+        cls,
         legal_name: str | None = None,
         familiar_name: str | None = None,
         initials: str | None = None,
@@ -133,8 +148,9 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             patient_log.conditions.add(Conditions.objects.get(name=condition))
         return patient_log
 
+    @classmethod
     def get_subject_screening(
-        self,
+        cls,
         patient_log: PatientLog | None = None,
         report_datetime: datetime | None = None,
         eligibility_datetime: datetime | None = None,
@@ -149,7 +165,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             conditions=conditions,
         )
         patient_log_opt.update(**(patient_log_options or {}))
-        patient_log = patient_log or self.get_patient_log(**patient_log_opt)
+        patient_log = patient_log or cls.get_patient_log(**patient_log_opt)
         eligible_options = deepcopy(get_eligible_options(patient_log=patient_log))
         eligible_options.update(report_datetime=report_datetime or now)
         subject_screening = SubjectScreening.objects.create(
@@ -159,14 +175,10 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             **eligible_options,
         )
         screening_identifier = subject_screening.screening_identifier
-        self.assertEqual(subject_screening.reasons_ineligible, None)
-        self.assertTrue(subject_screening.eligible)
 
         subject_screening = SubjectScreening.objects.get(
             screening_identifier=screening_identifier
         )
-        self.assertTrue(subject_screening.eligible)
-
         patient_log.screening_identifier = screening_identifier
         patient_log.save()
 
@@ -197,50 +209,121 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             version=1,
         )
 
-    def get_subject_visit(
-        self,
-        visit_code: str | None = None,
-        visit_code_sequence: int | None = None,
-        subject_screening=None,
-        subject_consent=None,
-        reason: str | None = None,
-        appt_datetime: datetime | None = None,
-        gender: str | None = None,
-        ethnicity: str | None = None,
-        age_in_years: int | None = None,
-        screening_datetime: datetime | None = None,
-        eligibility_datetime: datetime | None = None,
+    @staticmethod
+    def get_crf_metadata(
+        subject_visit, model: str | None = None, entry_status: str | None = None
     ):
-        reason = reason or SCHEDULED
-        subject_screening = subject_screening or self.get_subject_screening(
-            gender=gender,
-            age_in_years=age_in_years,
-            report_datetime=screening_datetime,
-            eligibility_datetime=eligibility_datetime,
+        opts = dict(
+            subject_identifier=subject_visit.subject_identifier,
+            visit_code=subject_visit.visit_code,
+            visit_code_sequence=subject_visit.visit_code_sequence,
         )
-        subject_consent = subject_consent or self.get_subject_consent(subject_screening)
-        options = dict(
-            subject_identifier=subject_consent.subject_identifier,
-            visit_code=visit_code or DAY1,
-            visit_code_sequence=(
-                visit_code_sequence if visit_code_sequence is not None else 0
-            ),
-            reason=reason,
-        )
-        if appt_datetime:
-            options.update(appt_datetime=appt_datetime)
-        appointment = self.get_appointment(**options)
-        subject_visit = SubjectVisit(
-            appointment=appointment,
-            reason=SCHEDULED,
-            report_datetime=appointment.appt_datetime,
-        )
-        subject_visit.save()
-        subject_visit.refresh_from_db()
-        return subject_visit
+        if model:
+            opts.update(model=model)
+        if entry_status:
+            opts.update(entry_status=entry_status)
+        return CrfMetadata.objects.filter(**opts)
 
     @staticmethod
-    def get_next_subject_visit(subject_visit):
+    def get_consent_refusal(screening_identifier: str):
+        return ConsentRefusal.objects.create(
+            user_created="jw",
+            user_modified="jw",
+            screening_identifier=screening_identifier,
+        )
+
+    @classmethod
+    def get_patient_group(
+        cls, report_datetime: datetime | None = None, conditions: list[str] | None = None
+    ):
+        conditions = conditions or ([HIV] * 4) + ([HTN] * 5) + ([DM] * 5)
+        for i, condition_name in tqdm(enumerate(conditions), total=len(conditions)):
+            first_name = fake.first_name()
+            last_name = fake.last_name()
+            legal_name = f"{first_name} {last_name}"
+            initials = f"{first_name[0]}{last_name[0]}"
+            report_datetime = report_datetime or get_utcnow()
+            gender = random.choice([FEMALE, MALE])  # nosec B311
+            age_in_years = random.choice(  # nosec B311
+                [20, 25, 30, 35, 40, 45, 50, 55, 60, 65]  # nosec B311
+            )
+            patient_log_options = dict(
+                report_datetime=report_datetime,
+                legal_name=legal_name,
+                familiar_name=legal_name,
+                initials=initials,
+                gender=gender,
+                age_in_years=age_in_years,
+                hospital_identifier=uuid4().hex,
+                contact_number=f"12345678{i}",
+                conditions=[condition_name],
+            )
+            subject_screening = cls.get_subject_screening(
+                patient_log_options=patient_log_options, report_datetime=report_datetime
+            )
+            cls.get_subject_consent(subject_screening, consent_datetime=report_datetime)
+
+        patient_group = PatientGroup.objects.create(
+            name="BRANDX", report_datetime=report_datetime
+        )
+        total = PatientLog.objects.filter(conditions__name__in=[HIV]).count()
+        for obj in tqdm(PatientLog.objects.filter(conditions__name__in=[HIV]), total=total):
+            patient_group.hiv_patients.add(obj)
+        total = PatientLog.objects.filter(conditions__name__in=[HTN]).count()
+        for obj in tqdm(PatientLog.objects.filter(conditions__name__in=[HTN]), total=total):
+            patient_group.htn_patients.add(obj)
+        total = PatientLog.objects.filter(conditions__name__in=[DM]).count()
+        for obj in tqdm(PatientLog.objects.filter(conditions__name__in=[DM]), total=total):
+            patient_group.dm_patients.add(obj)
+        return patient_group
+
+    @classmethod
+    def get_randomized_patient_group(
+        cls,
+        report_datetime: datetime | None = None,
+        patient_group: PatientGroup | None = None,
+        conditions: list[str] | None = None,
+    ):
+        patient_group = patient_group or cls.get_patient_group(
+            report_datetime=report_datetime, conditions=conditions
+        )
+        patient_group.status = COMPLETE
+        patient_group.save()
+
+        patient_group = PatientGroupRando.objects.get(id=patient_group.id)
+        patient_group.randomize_now = YES
+        patient_group.confirm_randomize_now = "RANDOMIZE"
+        patient_group.save()
+        patient_group.refresh_from_db()
+        return patient_group
+
+    @classmethod
+    def get_subject_visit(
+        cls,
+        visit_code: str | None = None,
+        subject_identifier: str | None = None,
+        report_datetime: datetime | None = None,
+    ) -> SubjectVisit:
+        visit_code = visit_code or DAY1
+        if subject_identifier:
+            appointment = Appointment.objects.get(
+                visit_code=visit_code, subject_identifier=subject_identifier
+            )
+        else:
+            appointment = Appointment.objects.filter(visit_code=visit_code)[0]
+        subject_visit = SubjectVisit.objects.create(
+            appointment=appointment,
+            report_datetime=report_datetime or appointment.appt_datetime,
+            reason=SCHEDULED,
+        )
+        return subject_visit
+
+    @classmethod
+    def get_next_subject_visit(
+        cls,
+        subject_visit,
+        report_datetime: datetime | None = None,
+    ):
         appointment = subject_visit.appointment
         appointment.appt_status = INCOMPLETE_APPT
         appointment.save()
@@ -251,7 +334,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         subject_visit = SubjectVisit(
             appointment=next_appointment,
             reason=SCHEDULED,
-            report_datetime=next_appointment.appt_datetime,
+            report_datetime=report_datetime or next_appointment.appt_datetime,
             visit_code=next_appointment.visit_code,
             visit_code_sequence=next_appointment.visit_code_sequence,
         )
@@ -260,49 +343,19 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         return subject_visit
 
     @staticmethod
-    def get_crf_metadata(subject_visit):
-        return CrfMetadata.objects.filter(
-            subject_identifier=subject_visit.subject_identifier,
-            visit_code=subject_visit.visit_code,
-            visit_code_sequence=subject_visit.visit_code_sequence,
-            entry_status=REQUIRED,
-        )
-
-    @staticmethod
-    def get_consent_refusal(screening_identifier: str):
-        return ConsentRefusal.objects.create(
-            user_created="jw",
-            user_modified="jw",
-            screening_identifier=screening_identifier,
-        )
-
-    def get_patient_group(self, conditions: list[str] | None = None):
-        conditions = conditions or ([HIV] * 4) + ([HTN] * 5) + ([DM] * 5)
-        for i, condition_name in enumerate(conditions):
-            first_name = fake.first_name()
-            last_name = fake.last_name()
-            legal_name = f"{first_name} {last_name}"
-            initials = f"{first_name[0]}{last_name[0]}"
-            patient_log_options = dict(
-                legal_name=legal_name,
-                familiar_name=legal_name,
-                initials=initials,
-                gender=FEMALE,
-                age_in_years=20,
-                hospital_identifier=uuid4().hex,
-                contact_number=f"12345678{i}",
-                conditions=[condition_name],
+    def create_clinical_review_baseline(
+        patient_log: PatientLog, subject_visit: SubjectVisit
+    ) -> ClinicalReviewBaseline:
+        cond = [obj.name for obj in patient_log.conditions.all()][0]
+        options = {f"{cond.lower()}_dx": YES, f"{cond.lower()}_dx_at_screening": YES}
+        for cond in [c for c in [HIV, DM, HTN] if c != cond]:
+            options.update(
+                {f"{cond.lower()}_dx": NO, f"{cond.lower()}_dx_at_screening": NOT_APPLICABLE}
             )
-            subject_screening = self.get_subject_screening(
-                patient_log_options=patient_log_options
-            )
-            self.get_subject_consent(subject_screening)
-
-        patient_group = PatientGroup.objects.create(name="BRANDX")
-        for obj in PatientLog.objects.filter(conditions__name__in=[HIV]):
-            patient_group.hiv_patients.add(obj)
-        for obj in PatientLog.objects.filter(conditions__name__in=[HTN]):
-            patient_group.htn_patients.add(obj)
-        for obj in PatientLog.objects.filter(conditions__name__in=[DM]):
-            patient_group.dm_patients.add(obj)
-        return patient_group
+        obj = baker.make_recipe(
+            "intecomm_subject.clinicalreviewbaseline",
+            subject_visit=subject_visit,
+            report_datetime=subject_visit.report_datetime,
+            **options,
+        )
+        return obj
