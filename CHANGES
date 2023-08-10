@@ -1,6 +1,10 @@
 Changes
 =======
 
+unreleased
+----------
+- reset all migrations to initial 0001
+
 0.1.53
 ------
 - bump edc-he 0.1.21 (included in edc)
