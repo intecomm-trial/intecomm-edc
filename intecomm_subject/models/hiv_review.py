@@ -22,19 +22,6 @@ class HivReview(
         default=NOT_APPLICABLE,
     )
 
-    # arv_initiated = models.CharField(
-    #     verbose_name="Has the patient started antiretroviral therapy (ART)?",
-    #     max_length=15,
-    #     choices=YES_NO_NA,
-    #     default=NOT_APPLICABLE,
-    #     help_text="Select `not applicable` if previously reported.",
-    # )
-    # arv_initiation_actual_date = models.DateField(
-    #     verbose_name="Date started antiretroviral therapy (ART)",
-    #     null=True,
-    #     blank=True,
-    # )
-
     @property
     def best_art_initiation_date(self):
         return self.rx_init_date or self.rx_init_calculated_date

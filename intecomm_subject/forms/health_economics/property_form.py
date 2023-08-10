@@ -15,10 +15,6 @@ class HealthEconomicsPropertyForm(
 ):
     form_validator_cls = HealthEconomicsPropertyFormValidator
 
-    def clean(self):
-        self.raise_if_singleton_exists()
-        return super().clean()
-
     class Meta:
         model = HealthEconomicsProperty
         fields = "__all__"
