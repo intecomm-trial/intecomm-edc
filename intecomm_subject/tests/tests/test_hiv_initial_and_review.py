@@ -19,6 +19,12 @@ utc_tz = ZoneInfo("UTC")
 
 @time_machine.travel(dt.datetime(2019, 5, 11, 8, 00, tzinfo=utc_tz))
 class TestInitialAndReview(IntecommTestCaseMixin, TestCase):
+    """These tests cover funcs/methods that access other models such
+    as SubjectConsent, SubjectScreening ... .
+
+    More tests are in the `intecomm_form_validators` module.
+    """
+
     patient_group = None
 
     @classmethod
@@ -38,7 +44,7 @@ class TestInitialAndReview(IntecommTestCaseMixin, TestCase):
             subject_identifier=patient_log.subject_identifier
         )
 
-        self.create_clinical_review_baseline(patient_log, subject_visit)
+        self.get_or_create_clinical_review_baseline(patient_log, subject_visit)
         self.assertTrue(
             self.get_crf_metadata(
                 subject_visit, model="intecomm_subject.hivinitialreview", entry_status=REQUIRED

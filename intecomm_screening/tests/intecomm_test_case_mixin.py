@@ -9,6 +9,7 @@ from zoneinfo import ZoneInfo
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
 from edc_appointment.constants import IN_PROGRESS_APPT, INCOMPLETE_APPT
 from edc_appointment.models import Appointment
 from edc_appointment.tests.test_case_mixins import AppointmentTestCaseMixin
@@ -46,7 +47,7 @@ from intecomm_screening.models import (
 )
 from intecomm_sites.sites import fqdn
 from intecomm_sites.tests.site_test_case_mixin import SiteTestCaseMixin
-from intecomm_subject.models import ClinicalReviewBaseline, SubjectVisit
+from intecomm_subject.models import ClinicalReview, ClinicalReviewBaseline, SubjectVisit
 
 fake = Faker()
 now = datetime(2019, 5, 1).astimezone(ZoneInfo("UTC"))
@@ -331,31 +332,56 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         next_appointment = appointment.next_by_timepoint
         next_appointment.appt_status = IN_PROGRESS_APPT
         next_appointment.save()
-        subject_visit = SubjectVisit(
+        next_subject_visit = SubjectVisit(
             appointment=next_appointment,
             reason=SCHEDULED,
             report_datetime=report_datetime or next_appointment.appt_datetime,
             visit_code=next_appointment.visit_code,
             visit_code_sequence=next_appointment.visit_code_sequence,
         )
-        subject_visit.save()
-        subject_visit.refresh_from_db()
-        return subject_visit
+        next_subject_visit.save()
+        next_subject_visit.refresh_from_db()
+        return next_subject_visit
 
     @staticmethod
-    def create_clinical_review_baseline(
+    def get_or_create_clinical_review_baseline(
         patient_log: PatientLog, subject_visit: SubjectVisit
     ) -> ClinicalReviewBaseline:
         cond = [obj.name for obj in patient_log.conditions.all()][0]
         options = {f"{cond.lower()}_dx": YES, f"{cond.lower()}_dx_at_screening": YES}
-        for cond in [c for c in [HIV, DM, HTN] if c != cond]:
-            options.update(
-                {f"{cond.lower()}_dx": NO, f"{cond.lower()}_dx_at_screening": NOT_APPLICABLE}
+        try:
+            obj = ClinicalReviewBaseline.objects.get(subject_visit=subject_visit)
+        except ObjectDoesNotExist:
+            for cond in [c for c in [HIV, DM, HTN] if c != cond]:
+                options.update(
+                    {
+                        f"{cond.lower()}_dx": NO,
+                        f"{cond.lower()}_dx_at_screening": NOT_APPLICABLE,
+                    }
+                )
+            obj = baker.make_recipe(
+                "intecomm_subject.clinicalreviewbaseline",
+                subject_visit=subject_visit,
+                report_datetime=subject_visit.report_datetime,
+                **options,
             )
-        obj = baker.make_recipe(
-            "intecomm_subject.clinicalreviewbaseline",
-            subject_visit=subject_visit,
-            report_datetime=subject_visit.report_datetime,
-            **options,
-        )
+        return obj
+
+    @staticmethod
+    def get_or_create_clinical_review(
+        patient_log: PatientLog, subject_visit: SubjectVisit
+    ) -> ClinicalReview:
+        cond = [obj.name for obj in patient_log.conditions.all()][0]
+        options = {f"{cond.lower()}_dx": YES}
+        try:
+            obj = ClinicalReview.objects.get(subject_visit=subject_visit)
+        except ObjectDoesNotExist:
+            for cond in [c for c in [HIV, DM, HTN] if c != cond]:
+                options.update({f"{cond.lower()}_dx": NO})
+            obj = baker.make_recipe(
+                "intecomm_subject.clinicalreview",
+                subject_visit=subject_visit,
+                report_datetime=subject_visit.report_datetime,
+                **options,
+            )
         return obj
