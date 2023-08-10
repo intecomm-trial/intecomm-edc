@@ -17,6 +17,7 @@ project_settings = DefaultTestSettings(
     ROOT_URLCONF="intecomm_edc.urls",
     EDC_AUTH_CODENAMES_WARN_ONLY=True,
     EDC_DX_REVIEW_LIST_MODEL_APP_LABEL="edc_dx_review",
+    EDC_DX_REVIEW_APP_LABEL="intecomm_subject",
     BASE_DIR=base_dir,
     APP_NAME=app_name,
     SITE_ID=SiteID(default=101),

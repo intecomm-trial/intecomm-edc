@@ -15,6 +15,8 @@ class HealthEconomicsHouseholdHeadAdmin(
 ):
     form = HealthEconomicsHouseholdHeadForm
 
+    save_on_top = True
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if getattr(request, "site", None):
             if db_field.name == "hoh_ethnicity":
