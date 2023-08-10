@@ -1,6 +1,11 @@
 Changes
 =======
 
+0.1.53
+------
+- bump edc-he 0.1.21 (included in edc)
+- bump edc 0.5.18
+
 0.1.52
 ------
 - minor fix where HE patient not showing as required when expected
