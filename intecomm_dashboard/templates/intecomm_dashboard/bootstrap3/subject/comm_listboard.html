@@ -49,7 +49,11 @@
        {% else %}
            <i class="fas fa-female fa-lg"></i>
        {% endif %}
-       {% if perms.edc_registration.display_firstname %}{{ result.familiar_name }}{% else %}******{% endif %} {% if perms.edc_registration.display_lastname %}{{ result.initials }}{% else %}******{% endif %}
+       {% if country == "uganda" %}
+          {{result.object}}
+        {% else %}
+          {% if perms.edc_registration.display_firstname %}{{ result.familiar_name }}{% else %}******{% endif %} {% if perms.edc_registration.display_lastname %}{{ result.initials }}{% else %}******{% endif %}
+        {% endif %}
     </td>
     <td>{{result.object.age_in_years}}yrs</td>
     <td>{{ result.object.consent_datetime|date:"SHORT_DATE_FORMAT" }}</td>

@@ -7,6 +7,7 @@ from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.db.models import Q
 from django.urls import reverse
 from edc_listboard.views import SubjectListboardView
+from edc_sites import get_current_country
 from intecomm_rando.constants import CLINIC_CONTROL, COMM_INTERVENTION
 from intecomm_rando.models import RandomizationList
 
@@ -55,6 +56,10 @@ class BaseSubjectListboardView(SubjectListboardView):
             arm=self.arm,
             COMM_INTERVENTION=COMM_INTERVENTION,
             CLINIC_CONTROL=CLINIC_CONTROL,
+        )
+        context.update(
+            site=getattr(self.request, "site", None),
+            country=get_current_country(self.request),
         )
         return context
 

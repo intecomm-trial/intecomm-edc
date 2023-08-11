@@ -1,6 +1,11 @@
 Changes
 =======
 
+0.1.59
+------
+- add country to template listboard context. Show default
+  patientlog.__str__ in subject column for uganda.
+
 0.1.57
 ------
 - fix baseline visit definition by adding missing unscheduled
