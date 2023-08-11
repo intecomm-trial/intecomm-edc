@@ -69,7 +69,11 @@ visit00 = Visit(
     rupper=relativedelta(days=0),
     add_window_gap_to_lower=True,
     requisitions=requisitions_d1,
+    requisitions_unscheduled=default_requisitions_unscheduled,
     crfs=crfs_d1,
+    crfs_prn=default_crfs_prn,
+    crfs_unscheduled=crfs_followup,
+    crfs_missed=crfs_missed,
     facility_name="5-day-clinic",
 )
 
@@ -84,5 +88,7 @@ visit12 = Visit(
     add_window_gap_to_lower=True,
     requisitions=requisitions_followup,
     crfs=crfs_followup,
+    crfs_prn=default_crfs_prn,
+    crfs_missed=crfs_missed,
     facility_name="5-day-clinic",
 )
