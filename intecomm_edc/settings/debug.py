@@ -11,7 +11,7 @@ print(f"Settings file {__file__}")
 # UG
 # SITE_ID = SiteID(default=101)  # Kasangati
 # SITE_ID = SiteID(default=102)  # Kisugu
-# SITE_ID = SiteID(default=103)  # Kiswa
+SITE_ID = SiteID(default=103)  # Kiswa
 # SITE_ID = SiteID(default=104)  # Kyazanga
 # SITE_ID = SiteID(default=105)  # Mpigi
 # SITE_ID = SiteID(default=106)  # Namayumba
@@ -21,7 +21,7 @@ print(f"Settings file {__file__}")
 # SITE_ID = SiteID(default=110)  # Wakiso
 
 # TZ
-SITE_ID = SiteID(default=201)  # Amana
+# SITE_ID = SiteID(default=201)  # Amana
 # SITE_ID = SiteID(default=202)  # Bagamoyo
 # SITE_ID = SiteID(default=203)  # Rugambwa
 # SITE_ID = SiteID(default=204)  # Hindu_Mandal
