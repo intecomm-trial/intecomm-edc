@@ -1,8 +1,13 @@
 Changes
 =======
 
-0.1.53
+0.1.57
 ------
+- fix baseline visit definition by adding missing unscheduled
+  crfs/requisitions
+
+0.1.53 - 0.1.56
+---------------
 - bump edc-he 0.1.21 (included in edc)
 - bump edc 0.5.18
 
