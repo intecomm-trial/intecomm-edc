@@ -2,8 +2,8 @@ from edc_locator.utils import get_locator_model
 from edc_visit_schedule import VisitSchedule
 
 from ..constants import VISIT_SCHEDULE
-from .comm_schedule import comm_schedule
-from .inte_schedule import inte_schedule
+from .community_schedule import community_schedule
+from .facility_schedule import facility_schedule
 
 visit_schedule = VisitSchedule(
     name=VISIT_SCHEDULE,
@@ -13,5 +13,5 @@ visit_schedule = VisitSchedule(
     locator_model=get_locator_model(),
     previous_visit_schedule=None,
 )
-visit_schedule.add_schedule(comm_schedule)
-visit_schedule.add_schedule(inte_schedule)
+visit_schedule.add_schedule(community_schedule)
+visit_schedule.add_schedule(facility_schedule)

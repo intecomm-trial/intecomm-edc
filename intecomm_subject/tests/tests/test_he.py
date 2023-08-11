@@ -400,6 +400,7 @@ class TestHe(IntecommTestCaseMixin, TestCase):
 
         self.get_or_create_clinical_review(patient_log, subject_visit)
 
+        form = HealthEconomicsPatientForm(data=cleaned_data)
         form.is_valid()
         self.assertEqual({}, form._errors)
         form.save(commit=True)

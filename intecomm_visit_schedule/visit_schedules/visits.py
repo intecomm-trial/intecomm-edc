@@ -1,15 +1,55 @@
 from __future__ import annotations
 
 from dateutil.relativedelta import relativedelta
-from edc_visit_schedule import Visit as BaseVisit
+from edc_visit_schedule import Visit
 from edc_visit_schedule.constants import MONTH0, MONTH12
 
-from .crfs import crfs_d1, crfs_followup, crfs_missed
-from .crfs import crfs_prn as default_crfs_prn
-from .crfs import crfs_unscheduled as default_crfs_unscheduled
-from .requisitions import requisitions_d1, requisitions_followup
-from .requisitions import requisitions_prn as default_requisitions_prn
-from .requisitions import requisitions_unscheduled as default_requisitions_unscheduled
+from .crfs import crfs_d1, crfs_followup, crfs_missed, crfs_prn
+from .requisitions import (
+    requisitions_d1,
+    requisitions_followup,
+    requisitions_prn,
+    requisitions_unscheduled,
+)
+
+visit00 = Visit(
+    code=MONTH0,
+    title="Baseline",
+    add_window_gap_to_lower=True,
+    allow_unscheduled=True,
+    crfs=crfs_d1,
+    crfs_missed=crfs_missed,
+    crfs_prn=crfs_prn,
+    crfs_unscheduled=crfs_followup,
+    facility_name="5-day-clinic",
+    rbase=relativedelta(day=0),
+    requisitions=requisitions_d1,
+    requisitions_prn=requisitions_prn,
+    requisitions_unscheduled=requisitions_unscheduled,
+    rlower=relativedelta(days=0),
+    rupper=relativedelta(days=0),
+    timepoint=0,
+)
+
+
+visit12 = Visit(
+    code=MONTH12,
+    title="Month 12 (End of study)",
+    add_window_gap_to_lower=True,
+    allow_unscheduled=False,
+    crfs=crfs_followup,
+    crfs_missed=crfs_missed,
+    crfs_prn=crfs_prn,
+    crfs_unscheduled=crfs_followup,
+    facility_name="5-day-clinic",
+    rbase=relativedelta(months=12),
+    requisitions=requisitions_followup,
+    requisitions_prn=requisitions_prn,
+    requisitions_unscheduled=requisitions_unscheduled,
+    rlower=relativedelta(days=5),
+    rupper=relativedelta(days=10),
+    timepoint=12,
+)
 
 
 def get_visit_code(mnth: int):
@@ -26,69 +66,18 @@ def get_followup_visit(month):
     return Visit(
         code=get_visit_code(month),
         title=f"Followup month {month}",
-        timepoint=month,
-        rbase=relativedelta(months=month),
-        rlower=rlower,
-        rupper=rupper,
         add_window_gap_to_lower=True,
-        requisitions=requisitions_followup,
+        allow_unscheduled=False,
         crfs=crfs_followup,
+        crfs_missed=crfs_missed,
+        crfs_prn=crfs_prn,
         crfs_unscheduled=crfs_followup,
         facility_name="5-day-clinic",
+        rbase=relativedelta(months=month),
+        requisitions=requisitions_followup,
+        requisitions_prn=requisitions_prn,
+        requisitions_unscheduled=requisitions_unscheduled,
+        rlower=rlower,
+        rupper=rupper,
+        timepoint=month,
     )
-
-
-class Visit(BaseVisit):
-    def __init__(
-        self,
-        crfs_unscheduled=None,
-        requisitions_unscheduled=None,
-        crfs_prn=None,
-        requisitions_prn=None,
-        allow_unscheduled=None,
-        **kwargs,
-    ):
-        super().__init__(
-            allow_unscheduled=True if allow_unscheduled is None else allow_unscheduled,
-            crfs_unscheduled=crfs_unscheduled or default_crfs_unscheduled,
-            requisitions_unscheduled=requisitions_unscheduled
-            or default_requisitions_unscheduled,
-            crfs_prn=crfs_prn or default_crfs_prn,
-            requisitions_prn=requisitions_prn or default_requisitions_prn,
-            crfs_missed=crfs_missed,
-            **kwargs,
-        )
-
-
-visit00 = Visit(
-    code=MONTH0,
-    title="Baseline",
-    timepoint=0,
-    rbase=relativedelta(day=0),
-    rlower=relativedelta(days=0),
-    rupper=relativedelta(days=0),
-    add_window_gap_to_lower=True,
-    requisitions=requisitions_d1,
-    requisitions_unscheduled=default_requisitions_unscheduled,
-    crfs=crfs_d1,
-    crfs_prn=default_crfs_prn,
-    crfs_unscheduled=crfs_followup,
-    crfs_missed=crfs_missed,
-    facility_name="5-day-clinic",
-)
-
-
-visit12 = Visit(
-    code=MONTH12,
-    title="Month 12 (End of study)",
-    timepoint=12,
-    rbase=relativedelta(months=12),
-    rlower=relativedelta(days=5),
-    rupper=relativedelta(days=10),
-    add_window_gap_to_lower=True,
-    requisitions=requisitions_followup,
-    crfs=crfs_followup,
-    crfs_prn=default_crfs_prn,
-    crfs_missed=crfs_missed,
-    facility_name="5-day-clinic",
-)
