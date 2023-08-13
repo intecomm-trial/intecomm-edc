@@ -12,7 +12,6 @@ class SubjectVisitMissedFormValidator(CrfFormValidator):
         self.required_if(
             YES, field="contact_attempted", field_required="contact_attempts_count"
         )
-
         if self.cleaned_data.get("contact_made") in [NO, NOT_APPLICABLE]:
             if not self.cleaned_data.get("contact_attempts_count") and self.cleaned_data.get(
                 "contact_attempts_explained"

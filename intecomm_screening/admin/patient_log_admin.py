@@ -60,7 +60,6 @@ class PatientLogAdmin(
     show_cancel = True
 
     extra_pii_attrs = ["first_column"]
-    # extra_pii_attrs = [("first_column", "__str__"), ("screened", "screened_no_links")]
 
     # PiiNamesModelAdminMixin attrs
     name_fields: list[str] = ["legal_name", "familiar_name"]
@@ -271,10 +270,13 @@ class PatientLogAdmin(
     def post_url_on_delete_kwargs(self, request, obj):
         return {}
 
-    @admin.display(description="Patient log", ordering="-modified")
+    @admin.display(description="Patient log", ordering="filing_identifier")
     def first_column(self, obj=None):
+        legal_name = (
+            "<unknown>" if re.match(UUID_PATTERN, str(obj.legal_name)) else obj.legal_name
+        )
         context = dict(
-            legal_name=obj.legal_name,
+            legal_name=legal_name,
             filing_identifier=obj.filing_identifier,
             last_4_hospital_identifier=obj.last_4_hospital_identifier,
             last_4_contact_number=obj.last_4_contact_number,
@@ -304,15 +306,6 @@ class PatientLogAdmin(
     @admin.display(description="last_appt", ordering="last_appt_date")
     def last_appt(self, obj=None):
         return obj.last_appt_date
-
-    # @admin.display(description="HF ID", ordering="hospital_identifier")
-    # def hf_id(self, obj=None):
-    #     context = dict(hospital_identifier=obj.hospital_identifier)
-    #     return format_html(
-    #         render_to_string(
-    #             "intecomm_screening/change_list_hospital_identifier.html", context=context
-    #         )
-    #     )
 
     @admin.display(description="FILE", ordering="filing_identifier")
     def filing_id(self, obj=None):
@@ -497,8 +490,3 @@ class PatientLogAdmin(
         if db_field.name == "gender":
             kwargs["choices"] = GENDER
         return super().formfield_for_choice_field(db_field, request, **kwargs)
-
-    def get_changeform_initial_data(self, request) -> dict:
-        dct = super().get_changeform_initial_data(request)
-        dct.update({"patient_log_identifier": "custom_initial_value"})
-        return dct

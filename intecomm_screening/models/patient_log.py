@@ -249,8 +249,10 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
 
     def save(self, *args, **kwargs):
         if not kwargs.get("update_fields"):
-            self.legal_name = self.legal_name.upper()
-            self.familiar_name = self.familiar_name.upper()
+            if not re.match(UUID_PATTERN, str(self.legal_name or "")):
+                self.legal_name = self.legal_name.upper()
+            if not re.match(UUID_PATTERN, str(self.familiar_name or "")):
+                self.familiar_name = self.familiar_name.upper()
             self.initials = self.initials.upper()
             self.last_4_contact_number = self.contact_number[-4:]
             self.last_4_hospital_identifier = self.hospital_identifier[-4:]

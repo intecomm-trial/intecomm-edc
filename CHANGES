@@ -1,6 +1,14 @@
 Changes
 =======
 
+0.1.60
+------
+- manipulate changeform data to remove legal and familiar name
+  if required
+- set initial data on modeladmin class instead of via querystring
+- add prn and unscheduled forms to baseline schedule
+- bump edc 0.5.20
+
 0.1.59
 ------
 - add country to template listboard context. Show default
