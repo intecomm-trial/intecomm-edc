@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Tuple
 
 from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_consent.actions import (
     flag_as_verified_against_paper,
@@ -19,8 +20,10 @@ from edc_model_admin.mixins import ModelAdminProtectPiiMixin
 from edc_sites.admin import SiteModelAdminMixin
 
 from intecomm_screening.admin.modeladmin_mixins import (
+    InitialDataModelAdminMixin,
     RedirectAllToPatientLogModelAdminMixin,
 )
+from intecomm_screening.models import SubjectScreening
 from intecomm_sites import all_sites
 
 from ..admin_site import intecomm_consent_admin
@@ -31,6 +34,7 @@ from ..models import SubjectConsent
 @admin.register(SubjectConsent, site=intecomm_consent_admin)
 class SubjectConsentAdmin(
     SiteModelAdminMixin,
+    InitialDataModelAdminMixin,
     RedirectAllToPatientLogModelAdminMixin,
     ModelAdminProtectPiiMixin,
     PiiNamesModelAdminMixin,
@@ -131,3 +135,15 @@ class SubjectConsentAdmin(
         if "group_identifier" not in readonly_fields:
             readonly_fields += ("group_identifier",)
         return readonly_fields
+
+    def get_changeform_initial_data(self, request) -> dict:
+        dct = super().get_changeform_initial_data(request)
+        try:
+            subject_screening = SubjectScreening.objects.get(
+                screening_identifier=dct.get("screening_identifier")
+            )
+        except ObjectDoesNotExist:
+            pass
+        else:
+            dct.update(**self.initial_form_data(request, subject_screening))
+        return dct

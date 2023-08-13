@@ -1,5 +1,8 @@
+import re
+
 from django import forms
 from django.utils.html import format_html
+from edc_constants.constants import UUID_PATTERN
 from edc_form_validators import FormValidatorMixin
 from edc_screening.modelform_mixins import AlreadyConsentedFormMixin
 from edc_sites.modelform_mixins import SiteModelFormMixin
@@ -24,6 +27,19 @@ class PatientLogForm(
                     )
                 )
         return super().clean()
+
+    def get_initial_for_field(self, field, field_name):
+        """Set existing data value to None if UUID.
+
+        Required for forms that were saved when the
+        name fields were hidden by mistake.
+        """
+        value = super().get_initial_for_field(field, field_name)
+        if field_name in ["legal_name", "familiar_name"]:
+            if field_name in [fld.name for fld in self.visible_fields()]:
+                if re.match(UUID_PATTERN, value):
+                    value = None
+        return value
 
     class Meta:
         model = PatientLog

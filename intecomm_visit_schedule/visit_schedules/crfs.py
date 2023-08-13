@@ -58,7 +58,7 @@ crfs_followup = FormsCollection(
     Crf(show_order=190, model="intecomm_subject.dmmedicationadherence", required=False),
     Crf(show_order=195, model="intecomm_subject.htnmedicationadherence", required=False),
     Crf(show_order=200, model="intecomm_subject.complicationsfollowup", required=False),
-    Crf(show_order=220, model="intecomm_subject.familyhistory"),
+    Crf(show_order=220, model="intecomm_subject.familyhistory", required=False),
     Crf(show_order=240, model="intecomm_subject.icecapa"),
     Crf(show_order=245, model="intecomm_subject.eq5d3l"),
     Crf(show_order=300, model="intecomm_subject.healtheconomicshouseholdhead", required=False),

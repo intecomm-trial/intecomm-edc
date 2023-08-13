@@ -18,10 +18,11 @@ from intecomm_sites import all_sites
 
 from ..admin_site import intecomm_screening_admin
 from ..forms import SubjectScreeningForm
-from ..models import SubjectScreening
+from ..models import PatientLog, SubjectScreening
 from ..utils import get_consent_refusal_model_cls
 from .modeladmin_mixins import (
     BaseModelAdminMixin,
+    InitialDataModelAdminMixin,
     RedirectAllToPatientLogModelAdminMixin,
 )
 
@@ -29,6 +30,7 @@ from .modeladmin_mixins import (
 @admin.register(SubjectScreening, site=intecomm_screening_admin)
 class SubjectScreeningAdmin(
     SiteModelAdminMixin,
+    InitialDataModelAdminMixin,
     RedirectAllToPatientLogModelAdminMixin,
     ModelAdminHideDeleteButtonOnCondition,
     PiiNamesModelAdminMixin,
@@ -263,8 +265,9 @@ class SubjectScreeningAdmin(
         return readonly_fields
 
     @staticmethod
+    @admin.display(description="Eligibile", ordering="eligible")
     def eligibility_status(obj=None):
-        return None
+        return format_html('<span style="color:green;">YES</span>' if obj.eligible else "NO")
 
     @staticmethod
     def demographics(obj=None):
@@ -299,3 +302,15 @@ class SubjectScreeningAdmin(
         if db_field.name == "gender":
             kwargs["choices"] = GENDER
         return super().formfield_for_choice_field(db_field, request, **kwargs)
+
+    def get_changeform_initial_data(self, request) -> dict:
+        dct = super().get_changeform_initial_data(request)
+        try:
+            patient_log = PatientLog.objects.get(
+                patient_log_identifier=dct.get("patient_log_identifier")
+            )
+        except ObjectDoesNotExist:
+            pass
+        else:
+            dct.update(**self.initial_form_data(request, patient_log))
+        return dct

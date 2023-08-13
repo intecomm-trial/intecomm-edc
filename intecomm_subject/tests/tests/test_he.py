@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 import time_machine
 from dateutil.relativedelta import relativedelta
 from django.core.management import call_command
-from django.test import TestCase, tag
+from django.test import TestCase
 from edc_constants.constants import COMPLETE, DM, HTN, MALE, NO, NOT_APPLICABLE, YES
 from edc_he.constants import WIFE_HUSBAND
 from edc_he.models import (
@@ -305,7 +305,6 @@ class TestHe(IntecommTestCaseMixin, TestCase):
         form.is_valid()
         self.assertEqual({}, form._errors)
 
-    @tag("1")
     def test_entered_across_visits(self):
         ClinicalReviewBaseline.objects.all().delete()
         HealthEconomicsHouseholdHead.objects.all().delete()

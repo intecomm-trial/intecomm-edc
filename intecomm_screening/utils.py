@@ -51,22 +51,11 @@ def get_subject_screening_url(
     subject_screening: SubjectScreening | None = None,
     next_url_name: str | None = None,
 ) -> str | None:
-    url = None
     if subject_screening:
         url = subject_screening.get_absolute_url()
     else:
-        url = get_subject_screening_model_cls()().get_absolute_url()
-        # TODO: remove sensitive data from url!!
-        url = (
-            f"{url}?hospital_identifier={patient_log.hospital_identifier}"
-            f"&initials={patient_log.initials}"
-            f"&site={patient_log.site.id}"
-            f"&gender={patient_log.gender}"
-            f"&age_in_years={patient_log.age_in_years}"
-            f"&legal_name={patient_log.legal_name}"
-            f"&familiar_name={patient_log.familiar_name}"
-            f"&patient_log_identifier={patient_log.patient_log_identifier}"
-        )
+        absolute_url = get_subject_screening_model_cls()().get_absolute_url()
+        url = f"{absolute_url}?patient_log_identifier={patient_log.patient_log_identifier}"
     if next_url_name:
         url = f"{url.split('?')[0]}?next={next_url_name}&{url.split('?')[1]}"
     return url
@@ -87,17 +76,9 @@ def get_subject_consent_url(
         )
     except ObjectDoesNotExist:
         if subject_screening and subject_screening.eligible:
-            url = get_consent_model_cls()().get_absolute_url()
-            # TODO: remove sensitive data from url!!
+            absolute_url = get_consent_model_cls()().get_absolute_url()
             url = (
-                f"{url}?screening_identifier={subject_screening.screening_identifier}"
-                f"&identity={subject_screening.hospital_identifier}"
-                f"&initials={subject_screening.initials}"
-                f"&site={subject_screening.site.id}"
-                f"&gender={subject_screening.gender}"
-                f"&age_in_years={subject_screening.age_in_years}"
-                f"&legal_name={subject_screening.legal_name}"
-                f"&familiar_name={subject_screening.familiar_name}"
+                f"{absolute_url}?screening_identifier={subject_screening.screening_identifier}"
             )
     else:
         url = subject_consent.get_absolute_url()
