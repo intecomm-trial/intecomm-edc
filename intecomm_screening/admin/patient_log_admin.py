@@ -43,11 +43,11 @@ from .utils import ChangeListTemplateContext
 
 @admin.register(PatientLog, site=intecomm_screening_admin)
 class PatientLogAdmin(
+    PiiNamesModelAdminMixin,
     ModelAdminProtectPiiMixin,
     SiteModelAdminMixin,
     ChangeListTopBarModelAdminMixin,
     RedirectAllToPatientLogModelAdminMixin,
-    PiiNamesModelAdminMixin,
     BaseModelAdminMixin,
 ):
     form = PatientLogForm
