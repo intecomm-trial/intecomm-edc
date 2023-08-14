@@ -29,11 +29,11 @@ from .modeladmin_mixins import (
 
 @admin.register(SubjectScreening, site=intecomm_screening_admin)
 class SubjectScreeningAdmin(
+    PiiNamesModelAdminMixin,
     SiteModelAdminMixin,
     InitialDataModelAdminMixin,
     RedirectAllToPatientLogModelAdminMixin,
     ModelAdminHideDeleteButtonOnCondition,
-    PiiNamesModelAdminMixin,
     BaseModelAdminMixin,
 ):
     form = SubjectScreeningForm

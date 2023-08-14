@@ -33,11 +33,11 @@ from ..models import SubjectConsent
 
 @admin.register(SubjectConsent, site=intecomm_consent_admin)
 class SubjectConsentAdmin(
+    PiiNamesModelAdminMixin,
     SiteModelAdminMixin,
     InitialDataModelAdminMixin,
     RedirectAllToPatientLogModelAdminMixin,
     ModelAdminProtectPiiMixin,
-    PiiNamesModelAdminMixin,
     ConsentModelAdminMixin,
     ModelAdminSubjectDashboardMixin,
     SimpleHistoryAdmin,
