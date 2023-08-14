@@ -35,7 +35,7 @@ class PatientLogForm(
         name fields were hidden by mistake.
         """
         value = super().get_initial_for_field(field, field_name)
-        if field_name in ["legal_name", "familiar_name"]:
+        if value and field_name in ["legal_name", "familiar_name"]:
             if field_name in [fld.name for fld in self.visible_fields()]:
                 if re.match(UUID_PATTERN, value):
                     value = None
