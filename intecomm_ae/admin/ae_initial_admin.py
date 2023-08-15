@@ -1,8 +1,12 @@
 from django.contrib import admin
-from django.utils.html import format_html
-from edc_adverse_event.modeladmin_mixins import AeInitialModelAdminMixin
+from django_audit_fields import audit_fieldset_tuple
+from edc_action_item import action_fieldset_tuple
+from edc_adverse_event.modeladmin_mixins import (
+    AeInitialModelAdminMixin,
+    fieldset_part_one,
+    fieldset_part_three,
+)
 from edc_model_admin.history import SimpleHistoryAdmin
-from edc_notification.utils import get_email_contacts
 from edc_sites.admin import SiteModelAdminMixin
 
 from ..admin_site import intecomm_ae_admin
@@ -13,10 +17,30 @@ from ..models import AeInitial
 @admin.register(AeInitial, site=intecomm_ae_admin)
 class AeInitialAdmin(SiteModelAdminMixin, AeInitialModelAdminMixin, SimpleHistoryAdmin):
     form = AeInitialForm
-    email_contact = get_email_contacts("ae_reports")
-    additional_instructions = format_html(
-        "Complete the initial AE report and forward to the TMG. "
-        'Email to <a href="mailto:{}">{}</a>',
-        email_contact,
-        email_contact,
+    additional_instructions = None
+
+    fieldsets = (
+        (None, {"fields": ("subject_identifier", "report_datetime")}),
+        fieldset_part_one,
+        fieldset_part_three,
+        action_fieldset_tuple,
+        audit_fieldset_tuple,
     )
+
+    default_radio_fields = {
+        "ae_classification": admin.VERTICAL,
+        "ae_grade": admin.VERTICAL,
+    }
+
+    def get_list_filter(self, request) -> tuple[str, ...]:
+        list_filter = super().get_list_filter(request)
+        custom_fields = ("ae_awareness_date", "ae_grade")
+        excluded_fields = [
+            "ae_classification",
+            "sae",
+            "sae_reason",
+            "susar",
+            "susar_reported",
+        ]
+        excluded_fields.extend(custom_fields)
+        return custom_fields + tuple(f for f in list_filter if f not in excluded_fields)

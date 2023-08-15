@@ -7,4 +7,11 @@ from ..models import AeInitial
 class AeInitialForm(AeInitialModelFormMixin, forms.ModelForm):
     class Meta(AeInitialModelFormMixin.Meta):
         model = AeInitial
-        fields = "__all__"
+        fields = [
+            "ae_classification_as_text",
+            "ae_description",
+            "ae_awareness_date",
+            "ae_start_date",
+            "ae_grade",
+            "ae_treatment",
+        ]
