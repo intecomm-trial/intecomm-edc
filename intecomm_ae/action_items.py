@@ -6,6 +6,7 @@ from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
 from edc_action_item import ActionWithNotification, site_action_items
+from edc_adverse_event.action_items import HospitalizationAction
 from edc_adverse_event.constants import (
     AE_FOLLOWUP_ACTION,
     AE_INITIAL_ACTION,
@@ -220,6 +221,12 @@ class DeathReportAction(ActionWithNotification):
             return django_apps.get_model("intecomm_prn.offscheduleinte")
 
 
-site_action_items.register(DeathReportAction)
+class HospitalizationAction(HospitalizationAction):
+    reference_model = "intecomm_ae.hospitalization"
+    admin_site_name = "intecomm_ae_admin"
+
+
 site_action_items.register(AeFollowupAction)
 site_action_items.register(AeInitialAction)
+site_action_items.register(DeathReportAction)
+site_action_items.register(HospitalizationAction)
