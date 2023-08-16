@@ -53,10 +53,8 @@ class DeathReportAdmin(SiteModelAdminMixin, DeathReportModelAdminMixin, SimpleHi
                     "please indicate the recorded causes of death"
                 ),
                 "fields": (
+                    "death_certificate",
                     "cause_of_death",
-                    "cause_of_death_other",
-                    "secondary_cause_of_death",
-                    "secondary_cause_of_death_other",
                     "narrative",
                 ),
             },
@@ -66,9 +64,8 @@ class DeathReportAdmin(SiteModelAdminMixin, DeathReportModelAdminMixin, SimpleHi
     )
 
     radio_fields = {
-        "cause_of_death": admin.VERTICAL,
         "death_as_inpatient": admin.VERTICAL,
         "death_location": admin.VERTICAL,
         "informant_relationship": admin.VERTICAL,
-        "secondary_cause_of_death": admin.VERTICAL,
+        "death_certificate": admin.VERTICAL,
     }

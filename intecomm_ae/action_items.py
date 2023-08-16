@@ -6,17 +6,16 @@ from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
 from edc_action_item import ActionWithNotification, site_action_items
+from edc_adverse_event.action_items import HospitalizationAction
 from edc_adverse_event.constants import (
     AE_FOLLOWUP_ACTION,
     AE_INITIAL_ACTION,
-    AE_SUSAR_ACTION,
-    AE_TMG_ACTION,
     DEATH_REPORT_ACTION,
 )
-from edc_constants.constants import CLOSED, DEAD, HIGH_PRIORITY, NO, YES
+from edc_constants.constants import DEAD, HIGH_PRIORITY, YES
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_notification.utils import get_email_contacts
-from edc_reportable import GRADE3, GRADE4, GRADE5
+from edc_reportable import GRADE5
 from edc_visit_schedule.utils import get_offschedule_models
 from intecomm_rando.constants import CLINIC_CONTROL, COMM_INTERVENTION
 
@@ -96,84 +95,19 @@ class AeInitialAction(ActionWithNotification):
         1. Add death report action if death
         """
         next_actions = []
-        deceased = (
-            self.reference_obj.ae_grade == GRADE5 or self.reference_obj.sae_reason.name == DEAD
-        )
-
+        deceased = self.reference_obj.ae_grade == GRADE5
         # add next AeFollowup if not deceased
         if not deceased:
             next_actions = self.append_to_next_if_required(
                 action_name=AE_FOLLOWUP_ACTION, next_actions=next_actions
             )
-
-        # add next AE_SUSAR_ACTION if SUSAR == YES
-        next_actions = self.append_to_next_if_required(
-            next_actions=next_actions,
-            action_name=AE_SUSAR_ACTION,
-            required=(
-                self.reference_obj.susar == YES and self.reference_obj.susar_reported == NO
-            ),
-        )
-
         # add next Death report if G5/Death
         next_actions = self.append_to_next_if_required(
             next_actions=next_actions,
             action_name=DEATH_REPORT_ACTION,
             required=deceased,
         )
-
-        # add next AE Tmg if G5/Death
-        next_actions = self.append_to_next_if_required(
-            next_actions=next_actions, action_name=AE_TMG_ACTION, required=deceased
-        )
-        # add next AeTmgAction if G4
-        next_actions = self.append_to_next_if_required(
-            next_actions=next_actions,
-            action_name=AE_TMG_ACTION,
-            required=self.reference_obj.ae_grade == GRADE4,
-        )
-        # add next AeTmgAction if G3 and is an SAE
-        next_actions = self.append_to_next_if_required(
-            next_actions=next_actions,
-            action_name=AE_TMG_ACTION,
-            required=(self.reference_obj.ae_grade == GRADE3 and self.reference_obj.sae == YES),
-        )
-
         return next_actions
-
-
-class AeSusarAction(ActionWithNotification):
-    name = AE_SUSAR_ACTION
-    display_name = "Submit AE SUSAR Report"
-    notification_display_name = "AE SUSAR Report"
-    parent_action_names = [AE_INITIAL_ACTION]
-    reference_model = "intecomm_ae.aesusar"
-    related_reference_model = "intecomm_ae.aeinitial"
-    related_reference_fk_attr = "ae_initial"
-    create_by_user = False
-    show_link_to_changelist = True
-    admin_site_name = "intecomm_ae_admin"
-    instructions = "Complete the AE SUSAR report"
-    priority = HIGH_PRIORITY
-
-
-class AeTmgAction(ActionWithNotification):
-    name = AE_TMG_ACTION
-    display_name = "TMG AE Report pending"
-    notification_display_name = "TMG AE Report"
-    parent_action_names = [AE_INITIAL_ACTION, AE_FOLLOWUP_ACTION, AE_TMG_ACTION]
-    reference_model = "intecomm_ae.aetmg"
-    related_reference_model = "intecomm_ae.aeinitial"
-    related_reference_fk_attr = "ae_initial"
-    create_by_user = False
-    color_style = "info"
-    show_link_to_changelist = True
-    admin_site_name = "intecomm_ae_admin"
-    instructions = "This report is to be completed by the TMG only."
-    priority = HIGH_PRIORITY
-
-    def close_action_item_on_save(self):
-        return self.reference_obj.report_status == CLOSED
 
 
 class DeathReportAction(ActionWithNotification):
@@ -220,6 +154,12 @@ class DeathReportAction(ActionWithNotification):
             return django_apps.get_model("intecomm_prn.offscheduleinte")
 
 
-site_action_items.register(DeathReportAction)
+class HospitalizationAction(HospitalizationAction):
+    reference_model = "intecomm_ae.hospitalization"
+    admin_site_name = "intecomm_ae_admin"
+
+
 site_action_items.register(AeFollowupAction)
 site_action_items.register(AeInitialAction)
+site_action_items.register(DeathReportAction)
+site_action_items.register(HospitalizationAction)
