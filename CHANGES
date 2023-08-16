@@ -1,11 +1,14 @@
 Changes
 =======
 
-0.1.61
+0.1.62
 ------
 - simplify death report model and aeinitial model
 - Update death/aeinitial form/admin classes and PDF report classes
 - update action items for simplified death/aeinitial model
+- add hospitalization form
+- use get_adverse_event_app_label func instead of directly accessing
+  settings attr.
 
 0.1.60
 ------
