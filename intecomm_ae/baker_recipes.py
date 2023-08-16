@@ -6,8 +6,6 @@ from model_bakery.recipe import Recipe
 
 from intecomm_ae.models.ae_followup import AeFollowup
 from intecomm_ae.models.ae_initial import AeInitial
-from intecomm_ae.models.ae_susar import AeSusar
-from intecomm_ae.models.ae_tmg import AeTmg
 from intecomm_ae.models.death_report import DeathReport
 
 aeinitial = Recipe(
@@ -27,9 +25,6 @@ aeinitial = Recipe(
     ae_cause_other=None,
 )
 
-aetmg = Recipe(AeTmg, action_identifier=None)
-
-aesusar = Recipe(AeSusar, action_identifier=None)
 
 aefollowup = Recipe(AeFollowup, relevant_history=NO, action_identifier=None)
 

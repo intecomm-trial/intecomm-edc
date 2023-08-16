@@ -3,7 +3,6 @@ from django_audit_fields import audit_fieldset_tuple
 from edc_action_item import action_fieldset_tuple
 from edc_adverse_event.modeladmin_mixins import (
     AeInitialModelAdminMixin,
-    fieldset_part_one,
     fieldset_part_three,
 )
 from edc_model_admin.history import SimpleHistoryAdmin
@@ -21,14 +20,24 @@ class AeInitialAdmin(SiteModelAdminMixin, AeInitialModelAdminMixin, SimpleHistor
 
     fieldsets = (
         (None, {"fields": ("subject_identifier", "report_datetime")}),
-        fieldset_part_one,
+        (
+            "Part 1: Description",
+            {
+                "fields": (
+                    "ae_classification_as_text",
+                    "ae_description",
+                    "ae_awareness_date",
+                    "ae_start_date",
+                    "ae_grade",
+                )
+            },
+        ),
         fieldset_part_three,
         action_fieldset_tuple,
         audit_fieldset_tuple,
     )
 
-    default_radio_fields = {
-        "ae_classification": admin.VERTICAL,
+    radio_fields = {
         "ae_grade": admin.VERTICAL,
     }
 

@@ -1,6 +1,12 @@
 Changes
 =======
 
+0.1.61
+------
+- simplify death report model and aeinitial model
+- Update death/aeinitial form/admin classes and PDF report classes
+- update action items for simplified death/aeinitial model
+
 0.1.60
 ------
 - manipulate changeform data to remove legal and familiar name
