@@ -38,6 +38,7 @@ from .htn_initial_review_admin import HtnInitialReviewAdmin
 from .htn_medication_adherence_admin import HtnMedicationAdherenceAdmin
 from .htn_review_admin import HtnReviewAdmin
 from .icecapa_admin import IcecapaModelAdmin
+from .location_update_admin import LocationUpdateAdmin
 from .malaria_test_admin import MalariaTestAdmin
 from .medications_admin import MedicationsAdmin
 from .next_appointment_admin import NextAppointmentAdmin

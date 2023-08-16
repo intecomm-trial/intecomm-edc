@@ -1,4 +1,5 @@
 from edc_constants.constants import (
+    CLINIC,
     CLINICAL_WITHDRAWAL,
     COMMUNITY,
     DEAD,
@@ -8,6 +9,8 @@ from edc_constants.constants import (
     ESTIMATED,
     FREE_OF_CHARGE,
     HIV,
+    HOME,
+    HOSPITAL,
     HTN,
     INSURANCE,
     NONE,
@@ -20,6 +23,7 @@ from edc_constants.constants import (
     PREGNANCY,
     PRIVATE,
     RELATIVE,
+    TELEPHONE,
 )
 from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS, INSULIN
 from edc_he.constants import CHF, NHIF
@@ -32,6 +36,13 @@ from intecomm_lists.constants import HEALTH_RECORDS
 from intecomm_subject.constants import VIT_B_FOLIC_ACID
 
 list_data = {
+    "edc_appointment.appointmenttype": [
+        (CLINIC, "At the FACILITY"),
+        (COMMUNITY, "In the COMMUNITY"),
+        (HOSPITAL, "In hospital"),
+        (HOME, "At home"),
+        (TELEPHONE, "By telephone"),
+    ],
     "intecomm_lists.drugpaysources": [
         (OWN_CASH, "Own cash"),
         (INSURANCE, "Insurance"),

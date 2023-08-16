@@ -4,7 +4,6 @@ from importlib.metadata import version
 from pathlib import Path
 
 import environ
-from edc_appointment.constants import SCHEDULED_APPT, UNSCHEDULED_APPT
 from edc_constants.constants import COMPLETE
 from edc_protocol_incident.constants import PROTOCOL_INCIDENT
 from edc_utils import get_datetime_from_env
@@ -314,19 +313,15 @@ REPORT_DATETIME_FIELD_NAME = "report_datetime"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # edc-appointment
-EDC_APPOINTMENT_APPT_TYPE_CHOICES = (
-    ("clinic", "IN CLINIC / FACILITY"),
-    ("community", "IN COMMUNITY"),
-    ("hospital", "In hospital"),
-    ("home", "At home"),
-    ("telephone", "By telephone"),
-)
-EDC_APPOINTMENT_APPT_TYPE_DEFAULT = None
-
-EDC_APPOINTMENT_APPT_REASON_CHOICES = (
-    (SCHEDULED_APPT, "Scheduled visit (study)"),
-    (UNSCHEDULED_APPT, "Routine / Unscheduled (non-study)"),
-)
+EDC_APPOINTMENT_FORM_META_OPTIONS = {
+    "labels": {"appt_type": "Where is the participant attending"},
+    "help_texts": {
+        "appt_type": (
+            "If other than that expected based on subject's randomization, you will be "
+            "asked to complete the `Changed location` CRF."
+        )
+    },
+}
 
 # edc-export
 EDC_EXPORT_EXPORT_PII_USERS = env.list("EDC_EXPORT_EXPORT_PII_USERS")

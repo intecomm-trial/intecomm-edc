@@ -38,6 +38,7 @@ from .htn_initial_review_form import HtnInitialReviewForm
 from .htn_medication_adherence_form import HtnMedicationAdherenceForm
 from .htn_review_form import HtnReviewForm
 from .icecapa_form import IcecapaForm
+from .location_update_form import LocationUpdateForm
 from .malaria_test_form import MalariaTestForm
 from .medications_form import MedicationsForm
 from .next_appointment_form import NextAppointmentForm

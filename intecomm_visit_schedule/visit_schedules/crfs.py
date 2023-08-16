@@ -43,9 +43,10 @@ crfs_d1 = FormsCollection(
 
 crfs_followup = FormsCollection(
     Crf(show_order=110, model="intecomm_subject.clinicalreview"),
-    Crf(show_order=115, model="intecomm_subject.vitals"),
-    Crf(show_order=112, model="intecomm_subject.hivinitialreview", required=False),
-    Crf(show_order=114, model="intecomm_subject.dminitialreview", required=False),
+    Crf(show_order=112, model="intecomm_subject.locationupdate", required=False),
+    Crf(show_order=113, model="intecomm_subject.vitals"),
+    Crf(show_order=114, model="intecomm_subject.hivinitialreview", required=False),
+    Crf(show_order=115, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
     Crf(show_order=130, model="intecomm_subject.hivreview", required=False),
     Crf(show_order=140, model="intecomm_subject.dmreview", required=False),
