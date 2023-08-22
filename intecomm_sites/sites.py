@@ -4,10 +4,8 @@ from .intecomm_site import IntecommSite
 
 fqdn = "intecomm.clinicedc.org"
 
-# lg:Luganda,ry:Runyakitara,en:English,sw:Swahili
-
-ug_languages = dict(lg="Luganda", en="English", ry="Runyakitara", sw="Swahili")
-tz_languages = dict(sw="Swahili", en="English", mas="Maasai")
+ug_languages = dict(en="English", lg="Luganda", ry="Runyakitara", sw="Swahili")
+tz_languages = dict(en="English", sw="Swahili", mas="Maasai")
 
 all_sites = {
     "uganda": (
