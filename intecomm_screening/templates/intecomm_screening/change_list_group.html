@@ -1,3 +1,4 @@
+{% load i18n %}
 <table>
 <tr>
 <td style="white-space: nowrap;">{% if patient_group_url %}<a style="white-space: nowrap;background-color:#5cb85c" class="button" title="Go to patient group" href="{{ patient_group_url }}">{{ patient_group_name|upper|linebreaksbr }}</a>{% else %}<span style="color:orange">available</span>{% endif %}</td>

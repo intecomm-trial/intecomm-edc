@@ -2,7 +2,7 @@ from uuid import uuid4
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import override_settings
+from django.test import override_settings, tag
 from django.urls import reverse
 from django_webtest import WebTest
 from edc_constants.constants import HIV, UUID_PATTERN
@@ -58,6 +58,7 @@ class TestScreening(IntecommTestCaseMixin, WebTest):
         self.assertIn(str(obj.legal_name), response.text)
         self.assertIn(str(obj.familiar_name), response.text)
 
+    @tag("1")
     @override_settings(SITE_ID=101, EDC_CONSENT_REMOVE_PATIENT_NAMES_FROM_COUNTRIES=["uganda"])
     def test_add_patient_log_without_names(self):
         changelist_url_name = (
