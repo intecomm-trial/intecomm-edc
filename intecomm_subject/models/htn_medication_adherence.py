@@ -1,7 +1,6 @@
-from edc_adherence.model_mixins import MedicationAdherenceModelMixin
 from edc_model.models import BaseUuidModel
 
-from ..model_mixins import CrfModelMixin
+from ..model_mixins import CrfModelMixin, MedicationAdherenceModelMixin
 
 
 class HtnMedicationAdherence(

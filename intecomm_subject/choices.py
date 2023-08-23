@@ -96,8 +96,8 @@ MISSED_PILLS = (
     ("earlier_this_week", "earlier this week"),
     ("last_week", "last week"),
     ("lt_month_ago", "less than a month ago"),
-    ("gt_month_ago", "more than a month ago"),
-    (NEVER, "have never missed taking my study pills"),
+    # ("gt_month_ago", "more than a month ago"),
+    (NEVER, "have never missed taking my medications"),
 )
 
 MARITAL_STATUS = (
@@ -158,11 +158,17 @@ INFO_SOURCE = (
     (OTHER, "Other"),
 )
 
+MEDS_NOT_TAKEN_REASON = (
+    (NOT_APPLICABLE, "Not applicable"),
+    (OTHER, "Other, specify below ..."),
+)
+
 MISSED_VISIT_CALLER_CHOICES = (
     (NURSE, "Nurse"),
     (OTHER, "Other"),
     (NOT_APPLICABLE, "Not applicable"),
 )
+
 
 PHYSICAL_ACTIVITY = (
     ("retired", "Retired"),

@@ -1,5 +1,6 @@
 {% extends 'intecomm_edc/bootstrap3/base.html' %}
 {% load static edc_dashboard_extras %}
+{% load i18n %}
 
 {% block extrastyle %}
   <!-- begin group management extrastyle -->
@@ -21,7 +22,7 @@
   <div class="col-sm-8">
     <div class="panel panel-default">
     <div class="panel-heading">
-      <h4 class="panel-title">Add patients to group</h4>
+      <h4 class="panel-title">{%  trans "Add patients to group" %}</h4>
     </div>
 
 
@@ -34,7 +35,7 @@
         <form action="" method="post">
         {% csrf_token %}
           {{ add_form.as_div }}
-        <input type="submit" value="Add to group">
+        <input type="submit" value={% trans "Add to group" %}>
         </form>
 
       </fieldset>

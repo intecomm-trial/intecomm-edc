@@ -1,8 +1,9 @@
+{% load i18n %}
 <table>
 <tr>
 <td style="white-space: nowrap;">{% if patient_group_url %}<a style="white-space: nowrap;background-color:#5cb85c" class="button" title="Go to patient group" href="{{ patient_group_url }}">{{ patient_group_name|upper|linebreaksbr }}</a>{% else %}<span style="color:orange">available</span>{% endif %}</td>
 </tr>
 {% if subject_dashboard_url %}
-<tr><td style="white-space: nowrap;"><a style="white-space: nowrap;background-color:#0b58a2" class="button" title="Go to subject dashboard" href="{{ subject_dashboard_url }}">Dashboard</a></td></tr>
+<tr><td style="white-space: nowrap;"><a style="white-space: nowrap;background-color:#0b58a2" class="button" title={%  trans "Go to subject dashboard" %} href="{{ subject_dashboard_url }}">Dashboard</a></td></tr>
 {% endif  %}
 </table>

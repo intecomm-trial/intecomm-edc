@@ -1,8 +1,10 @@
+{% load i18n %}
+
 <table>
   <tr>
-    <td colspan="2" style="white-space: nowrap"><a title="place a call to this patient" href="{{ add_patient_call_url }}?contact_number={{ contact_number }}&alt_contact_number={{ alt_contact_number }}&patient_log={{  patient_log_id }}">Call now</a></td>
+    <td colspan="2" style="white-space: nowrap"><a title={% trans "place a call to this patient" %} href="{{ add_patient_call_url }}?contact_number={{ contact_number }}&alt_contact_number={{ alt_contact_number }}&patient_log={{  patient_log_id }}">Call now</a></td>
   </tr>
   <tr>
-    <td colspan="2"><a title="Go to calls made to this patient" href="{{ patient_call_url }}">Calls: {{call_attempts}}</a></td>
+    <td colspan="2"><a title={% trans "Go to calls made to this patient" %} href="{{ patient_call_url }}">{% trans "Calls" %}: {{call_attempts}}</a></td>
   </tr>
 </table>

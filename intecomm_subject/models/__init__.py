@@ -42,6 +42,7 @@ from .htn_initial_review import HtnInitialReview
 from .htn_medication_adherence import HtnMedicationAdherence
 from .htn_review import HtnReview
 from .icecapa import Icecapa
+from .location_update import LocationUpdate
 from .malaria_test import MalariaTest
 from .medications import Medications
 from .next_appointment import NextAppointment

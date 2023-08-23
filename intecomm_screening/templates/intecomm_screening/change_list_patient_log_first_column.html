@@ -1,9 +1,11 @@
+{% load i18n %}
+
 <table>
-  <tr><td style="white-space: nowrap;" title="Filing identifier">{{filing_identifier}}</td></tr>
+  <tr><td style="white-space: nowrap;" title={%  trans "Filing identifier" %}>{{filing_identifier}}</td></tr>
   {% if  legal_name %}
-    <tr><td style="white-space: nowrap;" title="Legal name">{{ legal_name }}</td></tr>
+    <tr><td style="white-space: nowrap;" title={%  trans "Legal name" %}>{{ legal_name }}</td></tr>
   {% endif %}
-  <tr><td style="white-space: nowrap;" title="Gender Age Initials">{{ gender }}{{ age_in_years }} {{ initials }}</td></tr>
-  <tr><td style="white-space: nowrap;" title="Last 4 digits of hospital identifier">Hospital: **{{ last_4_hospital_identifier }}</td></tr>
-  <tr><td style="white-space: nowrap;" title="Last 4 digits of cell">Cell: **{{ last_4_contact_number }}</td></tr>
+  <tr><td style="white-space: nowrap;" title={%  trans "Gender Age Initials" %}>{{ gender }}{{ age_in_years }} {{ initials }}</td></tr>
+  <tr><td style="white-space: nowrap;" title={%  trans "Last 4 digits of hospital identifier" %}>{%  trans "Hospital" %}: **{{ last_4_hospital_identifier }}</td></tr>
+  <tr><td style="white-space: nowrap;" title={%  trans "Last 4 digits of cell" %}>{%  trans "Cell" %}: **{{ last_4_contact_number }}</td></tr>
 </table>

@@ -3,8 +3,9 @@ import sys
 from importlib.metadata import version
 from pathlib import Path
 
+import django.conf.locale
 import environ
-from edc_appointment.constants import SCHEDULED_APPT, UNSCHEDULED_APPT
+from django.conf import global_settings
 from edc_constants.constants import COMPLETE
 from edc_protocol_incident.constants import PROTOCOL_INCIDENT
 from edc_utils import get_datetime_from_env
@@ -170,9 +171,9 @@ if not DEFENDER_ENABLED:
     INSTALLED_APPS.pop(INSTALLED_APPS.index("defender"))
 
 MIDDLEWARE = [
-    # "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "multisite.middleware.DynamicSiteMiddleware",
     "django.contrib.sites.middleware.CurrentSiteMiddleware",
@@ -239,7 +240,6 @@ if env.str("DJANGO_CACHE") == "redis":
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
             "LOCATION": "redis://127.0.0.1:6379/1",
-            # "LOCATION": "unix://[:{DJANGO_REDIS_PASSWORD}]@/path/to/socket.sock?db=0",
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
                 "PASSWORD": env.str("DJANGO_REDIS_PASSWORD"),
@@ -286,10 +286,42 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-USE_I18N = False  # disable trans
-USE_L10N = False  # set to False so DATE formats below are used
+USE_I18N = True  # set False to turn of translation
+USE_L10N = True  # set to False so DATE formats below are used (Deprecated)
 USE_TZ = True
-LANGUAGE_CODE = env.str("DJANGO_LANGUAGE_CODE")  # ignored if USE_L10N = False
+EXTRA_LANG_INFO = {
+    "mas": {
+        "bidi": False,
+        "code": "mas",
+        "name": "Masaai",
+        "name_local": "Masaai",
+    },
+    "ry": {
+        "bidi": False,
+        "code": "ry",
+        "name": "Runyakitara",
+        "name_local": "Runyakitara",
+    },
+    "rny": {
+        "bidi": False,
+        "code": "rny",
+        "name": "Runyankore",
+        "name_local": "Runyankore",
+    },
+    "lg": {
+        "bidi": False,
+        "code": "lg",
+        "name": "Luganda",
+        "name_local": "Luganda",
+    },
+}
+
+# Add custom languages not provided by Django
+LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
+django.conf.locale.LANG_INFO = LANG_INFO
+LANGUAGES_BIDI = global_settings.LANGUAGES_BIDI + ["mas", "ry", "lg", "rny"]
+
+LANGUAGE_CODE = "en-gb"
 LANGUAGES = [x.split(":") for x in env.list("DJANGO_LANGUAGES")] or (("en", "English"),)
 TIME_ZONE = env.str("DJANGO_TIME_ZONE")
 DATE_INPUT_FORMATS = ["%Y-%m-%d", "%d/%m/%Y"]
@@ -314,19 +346,15 @@ REPORT_DATETIME_FIELD_NAME = "report_datetime"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # edc-appointment
-EDC_APPOINTMENT_APPT_TYPE_CHOICES = (
-    ("clinic", "IN CLINIC / FACILITY"),
-    ("community", "IN COMMUNITY"),
-    ("hospital", "In hospital"),
-    ("home", "At home"),
-    ("telephone", "By telephone"),
-)
-EDC_APPOINTMENT_APPT_TYPE_DEFAULT = None
-
-EDC_APPOINTMENT_APPT_REASON_CHOICES = (
-    (SCHEDULED_APPT, "Scheduled visit (study)"),
-    (UNSCHEDULED_APPT, "Routine / Unscheduled (non-study)"),
-)
+EDC_APPOINTMENT_FORM_META_OPTIONS = {
+    "labels": {"appt_type": "Where is the participant attending"},
+    "help_texts": {
+        "appt_type": (
+            "If other than that expected based on subject's randomization, you will be "
+            "asked to complete the `Changed location` CRF."
+        )
+    },
+}
 
 # edc-export
 EDC_EXPORT_EXPORT_PII_USERS = env.list("EDC_EXPORT_EXPORT_PII_USERS")

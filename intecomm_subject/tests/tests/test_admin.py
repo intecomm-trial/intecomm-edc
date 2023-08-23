@@ -24,7 +24,13 @@ class TestAdmin(WebTest):
         ]
 
     def login(self):
-        form = self.app.get(reverse("admin:index")).maybe_follow().form
+        response = self.app.get(reverse("admin:index")).maybe_follow()
+        for index, form in response.forms.items():
+            if form.action == "/i18n/setlang/":
+                # exclude the locale form
+                continue
+            else:
+                break
         form["username"] = self.user.username
         form["password"] = "pass"  # nosec B105
         return form.submit()
@@ -52,7 +58,8 @@ class TestAdmin(WebTest):
             self.fail(f"NoReverseMatch unexpectedly raised. Got urls \n{as_str}.")
         for url, model in urls:
             response = self.app.get(url, user=self.user, status=200)
+            print(model._meta.verbose_name_plural)
             self.assertTrue(
-                model._meta.verbose_name_plural in response.text,
+                str(model._meta.verbose_name_plural) in response.text,
                 msg=f"{model._meta.verbose_name_plural} not found in changelist html",
             )

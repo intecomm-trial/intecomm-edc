@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from edc_subject_dashboard.views import SubjectDashboardView
 
 from intecomm_group.models import PatientGroup
@@ -16,7 +17,7 @@ class DashboardView(SubjectDashboardView):
     consent_model = "intecomm_consent.subjectconsent"
     navbar_selected_item = "consented_subject"
     visit_model = "intecomm_subject.subjectvisit"
-    history_button_label = "Audit"
+    history_button_label = _("Audit")
 
     appointment_model_wrapper_cls = AppointmentModelWrapper
 

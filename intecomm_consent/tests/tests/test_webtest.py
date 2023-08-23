@@ -1,4 +1,8 @@
+import django
+from django.conf import global_settings
+from django.conf.locale import LANG_INFO
 from django.contrib.auth.models import User
+from django.test import override_settings
 from django.urls import reverse
 from django_webtest import WebTest
 from edc_dashboard import url_names
@@ -8,7 +12,48 @@ from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMi
 from intecomm_subject.models import DrugSupplyDm, DrugSupplyHiv, DrugSupplyHtn
 from intecomm_subject.models import HealthEconomics as OldHealthEconomics
 
+EXTRA_LANG_INFO = {
+    "mas": {
+        "bidi": False,
+        "code": "mas",
+        "name": "Masaai",
+        "name_local": "Masaai",
+    },
+    "ry": {
+        "bidi": False,
+        "code": "ry",
+        "name": "Runyakitara",
+        "name_local": "Runyakitara",
+    },
+    "rny": {
+        "bidi": False,
+        "code": "rny",
+        "name": "Runyankore",
+        "name_local": "Runyankore",
+    },
+    "lg": {
+        "bidi": False,
+        "code": "lg",
+        "name": "Luganda",
+        "name_local": "Luganda",
+    },
+}
 
+django.conf.locale.LANG_INFO = LANG_INFO
+# Add custom languages not provided by Django
+LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
+django.conf.locale.LANG_INFO = LANG_INFO
+# LANGUAGES = [x.split(":") for x in env.list("DJANGO_LANGUAGES")] or (("en", "English"),)
+
+
+@override_settings(
+    USE_I18N=True,
+    USE_L10N=True,
+    USE_TZ=True,
+    LANG_INFO=dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO),
+    LANGUAGES_BIDI=global_settings.LANGUAGES_BIDI + ["mas", "ry", "lg", "rny"],
+    LANGUAGE_CODE="en-gb",
+)
 class TestSubjectDashboard(IntecommTestCaseMixin, WebTest):
     def setUp(self) -> None:
         super().setUp()
@@ -26,7 +71,13 @@ class TestSubjectDashboard(IntecommTestCaseMixin, WebTest):
         ]
 
     def login(self):
-        form = self.app.get(reverse("admin:index")).maybe_follow().form
+        response = self.app.get(reverse("admin:index")).maybe_follow()
+        for index, form in response.forms.items():
+            if form.action == "/i18n/setlang/":
+                # exclude the locale form
+                continue
+            else:
+                break
         form["username"] = self.user.username
         form["password"] = "pass"  # nosec B105
         return form.submit()

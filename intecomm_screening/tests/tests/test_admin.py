@@ -2,7 +2,8 @@ from uuid import uuid4
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import override_settings
+from django.contrib.sites.models import Site
+from django.test import override_settings, tag
 from django.urls import reverse
 from django_webtest import WebTest
 from edc_constants.constants import HIV, UUID_PATTERN
@@ -58,6 +59,7 @@ class TestScreening(IntecommTestCaseMixin, WebTest):
         self.assertIn(str(obj.legal_name), response.text)
         self.assertIn(str(obj.familiar_name), response.text)
 
+    @tag("1")
     @override_settings(SITE_ID=101, EDC_CONSENT_REMOVE_PATIENT_NAMES_FROM_COUNTRIES=["uganda"])
     def test_add_patient_log_without_names(self):
         changelist_url_name = (
@@ -100,3 +102,42 @@ class TestScreening(IntecommTestCaseMixin, WebTest):
         response = self.app.get(change_url, user=self.user)
         self.assertNotIn(str(obj.legal_name), response.text)
         self.assertNotIn(str(obj.familiar_name), response.text)
+
+    @tag("1")
+    @override_settings(
+        SITE_ID=None,
+        EDC_CONSENT_REMOVE_PATIENT_NAMES_FROM_COUNTRIES=["uganda"],
+        ALLOWED_HOSTS=["amana.tz.localhost"],
+        LANGUAGES=[("en", "English"), ("sw", "Swahili")],
+    )
+    def test_add_patient_log_with_names_with_site_from_http_host(self):
+        site_obj = Site.objects.get(id=201)
+        site_obj.domain = "amana.tz.localhost"
+        site_obj.save()
+
+        changelist_url_name = (
+            "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
+        )
+
+        login(
+            self,
+            user=self.user,
+            redirect_url=changelist_url_name,
+            extra_environ=dict(HTTP_HOST="amana.tz.localhost"),
+        )
+
+        changelist_url = reverse(changelist_url_name)
+        response = self.app.get(
+            changelist_url,
+            user=self.user,
+            extra_environ=dict(HTTP_HOST="amana.tz.localhost"),
+        )
+        add_url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_add")
+        self.assertIn(add_url, response.text)
+        response = self.app.get(
+            add_url,
+            user=self.user,
+            extra_environ=dict(HTTP_HOST="amana.tz.localhost"),
+        )
+        self.assertIn("legal_name", response.text)
+        self.assertIn("familiar_name", response.text)

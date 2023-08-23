@@ -4,6 +4,7 @@ import inflect
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_constants.constants import COMPLETE, NEW, NOT_APPLICABLE, UUID_PATTERN
 from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
@@ -150,8 +151,9 @@ class PatientGroupAdmin(
     def to_subjects(self, obj=None):
         cnt = obj.patients.all().count()
         url = get_group_subject_dashboards_url(obj)
+        title = _("Go to subject dashboards")
         return format_html(
-            f'<a title="Go to subject dashboards" href="{url}">'
+            f'<a title="{title}" href="{url}">'
             f'<span class="nowrap">{cnt}&nbsp;{p.plural("subject", cnt)}</span></a>'
         )
 
