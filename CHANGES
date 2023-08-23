@@ -1,6 +1,19 @@
 Changes
 =======
 
+0.1.64
+------
+- bump edc to 0.5.24
+- ICECAP-A translation to sw
+- other minor translations for sw
+
+0.1.63
+------
+- bump edc to 0.5.23
+- addresses issue with names (PII) fields not showing despite
+  having correct perms
+
+
 0.1.62
 ------
 - simplify death report model and aeinitial model
