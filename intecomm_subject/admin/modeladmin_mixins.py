@@ -8,11 +8,13 @@ from edc_model_admin.history import SimpleHistoryAdmin
 from edc_model_admin.mixins import ModelAdminProtectPiiMixin
 from edc_sites.admin import SiteModelAdminMixin
 
+from intecomm_subject.choices import MISSED_PILLS
+
 medication_adherence_description = """
 <H5><B><font color="orange">Interviewer to read</font></B></H5>
 <p>Drag the slider on the line below at
 the point showing your best guess about how much medication
-you have taken in the last 28 days:<BR><BR>
+you have taken in the last month:<BR><BR>
 <B>0%</B> means you have taken no medication<BR>
 <B>50%</B> means you have taken half of your medication<BR>
 <B>100%</B> means you have taken all your medication<BR>
@@ -45,8 +47,12 @@ class MedicationAdherenceAdminMixin:
             {
                 "fields": (
                     "last_missed_pill",
+                    "meds_missed_in_days",
                     "missed_pill_reason",
                     "other_missed_pill_reason",
+                    "meds_shortage_in_days",
+                    "meds_shortage_reason",
+                    "meds_shortage_reason_other",
                 )
             },
         ),
@@ -54,9 +60,14 @@ class MedicationAdherenceAdminMixin:
         audit_fieldset_tuple,
     )
 
-    filter_horizontal = ["missed_pill_reason"]
+    filter_horizontal = ["missed_pill_reason", "meds_shortage_reason"]
 
     radio_fields = {
         "last_missed_pill": admin.VERTICAL,
         "crf_status": admin.VERTICAL,
     }
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        if db_field.name == "last_missed_pill":
+            kwargs["choices"] = MISSED_PILLS
+        return super().formfield_for_choice_field(db_field, request, **kwargs)

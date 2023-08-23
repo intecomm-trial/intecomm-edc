@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
 from django.urls.conf import include, path, re_path
 from django.views.generic import RedirectView
 from edc_auth.views import LogoutView
@@ -78,6 +79,9 @@ urlpatterns += [
     path("followup_comm/", FollowupCommView.as_view(), name="followup_comm_url"),
     path("followup_inte/", FollowupInteView.as_view(), name="followup_inte_url"),
     path("home/", HomeView.as_view(), name="home_url"),
+    path("i18n/", include("django.conf.urls.i18n")),
     re_path(".", RedirectView.as_view(url="/"), name="home_url"),
     re_path("", HomeView.as_view(), name="home_url"),
 ]
+
+urlpatterns = i18n_patterns(*urlpatterns)

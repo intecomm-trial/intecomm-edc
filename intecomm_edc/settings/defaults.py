@@ -3,7 +3,9 @@ import sys
 from importlib.metadata import version
 from pathlib import Path
 
+import django.conf.locale
 import environ
+from django.conf import global_settings
 from edc_constants.constants import COMPLETE
 from edc_protocol_incident.constants import PROTOCOL_INCIDENT
 from edc_utils import get_datetime_from_env
@@ -172,6 +174,7 @@ MIDDLEWARE = [
     # "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "multisite.middleware.DynamicSiteMiddleware",
     "django.contrib.sites.middleware.CurrentSiteMiddleware",
@@ -285,10 +288,43 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-USE_I18N = False  # disable trans
-USE_L10N = False  # set to False so DATE formats below are used
+USE_I18N = True  # set False to turn of translation
+USE_L10N = True  # set to False so DATE formats below are used (Deprecated)
 USE_TZ = True
-LANGUAGE_CODE = env.str("DJANGO_LANGUAGE_CODE")  # ignored if USE_L10N = False
+
+EXTRA_LANG_INFO = {
+    "mas": {
+        "bidi": False,
+        "code": "mas",
+        "name": "Masaai",
+        "name_local": "Masaai",
+    },
+    "ry": {
+        "bidi": False,
+        "code": "ry",
+        "name": "Runyakitara",
+        "name_local": "Runyakitara",
+    },
+    "rny": {
+        "bidi": False,
+        "code": "rny",
+        "name": "Runyankore",
+        "name_local": "Runyankore",
+    },
+    "lg": {
+        "bidi": False,
+        "code": "lg",
+        "name": "Luganda",
+        "name_local": "Luganda",
+    },
+}
+
+# Add custom languages not provided by Django
+LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
+django.conf.locale.LANG_INFO = LANG_INFO
+LANGUAGES_BIDI = global_settings.LANGUAGES_BIDI + ["mas", "ry", "lg", "rny"]
+
+LANGUAGE_CODE = "en-gb"
 LANGUAGES = [x.split(":") for x in env.list("DJANGO_LANGUAGES")] or (("en", "English"),)
 TIME_ZONE = env.str("DJANGO_TIME_ZONE")
 DATE_INPUT_FORMATS = ["%Y-%m-%d", "%d/%m/%Y"]

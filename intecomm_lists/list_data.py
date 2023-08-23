@@ -229,6 +229,13 @@ list_data = {
         ("need_to_think_about_it", "I haven't had a chance to think about it"),
         (OTHER, "Other, please specify"),
     ],
+    "intecomm_lists.medicationshortagereasons": [
+        ("gov_supply_shortage", "I did not get enough medication from hospital/clinic"),
+        ("no_money", "I did not have money to but my medications"),
+        ("no_supplier", "I could not find a supplier with my medications"),
+        (NOT_APPLICABLE, "Not applicable"),
+        (OTHER, "Other, please specify"),
+    ],
     "intecomm_lists.nonadherencereasons": [
         ("forgot_to_take", "I simply forgot to take my medication"),
         ("travelled", "I travelled and forgot my medication"),
@@ -280,6 +287,18 @@ list_data = {
         (OTHER, "Other, specify"),
         (NOT_APPLICABLE, "Not applicable"),
     ],
+    # TODO: = Update TZ tribes
+    #   1 = Msukuma
+    #   2 = Wapogoro
+    #   3 = Mzaramo
+    #   4 = Mnyiramba
+    #   5 = Mkara/Mkerewe
+    #   6 = Mhaya
+    #   7 = Mmakonde
+    #   8 = Mkuria/Mshashi
+    #   9 = Mchaga
+    #   10 = Mhindi
+    #   11 = Mwarabu
     "edc_he.ethnicities": [
         Row(("acholi", "Acholi"), extra="uganda"),
         Row(("alur", "Alur"), extra="uganda"),

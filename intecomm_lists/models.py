@@ -109,6 +109,12 @@ class OffstudyReasons(ListModelMixin):
         verbose_name_plural = "Offstudy Reasons"
 
 
+class MedicationShortageReasons(ListModelMixin):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Medication shortage reasons"
+        verbose_name_plural = "Medication shortage reasons"
+
+
 class NonAdherenceReasons(ListModelMixin):
     class Meta(ListModelMixin.Meta):
         verbose_name = "NonAdherence Reasons"
