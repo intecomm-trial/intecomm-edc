@@ -181,7 +181,7 @@ project_settings = DefaultTestSettings(
     add_dashboard_middleware=True,
     add_lab_dashboard_middleware=True,
     add_adverse_event_dashboard_middleware=True,
-    add_multisite_middleware=True,
+    # add_multisite_middleware=True,
 ).settings
 
 
