@@ -34,9 +34,7 @@ SITE_ID = SiteID(default=201)  # Amana
 
 EDC_SITES_UAT_DOMAIN = False
 DEBUG = True
-ALLOWED_HOSTS = [
-    "localhost",
-]
+ALLOWED_HOSTS = ["localhost"]
 
 SECURE_SSL_REDIRECT = False
 EDC_MODEL_ADMIN_CSS_THEME = "edc_purple"
