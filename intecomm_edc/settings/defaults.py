@@ -171,7 +171,6 @@ if not DEFENDER_ENABLED:
     INSTALLED_APPS.pop(INSTALLED_APPS.index("defender"))
 
 MIDDLEWARE = [
-    # "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -241,7 +240,6 @@ if env.str("DJANGO_CACHE") == "redis":
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
             "LOCATION": "redis://127.0.0.1:6379/1",
-            # "LOCATION": "unix://[:{DJANGO_REDIS_PASSWORD}]@/path/to/socket.sock?db=0",
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
                 "PASSWORD": env.str("DJANGO_REDIS_PASSWORD"),
@@ -291,7 +289,6 @@ AUTH_PASSWORD_VALIDATORS = [
 USE_I18N = True  # set False to turn of translation
 USE_L10N = True  # set to False so DATE formats below are used (Deprecated)
 USE_TZ = True
-
 EXTRA_LANG_INFO = {
     "mas": {
         "bidi": False,
