@@ -6,13 +6,28 @@ Controlling chronic diseases in Africa: Development and evaluation of an integra
 
 Liverpool School of Tropical Medicine
 
+University College London (UCL)
+
 http://www.isrctn.com/ISRCTN15319595
 
 See also https://github.com/clinicedc/edc
 
-Installation
-------------
-... in development
+* Django 4.2 / python 3.11
+* EDC (see setup.cfg for version)
+* We run live and UAT on Ubuntu with nginx/gunicorn/mysql 8.1
+
+Basic install
+-------------
+.. code-block:: bash
+
+    conda create -n edc python=3.11
+    conda activate edc
+    git clone https://github.com/intecomm-trial/intecomm-edc.git ~/apps
+    cd ~/apps
+    pip install -U .
+    python manage.py migrate
+    # run migrate a second time for post-migrate signals
+    python manage.py migrate
 
 Randomization
 -------------

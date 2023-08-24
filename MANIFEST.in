@@ -4,3 +4,4 @@ include *.rst
 recursive-include intecomm_*/templates *
 recursive-include intecomm_*/static *
 recursive-include label_templates *
+include */locale/*/LC_MESSAGES/*.mo
