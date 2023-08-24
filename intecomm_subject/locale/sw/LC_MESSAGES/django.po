@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-21 11:34-0500\n"
+"POT-Creation-Date: 2023-08-23 21:25-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,33 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: models/health_economics/assets.py:17 models/health_economics/assets.py:18
 msgid "Health Economics: Assets"
 msgstr "Afya Uchumi: Mali"
+
+#: models/health_economics/household_head.py:19
+#: models/health_economics/household_head.py:20
+#, fuzzy
+#| msgid "Health Economics: Assets"
+msgid "Health Economics: Household head"
+msgstr "Health Economics: Mkuu wa kaya"
+
+#: models/health_economics/income.py:16 models/health_economics/income.py:17
+#, fuzzy
+#| msgid "Health Economics: Assets"
+msgid "Health Economics: Income"
+msgstr "Health Economics: Mapato"
+
+#: models/health_economics/patient.py:16 models/health_economics/patient.py:17
+#, fuzzy
+#| msgid "Health Economics: Assets"
+msgid "Health Economics: Mgonjwa"
+msgstr "Health Economics: Mali"
+
+#: models/health_economics/property.py:16
+#: models/health_economics/property.py:17
+#, fuzzy
+#| msgid "Health Economics: Assets"
+msgid "Health Economics: Property"
+msgstr "Health Economics: Ardhi"
