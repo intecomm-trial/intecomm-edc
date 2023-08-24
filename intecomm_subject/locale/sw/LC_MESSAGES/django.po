@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-23 21:25-0500\n"
+"POT-Creation-Date: 2023-08-24 17:02-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,396 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: choices.py:25
+msgid "Occasionally"
+msgstr ""
+
+#: choices.py:26
+msgid "1-2 times a week"
+msgstr ""
+
+#: choices.py:27
+msgid "3-4 times a week"
+msgstr ""
+
+#: choices.py:28
+msgid "Daily"
+msgstr ""
+
+#: choices.py:29 choices.py:35 choices.py:42 choices.py:49 choices.py:87
+#: choices.py:93 choices.py:132 choices.py:144 choices.py:150 choices.py:160
+#: choices.py:165 choices.py:172 choices.py:211
+msgid "Not applicable"
+msgstr ""
+
+#: choices.py:33
+msgid "Patient comes to this facility for their care"
+msgstr ""
+
+#: choices.py:34
+msgid "Patient goes to a different clinic"
+msgstr ""
+
+#: choices.py:39
+msgid "Health facility"
+msgstr ""
+
+#: choices.py:40
+msgid "Community clinic"
+msgstr ""
+
+#: choices.py:41
+msgid "Other facility, please specify below ..."
+msgstr ""
+
+#: choices.py:46
+msgid "Voluntary disclosure"
+msgstr ""
+
+#: choices.py:47
+msgid "Involuntary disclosure"
+msgstr ""
+
+#: choices.py:48
+msgid "Others told them without permission"
+msgstr ""
+
+#: choices.py:53
+msgid "No Formal Education"
+msgstr ""
+
+#: choices.py:54
+msgid "Up to primary"
+msgstr ""
+
+#: choices.py:55
+msgid "Up to secondary / high school"
+msgstr ""
+
+#: choices.py:56
+msgid "College or similar higher institution"
+msgstr ""
+
+#: choices.py:57
+msgid "university educated"
+msgstr ""
+
+#: choices.py:61
+msgid "Professional / office work / business"
+msgstr ""
+
+#: choices.py:62
+msgid "Skilled / Unskilled manual work"
+msgstr ""
+
+#: choices.py:63
+msgid "Housewife"
+msgstr ""
+
+#: choices.py:64
+msgid "Not working / seeking work"
+msgstr ""
+
+#: choices.py:65
+msgid "Not working / NOT seeking work"
+msgstr ""
+
+#: choices.py:66 choices.py:177
+msgid "Retired"
+msgstr ""
+
+#: choices.py:67 choices.py:121
+msgid "Other, please specify"
+msgstr ""
+
+#: choices.py:71
+msgid "No"
+msgstr ""
+
+#: choices.py:72
+msgid "Yes, my spouse"
+msgstr ""
+
+#: choices.py:73
+msgid "Yes, one of my parents living with me"
+msgstr ""
+
+#: choices.py:74
+msgid "Yes, another relative living with me"
+msgstr ""
+
+#: choices.py:75
+msgid "Don't know"
+msgstr ""
+
+#: choices.py:79
+msgid "Drugs / Medicine"
+msgstr ""
+
+#: choices.py:80
+msgid "Diet and lifestyle alone"
+msgstr ""
+
+#: choices.py:84
+msgid "Minor"
+msgstr ""
+
+#: choices.py:85
+msgid "Moderate"
+msgstr ""
+
+#: choices.py:86
+msgid "Major"
+msgstr ""
+
+#: choices.py:91
+msgid "Resolved"
+msgstr ""
+
+#: choices.py:92
+msgid "Ongoing"
+msgstr ""
+
+#: choices.py:97
+msgid "today"
+msgstr ""
+
+#: choices.py:98
+msgid "yesterday"
+msgstr ""
+
+#: choices.py:99
+msgid "earlier this week"
+msgstr ""
+
+#: choices.py:100
+msgid "last week"
+msgstr ""
+
+#: choices.py:101
+msgid "less than a month ago"
+msgstr ""
+
+#: choices.py:103
+msgid "have never missed taking my medications"
+msgstr ""
+
+#: choices.py:107
+msgid "Married or living with someone"
+msgstr ""
+
+#: choices.py:108
+msgid "Single"
+msgstr ""
+
+#: choices.py:109
+msgid "Divorced"
+msgstr ""
+
+#: choices.py:110
+msgid "Widow / Spinster"
+msgstr ""
+
+#: choices.py:116 choices.py:133
+msgid "Working"
+msgstr ""
+
+#: choices.py:117 choices.py:134
+msgid "Studying"
+msgstr ""
+
+#: choices.py:118 choices.py:135
+msgid "Caring for children"
+msgstr ""
+
+#: choices.py:119 choices.py:136
+msgid "House maintenance"
+msgstr ""
+
+#: choices.py:120 choices.py:137
+msgid "Nothing"
+msgstr ""
+
+#: choices.py:125
+msgid "Paper-based"
+msgstr ""
+
+#: choices.py:126
+msgid "Electronic"
+msgstr ""
+
+#: choices.py:127
+msgid "Both"
+msgstr ""
+
+#: choices.py:128
+msgid "Not Applicable"
+msgstr ""
+
+#: choices.py:138 choices.py:203
+msgid "Other, specify"
+msgstr ""
+
+#: choices.py:148
+msgid "Yes"
+msgstr ""
+
+#: choices.py:149
+msgid "No, I buy my own drugs"
+msgstr ""
+
+#: choices.py:154 choices.py:228
+msgid "Patient"
+msgstr ""
+
+#: choices.py:155
+msgid "Patient, hospital notes and/or outpatient card"
+msgstr ""
+
+#: choices.py:156
+msgid "Patient Representative (e.family member, friend)"
+msgstr ""
+
+#: choices.py:157
+msgid "Hospital notes"
+msgstr ""
+
+#: choices.py:158
+msgid "Outpatient cards"
+msgstr ""
+
+#: choices.py:159
+msgid "Collateral History from relative/guardian"
+msgstr ""
+
+#: choices.py:161 choices.py:171 choices.py:210
+msgid "Other"
+msgstr ""
+
+#: choices.py:166
+msgid "Other, specify below ..."
+msgstr ""
+
+#: choices.py:170
+msgid "Nurse"
+msgstr ""
+
+#: choices.py:178
+msgid "Mostly sitting"
+msgstr ""
+
+#: choices.py:179
+msgid "Mostly standing or walking"
+msgstr ""
+
+#: choices.py:180
+msgid "Definite physical effort"
+msgstr ""
+
+#: choices.py:181
+msgid "Vigorous physical activity"
+msgstr ""
+
+#: choices.py:185
+msgid "None"
+msgstr ""
+
+#: choices.py:186
+msgid "Some but less than one hour"
+msgstr ""
+
+#: choices.py:187
+msgid "1 hour but less than 3 hours"
+msgstr ""
+
+#: choices.py:188
+msgid "3 hours or more"
+msgstr ""
+
+#: choices.py:193
+msgid "Bus"
+msgstr ""
+
+#: choices.py:194
+msgid "Train"
+msgstr ""
+
+#: choices.py:195
+msgid "Ambulance"
+msgstr ""
+
+#: choices.py:196
+msgid "Private taxi"
+msgstr ""
+
+#: choices.py:197
+msgid "Own bicycle"
+msgstr ""
+
+#: choices.py:198
+msgid "Hired motorbike"
+msgstr ""
+
+#: choices.py:199
+msgid "Own car"
+msgstr ""
+
+#: choices.py:200
+msgid "Own motorbike"
+msgstr ""
+
+#: choices.py:201
+msgid "Hired bicycle"
+msgstr ""
+
+#: choices.py:202
+msgid "Foot"
+msgstr ""
+
+#: choices.py:207
+msgid "Routine appointment (non-study)"
+msgstr ""
+
+#: choices.py:208
+msgid "Patient unwell"
+msgstr ""
+
+#: choices.py:209
+msgid "Drug refill only"
+msgstr ""
+
+#: choices.py:215
+msgid "Scheduled visit (study)"
+msgstr ""
+
+#: choices.py:216
+msgid "Routine / Unscheduled visit (non-study)"
+msgstr ""
+
+#: choices.py:217
+msgid "Missed visit"
+msgstr ""
+
+#: choices.py:221
+msgid "Measured"
+msgstr ""
+
+#: choices.py:222
+msgid "Estimated"
+msgstr ""
+
+#: choices.py:223
+msgid "Not recorded / Not applicable"
+msgstr ""
+
+#: choices.py:227
+msgid "Health record"
+msgstr ""
+
+#: choices.py:229
+msgid "I estimated the date"
+msgstr ""
 
 #: models/health_economics/assets.py:17 models/health_economics/assets.py:18
 msgid "Health Economics: Assets"
@@ -38,8 +428,8 @@ msgstr "Health Economics: Mapato"
 #: models/health_economics/patient.py:16 models/health_economics/patient.py:17
 #, fuzzy
 #| msgid "Health Economics: Assets"
-msgid "Health Economics: Mgonjwa"
-msgstr "Health Economics: Mali"
+msgid "Health Economics: Patient"
+msgstr "Health Economics: Ardhi"
 
 #: models/health_economics/property.py:16
 #: models/health_economics/property.py:17
@@ -47,3 +437,8 @@ msgstr "Health Economics: Mali"
 #| msgid "Health Economics: Assets"
 msgid "Health Economics: Property"
 msgstr "Health Economics: Ardhi"
+
+#, fuzzy
+#~| msgid "Health Economics: Assets"
+#~ msgid "Health Economics: Mgonjwa"
+#~ msgstr "Health Economics: Mali"
