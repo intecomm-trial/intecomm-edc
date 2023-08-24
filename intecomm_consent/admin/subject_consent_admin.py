@@ -146,4 +146,10 @@ class SubjectConsentAdmin(
             pass
         else:
             dct.update(**self.initial_form_data(request, subject_screening))
+            try:
+                identity = dct["hospital_identifier"]
+            except KeyError:
+                pass
+            else:
+                dct["identity"] = identity
         return dct
