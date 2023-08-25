@@ -14,9 +14,12 @@ class ClinicalNoteAdmin(CrfModelAdmin):
 
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
-        ("Notes", {"fields": ("has_comment",)}),
+        ("Notes", {"fields": ("has_comment", "comments")}),
         crf_status_fieldset_tuple,
         audit_fieldset_tuple,
     )
 
-    radio_fields = {"crf_status": admin.VERTICAL}
+    radio_fields = {
+        "crf_status": admin.VERTICAL,
+        "has_comment": admin.VERTICAL,
+    }
