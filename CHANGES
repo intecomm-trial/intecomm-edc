@@ -1,6 +1,13 @@
 Changes
 =======
 
+0.1.67
+------
+- bump intecomm-form-validators==0.1.43
+- accept 0 for amount paid value (clinical review)
+- add DONT KNOW option to family history choices
+- add clinical note to PRN forms
+
 0.1.64
 ------
 - bump edc to 0.5.24
