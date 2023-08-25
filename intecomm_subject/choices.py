@@ -1,4 +1,6 @@
+from django.utils.translation import gettext_lazy as _
 from edc_constants.constants import (
+    DONT_KNOW,
     ESTIMATED,
     MEASURED,
     NEVER,
@@ -20,208 +22,209 @@ from edc_visit_tracking.constants import MISSED_VISIT, SCHEDULED, UNSCHEDULED
 from .constants import COMMUNITY_CLINIC, GTE_3HRS, NURSE, SITTING
 
 ALCOHOL_CONSUMPTION = (
-    ("occasionally", "Occasionally"),
-    ("1_2_per_week", "1-2 times a week"),
-    ("3_4_per_week", "3-4 times a week"),
-    ("daily", "Daily"),
-    (NOT_APPLICABLE, "Not applicable"),
+    ("occasionally", _("Occasionally")),
+    ("1_2_per_week", _("1-2 times a week")),
+    ("3_4_per_week", _("3-4 times a week")),
+    ("daily", _("Daily")),
+    (NOT_APPLICABLE, _("Not applicable")),
 )
 
 CARE_ACCESS = (
-    (THIS_CLINIC, "Patient comes to this facility for their care"),
-    (OTHER, "Patient goes to a different clinic"),
-    (NOT_APPLICABLE, "Not applicable"),
+    (THIS_CLINIC, _("Patient comes to this facility for their care")),
+    (OTHER, _("Patient goes to a different clinic")),
+    (NOT_APPLICABLE, _("Not applicable")),
 )
 
 CARE_DELIVERY = (
-    (HEALTH_FACILITY, "Health facility"),
-    (COMMUNITY_CLINIC, "Community clinic"),
-    (OTHER, "Other facility, please specify below ..."),
-    (NOT_APPLICABLE, "Not applicable"),
+    (HEALTH_FACILITY, _("Health facility")),
+    (COMMUNITY_CLINIC, _("Community clinic")),
+    (OTHER, _("Other facility, please specify below ...")),
+    (NOT_APPLICABLE, _("Not applicable")),
 )
 
 DISCLOSURE = (
-    ("voluntary", "Voluntary disclosure"),
-    ("involuntary", "Involuntary disclosure"),
-    ("by_others", "Others told them without permission"),
-    (NOT_APPLICABLE, "Not applicable"),
+    ("voluntary", _("Voluntary disclosure")),
+    ("involuntary", _("Involuntary disclosure")),
+    ("by_others", _("Others told them without permission")),
+    (NOT_APPLICABLE, _("Not applicable")),
 )
 
 EDUCATION = (
-    ("no_formal_education", "No Formal Education"),
-    ("primary", "Up to primary"),
-    ("secondary", "Up to secondary / high school"),
-    ("post_secondary", "College or similar higher institution"),
-    ("tertiary", "university educated"),
+    ("no_formal_education", _("No Formal Education")),
+    ("primary", _("Up to primary")),
+    ("secondary", _("Up to secondary / high school")),
+    ("post_secondary", _("College or similar higher institution")),
+    ("tertiary", _("university educated")),
 )
 
 EMPLOYMENT_STATUS = (
-    ("professional", "Professional / office work / business"),
-    ("manual_work", "Skilled / Unskilled manual work"),
-    ("housewife", "Housewife"),
-    ("unemployed", "Not working / seeking work"),
-    ("unemployed_not_seeking", "Not working / NOT seeking work"),
-    ("retired", "Retired"),
-    (OTHER, "Other, please specify"),
+    ("professional", _("Professional / office work / business")),
+    ("manual_work", _("Skilled / Unskilled manual work")),
+    ("housewife", _("Housewife")),
+    ("unemployed", _("Not working / seeking work")),
+    ("unemployed_not_seeking", _("Not working / NOT seeking work")),
+    ("retired", _("Retired")),
+    (OTHER, _("Other, please specify")),
 )
 
 HOUSEHOLD_YES_NO_CHOICES = (
-    (NO, "No"),
-    ("yes_spouse", "Yes, my spouse"),
-    ("yes_parents", "Yes, one of my parents living with me"),
-    ("yes_relative", "Yes, another relative living with me"),
+    (NO, _("No")),
+    ("yes_spouse", _("Yes, my spouse")),
+    ("yes_parents", _("Yes, one of my parents living with me")),
+    ("yes_relative", _("Yes, another relative living with me")),
+    (DONT_KNOW, _("Don't know")),
 )
 
 HTN_MANAGEMENT = (
-    (DRUGS, "Drugs / Medicine"),
-    (DIET_LIFESTYLE, "Diet and lifestyle alone"),
+    (DRUGS, _("Drugs / Medicine")),
+    (DIET_LIFESTYLE, _("Diet and lifestyle alone")),
 )
 
 IMPACT_SEVERITY = (
-    ("minor", "Minor"),
-    ("moderate", "Moderate"),
-    ("major", "Major"),
-    (NOT_APPLICABLE, "Not applicable"),
+    ("minor", _("Minor")),
+    ("moderate", _("Moderate")),
+    ("major", _("Major")),
+    (NOT_APPLICABLE, _("Not applicable")),
 )
 
 IMPACT_STATUS = (
-    ("resolved", "Resolved"),
-    ("ongoing", "Ongoing"),
-    (NOT_APPLICABLE, "Not applicable"),
+    ("resolved", _("Resolved")),
+    ("ongoing", _("Ongoing")),
+    (NOT_APPLICABLE, _("Not applicable")),
 )
 
 MISSED_PILLS = (
-    ("today", "today"),
-    ("yesterday", "yesterday"),
-    ("earlier_this_week", "earlier this week"),
-    ("last_week", "last week"),
-    ("lt_month_ago", "less than a month ago"),
-    # ("gt_month_ago", "more than a month ago"),
-    (NEVER, "have never missed taking my medications"),
+    ("today", _("today")),
+    ("yesterday", _("yesterday")),
+    ("earlier_this_week", _("earlier this week")),
+    ("last_week", _("last week")),
+    ("lt_month_ago", _("less than a month ago")),
+    # ("gt_month_ago", _("more than a month ago")),
+    (NEVER, _("have never missed taking my medications")),
 )
 
 MARITAL_STATUS = (
-    ("married", "Married or living with someone"),
-    ("single", "Single"),
-    ("divorced", "Divorced"),
-    ("widowed", "Widow / Spinster"),
+    ("married", _("Married or living with someone")),
+    ("single", _("Single")),
+    ("divorced", _("Divorced")),
+    ("widowed", _("Widow / Spinster")),
 )
 
 
 # *********************************
 ACTIVITY_CHOICES = (
-    ("working", "Working"),
-    ("studying", "Studying"),
-    ("caring_for_children", "Caring for children"),
-    ("house_maintenance", "House maintenance"),
-    ("nothing", "Nothing"),
-    (OTHER, "Other, please specify"),
+    ("working", _("Working")),
+    ("studying", _("Studying")),
+    ("caring_for_children", _("Caring for children")),
+    ("house_maintenance", _("House maintenance")),
+    ("nothing", _("Nothing")),
+    (OTHER, _("Other, please specify")),
 )
 
 CARD_TYPE_CHOICES = (
-    ("paper_based", "Paper-based"),
-    ("electronic", "Electronic"),
-    ("both", "Both"),
-    (NOT_APPLICABLE, "Not Applicable"),
+    ("paper_based", _("Paper-based")),
+    ("electronic", _("Electronic")),
+    ("both", _("Both")),
+    (NOT_APPLICABLE, _("Not Applicable")),
 )
 
 CHILDCARE_CHOICES = (
-    (NOT_APPLICABLE, "Not applicable"),
-    ("working", "Working"),
-    ("studying", "Studying"),
-    ("caring_for_children", "Caring for children"),
-    ("house_maintenance", "House maintenance"),
-    ("nothing", "Nothing"),
-    (OTHER, "Other, specify"),
+    (NOT_APPLICABLE, _("Not applicable")),
+    ("working", _("Working")),
+    ("studying", _("Studying")),
+    ("caring_for_children", _("Caring for children")),
+    ("house_maintenance", _("House maintenance")),
+    ("nothing", _("Nothing")),
+    (OTHER, _("Other, specify")),
 )
 
 GLUCOSE_UNITS = (
     (MILLIGRAMS_PER_DECILITER, MILLIGRAMS_PER_DECILITER),
     (MILLIMOLES_PER_LITER, MILLIMOLES_PER_LITER_DISPLAY),
-    (NOT_APPLICABLE, "Not applicable"),
+    (NOT_APPLICABLE, _("Not applicable")),
 )
 
 HCF_PRESCRIPTION_COLLECTION_CHOICES = (
-    (YES, "Yes"),
-    (NO, "No, I buy my own drugs"),
-    (NOT_APPLICABLE, "Not applicable"),
+    (YES, _("Yes")),
+    (NO, _("No, I buy my own drugs")),
+    (NOT_APPLICABLE, _("Not applicable")),
 )
 
 INFO_SOURCE = (
-    ("patient", "Patient"),
-    ("patient_and_outpatient", "Patient, hospital notes and/or outpatient card"),
-    ("patient_representive", "Patient Representative (e.family member, friend)"),
-    ("hospital_notes", "Hospital notes"),
-    ("outpatient_cards", "Outpatient cards"),
-    ("collateral_history", "Collateral History from relative/guardian"),
-    (NOT_APPLICABLE, "Not applicable"),
-    (OTHER, "Other"),
+    ("patient", _("Patient")),
+    ("patient_and_outpatient", _("Patient, hospital notes and/or outpatient card")),
+    ("patient_representive", _("Patient Representative (e.family member, friend)")),
+    ("hospital_notes", _("Hospital notes")),
+    ("outpatient_cards", _("Outpatient cards")),
+    ("collateral_history", _("Collateral History from relative/guardian")),
+    (NOT_APPLICABLE, _("Not applicable")),
+    (OTHER, _("Other")),
 )
 
 MEDS_NOT_TAKEN_REASON = (
-    (NOT_APPLICABLE, "Not applicable"),
-    (OTHER, "Other, specify below ..."),
+    (NOT_APPLICABLE, _("Not applicable")),
+    (OTHER, _("Other, specify below ...")),
 )
 
 MISSED_VISIT_CALLER_CHOICES = (
-    (NURSE, "Nurse"),
-    (OTHER, "Other"),
-    (NOT_APPLICABLE, "Not applicable"),
+    (NURSE, _("Nurse")),
+    (OTHER, _("Other")),
+    (NOT_APPLICABLE, _("Not applicable")),
 )
 
 
 PHYSICAL_ACTIVITY = (
-    ("retired", "Retired"),
-    (SITTING, "Mostly sitting"),
-    ("standing_or_walking", "Mostly standing or walking"),
-    ("physical_effort", "Definite physical effort"),
-    ("vigorous_physical_activity", "Vigorous physical activity"),
+    ("retired", _("Retired")),
+    (SITTING, _("Mostly sitting")),
+    ("standing_or_walking", _("Mostly standing or walking")),
+    ("physical_effort", _("Definite physical effort")),
+    ("vigorous_physical_activity", _("Vigorous physical activity")),
 )
 
 PHYSICAL_ACTIVITY_HOURS = (
-    ("none", "None"),
-    ("lt_1hr", "Some but less than one hour"),
-    ("1-3hr", "1 hour but less than 3 hours"),
-    (GTE_3HRS, "3 hours or more"),
+    ("none", _("None")),
+    ("lt_1hr", _("Some but less than one hour")),
+    ("1-3hr", _("1 hour but less than 3 hours")),
+    (GTE_3HRS, _("3 hours or more")),
 )
 
 
 TRANSPORT_CHOICES = (
-    ("bus", "Bus"),
-    ("train", "Train"),
-    ("ambulance", "Ambulance"),
-    ("private_taxi", "Private taxi"),
-    ("own_bicycle", "Own bicycle"),
-    ("hired_motorbike", "Hired motorbike"),
-    ("own_car", "Own car"),
-    ("own_motorbike", "Own motorbike"),
-    ("hired_bicycle", "Hired bicycle"),
-    ("foot", "Foot"),
-    (OTHER, "Other, specify"),
+    ("bus", _("Bus")),
+    ("train", _("Train")),
+    ("ambulance", _("Ambulance")),
+    ("private_taxi", _("Private taxi")),
+    ("own_bicycle", _("Own bicycle")),
+    ("hired_motorbike", _("Hired motorbike")),
+    ("own_car", _("Own car")),
+    ("own_motorbike", _("Own motorbike")),
+    ("hired_bicycle", _("Hired bicycle")),
+    ("foot", _("Foot")),
+    (OTHER, _("Other, specify")),
 )
 
 VISIT_UNSCHEDULED_REASON = (
-    ("routine_non_study", "Routine appointment (non-study)"),
-    ("patient_unwell_outpatient", "Patient unwell"),
-    ("drug_refill", "Drug refill only"),
-    (OTHER, "Other"),
-    (NOT_APPLICABLE, "Not applicable"),
+    ("routine_non_study", _("Routine appointment (non-study)")),
+    ("patient_unwell_outpatient", _("Patient unwell")),
+    ("drug_refill", _("Drug refill only")),
+    (OTHER, _("Other")),
+    (NOT_APPLICABLE, _("Not applicable")),
 )
 
 VISIT_REASON = (
-    (SCHEDULED, "Scheduled visit (study)"),
-    (UNSCHEDULED, "Routine / Unscheduled visit (non-study)"),
-    (MISSED_VISIT, "Missed visit"),
+    (SCHEDULED, _("Scheduled visit (study)")),
+    (UNSCHEDULED, _("Routine / Unscheduled visit (non-study)")),
+    (MISSED_VISIT, _("Missed visit")),
 )
 
 ESTIMATED_MEASURED_CHOICES = (
-    (MEASURED, "Measured"),
-    (ESTIMATED, "Estimated"),
-    (NOT_APPLICABLE, "Not recorded / Not applicable"),
+    (MEASURED, _("Measured")),
+    (ESTIMATED, _("Estimated")),
+    (NOT_APPLICABLE, _("Not recorded / Not applicable")),
 )
 
 APPT_DATE_INFO_SOURCES = (
-    ("health_records", "Health record"),
-    (PATIENT, "Patient"),
-    ("estimated", "I estimated the date"),
+    ("health_records", _("Health record")),
+    (PATIENT, _("Patient")),
+    ("estimated", _("I estimated the date")),
 )
