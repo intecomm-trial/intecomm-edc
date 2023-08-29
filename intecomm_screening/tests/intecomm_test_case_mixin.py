@@ -38,12 +38,14 @@ from model_bakery.baker import make_recipe
 from tqdm import tqdm
 
 from intecomm_lists.models import Conditions
+from intecomm_screening.constants import UGANDA
 from intecomm_screening.models import (
     ConsentRefusal,
     PatientGroup,
     PatientGroupRando,
     PatientLog,
     SubjectScreening,
+    SubjectScreeningUg,
 )
 from intecomm_sites.sites import fqdn
 from intecomm_sites.tests.site_test_case_mixin import SiteTestCaseMixin
@@ -98,6 +100,12 @@ def get_eligible_options(patient_log: PatientLog):
     )
 
 
+def get_current_country(site_id):
+    if site_id <= 200:
+        return UGANDA
+    return "tanzania"
+
+
 class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
     fqdn = fqdn
 
@@ -131,6 +139,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         age_in_years: int | None = None,
         hospital_identifier: str | None = None,
         conditions: list[Conditions] | None = None,
+        country: str | None = None,
         **kwargs,
     ):
         opts = dict(
@@ -143,7 +152,10 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             contact_number="1234567890",
         )
         opts.update(**kwargs)
-        patient_log = make_recipe("intecomm_screening.patientlog", **opts)
+        if country == UGANDA:
+            patient_log = make_recipe("intecomm_screening.patientlogug", **opts)
+        else:
+            patient_log = make_recipe("intecomm_screening.patientlog", **opts)
         conditions = conditions or [HIV]
         for condition in conditions:
             patient_log.conditions.add(Conditions.objects.get(name=condition))
@@ -166,10 +178,15 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             conditions=conditions,
         )
         patient_log_opt.update(**(patient_log_options or {}))
-        patient_log = patient_log or cls.get_patient_log(**patient_log_opt)
+        country = get_current_country(settings.SITE_ID)
+        patient_log = patient_log or cls.get_patient_log(country=country, **patient_log_opt)
         eligible_options = deepcopy(get_eligible_options(patient_log=patient_log))
         eligible_options.update(report_datetime=report_datetime or now)
-        subject_screening = SubjectScreening.objects.create(
+        if country == UGANDA:
+            subject_screening_model_cls = SubjectScreeningUg
+        else:
+            subject_screening_model_cls = SubjectScreening
+        subject_screening = subject_screening_model_cls.objects.create(
             patient_log_identifier=patient_log.patient_log_identifier,
             user_created="erikvw",
             user_modified="erikvw",
@@ -193,8 +210,14 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
 
     @staticmethod
     def get_subject_consent(subject_screening, consent_datetime=None, site_id=None):
+        country = get_current_country(subject_screening.site.id)
+        if country == UGANDA:
+            model_name = "intecomm_consent.subjectconsent"
+        else:
+            model_name = "intecomm_consent.subjectconsent"
+
         return baker.make_recipe(
-            "intecomm_consent.subjectconsent",
+            model_name,
             user_created="erikvw",
             user_modified="erikvw",
             screening_identifier=subject_screening.screening_identifier,

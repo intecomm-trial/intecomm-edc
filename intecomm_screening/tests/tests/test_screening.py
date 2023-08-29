@@ -1,4 +1,5 @@
 from decimal import Decimal
+from unittest.mock import patch
 from uuid import uuid4
 
 from django.db import IntegrityError
@@ -23,6 +24,7 @@ from intecomm_screening.models import PatientLog, SubjectScreening
 from intecomm_screening.models.subject_screening import SubjectScreeningError
 from intecomm_screening.utils import InvalidScreeningIdentifier
 
+from ...constants import UGANDA
 from ..intecomm_test_case_mixin import IntecommTestCaseMixin
 
 
@@ -229,7 +231,9 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
         patient_log_two.screening_identifier = patient_log.screening_identifier
         self.assertRaises(IntegrityError, patient_log_two.save)
 
-    def test_unwilling_to_screen_in_patient_log_raises(self):
+    @patch("intecomm_screening.forms.subject_screening.modelform_mixins.get_current_country")
+    def test_unwilling_to_screen_in_patient_log_raises(self, mock_get_current_country):
+        mock_get_current_country.result = "uganda"
         patient_log = self.get_patient_log(
             willing_to_screen=NO,
             screening_refusal_reason=ScreeningRefusalReasons.objects.get(
@@ -255,7 +259,9 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
             "Patient is unwilling to screen", str(form._errors.get("__all__", ""))
         )
 
-    def test_gender(self):
+    @patch("intecomm_screening.forms.subject_screening.modelform_mixins.get_current_country")
+    def test_gender(self, mock_get_current_country):
+        mock_get_current_country.result = "uganda"
         patient_log = self.get_patient_log(
             gender=FEMALE,
             willing_to_screen=YES,
@@ -275,7 +281,9 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
         form.is_valid()
         self.assertNotIn("gender", form._errors)
 
-    def test_initials(self):
+    @patch("intecomm_screening.forms.subject_screening.modelform_mixins.get_current_country")
+    def test_initials(self, mock_get_current_country):
+        mock_get_current_country.result = "uganda"
         patient_log = self.get_patient_log(
             gender=FEMALE,
             initials="XX",
@@ -300,13 +308,16 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
         form.is_valid()
         self.assertNotIn("initials", form._errors)
 
-    def test_conditions_matching_patient_log(self):
+    @patch("intecomm_screening.forms.subject_screening.modelform_mixins.get_current_country")
+    def test_conditions_matching_patient_log(self, mock_get_current_country):
+        mock_get_current_country.result = UGANDA
         patient_log = self.get_patient_log(
             gender=MALE,
             age_in_years=20,
             initials="XX",
             willing_to_screen=YES,
             screening_refusal_reason=None,
+            hospital_identifier="123456789",
             conditions=[DM],
         )
         cleaned_data = dict(
@@ -315,6 +326,7 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
             gender=MALE,
             age_in_years=20,
             initials="XX",
+            hospital_identifier="123456789",
             consent_ability=YES,
             in_care_6m=YES,
             in_care_duration="5y",
@@ -352,7 +364,9 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
             str(form._errors.get("__all__", "")),
         )
 
-    def test_health_talk_reponse_from_patientlog(self):
+    @patch("intecomm_screening.forms.subject_screening.modelform_mixins.get_current_country")
+    def test_health_talk_reponse_from_patientlog(self, mock_get_current_country):
+        mock_get_current_country.result = UGANDA
         patient_log = self.get_patient_log(
             gender=MALE,
             age_in_years=20,

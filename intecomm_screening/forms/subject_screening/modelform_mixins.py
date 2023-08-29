@@ -1,24 +1,22 @@
 from __future__ import annotations
 
+from typing import Type
+
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.html import format_html
 from edc_constants.constants import DM, HIV, HTN, NO, TBD, YES
 from edc_dashboard import url_names
-from edc_form_validators import INVALID_ERROR, FormValidatorMixin
-from edc_screening.modelform_mixins import AlreadyConsentedFormMixin
+from edc_form_validators import INVALID_ERROR
 from edc_sites.get_country import get_current_country
-from edc_sites.modelform_mixins import SiteModelFormMixin
 from intecomm_form_validators import SubjectScreeningFormValidator
 
-from ..constants import UGANDA
-from ..models import PatientLog, SubjectScreening
+from ...constants import UGANDA
+from ...models import PatientLog, PatientLogUg
 
 
-class SubjectScreeningForm(
-    AlreadyConsentedFormMixin, SiteModelFormMixin, FormValidatorMixin, forms.ModelForm
-):
+class SubjectScreeningModelFormMixin:
     form_validator_cls = SubjectScreeningFormValidator
 
     def __init__(self, *args, **kwargs):
@@ -32,6 +30,7 @@ class SubjectScreeningForm(
         self.validate_health_talks_on_patient_log()
         self.validate_initials_against_patient_log()
         self.validate_age_in_years_against_patient_log()
+        self.validate_hospital_identifier_against_patient_log()
         self.validate_condition(HIV, "hiv_dx")
         self.validate_condition(DM, "dm_dx")
         self.validate_condition(HTN, "htn_dx")
@@ -39,23 +38,32 @@ class SubjectScreeningForm(
         return super().clean()
 
     @property
-    def patient_log(self) -> PatientLog:
+    def patient_log_model_cls(self) -> Type[PatientLog | PatientLogUg]:
+        pass
+
+    @property
+    def patient_log(self) -> PatientLog | PatientLogUg:
         if not self._patient_log:
             try:
-                self._patient_log = PatientLog.objects.get(
+                self._patient_log = self.patient_log_model_cls.objects.get(
                     patient_log_identifier=self.cleaned_data.get("patient_log_identifier")
                 )
             except ObjectDoesNotExist:
                 raise forms.ValidationError(
                     {"patient_log_identifier": "Invalid. Patient log identifier not found."}
                 )
+            if self._patient_log:
+                if get_current_country(site=self._patient_log.site) == UGANDA:
+                    self._patient_log = PatientLogUg.objects.get(
+                        patient_log_identifier=self.cleaned_data.get("patient_log_identifier")
+                    )
         return self._patient_log
 
     @property
     def patient_log_link(self):
         return (
             f'<a href="{self.patient_log.get_changelist_url()}?'
-            f'q={str(self.patient_log.id)}">Patient Log</a>'
+            f'q={str(self.patient_log.id)}">{self.patient_log._meta.verbose_name}</a>'
         )
 
     def validate_willing_to_screen_on_patient_log(self):
@@ -118,8 +126,6 @@ class SubjectScreeningForm(
                 code=INVALID_ERROR,
             )
 
-        pass
-
     def validate_initials_against_patient_log(self):
         if self.cleaned_data.get("initials") != self.patient_log.initials:
             raise forms.ValidationError(
@@ -132,7 +138,20 @@ class SubjectScreeningForm(
                 code=INVALID_ERROR,
             )
 
-        pass
+    def validate_hospital_identifier_against_patient_log(self):
+        if (
+            self.cleaned_data.get("hospital_identifier")
+            != self.patient_log.hospital_identifier
+        ):
+            raise forms.ValidationError(
+                {
+                    "hospital_identifier": format_html(
+                        f"Invalid. Expected {self.patient_log.hospital_identifier}. "
+                        f"See {self.patient_log_link}."
+                    )
+                },
+                code=INVALID_ERROR,
+            )
 
     def validate_condition(self, name, field):
         if self.patient_log.conditions.count() == 0:
@@ -191,23 +210,3 @@ class SubjectScreeningForm(
                 )
             url = f"{url}?q={self.instance.subject_identifier}"
         return url
-
-    class Meta:
-        model = SubjectScreening
-        fields = "__all__"
-        labels = {
-            "consent_ability": "Is the patient able and willing to give informed consent.",
-            "site": "Which study site is this?",
-        }
-        widgets = {
-            "patient_log_identifier": forms.TextInput(attrs={"readonly": "readonly"}),
-            "legal_name": forms.TextInput(attrs={"readonly": "readonly"}),
-            "familiar_name": forms.TextInput(attrs={"readonly": "readonly"}),
-            "initials": forms.TextInput(attrs={"readonly": "readonly"}),
-            "age_in_years": forms.TextInput(attrs={"readonly": "readonly"}),
-            "hospital_identifier": forms.TextInput(attrs={"readonly": "readonly"}),
-        }
-        help_texts = {
-            "patient_log_identifier": "(read-only)",
-            "site": "This question is asked to confirm you are logged in to the correct site.",
-        }
