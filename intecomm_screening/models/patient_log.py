@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 
+from django.apps import apps as django_apps
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.html import format_html
@@ -221,7 +222,7 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
 
     objects = PatientLogManager()
     on_site = CurrentSiteManager()
-    history = HistoricalRecords()
+    history = HistoricalRecords(inherit=True)
 
     def __str_safe__(self):
         g = "G" if self.group_identifier else ""
@@ -264,8 +265,16 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
                 UUID_PATTERN, str(self.patient_log_identifier)
             ):
                 self.patient_log_identifier = PatientLogIdentifier().identifier
-        validate_screening_identifier(self.screening_identifier, calling_model=self)
-        validate_subject_identifier(self.subject_identifier, calling_model=self)
+        validate_screening_identifier(
+            self.screening_identifier,
+            subject_screening_model_cls=self.subject_screening_model_cls,
+            calling_model=self,
+        )
+        validate_subject_identifier(
+            self.subject_identifier,
+            subject_consent_model_cls=self.subject_consent_model_cls,
+            calling_model=self,
+        )
         super().save(*args, **kwargs)
 
     def natural_key(self):
@@ -274,6 +283,14 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     @property
     def patient_group(self):
         return self.patientgroup_set.all().first()
+
+    @property
+    def subject_screening_model_cls(self):
+        return django_apps.get_model("intecomm_screening.subjectscreening")
+
+    @property
+    def subject_consent_model_cls(self):
+        return django_apps.get_model("intecomm_consent.subjectconsent")
 
     class Meta(BaseUuidModel.Meta):
         verbose_name = "Patient Log"

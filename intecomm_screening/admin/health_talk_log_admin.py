@@ -93,5 +93,5 @@ class HealthTalkLogAdmin(
             except AttributeError:
                 pass
             else:
-                kwargs["health_facility"] = HealthFacility.objects.filter(site_id=site_id)
+                kwargs["queryset"] = HealthFacility.objects.filter(site_id=site_id)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)

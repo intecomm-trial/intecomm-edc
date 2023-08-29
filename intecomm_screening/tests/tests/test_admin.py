@@ -3,7 +3,7 @@ from uuid import uuid4
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.test import override_settings, tag
+from django.test import override_settings
 from django.urls import reverse
 from django_webtest import WebTest
 from edc_constants.constants import HIV, UUID_PATTERN
@@ -59,24 +59,23 @@ class TestScreening(IntecommTestCaseMixin, WebTest):
         self.assertIn(str(obj.legal_name), response.text)
         self.assertIn(str(obj.familiar_name), response.text)
 
-    @tag("1")
-    @override_settings(SITE_ID=101, EDC_CONSENT_REMOVE_PATIENT_NAMES_FROM_COUNTRIES=["uganda"])
+    @override_settings(SITE_ID=101)
     def test_add_patient_log_without_names(self):
         changelist_url_name = (
-            "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
+            "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
         )
         login(self, user=self.user, redirect_url=changelist_url_name)
 
         changelist_url = reverse(changelist_url_name)
         response = self.app.get(changelist_url, user=self.user)
-        add_url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_add")
+        add_url = reverse("intecomm_screening_admin:intecomm_screening_patientlogug_add")
         self.assertIn(add_url, response.text)
         response = self.app.get(add_url, user=self.user)
         self.assertNotIn("legal_name", response.text)
         self.assertNotIn("familiar_name", response.text)
 
         obj = make_recipe(
-            "intecomm_screening.patientlog",
+            "intecomm_screening.patientlogug",
             legal_name=str(uuid4()),
             familiar_name=str(uuid4()),
             initials="BB",
@@ -95,7 +94,7 @@ class TestScreening(IntecommTestCaseMixin, WebTest):
         self.assertNotIn(str(obj.familiar_name), response.text)
 
         change_url = reverse(
-            "intecomm_screening_admin:intecomm_screening_patientlog_change",
+            "intecomm_screening_admin:intecomm_screening_patientlogug_change",
             args=(obj.id,),
         )
 
@@ -103,7 +102,47 @@ class TestScreening(IntecommTestCaseMixin, WebTest):
         self.assertNotIn(str(obj.legal_name), response.text)
         self.assertNotIn(str(obj.familiar_name), response.text)
 
-    @tag("1")
+    @override_settings(SITE_ID=201)
+    def test_add_patient_log_with_names2(self):
+        changelist_url_name = (
+            "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
+        )
+        login(self, user=self.user, redirect_url=changelist_url_name)
+
+        changelist_url = reverse(changelist_url_name)
+        response = self.app.get(changelist_url, user=self.user)
+        add_url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_add")
+        self.assertIn(add_url, response.text)
+        response = self.app.get(add_url, user=self.user)
+        self.assertIn("legal_name", response.text)
+        self.assertIn("familiar_name", response.text)
+
+        obj = make_recipe(
+            "intecomm_screening.patientlog",
+            legal_name="Tianna Esperanza",
+            familiar_name="Tianna Esperanza",
+            initials="TE",
+            hospital_identifier=uuid4().hex,
+            contact_number="123456780",
+            site_id=settings.SITE_ID,
+        )
+        obj.conditions.add(Conditions.objects.get(name=HIV))
+
+        obj.refresh_from_db()
+
+        response = self.app.get(changelist_url, user=self.user)
+        self.assertIn(str(obj.legal_name), response.text)
+        self.assertIn(str(obj.familiar_name), response.text)
+
+        change_url = reverse(
+            "intecomm_screening_admin:intecomm_screening_patientlog_change",
+            args=(obj.id,),
+        )
+
+        response = self.app.get(change_url, user=self.user)
+        self.assertIn(str(obj.legal_name), response.text)
+        self.assertIn(str(obj.familiar_name), response.text)
+
     @override_settings(
         SITE_ID=None,
         EDC_CONSENT_REMOVE_PATIENT_NAMES_FROM_COUNTRIES=["uganda"],

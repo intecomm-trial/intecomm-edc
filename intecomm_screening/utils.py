@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 from django import forms
 from django.apps import apps as django_apps
@@ -9,13 +9,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from edc_consent.utils import get_consent_model_cls
 from edc_constants.constants import UUID_PATTERN
-from edc_screening.utils import get_subject_screening_model_cls
 
 if TYPE_CHECKING:
-    from intecomm_consent.models import SubjectConsent
-    from intecomm_screening.models import PatientLog, SubjectScreening
+    from intecomm_consent.models import SubjectConsent, SubjectConsentUg
+    from intecomm_screening.models import (
+        PatientLog,
+        SubjectScreening,
+        SubjectScreeningUg,
+    )
 
 
 class AlreadyRefusedConsentError(Exception):
@@ -42,19 +44,16 @@ def get_consent_refusal_model_cls():
     return django_apps.get_model("intecomm_screening.consentrefusal")
 
 
-def get_patient_log_model_cls():
-    return django_apps.get_model("intecomm_screening.patientlog")
-
-
 def get_subject_screening_url(
     patient_log: PatientLog,
     subject_screening: SubjectScreening | None = None,
+    subject_screening_model_cls: Type[SubjectScreening | SubjectScreeningUg] = None,
     next_url_name: str | None = None,
 ) -> str | None:
     if subject_screening:
         url = subject_screening.get_absolute_url()
     else:
-        absolute_url = get_subject_screening_model_cls()().get_absolute_url()
+        absolute_url = subject_screening_model_cls().get_absolute_url()
         url = f"{absolute_url}?patient_log_identifier={patient_log.patient_log_identifier}"
     if next_url_name:
         url = f"{url.split('?')[0]}?next={next_url_name}&{url.split('?')[1]}"
@@ -63,7 +62,8 @@ def get_subject_screening_url(
 
 def get_subject_consent_url(
     subject_screening: SubjectScreening,
-    subject_consent: SubjectConsent | None = None,
+    subject_consent: SubjectConsent | SubjectConsentUg | None = None,
+    subject_consent_model_cls: Type[SubjectConsent | SubjectConsentUg] = None,
     next_url_name: str | None = None,
 ) -> str:
     """Returns an add url if subject is screened eligible or a change
@@ -71,12 +71,12 @@ def get_subject_consent_url(
     """
     url = None
     try:
-        subject_consent = subject_consent or get_consent_model_cls().objects.get(
+        subject_consent = subject_consent or subject_consent_model_cls.objects.get(
             screening_identifier=subject_screening.screening_identifier
         )
     except ObjectDoesNotExist:
         if subject_screening and subject_screening.eligible:
-            absolute_url = get_consent_model_cls()().get_absolute_url()
+            absolute_url = subject_consent_model_cls().get_absolute_url()
             url = (
                 f"{absolute_url}?screening_identifier={subject_screening.screening_identifier}"
             )
@@ -92,7 +92,6 @@ def get_consent_refusal_url(
     consent_refusal=None,
     next_url_name: str | None = None,
 ) -> str:
-    get_consent_refusal_model_cls()
     try:
         consent_refusal = consent_refusal or get_consent_refusal_model_cls().objects.get(
             screening_identifier=screening_identifier
@@ -137,12 +136,16 @@ def raise_if_consent_refusal_exists(
             )
 
 
-def validate_screening_identifier(screening_identifier: str, calling_model=None):
+def validate_screening_identifier(
+    screening_identifier: str,
+    subject_screening_model_cls: Type[SubjectScreening | SubjectScreeningUg] = None,
+    calling_model=None,
+):
     """Raise if non-uuid identifier is not found in SubjectScreening."""
     if not screening_identifier or not re.match(UUID_PATTERN, screening_identifier):
         try:
             with transaction.atomic():
-                get_subject_screening_model_cls().objects.get(
+                subject_screening_model_cls.objects.get(
                     screening_identifier=screening_identifier
                 )
         except ObjectDoesNotExist:
@@ -152,12 +155,16 @@ def validate_screening_identifier(screening_identifier: str, calling_model=None)
             )
 
 
-def validate_subject_identifier(subject_identifier, calling_model=None):
+def validate_subject_identifier(
+    subject_identifier,
+    subject_consent_model_cls: Type[SubjectConsent | SubjectConsentUg] = None,
+    calling_model=None,
+):
     """Raise if non-uuid identifier is not found in SubjectConsent."""
     if not subject_identifier or not re.match(UUID_PATTERN, subject_identifier):
         try:
             with transaction.atomic():
-                get_consent_model_cls().objects.get(subject_identifier=subject_identifier)
+                subject_consent_model_cls.objects.get(subject_identifier=subject_identifier)
         except ObjectDoesNotExist:
             raise InvalidSubjectIdentifier(
                 f"Invalid subject identifier. See {calling_model._meta.verbose_name}. "

@@ -1,5 +1,6 @@
 {% extends "edc_model_admin/admin/change_list.html" %}
 {% load i18n admin_urls static admin_list edc_admin_modify %}
+{% load edc_sites_extras %}
 
 {% block object-tools-items %}
   <li>
@@ -16,7 +17,11 @@
     </a>
   </li>
   <li>
+  {% if request|country == "uganda" %}
+    <a href="{% url "intecomm_screening_admin:intecomm_screening_patientlogug_changelist" %}" class="changelink">
+  {% else %}
     <a href="{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist" %}" class="changelink">
+  {% endif %}
       Patients
     </a>
   </li>

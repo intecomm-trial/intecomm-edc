@@ -1,4 +1,5 @@
 from django.db import models
+from edc_consent.utils import get_consent_model_cls
 from edc_model.models import BaseUuidModel
 from edc_model.models.historical_records import HistoricalRecords
 from edc_model_fields.fields.other_charfield import OtherCharField
@@ -46,7 +47,10 @@ class ConsentRefusal(SiteModelMixin, BaseUuidModel):
 
     def save(self, *args, **kwargs):
         self.subject_screening = get_subject_screening_or_raise(self.screening_identifier)
-        raise_if_subject_consent_exists(screening_identifier=self.screening_identifier)
+        raise_if_subject_consent_exists(
+            screening_identifier=self.screening_identifier,
+            subject_consent_model_cls=get_consent_model_cls(),
+        )
         super().save(*args, **kwargs)
 
     def __str__(self):

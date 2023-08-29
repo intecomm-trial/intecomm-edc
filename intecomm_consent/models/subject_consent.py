@@ -91,10 +91,10 @@ class SubjectConsent(
 
     consent = ConsentManager()
 
-    history = HistoricalRecords()
+    history = HistoricalRecords(inherit=True)
 
     def __str__(self):
-        return f"{self.subject_identifier} V{self.version}"
+        return f"{self._meta.verbose_name} {self.subject_identifier} v{self.version}"
 
     def save(self, *args, **kwargs):
         validate_screening_identifier_format_or_raise(self.screening_identifier)

@@ -4,6 +4,7 @@ from edc_consent import ConsentModelWrapperMixin
 from edc_model_wrapper import ModelWrapper
 from edc_subject_model_wrappers import SubjectConsentModelWrapper as BaseModelWrapper
 
+from . import SubjectConsentUgModelWrapper
 from .consent_refusal_model_wrapper import ConsentRefusalModelWrapper
 
 
@@ -52,3 +53,8 @@ class SubjectScreeningModelWrapper(ConsentModelWrapperMixin, ModelWrapper):
     @property
     def patient_group(self):
         return self.object.patient_group
+
+
+class SubjectScreeningUgModelWrapper(SubjectScreeningModelWrapper):
+    consent_model_wrapper_cls = SubjectConsentUgModelWrapper
+    model = "intecomm_screening.subjectscreeningug"

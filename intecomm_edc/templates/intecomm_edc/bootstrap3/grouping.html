@@ -1,5 +1,6 @@
 {% extends 'intecomm_edc/bootstrap3/base.html' %}
 {% load static edc_dashboard_extras %}
+{% load edc_sites_extras %}
 
 {% block main %}
 
@@ -34,7 +35,11 @@
         <a id="home_list_group_healthtalklog" href="{% url 'intecomm_screening_admin:intecomm_screening_healthtalklog_changelist' %}" class="list-group-item"><i class="fas fa-users-between-lines fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Health Talk Log</a>
       {% endif %}
       {% if perms.intecomm_screening.view_patientlog %}
-        <a id="home_list_group_patientlog" href="{% url 'intecomm_screening_admin:intecomm_screening_patientlog_changelist' %}" class="list-group-item"><i class="fas fa-person-circle-plus fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Patient Log</a>
+        {% if request|country == "uganda" %}
+          <a id="home_list_group_patientlog" href="{% url 'intecomm_screening_admin:intecomm_screening_patientlogug_changelist' %}" class="list-group-item"><i class="fas fa-person-circle-plus fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Patient Log</a>
+        {% else %}
+          <a id="home_list_group_patientlog" href="{% url 'intecomm_screening_admin:intecomm_screening_patientlog_changelist' %}" class="list-group-item"><i class="fas fa-person-circle-plus fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Patient Log</a>
+        {% endif %}
       {% endif %}
       {% if perms.intecomm_screening.view_patientgroup %}
         <a id="home_list_group_patientgroup" href="{% url 'intecomm_screening_admin:intecomm_screening_patientgroup_changelist' %}" class="list-group-item"><i class="fas fa-users fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Manage Patient Groups</a>

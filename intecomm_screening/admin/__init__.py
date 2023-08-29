@@ -6,6 +6,6 @@ from .patient_call_admin import PatientCallAdmin
 from .patient_call_inlines import AddPatientCallInline, ViewPatientCallInline
 from .patient_group_admin import PatientGroupAdmin
 from .patient_group_rando_admin import PatientGroupRandoAdmin
-from .patient_log_admin import PatientLogAdmin
+from .patient_log import PatientLogAdmin, PatientLogUgAdmin
 from .patient_log_report_print_history_admin import PatientLogReportPrintHistoryAdmin
-from .subject_screening_admin import SubjectScreeningAdmin
+from .subject_screening import SubjectScreeningAdmin, SubjectScreeningUgAdmin

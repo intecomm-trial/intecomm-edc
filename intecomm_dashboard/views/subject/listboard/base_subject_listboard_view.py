@@ -59,7 +59,7 @@ class BaseSubjectListboardView(SubjectListboardView):
         )
         context.update(
             site=getattr(self.request, "site", None),
-            country=get_current_country(self.request),
+            country=get_current_country(request=self.request),
         )
         return context
 

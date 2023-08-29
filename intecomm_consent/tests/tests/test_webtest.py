@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import django
 from django.conf import global_settings
 from django.conf.locale import LANG_INFO
@@ -43,7 +45,6 @@ django.conf.locale.LANG_INFO = LANG_INFO
 # Add custom languages not provided by Django
 LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
 django.conf.locale.LANG_INFO = LANG_INFO
-# LANGUAGES = [x.split(":") for x in env.list("DJANGO_LANGUAGES")] or (("en", "English"),)
 
 
 @override_settings(
@@ -71,6 +72,7 @@ class TestSubjectDashboard(IntecommTestCaseMixin, WebTest):
         ]
 
     def login(self):
+        form = None
         response = self.app.get(reverse("admin:index")).maybe_follow()
         for index, form in response.forms.items():
             if form.action == "/i18n/setlang/":
@@ -82,7 +84,9 @@ class TestSubjectDashboard(IntecommTestCaseMixin, WebTest):
         form["password"] = "pass"  # nosec B105
         return form.submit()
 
-    def test_dashboard_ok(self):
+    @patch("intecomm_dashboard.views.subject.dashboard.dashboard_view.get_current_country")
+    def test_dashboard_ok(self, mock_get_current_country):
+        mock_get_current_country.result = "uganda"
         subject_screening = self.get_subject_screening()
         self.assertEqual(subject_screening.reasons_ineligible, None)
         self.assertTrue(subject_screening.eligible)

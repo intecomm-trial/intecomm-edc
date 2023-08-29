@@ -1,0 +1,2 @@
+from .patient_log_admin import PatientLogAdmin
+from .patient_log_ug_admin import PatientLogUgAdmin

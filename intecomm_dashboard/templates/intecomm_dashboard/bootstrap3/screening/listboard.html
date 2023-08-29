@@ -2,21 +2,38 @@
 {% load admin_urls %}
 {% load edc_dashboard_extras %}
 {% load protocol_dashboard_extras %}
+{% load edc_sites_extras %}
 
 {% block listboard_panel %}
 
-    <a id="patientlog_add"
-        title="{% if perms.intecomm_screening.add_patientlog %}add patient{% else %}check your permissions{% endif %}"
-        class="btn btn-sm btn-default" role="button"  href="{% url 'intecomm_screening_admin:intecomm_screening_patientlog_add' %}?">
-            <i class="fas fa-plus fa-sm"></i> Add Patient Log
-    </a>
-    <a id="patientlog_changelist"
-        title="{% if perms.intecomm_screening.add_patientlog %}patient logs{% else %}check your permissions{% endif %}"
-        class="btn btn-sm btn-default" role="button"
-        {% if not perms.intecomm_screening.add_patientlog %}disabled{% endif %}
-        href="{% if perms.intecomm_screening.add_patientlog %}{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist" %}{% endif %}">
-            Patient Logs
-    </a>
+    {% if request|country == "uganda" %}
+      <a id="patientlog_add"
+          title="{% if perms.intecomm_screening.add_patientlog %}add patient{% else %}check your permissions{% endif %}"
+          class="btn btn-sm btn-default" role="button"  href="{% url 'intecomm_screening_admin:intecomm_screening_patientlogug_add' %}?">
+              <i class="fas fa-plus fa-sm"></i> Add Patient Log (Uganda)
+      </a>
+      <a id="patientlog_changelist"
+          title="{% if perms.intecomm_screening.add_patientlog %}patient logs{% else %}check your permissions{% endif %}"
+          class="btn btn-sm btn-default" role="button"
+          {% if not perms.intecomm_screening.add_patientlog %}disabled{% endif %}
+          href="{% if perms.intecomm_screening.add_patientlog %}{% url "intecomm_screening_admin:intecomm_screening_patientlogug_changelist" %}{% endif %}">
+              Patient Logs
+      </a>
+    {% else %}
+      <a id="patientlog_add"
+          title="{% if perms.intecomm_screening.add_patientlog %}add patient{% else %}check your permissions{% endif %}"
+          class="btn btn-sm btn-default" role="button"  href="{% url 'intecomm_screening_admin:intecomm_screening_patientlog_add' %}?">
+              <i class="fas fa-plus fa-sm"></i> Add Patient Log
+      </a>
+      <a id="patientlog_changelist"
+          title="{% if perms.intecomm_screening.add_patientlog %}patient logs{% else %}check your permissions{% endif %}"
+          class="btn btn-sm btn-default" role="button"
+          {% if not perms.intecomm_screening.add_patientlog %}disabled{% endif %}
+          href="{% if perms.intecomm_screening.add_patientlog %}{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist" %}{% endif %}">
+              Patient Logs
+      </a>
+    {% endif %}
+
     <a id="patientgroup_changelist"
         title="{% if perms.intecomm_screening.add_patientlog %}patient groups{% else %}check your permissions{% endif %}"
         class="btn btn-sm btn-default" role="button"

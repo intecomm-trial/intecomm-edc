@@ -2,27 +2,23 @@ from __future__ import annotations
 
 import re
 import urllib.parse
+from typing import TYPE_CHECKING, Type
 
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
-from django_audit_fields import audit_fieldset_tuple
-from edc_consent.modeladmin_mixins import PiiNamesModelAdminMixin
 from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER
 from edc_constants.constants import UUID_PATTERN
-from edc_model_admin.mixins import ModelAdminProtectPiiMixin
 from edc_sites.admin import SiteModelAdminMixin
 
 from intecomm_sites.sites import all_sites
 
-from ..admin_site import intecomm_screening_admin
-from ..forms import PatientLogForm
-from ..models import PatientGroup, PatientLog
-from .actions import render_pdf_action
-from .list_filters import (
+from ...models import PatientGroup
+from ..actions import render_pdf_action
+from ..list_filters import (
     AttendDateListFilter,
     ConsentedListFilter,
     DxListFilter,
@@ -32,25 +28,21 @@ from .list_filters import (
     ScreenedListFilter,
     StableListFilter,
 )
-from .modeladmin_mixins import (
-    BaseModelAdminMixin,
-    ChangeListTopBarModelAdminMixin,
-    RedirectAllToPatientLogModelAdminMixin,
-)
-from .patient_call_inlines import AddPatientCallInline, ViewPatientCallInline
-from .utils import ChangeListTemplateContext
+from ..modeladmin_mixins import ChangeListTopBarModelAdminMixin
+from ..patient_call_inlines import AddPatientCallInline, ViewPatientCallInline
+from .change_list_template_context import ChangeListTemplateContext
+
+if TYPE_CHECKING:
+    from intecomm_consent.models import SubjectConsent, SubjectConsentUg
+
+    from ...models import SubjectScreening, SubjectScreeningUg
 
 
-@admin.register(PatientLog, site=intecomm_screening_admin)
-class PatientLogAdmin(
-    PiiNamesModelAdminMixin,
-    ModelAdminProtectPiiMixin,
+class PatientLogModelAdminMixin(
     SiteModelAdminMixin,
     ChangeListTopBarModelAdminMixin,
-    RedirectAllToPatientLogModelAdminMixin,
-    BaseModelAdminMixin,
 ):
-    form = PatientLogForm
+    all_sites = all_sites
 
     autocomplete_fields = ["site"]
     inlines = [AddPatientCallInline, ViewPatientCallInline]
@@ -61,18 +53,6 @@ class PatientLogAdmin(
 
     extra_pii_attrs = ["first_column"]
 
-    # PiiNamesModelAdminMixin attrs
-    name_fields: list[str] = ["legal_name", "familiar_name"]
-    name_display_field: str = "familiar_name"
-    all_sites = all_sites
-
-    # ChangeListTopBarModelAdminMixin attrs
-    changelist_top_bar_selected = "patientlog"
-    changelist_top_bar_add_url = "intecomm_screening_admin:intecomm_screening_patientlog_add"
-
-    custom_form_codename = "edc_data_manager.special_bypassmodelform"
-    change_list_template: str = "intecomm_screening/admin/patientlog_change_list.html"
-    change_list_title = PatientLog._meta.verbose_name
     change_list_note = format_html(
         "In addition to other values, you may search for patients on the last 4-digits of "
         "either their mobile number or hospital identifier."
@@ -87,109 +67,6 @@ class PatientLogAdmin(
         "condition and are stable in-care.<BR>"
         '<h3 style="color:orange;">Note:</h3> Log calls and call attempts at the bottom '
         "of this form."
-    )
-
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    "patient_log_identifier",
-                    "filing_identifier",
-                    "report_datetime",
-                    "site",
-                )
-            },
-        ),
-        (
-            "Name and basic demographics",
-            {
-                "fields": (
-                    "legal_name",
-                    "familiar_name",
-                    "initials",
-                    "hospital_identifier",
-                    "gender",
-                    "age_in_years",
-                )
-            },
-        ),
-        (
-            "Contact",
-            {
-                "fields": (
-                    "contact_number",
-                    "alt_contact_number",
-                    "may_contact",
-                )
-            },
-        ),
-        (
-            "Address / Location",
-            {"fields": ("location_description",)},
-        ),
-        (
-            "Health",
-            {
-                "description": "Select one or more conditions with a documented diagnoses",
-                "fields": (
-                    "conditions",
-                    "stable",
-                ),
-            },
-        ),
-        (
-            "Health talks",
-            {
-                "fields": (
-                    "first_health_talk",
-                    "first_health_talk_date",
-                    "second_health_talk",
-                    "second_health_talk_date",
-                )
-            },
-        ),
-        (
-            "Appointments",
-            {
-                "fields": (
-                    "last_appt_date",
-                    "next_appt_date",
-                )
-            },
-        ),
-        (
-            "Willingness to screen",
-            {
-                "description": (
-                    "This section may be left blank until a decision is made. If and when the "
-                    "screening form is submitted, the response here will be "
-                    "automatically updated by the EDC"
-                ),
-                "fields": (
-                    "willing_to_screen",
-                    "screening_refusal_reason",
-                    "screening_refusal_reason_other",
-                ),
-            },
-        ),
-        (
-            "Screening and Consent",
-            {
-                "classes": ("collapse",),
-                "fields": (
-                    "screening_identifier",
-                    "screening_datetime",
-                    "subject_identifier",
-                    "consent_datetime",
-                ),
-            },
-        ),
-        (
-            "Group",
-            {"classes": ("collapse",), "fields": ("group_identifier",)},
-        ),
-        audit_fieldset_tuple,
     )
 
     list_display = (
@@ -229,23 +106,6 @@ class PatientLogAdmin(
 
     filter_horizontal = ("conditions",)
 
-    search_fields = (
-        "id",
-        "screening_identifier",
-        "subject_identifier",
-        "hospital_identifier__exact",
-        "initials__exact",
-        "filing_identifier",
-        "patient_log_identifier",
-        "group_identifier",
-        "contact_number__exact",
-        "alt_contact_number__exact",
-        "last_4_hospital_identifier__exact",
-        "last_4_contact_number__exact",
-        "legal_name__exact",
-        "familiar_name__exact",
-    )
-
     radio_fields = {
         "first_health_talk": admin.VERTICAL,
         "gender": admin.VERTICAL,
@@ -266,6 +126,14 @@ class PatientLogAdmin(
         "filing_identifier",
         "patient_log_identifier",
     )
+
+    @property
+    def subject_screening_model_cls(self) -> Type[SubjectScreening, SubjectScreeningUg]:
+        pass
+
+    @property
+    def subject_consent_model_cls(self) -> Type[SubjectConsent, SubjectConsentUg]:
+        pass
 
     def post_url_on_delete_kwargs(self, request, obj):
         return {}
@@ -463,10 +331,13 @@ class PatientLogAdmin(
             qs = qs1 | self.model.on_site.filter(id__in=pks)
         return qs, True
 
-    @staticmethod
-    def get_screen_and_consent_template_context(obj) -> dict:
+    def get_screen_and_consent_template_context(self, obj) -> dict:
         """Context for change_list_screen_and_consent.html"""
-        return ChangeListTemplateContext(obj).context
+        return ChangeListTemplateContext(
+            obj,
+            subject_screening_model_cls=self.subject_screening_model_cls,
+            subject_consent_model_cls=self.subject_consent_model_cls,
+        ).context
 
     @staticmethod
     def get_subject_dashboard_url(obj):

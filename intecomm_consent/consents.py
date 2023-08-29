@@ -12,6 +12,8 @@ v1 = Consent(
     age_is_adult=18,
     age_max=110,
     gender=[MALE, FEMALE],
+    proxy_models=["intecomm_consent.subjectconsentug"],
 )
+
 
 site_consents.register(v1)

@@ -8,9 +8,11 @@ from edc_constants.constants import DM, HIV, HTN, NO, TBD, YES
 from edc_dashboard import url_names
 from edc_form_validators import INVALID_ERROR, FormValidatorMixin
 from edc_screening.modelform_mixins import AlreadyConsentedFormMixin
+from edc_sites.get_country import get_current_country
 from edc_sites.modelform_mixins import SiteModelFormMixin
 from intecomm_form_validators import SubjectScreeningFormValidator
 
+from ..constants import UGANDA
 from ..models import PatientLog, SubjectScreening
 
 
@@ -179,7 +181,14 @@ class SubjectScreeningForm(
                 kwargs={"subject_identifier": self.instance.subject_identifier},
             )
         else:
-            url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
+            if get_current_country(site=self.instance.site) == UGANDA:
+                url = reverse(
+                    "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
+                )
+            else:
+                url = reverse(
+                    "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
+                )
             url = f"{url}?q={self.instance.subject_identifier}"
         return url
 
