@@ -1,6 +1,14 @@
 Changes
 =======
 
+0.1.69
+------
+- major refactor of approach to hiding legal names for Uganda
+
+0.1.68
+------
+- minor update to clinical note
+
 0.1.67
 ------
 - bump intecomm-form-validators==0.1.43
