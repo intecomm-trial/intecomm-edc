@@ -7,11 +7,15 @@ from .patient_log_ug import PatientLogUg
 from .proxy_models import PatientGroup, PatientGroupRando, Site
 from .signals import (
     patient_call_on_post_delete,
-    patient_call_on_post_save,
     patientlog_on_pre_delete,
-    subjectscreening_on_post_delete,
+    patientlogug_on_pre_delete,
     subjectscreening_on_pre_delete,
+    subjectscreeningug_on_pre_delete,
+    update_patient_call_on_post_save,
+    update_subjectscreening_on_post_delete,
     update_subjectscreening_on_post_save,
+    update_subjectscreeningug_on_post_delete,
+    update_subjectscreeningug_on_post_save,
 )
 from .subject_screening import SubjectScreening
 from .subject_screening_ug import SubjectScreeningUg

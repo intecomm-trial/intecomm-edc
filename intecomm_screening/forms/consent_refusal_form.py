@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.sites.models import Site
 from edc_consent.utils import get_consent_model_cls
 from edc_form_validators import FormValidatorMixin
 from edc_screening.utils import (
@@ -7,6 +8,7 @@ from edc_screening.utils import (
     is_eligible_or_raise,
 )
 from edc_sites.get_country import get_current_country
+from edc_sites.modelform_mixins import SiteModelFormMixin
 from intecomm_form_validators import ConsentRefusalFormValidator
 
 from intecomm_consent.utils import raise_if_subject_consent_exists
@@ -15,7 +17,7 @@ from ..constants import UGANDA
 from ..models import ConsentRefusal
 
 
-class ConsentRefusalForm(FormValidatorMixin, forms.ModelForm):
+class ConsentRefusalForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
     form_validator_cls = ConsentRefusalFormValidator
 
     def clean(self):
@@ -39,7 +41,7 @@ class ConsentRefusalForm(FormValidatorMixin, forms.ModelForm):
 
     @property
     def changelist_url(self):
-        if get_current_country(site=self.current_site) == UGANDA:
+        if get_current_country(site=Site.objects.get_current()) == UGANDA:
             return "intecomm_screening_admin:intecomm_screening_patientlogug_changlist"
         return "intecomm_screening_admin:intecomm_screening_patientlog_changlist"
 

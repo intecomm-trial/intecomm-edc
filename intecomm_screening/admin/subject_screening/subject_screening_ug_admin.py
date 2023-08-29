@@ -5,6 +5,7 @@ from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
 from intecomm_sites import all_sites
 
 from ...admin_site import intecomm_screening_admin
+from ...forms import SubjectScreeningUgForm
 from ...models import PatientLogUg, SubjectScreeningUg
 from ..modeladmin_mixins import BaseModelAdminMixin
 from .fieldsets import (
@@ -17,6 +18,7 @@ from .fieldsets import (
     get_htn_fieldset,
     get_location_fieldset,
     get_other_fieldset,
+    get_other_history_fieldset,
     get_pregnancy_fieldset,
     get_updates_fieldset,
 )
@@ -29,6 +31,8 @@ class SubjectScreeningUgAdmin(
     ModelAdminRedirectAllToChangelistMixin,
     BaseModelAdminMixin,
 ):
+    form = SubjectScreeningUgForm
+
     # ModelAdminRedirectAllToChangelistMixin
     changelist_url = "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
     add_search_field_name = "patient_log_identifier"
@@ -44,6 +48,7 @@ class SubjectScreeningUgAdmin(
         get_dm_fieldset(),
         get_htn_fieldset(),
         get_pregnancy_fieldset(),
+        get_other_history_fieldset(),
         get_location_fieldset(),
         get_bp_fieldset(),
         get_other_fieldset(),
@@ -52,6 +57,7 @@ class SubjectScreeningUgAdmin(
     )
 
     search_fields = (
+        "patient_log_identifier",
         "screening_identifier",
         "subject_identifier",
         "hospital_identifier__exact",

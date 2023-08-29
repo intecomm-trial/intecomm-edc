@@ -19,6 +19,11 @@ class SubjectScreeningModelAdminMixin(
     InitialDataModelAdminMixin,
     ModelAdminHideDeleteButtonOnCondition,
 ):
+    list_per_page = 5
+    autocomplete_fields = ["site"]
+    show_object_tools = True
+    show_cancel = True
+
     change_list_template: str = "intecomm_screening/admin/subjectscreening_change_list.html"
 
     additional_instructions = (
@@ -103,6 +108,7 @@ class SubjectScreeningModelAdminMixin(
             f"{obj.get_gender_display()} {obj.age_in_years}yrs",
             f"Initials: {obj.initials.upper()}<BR>",
             f"Hospital ID: {obj.hospital_identifier}",
+            f"Patient log: {obj.patient_log_identifier}",
         ]
         return format_html("<BR>".join(data))
 

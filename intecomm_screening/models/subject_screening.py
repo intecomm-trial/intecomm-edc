@@ -238,6 +238,12 @@ class SubjectScreening(
         verbose_name="Is the patient pregnant?", max_length=15, choices=PREG_YES_NO_NA
     )
 
+    def __str__(self):
+        return (
+            f"{self._meta.verbose_name} {self.screening_identifier} "
+            f"{self.age_in_years}{self.gender}"
+        )
+
     def save(self, *args, **kwargs):
         try:
             self.patient_log = PatientLog.objects.get(

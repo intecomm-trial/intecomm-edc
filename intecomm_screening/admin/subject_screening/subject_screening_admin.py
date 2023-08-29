@@ -20,6 +20,7 @@ from .fieldsets import (
     get_htn_fieldset,
     get_location_fieldset,
     get_other_fieldset,
+    get_other_history_fieldset,
     get_pregnancy_fieldset,
     get_updates_fieldset,
 )
@@ -33,13 +34,9 @@ class SubjectScreeningAdmin(
     BaseModelAdminMixin,
 ):
     form = SubjectScreeningForm
-    list_per_page = 5
-    autocomplete_fields = ["site"]
-    show_object_tools = True
-    show_cancel = True
 
     # ModelAdminRedirectAllToChangelistMixin
-    changelist_url = "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
+    changelist_url = "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
     add_search_field_name = "patient_log_identifier"
     change_search_field_name = "screening_identifier"
 
@@ -53,6 +50,7 @@ class SubjectScreeningAdmin(
         get_dm_fieldset(),
         get_htn_fieldset(),
         get_pregnancy_fieldset(),
+        get_other_history_fieldset(),
         get_location_fieldset(),
         get_bp_fieldset(),
         get_other_fieldset(),
@@ -61,6 +59,7 @@ class SubjectScreeningAdmin(
     )
 
     search_fields = (
+        "patient_log_identifier",
         "screening_identifier",
         "subject_identifier",
         "hospital_identifier__exact",
