@@ -10,7 +10,6 @@ from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.constants import UUID_PATTERN
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_model_admin.mixins import (
-    ModelAdminBypassDefaultFormClsMixin,
     ModelAdminFormAutoNumberMixin,
     ModelAdminFormInstructionsMixin,
     ModelAdminInstitutionMixin,
@@ -20,11 +19,14 @@ from edc_model_admin.mixins import (
     TemplatesModelAdminMixin,
 )
 from edc_notification import NotificationModelAdminMixin
+from edc_sites.get_country import get_current_country
 
 from intecomm_sites import all_sites
 
+from ..constants import UGANDA
+
 if TYPE_CHECKING:
-    from intecomm_screening.models import PatientLog, SubjectScreening
+    from ..models import PatientLog, SubjectScreening
 
 
 class BaseModelAdminMixin(
@@ -37,7 +39,6 @@ class BaseModelAdminMixin(
     ModelAdminNextUrlRedirectMixin,
     NotificationModelAdminMixin,
     ModelAdminAuditFieldsMixin,
-    ModelAdminBypassDefaultFormClsMixin,
     SimpleHistoryAdmin,
 ):
     show_cancel = True
@@ -46,9 +47,13 @@ class BaseModelAdminMixin(
 
 
 class RedirectAllToPatientLogModelAdminMixin(ModelAdminRedirectAllToChangelistMixin):
-    changelist_url = "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
     change_search_field_name = "screening_identifier"
     add_search_field_name = "screening_identifier"
+
+    def get_changelist_url(self, request):
+        if get_current_country(request=request) == UGANDA:
+            return "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
+        return "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
 
 
 class ChangeListTopBarModelAdminMixin:

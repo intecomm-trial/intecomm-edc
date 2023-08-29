@@ -5,9 +5,11 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 from edc_model_admin.mixins import ModelAdminLimitToSelectedForeignkey
+from edc_sites import get_current_country
 from edc_sites.admin import SiteModelAdminMixin
 
 from ..admin_site import intecomm_screening_admin
+from ..constants import UGANDA
 from ..forms import PatientCallForm
 from ..models import PatientCall, PatientLog
 from .list_filters import LastApptListFilter, NextApptListFilter
@@ -147,7 +149,12 @@ class PatientCallAdmin(
 
     @admin.display(description="Patient", ordering="patient_log")
     def patient_log_link(self, obj=None):
-        url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
+        if get_current_country(site=obj.site) == UGANDA:
+            url = reverse(
+                "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
+            )
+        else:
+            url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
         url = f"{url}?q={obj.patient_log.id}"
         return format_html(f'<A href="{url}">{obj.patient_log}</a>')
 

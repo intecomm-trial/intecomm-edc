@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Dict
 
 from django.db import IntegrityError
-from django.test import TestCase
+from django.test import TestCase, tag
 from edc_constants.constants import FEMALE, MALE, NO, YES
 from edc_utils import get_utcnow
 
@@ -65,7 +65,8 @@ class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
             "other_reason": "",
         }
 
-    def test_consent_refusal_ok(self):
+    @tag("1")
+    def test_consent_refusal_ok2(self):
         subject_screening = self.get_subject_screening(
             patient_log_options=dict(willing_to_screen=YES)
         )
@@ -134,6 +135,7 @@ class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
 
         self.assertEqual(ConsentRefusal.objects.all().count(), 1)
 
+    @tag("")
     def test_raises_if_add_consent_refusal_after_already_consented(self):
         subject_screening = self.get_subject_screening(
             patient_log_options=dict(willing_to_screen=YES)

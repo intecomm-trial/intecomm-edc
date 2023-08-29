@@ -8,14 +8,10 @@ from edc_screening.modelform_mixins import AlreadyConsentedFormMixin
 from edc_sites.modelform_mixins import SiteModelFormMixin
 from intecomm_form_validators import PatientLogFormValidator
 
-from ..models import PatientGroup, PatientLog
+from ...models import PatientGroup, PatientLog
 
 
-class PatientLogForm(
-    AlreadyConsentedFormMixin, SiteModelFormMixin, FormValidatorMixin, forms.ModelForm
-):
-    form_validator_cls = PatientLogFormValidator
-
+class PatientLogFormMixin:
     def clean(self) -> dict:
         if self.instance.id:
             qs = PatientGroup.objects.filter(patients__in=[self.instance])
@@ -36,10 +32,19 @@ class PatientLogForm(
         """
         value = super().get_initial_for_field(field, field_name)
         if value and field_name in ["legal_name", "familiar_name"]:
-            if field_name in [fld.name for fld in self.visible_fields()]:
-                if re.match(UUID_PATTERN, value):
-                    value = None
+            if re.match(UUID_PATTERN, value):
+                value = None
         return value
+
+
+class PatientLogForm(
+    PatientLogFormMixin,
+    AlreadyConsentedFormMixin,
+    SiteModelFormMixin,
+    FormValidatorMixin,
+    forms.ModelForm,
+):
+    form_validator_cls = PatientLogFormValidator
 
     class Meta:
         model = PatientLog

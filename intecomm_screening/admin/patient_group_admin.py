@@ -11,6 +11,7 @@ from django.utils.html import format_html
 from django.utils.http import urlencode
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_constants.constants import COMPLETE, DM, HIV, HTN, UUID_PATTERN, YES
+from edc_sites import get_current_country
 from edc_sites.admin import SiteModelAdminMixin
 from edc_utils.round_up import round_up
 from intecomm_form_validators.utils import get_group_size_for_ratio
@@ -22,6 +23,7 @@ from intecomm_group.utils import (
 )
 
 from ..admin_site import intecomm_screening_admin
+from ..constants import UGANDA
 from ..forms import PatientGroupForm
 from ..models import PatientGroup
 from .modeladmin_mixins import (
@@ -236,7 +238,12 @@ class PatientGroupAdmin(
     @admin.display(description="Patient Logs")
     def to_patients(self, obj=None):
         cnt = obj.patients.all().count()
-        url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
+        if get_current_country(site=obj.site) == UGANDA:
+            url = reverse(
+                "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
+            )
+        else:
+            url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
         url = f"{url}?{urlencode({'q': obj.name})}"
         return format_html(
             f'<a title="Go to patient log" href="{url}">'

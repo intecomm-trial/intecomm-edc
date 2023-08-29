@@ -10,5 +10,5 @@ class SiteAdmin(admin.ModelAdmin):
     search_fields = ("id", "name")
 
     def get_queryset(self, request):
-        country = get_current_country(request)
+        country = get_current_country(request=request)
         return self.model.objects.filter(siteprofile__country=country).order_by("name")

@@ -1,3 +1,4 @@
+{% load edc_sites_extras %}
 <!--BEGIN CHANGELIST TOPBAR-->
   <li>
     <a href="{% url "screen_group_url" %}" class="changelink">Home</a>
@@ -6,7 +7,7 @@
     {% if selected == "patientlog" %}
       <a href="#" class="changelink" style="background-color: black;">Patients</a>
     {% else %}
-      <a href="{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist" %}" class="changelink">Patients</a>
+        <a href="{{ patient_log_changelist_url }}" class="changelink">Patients</a>
     {% endif %}
   </li>
   <li>

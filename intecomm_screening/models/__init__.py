@@ -3,6 +3,7 @@ from .health_talk_log import HealthTalkLog
 from .patient_call import PatientCall
 from .patient_log import PatientLog
 from .patient_log_report_print_history import PatientLogReportPrintHistory
+from .patient_log_ug import PatientLogUg
 from .proxy_models import PatientGroup, PatientGroupRando, Site
 from .signals import (
     patient_call_on_post_delete,
@@ -13,3 +14,4 @@ from .signals import (
     update_subjectscreening_on_post_save,
 )
 from .subject_screening import SubjectScreening
+from .subject_screening_ug import SubjectScreeningUg

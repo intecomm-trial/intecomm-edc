@@ -1,28 +1,37 @@
 from __future__ import annotations
 
 import re
+from typing import TYPE_CHECKING, Type
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
-from edc_consent.utils import get_consent_model_cls
 from edc_constants.constants import NO, TBD, UUID_PATTERN, YES
 from edc_dashboard import url_names
 
-from ..models import ConsentRefusal, SubjectScreening
-from ..utils import (
+from ...models import ConsentRefusal
+from ...utils import (
     get_consent_refusal_url,
     get_subject_consent_url,
     get_subject_screening_url,
 )
 
+if TYPE_CHECKING:
+    from intecomm_consent.models import SubjectConsent, SubjectConsentUg
+
+    from ...models import SubjectScreening, SubjectScreeningUg
+
 
 class ChangeListTemplateContext:
     """Context for change_list_screen_and_consent.html"""
 
-    next_url_name = "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
     subject_dashboard_url_name = "subject_dashboard_url"
 
-    def __init__(self, patient_log):
+    def __init__(
+        self,
+        patient_log,
+        subject_screening_model_cls: Type[SubjectScreening | SubjectScreeningUg] = None,
+        subject_consent_model_cls: Type[SubjectConsent | SubjectConsentUg] = None,
+    ):
         self._consent_refusal = None
         self._eligible = None
         self._randomized = None
@@ -31,6 +40,8 @@ class ChangeListTemplateContext:
         self._subject_identifier = None
         self._subject_screening = None
         self.patient_log = patient_log
+        self.subject_screening_model_cls = subject_screening_model_cls
+        self.subject_consent_model_cls = subject_consent_model_cls
 
     @property
     def context(self) -> dict:
@@ -66,10 +77,10 @@ class ChangeListTemplateContext:
         return self._screening_identifier
 
     @property
-    def subject_screening(self) -> SubjectScreening | None:
+    def subject_screening(self) -> SubjectScreening | SubjectScreeningUg | None:
         if not self._subject_screening:
             try:
-                self._subject_screening = SubjectScreening.objects.get(
+                self._subject_screening = self.subject_screening_model_cls.objects.get(
                     screening_identifier=self.screening_identifier
                 )
             except ObjectDoesNotExist:
@@ -100,7 +111,7 @@ class ChangeListTemplateContext:
     def subject_consent(self):
         if not self._subject_consent:
             try:
-                self._subject_consent = get_consent_model_cls().objects.get(
+                self._subject_consent = self.subject_consent_model_cls.objects.get(
                     screening_identifier=self.screening_identifier
                 )
             except ObjectDoesNotExist:
@@ -143,6 +154,7 @@ class ChangeListTemplateContext:
             url = get_subject_screening_url(
                 self.patient_log,
                 subject_screening=self.subject_screening,
+                subject_screening_model_cls=self.subject_screening_model_cls,
             )
         return url
 
@@ -153,6 +165,7 @@ class ChangeListTemplateContext:
             url = get_subject_consent_url(
                 subject_screening=self.subject_screening,
                 subject_consent=self.subject_consent,
+                subject_consent_model_cls=self.subject_consent_model_cls,
             )
         return url
 
