@@ -11,6 +11,7 @@ from django.utils.html import format_html
 from django.utils.http import urlencode
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_constants.constants import COMPLETE, DM, HIV, HTN, UUID_PATTERN, YES
+from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
 from edc_sites import get_current_country
 from edc_sites.admin import SiteModelAdminMixin
 from edc_utils.round_up import round_up
@@ -26,11 +27,7 @@ from ..admin_site import intecomm_screening_admin
 from ..constants import UGANDA
 from ..forms import PatientGroupForm
 from ..models import PatientGroup
-from .modeladmin_mixins import (
-    BaseModelAdminMixin,
-    ChangeListTopBarModelAdminMixin,
-    RedirectAllToPatientLogModelAdminMixin,
-)
+from .modeladmin_mixins import BaseModelAdminMixin, ChangeListTopBarModelAdminMixin
 
 p = inflect.engine()
 
@@ -38,7 +35,7 @@ p = inflect.engine()
 @admin.register(PatientGroup, site=intecomm_screening_admin)
 class PatientGroupAdmin(
     SiteModelAdminMixin,
-    RedirectAllToPatientLogModelAdminMixin,
+    ModelAdminRedirectAllToChangelistMixin,
     ChangeListTopBarModelAdminMixin,
     BaseModelAdminMixin,
 ):
@@ -59,9 +56,9 @@ class PatientGroupAdmin(
     changelist_top_bar_selected = "patientgroup"
     changelist_top_bar_add_url = "intecomm_screening_admin:intecomm_screening_patientgroup_add"
 
-    # RedirectAllToPatientLogModelAdminMixin
-    change_search_field_name = "group_identifier"
+    # ModelAdminRedirectAllToChangelistMixin
     add_search_field_name = "group_identifier"
+    change_search_field_name = "group_identifier"
     changelist_url = "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
 
     # SiteModelAdminMixin

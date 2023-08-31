@@ -114,6 +114,7 @@ def get_screening_and_consent_fieldset():
         {
             "classes": ("collapse",),
             "fields": (
+                "comment",
                 "screening_identifier",
                 "screening_datetime",
                 "subject_identifier",
