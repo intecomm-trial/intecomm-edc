@@ -1,14 +1,23 @@
 from django.utils.translation import gettext_lazy as _
 from edc_constants.constants import (
+    DIVORCED,
     DONT_KNOW,
     ESTIMATED,
+    LAST_WEEK,
+    MARRIED,
     MEASURED,
     NEVER,
     NO,
     NOT_APPLICABLE,
+    ONGOING,
     OTHER,
     PATIENT,
+    RESOLVED,
+    SINGLE,
+    TODAY,
+    WIDOWED,
     YES,
+    YESTERDAY,
 )
 from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS, THIS_CLINIC
 from edc_facility.constants import HEALTH_FACILITY
@@ -23,8 +32,8 @@ from .constants import COMMUNITY_CLINIC, GTE_3HRS, NURSE, SITTING
 
 ALCOHOL_CONSUMPTION = (
     ("occasionally", _("Occasionally")),
-    ("1_2_per_week", _("1-2 times a week")),
-    ("3_4_per_week", _("3-4 times a week")),
+    ("1_2_per_week", _("%(freq)s times a week") % {"freq": "1-2"}),
+    ("3_4_per_week", _("%(freq)s times a week") % {"freq": "3-4"}),
     ("daily", _("Daily")),
     (NOT_APPLICABLE, _("Not applicable")),
 )
@@ -88,26 +97,26 @@ IMPACT_SEVERITY = (
 )
 
 IMPACT_STATUS = (
-    ("resolved", _("Resolved")),
-    ("ongoing", _("Ongoing")),
+    (RESOLVED, _("Resolved")),
+    (ONGOING, _("Ongoing")),
     (NOT_APPLICABLE, _("Not applicable")),
 )
 
 MISSED_PILLS = (
-    ("today", _("today")),
-    ("yesterday", _("yesterday")),
+    (TODAY, _("today")),
+    (YESTERDAY, _("yesterday")),
     ("earlier_this_week", _("earlier this week")),
-    ("last_week", _("last week")),
+    (LAST_WEEK, _("last week")),
     ("lt_month_ago", _("less than a month ago")),
     # ("gt_month_ago", _("more than a month ago")),
     (NEVER, _("have never missed taking my medications")),
 )
 
 MARITAL_STATUS = (
-    ("married", _("Married or living with someone")),
-    ("single", _("Single")),
-    ("divorced", _("Divorced")),
-    ("widowed", _("Widow / Spinster")),
+    (MARRIED, _("Married or living with someone")),
+    (SINGLE, _("Single")),
+    (DIVORCED, _("Divorced")),
+    (WIDOWED, _("Widow / Spinster")),
 )
 
 

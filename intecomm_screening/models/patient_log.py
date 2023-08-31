@@ -220,6 +220,8 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
 
     printed = models.BooleanField(default=False)
 
+    comment = models.CharField(max_length=250, null=True, blank=True)
+
     objects = PatientLogManager()
     on_site = CurrentSiteManager()
     history = HistoricalRecords(inherit=True)

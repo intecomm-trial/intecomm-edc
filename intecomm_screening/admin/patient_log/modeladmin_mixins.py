@@ -125,6 +125,7 @@ class PatientLogModelAdminMixin(
         "group_identifier",
         "filing_identifier",
         "patient_log_identifier",
+        "comment",
     )
 
     @property
