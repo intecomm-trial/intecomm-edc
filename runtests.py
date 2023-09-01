@@ -69,7 +69,7 @@ project_settings = DefaultTestSettings(
         comm_subject_listboard_template=(
             "intecomm_dashboard/bootstrap3/subject/comm_listboard.html"
         ),
-        inte_subject_listboard_template=(
+        intecomm_subject_listboard_template=(
             "intecomm_dashboard/bootstrap3/subject/inte_listboard.html"
         ),
         subject_dashboard_template="intecomm_dashboard/subject/dashboard.html",
