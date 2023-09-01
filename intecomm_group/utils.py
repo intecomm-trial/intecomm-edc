@@ -86,6 +86,6 @@ def get_group_subject_dashboards_url(patient_group: PatientGroup | None) -> str 
                 url = reverse("intecomm_dashboard:comm_subject_listboard_url")
             break
         if not url:
-            url = reverse("intecomm_dashboard:intecomm_subject_listboard_url")
+            url = reverse("intecomm_dashboard:inte_subject_listboard_url")
         return f"{url}?q={patient_group.group_identifier}"
     return None
