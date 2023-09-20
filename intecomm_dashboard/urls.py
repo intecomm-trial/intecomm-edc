@@ -14,7 +14,7 @@ app_name = "intecomm_dashboard"
 
 urlpatterns = InteSubjectListboardView.urls(
     namespace=app_name,
-    label="intecomm_subject_listboard",
+    label="inte_subject_listboard",
     identifier_pattern=Protocol().subject_identifier_pattern,
 )
 urlpatterns += CommSubjectListboardView.urls(
