@@ -4,8 +4,8 @@ from .intecomm_site import IntecommSite
 
 fqdn = "intecomm.clinicedc.org"
 
-ug_languages = ["en", "lg", "ry", "sw"]
-tz_languages = ["en", "sw", "mas"]
+ug_language_codes = ["en", "lg", "ry", "sw"]
+tz_language_codes = ["en", "sw", "mas"]
 
 all_sites = {
     "uganda": (
@@ -14,7 +14,7 @@ all_sites = {
             "kasangati",
             country_code="ug",
             country="uganda",
-            language_codes=ug_languages,
+            language_codes=ug_language_codes,
             health_facility_type=HC_IV,
             domain=f"kasangati.ug.{fqdn}",
         ),
@@ -24,7 +24,7 @@ all_sites = {
             health_facility_type=HC_III,
             country_code="ug",
             country="uganda",
-            language_codes=ug_languages,
+            language_codes=ug_language_codes,
             domain=f"kisugu.ug.{fqdn}",
         ),
         IntecommSite(
@@ -33,7 +33,7 @@ all_sites = {
             health_facility_type=HC_III,
             country_code="ug",
             country="uganda",
-            language_codes=ug_languages,
+            language_codes=ug_language_codes,
             domain=f"kiswa.ug.{fqdn}",
         ),
         IntecommSite(
@@ -42,7 +42,7 @@ all_sites = {
             health_facility_type=HC_IV,
             country_code="ug",
             country="uganda",
-            language_codes=ug_languages,
+            language_codes=ug_language_codes,
             domain=f"kyazanga.ug.{fqdn}",
         ),
         IntecommSite(
@@ -51,7 +51,7 @@ all_sites = {
             health_facility_type=HC_IV,
             country_code="ug",
             country="uganda",
-            language_codes=ug_languages,
+            language_codes=ug_language_codes,
             domain=f"mpigi.ug.{fqdn}",
         ),
         IntecommSite(
@@ -60,7 +60,7 @@ all_sites = {
             health_facility_type=HC_III,
             country_code="ug",
             country="uganda",
-            language_codes=ug_languages,
+            language_codes=ug_language_codes,
             domain=f"namayumba.ug.{fqdn}",
         ),
         IntecommSite(
@@ -69,7 +69,7 @@ all_sites = {
             health_facility_type=HC_III,
             country_code="ug",
             country="uganda",
-            language_codes=ug_languages,
+            language_codes=ug_language_codes,
             domain=f"namulonge.ug.{fqdn}",
         ),
         IntecommSite(
@@ -78,7 +78,7 @@ all_sites = {
             health_facility_type=HC_IV,
             country_code="ug",
             country="uganda",
-            language_codes=ug_languages,
+            language_codes=ug_language_codes,
             domain=f"ndejje.ug.{fqdn}",
         ),
         IntecommSite(
@@ -87,7 +87,7 @@ all_sites = {
             health_facility_type=HC_III,
             country_code="ug",
             country="uganda",
-            language_codes=ug_languages,
+            language_codes=ug_language_codes,
             domain=f"sekiwunga.ug.{fqdn}",
         ),
         IntecommSite(
@@ -96,7 +96,7 @@ all_sites = {
             health_facility_type=HC_IV,
             country_code="ug",
             country="uganda",
-            language_codes=ug_languages,
+            language_codes=ug_language_codes,
             domain=f"wakiso.ug.{fqdn}",
         ),
     ),
@@ -108,7 +108,7 @@ all_sites = {
             title="Amana Hospital",
             country="tanzania",
             country_code="tz",
-            language_codes=tz_languages,
+            language_codes=tz_language_codes,
             domain=f"amana.tz.{fqdn}",
         ),
         IntecommSite(
@@ -118,7 +118,7 @@ all_sites = {
             title="Bagamoyo Regional Hospital",
             country="tanzania",
             country_code="tz",
-            language_codes=tz_languages,
+            language_codes=tz_language_codes,
             domain=f"bagamoyo.tz.{fqdn}",
         ),
         IntecommSite(
@@ -128,7 +128,7 @@ all_sites = {
             title="Cardinal Rugambwa Hospital",
             country="tanzania",
             country_code="tz",
-            language_codes=tz_languages,
+            language_codes=tz_language_codes,
             domain=f"rugambwa.tz.{fqdn}",
         ),
         IntecommSite(
@@ -138,7 +138,7 @@ all_sites = {
             title="Hindu Mandal Hospital",
             country="tanzania",
             country_code="tz",
-            language_codes=tz_languages,
+            language_codes=tz_language_codes,
             domain=f"hindu-mandal.tz.{fqdn}",
         ),
         IntecommSite(
@@ -148,7 +148,7 @@ all_sites = {
             title="Kisarawe District Hospital",
             country="tanzania",
             country_code="tz",
-            language_codes=tz_languages,
+            language_codes=tz_language_codes,
             domain=f"kisarawe.tz.{fqdn}",
         ),
         IntecommSite(
@@ -158,7 +158,7 @@ all_sites = {
             title="Mbagala Hospital",
             country="tanzania",
             country_code="tz",
-            language_codes=tz_languages,
+            language_codes=tz_language_codes,
             domain=f"mbagala.tz.{fqdn}",
         ),
         IntecommSite(
@@ -168,7 +168,7 @@ all_sites = {
             title="Mnazi Moja Hospital",
             country="tanzania",
             country_code="tz",
-            language_codes=tz_languages,
+            language_codes=tz_language_codes,
             domain=f"mnazi.tz.{fqdn}",
         ),
         IntecommSite(
@@ -178,7 +178,7 @@ all_sites = {
             title="Mwananyamala Hospital",
             country="tanzania",
             country_code="tz",
-            language_codes=tz_languages,
+            language_codes=tz_language_codes,
             domain=f"mwananyamala.tz.{fqdn}",
         ),
         IntecommSite(
@@ -188,7 +188,7 @@ all_sites = {
             title="Sinza Hospital",
             country_code="tz",
             country="tanzania",
-            language_codes=tz_languages,
+            language_codes=tz_language_codes,
             domain=f"sinza.tz.{fqdn}",
         ),
         IntecommSite(
@@ -198,7 +198,7 @@ all_sites = {
             title="Temeke Hospital",
             country="tanzania",
             country_code="tz",
-            language_codes=tz_languages,
+            language_codes=tz_language_codes,
             domain=f"temeke.tz.{fqdn}",
         ),
     ),

@@ -1,5 +1,7 @@
+from unittest.mock import patch
 from uuid import uuid4
 
+import django.conf.locale
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -7,6 +9,7 @@ from django.test import override_settings
 from django.urls import reverse
 from django_webtest import WebTest
 from edc_constants.constants import HIV, UUID_PATTERN
+from edc_constants.internationalization import EXTRA_LANG_INFO
 from edc_test_utils.webtest import login
 from model_bakery.baker import make_recipe
 
@@ -15,6 +18,11 @@ from intecomm_lists.models import Conditions
 from ..intecomm_test_case_mixin import IntecommTestCaseMixin
 
 
+@patch.dict(
+    # Add custom languages not provided by Django
+    "django.conf.locale.LANG_INFO",
+    dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO),
+)
 class TestScreening(IntecommTestCaseMixin, WebTest):
     def setUp(self) -> None:
         super().setUp()

@@ -41,11 +41,10 @@ repos:
       - id: check-merge-conflict
       - id: debug-statements
       - id: detect-private-key
-      - id: detect-aws-credentials
       - id: check-toml
 
   - repo: https://github.com/rstcheck/rstcheck
-    rev: v6.1.2
+    rev: v6.2.0
     hooks:
       - id: rstcheck
 
