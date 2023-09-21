@@ -83,9 +83,9 @@ def get_group_subject_dashboards_url(patient_group: PatientGroup | None) -> str 
             group_identifier=patient_group.group_identifier
         ):
             if obj.assignment == COMM_INTERVENTION:
-                url = reverse("intecomm_dashboard:comm_subject_listboard_url")
+                url = reverse("intecomm_dashboard:community_subject_listboard_url")
             break
         if not url:
-            url = reverse("intecomm_dashboard:inte_subject_listboard_url")
+            url = reverse("intecomm_dashboard:facility_subject_listboard_url")
         return f"{url}?q={patient_group.group_identifier}"
     return None

@@ -22,59 +22,61 @@ from .subject_visit import SubjectVisit
 from .subject_visit_missed import SubjectVisitMissed
 
 
-def update_appointments(instance):
+def update_appointments_to_next(instance):
     appointment = instance.subject_visit.appointment.next
-    while appointment:
-        if appointment.appt_status != NEW_APPT:
-            break
-        if (
-            appointment.visit_code == instance.best_visit_code
-            and appointment.visit_code_sequence == 0
-        ):
-            appointment.appt_datetime = to_utc(
-                datetime(
-                    instance.appt_date.year,
-                    month=instance.appt_date.month,
-                    day=instance.appt_date.day,
-                    hour=8,
-                    minute=0,
-                    tzinfo=ZoneInfo(settings.TIME_ZONE),
+    best_next_visit_code = getattr(instance, "visitschedule", "")
+    if best_next_visit_code:
+        while appointment:
+            if appointment.appt_status != NEW_APPT:
+                break
+            if (
+                appointment.visit_code == getattr(instance, "visitschedule", "")
+                and appointment.visit_code_sequence == 0
+            ):
+                appointment.appt_datetime = to_utc(
+                    datetime(
+                        instance.appt_date.year,
+                        month=instance.appt_date.month,
+                        day=instance.appt_date.day,
+                        hour=8,
+                        minute=0,
+                        tzinfo=ZoneInfo(settings.TIME_ZONE),
+                    )
                 )
-            )
-            appointment.save(update_fields=["appt_datetime"])
-            break
-        else:
-            appointment.appt_status = IN_PROGRESS_APPT
-            appointment.appt_timing = MISSED_APPT
-            appointment.save(update_fields=["appt_status", "appt_timing"])
+                appointment.save(update_fields=["appt_datetime"])
+                break
+            else:
+                appointment.appt_status = IN_PROGRESS_APPT
+                appointment.appt_timing = MISSED_APPT
+                appointment.save(update_fields=["appt_status", "appt_timing"])
 
-            subject_visit = SubjectVisit.objects.get(appointment=appointment)
-            subject_visit.report_datetime = appointment.appt_datetime
-            subject_visit.save()
-            subject_visit_missed = SubjectVisitMissed.objects.create(
-                subject_visit=subject_visit,
-                survival_status=ALIVE,
-                report_datetime=appointment.appt_datetime,
-                contact_last_date=None,
-            )
-            subject_visit_missed.missed_reasons.add(
-                SubjectVisitMissedReasons.objects.get(name=OTHER)
-            )
-            subject_visit_missed.missed_reasons_other = NOT_SCHEDULED_FOR_FACILITY
-            subject_visit_missed.comment = "[auto-completed by EDC]"
-            subject_visit_missed.save()
-            appointment.appt_status = COMPLETE_APPT
-            appointment.save(update_fields=["appt_status"])
-        appointment = appointment.next
+                subject_visit = SubjectVisit.objects.get(appointment=appointment)
+                subject_visit.report_datetime = appointment.appt_datetime
+                subject_visit.save()
+                subject_visit_missed = SubjectVisitMissed.objects.create(
+                    subject_visit=subject_visit,
+                    survival_status=ALIVE,
+                    report_datetime=appointment.appt_datetime,
+                    contact_last_date=None,
+                )
+                subject_visit_missed.missed_reasons.add(
+                    SubjectVisitMissedReasons.objects.get(name=OTHER)
+                )
+                subject_visit_missed.missed_reasons_other = NOT_SCHEDULED_FOR_FACILITY
+                subject_visit_missed.comment = "[auto-completed by EDC]"
+                subject_visit_missed.save()
+                appointment.appt_status = COMPLETE_APPT
+                appointment.save(update_fields=["appt_status"])
+            appointment = appointment.next
 
 
 @receiver(
     post_save,
     weak=False,
     sender=NextAppointment,
-    dispatch_uid="update_next_appointment_on_post_save",
+    dispatch_uid="update_appointments_to_next_on_post_save",
 )
-def update_next_appointment_on_post_save(sender, instance, raw, created, using, **kwargs):
+def update_appointments_to_next_on_post_save(sender, instance, raw, created, using, **kwargs):
     if not raw and not kwargs.get("update_fields"):
-        if instance.appt_date and instance.best_visit_code:
-            update_appointments(instance)
+        if instance.appt_date and getattr(instance, "visitschedule", None):
+            update_appointments_to_next(instance)

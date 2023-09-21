@@ -14,10 +14,6 @@
   <span class="badge"><i class="fas fa-users-between-lines fa-fw"></i> {{ group_name }} {{ patient_log.group_identifier }}</span><span class="badge"><i class="fas fa-file fa-fw"></i> {{ patient_log.filing_identifier }}</span>
 {% endblock extra_demographic_title %}
 
-{% block appointments %}
-    {% include "intecomm_dashboard/bootstrap3/subject/dashboard/appointments.html" %}
-{% endblock appointments %}
-
 {% block side_bar %}
   {{ block.super }}
   <a class="list-group-item"><i class="fas fa-file fa-fw"></i>{{ patient_log.filing_identifier }}</a>

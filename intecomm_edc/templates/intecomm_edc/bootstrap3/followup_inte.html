@@ -33,7 +33,7 @@
       <div class="list-group">
         <a id="home_list_group_home" href="{% url 'home_url' %}" class="list-group-item"><i class="fas fa-reply fa-1x fa-fw" aria-hidden="true"></i> Home</a>
       {% if perms.edc_subject_dashboard.view_subject_listboard %}
-        <a id="home_list_group_subject_listboard" href="{% url inte_subject_listboard_url|default:'subject_listboard_url_cannot_be_none' %}" class="list-group-item"><i class="fas fa-user-circle fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;
+        <a id="home_list_group_subject_listboard" href="{% url facility_subject_listboard_url|default:'subject_listboard_url_cannot_be_none' %}" class="list-group-item"><i class="fas fa-user-circle fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;
           Subjects</a>
       {% endif %}
       {% if perms.edc_review_dashboard.view_subject_review_listboard %}

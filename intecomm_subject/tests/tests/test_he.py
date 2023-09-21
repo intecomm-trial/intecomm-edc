@@ -376,7 +376,7 @@ class TestHe(IntecommTestCaseMixin, TestCase):
         form = HealthEconomicsHouseholdHeadForm(data=cleaned_data)
         form.is_valid()
         self.assertIn(
-            "This form has already been submittted",
+            "This form has already been submitted",
             str(form._errors.get("__all__")),
         )
 

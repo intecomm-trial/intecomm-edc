@@ -27,6 +27,7 @@ class SubjectLocatorAction(BaseSubjectLocatorAction):
     admin_site_name = "intecomm_prn_admin"
 
 
+# TODO: action item for end of study does not show
 class OffscheduleInteAction(ActionWithNotification):
     name = OFFSCHEDULE_INTE_ACTION
     display_name = "Submit Off-Schedule (Facility)"

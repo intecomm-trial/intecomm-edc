@@ -322,7 +322,11 @@ django.conf.locale.LANG_INFO = LANG_INFO
 LANGUAGES_BIDI = global_settings.LANGUAGES_BIDI + ["mas", "ry", "lg", "rny"]
 
 LANGUAGE_CODE = "en-gb"
-LANGUAGES = [x.split(":") for x in env.list("DJANGO_LANGUAGES")] or (("en", "English"),)
+LANGUAGE_LIST = ["sw", "en-gb", "en", "mas", "ry", "lg", "rny"]
+LANGUAGES = []
+for code in LANGUAGE_LIST:
+    LANGUAGES.append((code, LANG_INFO[code]["name"]))
+# LANGUAGES = [x.split(":") for x in LANGUAGE_LIST] or (("en", "English"),)
 TIME_ZONE = env.str("DJANGO_TIME_ZONE")
 DATE_INPUT_FORMATS = ["%Y-%m-%d", "%d/%m/%Y"]
 DATETIME_INPUT_FORMATS = [
@@ -346,6 +350,7 @@ REPORT_DATETIME_FIELD_NAME = "report_datetime"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # edc-appointment
+EDC_APPOINTMENT_ALLOW_SKIPPED = True
 EDC_APPOINTMENT_FORM_META_OPTIONS = {
     "labels": {"appt_type": "Where is the participant attending"},
     "help_texts": {

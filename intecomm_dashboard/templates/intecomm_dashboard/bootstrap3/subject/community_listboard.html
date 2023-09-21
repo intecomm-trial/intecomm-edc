@@ -57,6 +57,6 @@
     </td>
     <td>{{result.object.age_in_years}}yrs</td>
     <td>{{ result.object.consent_datetime|date:"SHORT_DATE_FORMAT" }}</td>
-    <td><a href="{% url "intecomm_dashboard:comm_subject_listboard_url" %}?q={{result.group_identifier}}">{{ result.object.patient_group.name }}</a></td>
+    <td><a href="{% url "intecomm_dashboard:community_subject_listboard_url" %}?q={{result.group_identifier}}">{{ result.object.patient_group.name }}</a></td>
     <td>{{ result.object.modified|date:"SHORT_DATETIME_FORMAT" }}</td>
 {% endblock listboard_table_columns %}

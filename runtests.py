@@ -66,11 +66,11 @@ project_settings = DefaultTestSettings(
         listboard_base_template="intecomm_edc/base.html",
         dashboard_base_template="intecomm_edc/base.html",
         screening_listboard_template="intecomm_dashboard/screening/listboard.html",
-        comm_subject_listboard_template=(
-            "intecomm_dashboard/bootstrap3/subject/comm_listboard.html"
+        community_subject_listboard_template=(
+            "intecomm_dashboard/bootstrap3/subject/community_listboard.html"
         ),
-        intecomm_subject_listboard_template=(
-            "intecomm_dashboard/bootstrap3/subject/inte_listboard.html"
+        facility_subject_listboard_template=(
+            "intecomm_dashboard/bootstrap3/subject/facility_listboard.html"
         ),
         subject_dashboard_template="intecomm_dashboard/subject/dashboard.html",
         subject_review_listboard_template="edc_review_dashboard/subject_review_listboard.html",

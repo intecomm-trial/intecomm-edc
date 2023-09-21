@@ -29,6 +29,7 @@ from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS, INSULIN
 from edc_he.constants import CHF, NHIF
 from edc_list_data.row import Row
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
+from edc_next_appointment.choices import MISSED_VISIT_REASONS
 from edc_offstudy.constants import COMPLETED_FOLLOWUP, CONSENT_WITHDRAWAL
 from edc_transfer.constants import TRANSFERRED
 
@@ -42,6 +43,7 @@ list_data = {
         (HOSPITAL, "In hospital"),
         (HOME, "At home"),
         (TELEPHONE, "By telephone"),
+        (NOT_APPLICABLE, "Not applicable"),
     ],
     "intecomm_lists.drugpaysources": [
         (OWN_CASH, "Own cash"),
@@ -66,15 +68,7 @@ list_data = {
             "Other reason (specify below)",
         ),
     ],
-    "intecomm_lists.subjectvisitmissedreasons": [
-        ("forgot", "Forgot / Can’t remember being told about appointment"),
-        ("family_emergency", "Family emergency (e.g. funeral) and was away"),
-        ("travelling", "Away travelling/visiting"),
-        ("working_schooling", "Away working/schooling"),
-        ("too_sick", "Too sick or weak to come to the centre"),
-        ("lack_of_transport", "Transportation difficulty"),
-        (OTHER, "Other reason (specify below)"),
-    ],
+    "intecomm_lists.subjectvisitmissedreasons": list(MISSED_VISIT_REASONS),
     "intecomm_lists.clinicalwithdrawalreasons": [
         (PREGNANCY, "Pregnancy"),
         ("kidney_disease", "Development of chronic kidney disease"),
