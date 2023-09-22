@@ -1,3 +1,4 @@
+from .appointment_admin import AppointmentAdmin
 from .arv_regimens_admin import ArvRegimensAdmin
 from .blood_results import (
     BloodResultsFbcAdmin,

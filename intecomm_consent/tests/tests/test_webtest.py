@@ -1,12 +1,10 @@
 from unittest.mock import patch
 
-import django
-from django.conf import global_settings
-from django.conf.locale import LANG_INFO
+import django.conf.locale
 from django.contrib.auth.models import User
-from django.test import override_settings
 from django.urls import reverse
 from django_webtest import WebTest
+from edc_constants.internationalization import EXTRA_LANG_INFO
 from edc_dashboard import url_names
 
 from intecomm_dashboard.views import SubjectDashboardView
@@ -14,46 +12,11 @@ from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMi
 from intecomm_subject.models import DrugSupplyDm, DrugSupplyHiv, DrugSupplyHtn
 from intecomm_subject.models import HealthEconomics as OldHealthEconomics
 
-EXTRA_LANG_INFO = {
-    "mas": {
-        "bidi": False,
-        "code": "mas",
-        "name": "Masaai",
-        "name_local": "Masaai",
-    },
-    "ry": {
-        "bidi": False,
-        "code": "ry",
-        "name": "Runyakitara",
-        "name_local": "Runyakitara",
-    },
-    "rny": {
-        "bidi": False,
-        "code": "rny",
-        "name": "Runyankore",
-        "name_local": "Runyankore",
-    },
-    "lg": {
-        "bidi": False,
-        "code": "lg",
-        "name": "Luganda",
-        "name_local": "Luganda",
-    },
-}
 
-django.conf.locale.LANG_INFO = LANG_INFO
-# Add custom languages not provided by Django
-LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
-django.conf.locale.LANG_INFO = LANG_INFO
-
-
-@override_settings(
-    USE_I18N=True,
-    USE_L10N=True,
-    USE_TZ=True,
-    LANG_INFO=dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO),
-    LANGUAGES_BIDI=global_settings.LANGUAGES_BIDI + ["mas", "ry", "lg", "rny"],
-    LANGUAGE_CODE="en-gb",
+@patch.dict(
+    # Add custom languages not provided by Django
+    "django.conf.locale.LANG_INFO",
+    dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO),
 )
 class TestSubjectDashboard(IntecommTestCaseMixin, WebTest):
     def setUp(self) -> None:

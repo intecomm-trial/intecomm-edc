@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.urls import reverse
 from edc_listboard.views import SubjectListboardView
 from edc_sites import get_current_country
-from intecomm_rando.constants import CLINIC_CONTROL, COMM_INTERVENTION
+from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 from intecomm_rando.models import RandomizationList
 
 from intecomm_group.models import PatientGroup
@@ -54,8 +54,8 @@ class BaseSubjectListboardView(SubjectListboardView):
             patient_group_meeting_url=self.get_patient_group_meeting_url(**kwargs),
             patient_group=self.patient_group,
             arm=self.arm,
-            COMM_INTERVENTION=COMM_INTERVENTION,
-            CLINIC_CONTROL=CLINIC_CONTROL,
+            COMMUNITY_ARM=COMMUNITY_ARM,
+            FACILITY_ARM=FACILITY_ARM,
         )
         context.update(
             site=getattr(self.request, "site", None),

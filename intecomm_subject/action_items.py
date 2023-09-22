@@ -8,6 +8,9 @@ class MissedVisitAction(BaseMissedVisitAction):
     reference_model = "intecomm_subject.subjectvisitmissed"
     admin_site_name: str = "intecomm_subject_admin"
 
+    def is_ltfu(self) -> bool:
+        return False
+
 
 def register_actions():
     try:

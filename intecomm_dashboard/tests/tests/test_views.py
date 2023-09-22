@@ -1,19 +1,28 @@
+from unittest.mock import patch
+
+import django.conf.locale
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django_webtest import WebTest
+from edc_constants.internationalization import EXTRA_LANG_INFO
 from edc_dashboard import url_names
 
 from intecomm_dashboard.views import (
     AeListboardView,
-    CommSubjectListboardView,
+    CommunitySubjectListboardView,
     DeathReportListboardView,
-    InteSubjectListboardView,
+    FacilitySubjectListboardView,
     ScreenGroupListboardView,
 )
 from intecomm_subject.models import DrugSupplyDm, DrugSupplyHiv, DrugSupplyHtn
 from intecomm_subject.models import HealthEconomics as OldHealthEconomics
 
 
+@patch.dict(
+    # Add custom languages not provided by Django
+    "django.conf.locale.LANG_INFO",
+    dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO),
+)
 class TestViews(WebTest):
     def setUp(self) -> None:
         super().setUp()
@@ -60,12 +69,12 @@ class TestViews(WebTest):
         response = self.app.get(url, user=self.user, status=200)
         self.assertIn(DeathReportListboardView.listboard_panel_title, response.text)
 
-        url_name = url_names.get(CommSubjectListboardView.listboard_url)
+        url_name = url_names.get(CommunitySubjectListboardView.listboard_url)
         url = reverse(url_name)
         response = self.app.get(url, user=self.user, status=200)
-        self.assertIn(CommSubjectListboardView.listboard_panel_title, response.text)
+        self.assertIn(CommunitySubjectListboardView.listboard_panel_title, response.text)
 
-        url_name = url_names.get(InteSubjectListboardView.listboard_url)
+        url_name = url_names.get(FacilitySubjectListboardView.listboard_url)
         url = reverse(url_name)
         response = self.app.get(url, user=self.user, status=200)
-        self.assertIn(InteSubjectListboardView.listboard_panel_title, response.text)
+        self.assertIn(FacilitySubjectListboardView.listboard_panel_title, response.text)

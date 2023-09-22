@@ -11,7 +11,7 @@ from edc_protocol_incident.action_items import (
 )
 from edc_transfer.action_items import SubjectTransferAction as BaseSubjectTransferAction
 from edc_transfer.constants import SUBJECT_TRANSFER_ACTION
-from intecomm_rando.constants import CLINIC_CONTROL, COMM_INTERVENTION
+from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 
 from intecomm_group.utils import get_assignment_for_patient_group
 from intecomm_screening.models import PatientLog
@@ -27,6 +27,7 @@ class SubjectLocatorAction(BaseSubjectLocatorAction):
     admin_site_name = "intecomm_prn_admin"
 
 
+# TODO: action item for end of study does not show
 class OffscheduleInteAction(ActionWithNotification):
     name = OFFSCHEDULE_INTE_ACTION
     display_name = "Submit Off-Schedule (Facility)"
@@ -97,9 +98,9 @@ class SubjectTransferAction(BaseSubjectTransferAction):
         assignment = get_assignment_for_patient_group(
             patient_log.group_identifier,
         )
-        if assignment == COMM_INTERVENTION:
+        if assignment == COMMUNITY_ARM:
             next_actions = [OFFSCHEDULE_COMM_ACTION]
-        elif assignment == CLINIC_CONTROL:
+        elif assignment == FACILITY_ARM:
             next_actions = [OFFSCHEDULE_INTE_ACTION]
         else:
             raise ActionError(

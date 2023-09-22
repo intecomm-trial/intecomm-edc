@@ -3,7 +3,11 @@ from edc_he.rule_groups import HealthEconomicsRuleGroup as BaseHealthEconomicsRu
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.metadata_rules import CrfRule, CrfRuleGroup, P, register
 
-from .predicates import HealthEconomicsPredicates, LocationUpdatePredicates
+from .predicates import (
+    HealthEconomicsPredicates,
+    LocationUpdatePredicates,
+    NextAppointmentPredicates,
+)
 
 
 @register()
@@ -160,3 +164,18 @@ class LocationUpdateRuleGroup(CrfRuleGroup):
         app_label = "intecomm_subject"
         source_model = "intecomm_subject.subjectvisit"
         predicates = LocationUpdatePredicates()
+
+
+@register()
+class NextAppointmentRuleGroup(CrfRuleGroup):
+    crf = CrfRule(
+        predicate="is_required",
+        consequence=REQUIRED,
+        alternative=NOT_REQUIRED,
+        target_models=["nextappointment"],
+    )
+
+    class Meta:
+        app_label = "intecomm_subject"
+        source_model = "intecomm_subject.subjectvisit"
+        predicates = NextAppointmentPredicates()

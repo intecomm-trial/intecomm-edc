@@ -10,7 +10,7 @@ from edc_constants.constants import COMPLETE, NEW, NOT_APPLICABLE, UUID_PATTERN
 from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
 from edc_sites.admin import SiteModelAdminMixin
 from intecomm_form_validators import RECRUITING
-from intecomm_rando.constants import COMM_INTERVENTION
+from intecomm_rando.constants import COMMUNITY_ARM
 
 from intecomm_screening.admin.modeladmin_mixins import BaseModelAdminMixin
 
@@ -138,7 +138,7 @@ class PatientGroupAdmin(
         except PatientGroupNotRandomized:
             pass
         else:
-            if arm_as_str == COMM_INTERVENTION:
+            if arm_as_str == COMMUNITY_ARM:
                 name = "+".join(obj.name.split(" "))
                 url = reverse(
                     "intecomm_group_admin:intecomm_group_patientgroupmeeting_changelist"

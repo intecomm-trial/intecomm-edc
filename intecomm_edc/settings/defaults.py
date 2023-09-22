@@ -5,8 +5,8 @@ from pathlib import Path
 
 import django.conf.locale
 import environ
-from django.conf import global_settings
 from edc_constants.constants import COMPLETE
+from edc_constants.internationalization import EXTRA_LANG_INFO
 from edc_protocol_incident.constants import PROTOCOL_INCIDENT
 from edc_utils import get_datetime_from_env
 
@@ -196,7 +196,6 @@ MIDDLEWARE.extend(
         "edc_adverse_event.middleware.DashboardMiddleware",
         "edc_listboard.middleware.DashboardMiddleware",
         "edc_review_dashboard.middleware.DashboardMiddleware",
-        # 'simple_history.middleware.HistoryRequestMiddleware'
     ]
 )
 
@@ -283,46 +282,21 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-USE_I18N = True  # set False to turn of translation
-USE_L10N = True  # set to False so DATE formats below are used (Deprecated)
+USE_I18N = True
+USE_L10N = True
 USE_TZ = True
-EXTRA_LANG_INFO = {
-    "mas": {
-        "bidi": False,
-        "code": "mas",
-        "name": "Masaai",
-        "name_local": "Masaai",
-    },
-    "ry": {
-        "bidi": False,
-        "code": "ry",
-        "name": "Runyakitara",
-        "name_local": "Runyakitara",
-    },
-    "rny": {
-        "bidi": False,
-        "code": "rny",
-        "name": "Runyankore",
-        "name_local": "Runyankore",
-    },
-    "lg": {
-        "bidi": False,
-        "code": "lg",
-        "name": "Luganda",
-        "name_local": "Luganda",
-    },
-}
 
 # Add custom languages not provided by Django
 LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
 django.conf.locale.LANG_INFO = LANG_INFO
-LANGUAGES_BIDI = global_settings.LANGUAGES_BIDI + ["mas", "ry", "lg", "rny"]
 
 LANGUAGE_CODE = "en-gb"
-LANGUAGES = [x.split(":") for x in env.list("DJANGO_LANGUAGES")] or (("en", "English"),)
+LANGUAGE_LIST = ["sw", "en-gb", "en", "mas", "ry", "lg", "rny"]
+LANGUAGES = [(code, LANG_INFO[code]["name"]) for code in LANGUAGE_LIST]
 TIME_ZONE = env.str("DJANGO_TIME_ZONE")
 DATE_INPUT_FORMATS = ["%Y-%m-%d", "%d/%m/%Y"]
 DATETIME_INPUT_FORMATS = [
@@ -346,6 +320,7 @@ REPORT_DATETIME_FIELD_NAME = "report_datetime"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # edc-appointment
+EDC_APPOINTMENT_ALLOW_SKIPPED_APPT_USING = [("intecomm_subject.nextappointment", "appt_date")]
 EDC_APPOINTMENT_FORM_META_OPTIONS = {
     "labels": {"appt_type": "Where is the participant attending"},
     "help_texts": {

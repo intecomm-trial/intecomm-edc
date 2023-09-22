@@ -17,6 +17,13 @@ class SubjectVisitMissed(
 
     missed_reasons = models.ManyToManyField(SubjectVisitMissedReasons, blank=True)
 
+    appt_date = models.DateField(
+        verbose_name="Next scheduled routine/facility appointment",
+        null=True,
+        blank=False,
+        help_text="Should fall on an Integrated clinic day",
+    )
+
     class Meta(CrfWithActionModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Missed Visit Report"
         verbose_name_plural = "Missed Visit Report"
