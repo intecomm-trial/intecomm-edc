@@ -1,7 +1,7 @@
 Changes
 =======
 
-0.1.71
+0.1.75
 ------
 - refactor handling of missed appointments in facility arm using
   new appt_status SKIPPED_APPT from edc-appointment
