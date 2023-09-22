@@ -12,7 +12,7 @@ from edc_randomization.utils import (
     get_assignment_description_for_subject,
     get_assignment_for_subject,
 )
-from intecomm_rando.constants import COMM_INTERVENTION
+from intecomm_rando.constants import COMMUNITY_ARM
 
 from .exceptions import PatientGroupNotRandomized
 
@@ -82,7 +82,7 @@ def get_group_subject_dashboards_url(patient_group: PatientGroup | None) -> str 
         for obj in randomizer.model_cls().objects.filter(
             group_identifier=patient_group.group_identifier
         ):
-            if obj.assignment == COMM_INTERVENTION:
+            if obj.assignment == COMMUNITY_ARM:
                 url = reverse("intecomm_dashboard:community_subject_listboard_url")
             break
         if not url:

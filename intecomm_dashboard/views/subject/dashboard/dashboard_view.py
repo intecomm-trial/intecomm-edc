@@ -13,7 +13,6 @@ from intecomm_group.models import PatientGroup
 from intecomm_group.utils import get_group_subject_dashboards_url
 from intecomm_screening.constants import UGANDA
 from intecomm_screening.models import PatientLog, PatientLogUg
-from intecomm_subject.constants import NOT_SCHEDULED_FOR_FACILITY
 
 from ....model_wrappers import (
     AppointmentModelWrapper,
@@ -59,7 +58,6 @@ class DashboardView(SubjectDashboardView):
             group_identifier=group_identifier,
             group_name=group_name,
             patient_group_url=patient_group_url,
-            NOT_SCHEDULED_FOR_FACILITY=NOT_SCHEDULED_FOR_FACILITY,
             patient_log=self.patient_log,
             patient_log_url=self.patient_log_url,
             group_subject_dashboards_url=get_group_subject_dashboards_url(self.patient_log),

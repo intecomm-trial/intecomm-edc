@@ -1,7 +1,7 @@
 from edc_he.rule_groups import Predicates as BaseHealthEconomicsPredicates
 from edc_metadata.metadata_rules import PredicateCollection
 from edc_visit_schedule.utils import is_baseline
-from intecomm_rando.constants import CLINIC_CONTROL
+from intecomm_rando.constants import FACILITY_ARM
 from intecomm_rando.utils import get_assignment_for_subject
 
 
@@ -35,4 +35,4 @@ class NextAppointmentPredicates(PredicateCollection):
 
     @staticmethod
     def is_required(visit, **kwargs) -> bool:
-        return get_assignment_for_subject(visit.subject_identifier) == CLINIC_CONTROL
+        return get_assignment_for_subject(visit.subject_identifier) == FACILITY_ARM

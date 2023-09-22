@@ -22,39 +22,27 @@ navbar.append_item(
 
 navbar.append_item(
     NavbarItem(
-        name="comm_followup",
+        name="community_followup",
         title="Community",
         label="Community",
         fa_icon="fa-solid fa-users-between-lines",
         codename="edc_subject_dashboard.view_subject_listboard",
-        url_name="followup_comm_url",
+        url_name="followup_community_url",
         no_url_namespace=no_url_namespace,
     )
 )
 
 navbar.append_item(
     NavbarItem(
-        name="inte_followup",
+        name="facility_followup",
         title="Facility",
         label="Facility",
         fa_icon="fa-solid fa-user-circle",
         codename="edc_subject_dashboard.view_subject_listboard",
-        url_name="followup_inte_url",
+        url_name="followup_facility_url",
         no_url_namespace=no_url_namespace,
     )
 )
-
-# navbar.append_item(
-#     NavbarItem(
-#         name="consented_subject",
-#         title="Baseline",
-#         label="Baseline",
-#         fa_icon="fa-solid fa-user-circle",
-#         codename="edc_subject_dashboard.view_subject_listboard",
-#         url_name="subject_listboard_url",
-#         no_url_namespace=no_url_namespace,
-#     )
-# )
 
 navbar.append_item(review_navbar_item)
 navbar.append_item(tmg_navbar_item)

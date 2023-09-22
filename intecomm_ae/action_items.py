@@ -17,7 +17,7 @@ from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_notification.utils import get_email_contacts
 from edc_reportable import GRADE5
 from edc_visit_schedule.utils import get_offschedule_models
-from intecomm_rando.constants import CLINIC_CONTROL, COMM_INTERVENTION
+from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 
 from intecomm_group.utils import get_assignment_for_patient_group
 from intecomm_prn.constants import OFFSCHEDULE_COMM_ACTION, OFFSCHEDULE_INTE_ACTION
@@ -128,9 +128,9 @@ class DeathReportAction(ActionWithNotification):
         try:
             self.off_schedule_cls.objects.get(subject_identifier=self.subject_identifier)
         except ObjectDoesNotExist:
-            if self.assignment == COMM_INTERVENTION:
+            if self.assignment == COMMUNITY_ARM:
                 next_actions.extend([OFFSCHEDULE_COMM_ACTION])
-            elif self.assignment == CLINIC_CONTROL:
+            elif self.assignment == FACILITY_ARM:
                 next_actions.extend([OFFSCHEDULE_INTE_ACTION])
         return next_actions
 
@@ -148,9 +148,9 @@ class DeathReportAction(ActionWithNotification):
 
     @property
     def off_schedule_cls(self) -> OffScheduleComm | OffScheduleInte:
-        if self.assignment == COMM_INTERVENTION:
+        if self.assignment == COMMUNITY_ARM:
             return django_apps.get_model("intecomm_prn.offschedulecomm")
-        elif self.assignment == CLINIC_CONTROL:
+        elif self.assignment == FACILITY_ARM:
             return django_apps.get_model("intecomm_prn.offscheduleinte")
 
 

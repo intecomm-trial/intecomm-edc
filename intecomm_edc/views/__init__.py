@@ -1,4 +1,4 @@
-from .followup_comm_view import FollowupCommView
-from .followup_inte_view import FollowupInteView
+from .followup_community_view import FollowupCommunityView
+from .followup_facility_view import FollowupFacilityView
 from .grouping_view import GroupingView
 from .home_view import HomeView

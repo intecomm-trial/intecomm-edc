@@ -1,6 +1,15 @@
 Changes
 =======
 
+0.1.71
+------
+- refactor handling of missed appointments in facility arm using
+  new appt_status SKIPPED_APPT from edc-appointment
+- refactor code abrevviations inte/comm to facility/community
+- bump edc=0.5.29 (before migrating drop edc-visit-tracking tables)
+- after migrate, run management commands update_skipped and
+  update_metadata
+
 0.1.69
 ------
 - major refactor of approach to hiding legal names for Uganda

@@ -1,2 +1,2 @@
-from .comm_listboard_view import CommSubjectListboardView
-from .inte_listboard_view import InteSubjectListboardView
+from .community_listboard_view import CommunitySubjectListboardView
+from .facility_listboard_view import FacilitySubjectListboardView

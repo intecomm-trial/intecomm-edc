@@ -47,7 +47,6 @@ from .malaria_test import MalariaTest
 from .medications import Medications
 from .next_appointment import NextAppointment
 from .other_baseline_data import OtherBaselineData
-from .signals import update_appointments_to_next_on_post_save
 from .social_harms import SocialHarms
 from .subject_requisition import SubjectRequisition
 from .subject_visit import SubjectVisit

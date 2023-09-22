@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from edc_appointment.admin import AppointmentAdmin as BaseAdmin
 from edc_appointment.admin_site import edc_appointment_admin
@@ -8,7 +9,7 @@ from edc_appointment.form_validators import (
 )
 from edc_appointment.forms import AppointmentForm as BaseForm
 from edc_appointment.models import Appointment
-from edc_appointment.utils import allow_skipped_appointments
+from edc_appointment.utils import get_allow_skipped_appt_using
 from edc_form_validators import INVALID_ERROR
 from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 from intecomm_rando.utils import get_assignment_for_subject
@@ -40,8 +41,14 @@ class AppointmentAdmin(BaseAdmin):
 
     def allow_skipped_appointments(self, request):
         """Returns True only if the subject is in the facility arm."""
-        if allow_skipped_appointments() and (
-            get_assignment_for_subject(request.GET.get("subject_identifier")) == FACILITY_ARM
-        ):
-            return True
-        return False
+        allow = False
+        if get_allow_skipped_appt_using():
+            try:
+                get_assignment_for_subject(
+                    request.GET.get("subject_identifier")
+                ) == FACILITY_ARM
+            except ObjectDoesNotExist:
+                pass
+            else:
+                allow = True
+        return allow

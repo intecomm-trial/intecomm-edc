@@ -4,10 +4,10 @@ from edc_dashboard.view_mixins import EdcViewMixin
 from edc_navbar import NavbarViewMixin
 
 
-class FollowupInteView(EdcViewMixin, NavbarViewMixin, TemplateView):
-    template_name = f"intecomm_edc/bootstrap{settings.EDC_BOOTSTRAP}/followup_inte.html"
+class FollowupFacilityView(EdcViewMixin, NavbarViewMixin, TemplateView):
+    template_name = f"intecomm_edc/bootstrap{settings.EDC_BOOTSTRAP}/followup_facility.html"
     navbar_name = settings.APP_NAME
-    navbar_selected_item = "inte_followup"
+    navbar_selected_item = "facility_followup"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

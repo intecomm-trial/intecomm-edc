@@ -1,2 +1,2 @@
 from .dashboard import DashboardView
-from .listboard import CommSubjectListboardView, InteSubjectListboardView
+from .listboard import CommunitySubjectListboardView, FacilitySubjectListboardView
