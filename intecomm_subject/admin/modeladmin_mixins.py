@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.contrib import admin
 from django.utils.html import format_html
 from django_audit_fields import audit_fieldset_tuple
@@ -30,7 +32,7 @@ class CrfModelAdmin(
     SimpleHistoryAdmin,
 ):
     # TODO: remove with Django > 4.2.5
-    def get_list_filter(self, request) -> tuple[str]:
+    def get_list_filter(self, request) -> tuple[str, ...]:
         list_filter = super().get_list_filter(request)
         self.list_filter = list_filter
         return list_filter

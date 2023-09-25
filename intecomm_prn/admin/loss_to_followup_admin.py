@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.contrib import admin
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_action_item import ActionItemModelAdminMixin, action_fieldset_tuple
@@ -55,3 +57,9 @@ class LossToFollowupAdmin(
         "home_visited": admin.VERTICAL,
         "loss_category": admin.VERTICAL,
     }
+
+    # TODO: remove with Django > 4.2.5
+    def get_list_filter(self, request) -> tuple[str]:
+        list_filter = super().get_list_filter(request)
+        self.list_filter = list_filter
+        return list_filter

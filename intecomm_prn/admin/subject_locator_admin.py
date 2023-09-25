@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.contrib import admin
 from django.template.loader import render_to_string
 from edc_locator.admin_site import edc_locator_admin
@@ -22,6 +24,12 @@ class SubjectLocatorAdmin(
     SimpleHistoryAdmin,
 ):
     list_per_page = 5
+
+    # TODO: remove with Django > 4.2.5
+    def get_list_filter(self, request) -> tuple[str]:
+        list_filter = super().get_list_filter(request)
+        self.list_filter = list_filter
+        return list_filter
 
     @admin.display(description="Contacts")
     def contacts(self, obj):
