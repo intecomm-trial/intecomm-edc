@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.contrib import admin
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_crf.admin import crf_status_fieldset_tuple
@@ -57,9 +59,9 @@ class HivInitialReviewAdmin(CrfModelAdmin):
         "vl_quantifier": admin.VERTICAL,
     }
 
-    def get_list_filter(self, request):
+    def get_list_filter(self, request) -> tuple[str, ...]:
         list_filters = super().get_list_filter(request)
-        list_filters = list(list_filters or [])
+        list_filters = list(list_filters) or []
         list_filters.insert(4, "has_vl")
         return tuple(list_filters)
 

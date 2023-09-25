@@ -320,7 +320,9 @@ REPORT_DATETIME_FIELD_NAME = "report_datetime"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # edc-appointment
-EDC_APPOINTMENT_ALLOW_SKIPPED_APPT_USING = [("intecomm_subject.nextappointment", "appt_date")]
+EDC_APPOINTMENT_ALLOW_SKIPPED_APPT_USING = {
+    "intecomm_subject.nextappointment": ("appt_date", "next_visit_code")
+}
 EDC_APPOINTMENT_FORM_META_OPTIONS = {
     "labels": {"appt_type": "Where is the participant attending"},
     "help_texts": {
