@@ -1,6 +1,29 @@
 Changes
 =======
 
+0.1.76
+------
+- bump edc 0.5.30
+- close appointment window gap for facility arm visits 1000->1010
+- no longer require next_appointment CRF for community arm
+- update tests for changes in edc, especially for changes to
+  edc-appointment and appointment skipping.
+- notes for migrations:
+  - drop edc-visit-tracking tables and reset migrations before migrate:
+        drop table edc_visit_tracking_historicalsubjectvisitmissed;
+        drop table edc_visit_tracking_subjectvisitmissed;
+        drop table edc_visit_tracking_historicalsubjectvisit;
+        drop table edc_visit_tracking_subjectvisitmissed_missed_reasons;
+        drop table edc_visit_tracking_subjectvisitmissedreasons;
+        drop table edc_visit_tracking_subjectvisitmissed;
+        drop table edc_visit_tracking_subjectvisit;
+        drop table edc_visit_tracking_visitreasons;
+        delete from django_migrations where app="edc_visit_tracking";
+  - manage.py migrate
+  - manage.py update_metadata --delete_metadata --delete_references
+  - manage.py update_skipped_appointments
+
+
 0.1.75
 ------
 - refactor handling of missed appointments in facility arm using

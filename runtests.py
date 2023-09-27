@@ -4,11 +4,17 @@ from datetime import datetime
 from os.path import abspath, dirname, join
 from zoneinfo import ZoneInfo
 
+import django
+from edc_constants.internationalization import EXTRA_LANG_INFO
 from edc_test_utils import DefaultTestSettings, func_main
 from multisite import SiteID
 
 app_name = "intecomm_edc"
 base_dir = dirname(abspath(__file__))
+LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
+django.conf.locale.LANG_INFO = LANG_INFO
+LANGUAGE_LIST = ["sw", "en-gb", "en", "mas", "ry", "lg", "rny"]
+
 
 project_settings = DefaultTestSettings(
     calling_file=__file__,
@@ -23,13 +29,8 @@ project_settings = DefaultTestSettings(
     SITE_ID=SiteID(default=101),
     SENTRY_ENABLED=False,
     INDEX_PAGE="localhost:8000",
-    LANGUAGES=[
-        ["lg", "Luganda"],
-        ["sw", "Swahili"],
-        ["en", "English"],
-        ["ry", "Runyakitara"],
-        ["mas", "Maasai"],
-    ],
+    LANGUAGE_CODE="en",
+    LANGUAGES=[(code, LANG_INFO[code]["name"]) for code in LANGUAGE_LIST],
     EXPORT_FOLDER=join(base_dir, "tests", "export"),
     SUBJECT_APP_LABEL="intecomm_subject",
     SUBJECT_SCREENING_MODEL="intecomm_screening.subjectscreening",

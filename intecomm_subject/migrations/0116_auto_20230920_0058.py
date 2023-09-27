@@ -37,6 +37,7 @@ def delete_subject_visit_missed(apps, schema_editor):
             appointment_id = subject_visit.appointment_id
             subject_visit.delete()
             appointment = appointment_model_cls.objects.get(id=appointment_id)
+            appointment.related_visit = None
             reset_appointment(appointment)
 
     appointments = appointment_model_cls.objects.filter(
@@ -49,6 +50,7 @@ def delete_subject_visit_missed(apps, schema_editor):
         try:
             obj = subject_visit_model_cls.objects.get(appointment_id=appointment.id)
         except ObjectDoesNotExist:
+            appointment.related_visit = None
             reset_appointment(appointment)
         else:
             try:
@@ -56,6 +58,7 @@ def delete_subject_visit_missed(apps, schema_editor):
             except ProtectedError as e:
                 print(e)
             else:
+                appointment.related_visit = None
                 reset_appointment(appointment)
 
 
