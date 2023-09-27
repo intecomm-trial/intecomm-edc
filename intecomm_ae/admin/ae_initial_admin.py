@@ -52,4 +52,7 @@ class AeInitialAdmin(SiteModelAdminMixin, AeInitialModelAdminMixin, SimpleHistor
             "susar_reported",
         ]
         excluded_fields.extend(custom_fields)
-        return custom_fields + tuple(f for f in list_filter if f not in excluded_fields)
+        list_filter = custom_fields + tuple(f for f in list_filter if f not in excluded_fields)
+        # TODO: remove with Django > 4.2.5
+        self.list_filter = list_filter
+        return list_filter

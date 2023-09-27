@@ -1,17 +1,8 @@
-from unittest.mock import patch
-
-import django.conf.locale
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django_webtest import WebTest
-from edc_constants.internationalization import EXTRA_LANG_INFO
 
 
-@patch.dict(
-    # Add custom languages not provided by Django
-    "django.conf.locale.LANG_INFO",
-    dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO),
-)
 class TestNextAppointment(WebTest):
     def setUp(self) -> None:
         super().setUp()

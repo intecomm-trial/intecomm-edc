@@ -55,5 +55,6 @@ urlpatterns = [
     path("edc_subject_dashboard/", include("edc_subject_dashboard.urls")),
     path("edc_visit_schedule/", include("edc_visit_schedule.urls")),
     path("subject/", include("intecomm_dashboard.urls")),
+    path("i18n/", include("django.conf.urls.i18n")),
     path("", RedirectView.as_view(url="admin/"), name="home_url"),
 ]

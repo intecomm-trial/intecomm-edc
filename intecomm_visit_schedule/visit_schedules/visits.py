@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dateutil.relativedelta import relativedelta
 from edc_visit_schedule import Visit
-from edc_visit_schedule.constants import MONTH0, MONTH12
+from edc_visit_schedule.constants import MONTH0, MONTH1, MONTH12
 
 from .crfs import crfs_d1, crfs_followup, crfs_missed, crfs_prn
 from .requisitions import (
@@ -15,7 +15,7 @@ from .requisitions import (
 visit00 = Visit(
     code=MONTH0,
     title="Baseline",
-    add_window_gap_to_lower=True,
+    add_window_gap_to_lower=False,
     allow_unscheduled=True,
     crfs=crfs_d1,
     crfs_missed=crfs_missed,
@@ -29,6 +29,25 @@ visit00 = Visit(
     rlower=relativedelta(days=0),
     rupper=relativedelta(days=0),
     timepoint=0,
+)
+
+visit01 = Visit(
+    code=MONTH1,
+    title="Followup month 1",
+    add_window_gap_to_lower=True,
+    allow_unscheduled=False,
+    crfs=crfs_followup,
+    crfs_missed=crfs_missed,
+    crfs_prn=crfs_prn,
+    crfs_unscheduled=crfs_followup,
+    facility_name="5-day-clinic",
+    rbase=relativedelta(months=1),
+    requisitions=requisitions_followup,
+    requisitions_prn=requisitions_prn,
+    requisitions_unscheduled=requisitions_unscheduled,
+    rlower=relativedelta(days=28),
+    rupper=relativedelta(days=15),
+    timepoint=1,
 )
 
 
@@ -58,9 +77,12 @@ def get_visit_code(mnth: int):
     return f"1{mnth*10}"
 
 
-def get_followup_visit(month):
-    if month == 0 or month >= 12:
-        raise ValueError(f"Invalid month number. Follow visits are from 1-11. Got {month}.")
+def get_followup_visit(month, start: int | None = None):
+    start = 0 if start is None else start
+    if month == start or month >= 12:
+        raise ValueError(
+            f"Invalid month number. Follow visits are from {start}-11. Got {month}."
+        )
     rlower = relativedelta(days=13)
     rupper = relativedelta(days=15)
     return Visit(

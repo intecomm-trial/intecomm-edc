@@ -19,7 +19,7 @@ edc_appointment_admin.unregister(Appointment)
 
 class AppointmentFormValidator(BaseFormValidator):
     def validate_appt_type(self):
-        """Community arm may not skip appointments"""
+        """Community arm may not skip appointments."""
         if (
             get_assignment_for_subject(self.instance.subject_identifier) == COMMUNITY_ARM
             and self.cleaned_data.get("appt_status") == SKIPPED_APPT
@@ -39,8 +39,8 @@ class AppointmentForm(BaseForm):
 class AppointmentAdmin(BaseAdmin):
     form = AppointmentForm
 
-    def allow_skipped_appointments(self, request):
-        """Returns True only if the subject is in the facility arm."""
+    def allow_skipped_appointments(self, request) -> bool:
+        """Return True only if the subject is in the facility arm."""
         allow = False
         if get_allow_skipped_appt_using():
             try:

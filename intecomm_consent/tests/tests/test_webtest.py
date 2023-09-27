@@ -1,10 +1,8 @@
 from unittest.mock import patch
 
-import django.conf.locale
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django_webtest import WebTest
-from edc_constants.internationalization import EXTRA_LANG_INFO
 from edc_dashboard import url_names
 
 from intecomm_dashboard.views import SubjectDashboardView
@@ -13,11 +11,6 @@ from intecomm_subject.models import DrugSupplyDm, DrugSupplyHiv, DrugSupplyHtn
 from intecomm_subject.models import HealthEconomics as OldHealthEconomics
 
 
-@patch.dict(
-    # Add custom languages not provided by Django
-    "django.conf.locale.LANG_INFO",
-    dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO),
-)
 class TestSubjectDashboard(IntecommTestCaseMixin, WebTest):
     def setUp(self) -> None:
         super().setUp()

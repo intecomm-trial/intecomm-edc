@@ -294,7 +294,7 @@ USE_TZ = True
 LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
 django.conf.locale.LANG_INFO = LANG_INFO
 
-LANGUAGE_CODE = "en-gb"
+LANGUAGE_CODE = "en"
 LANGUAGE_LIST = ["sw", "en-gb", "en", "mas", "ry", "lg", "rny"]
 LANGUAGES = [(code, LANG_INFO[code]["name"]) for code in LANGUAGE_LIST]
 TIME_ZONE = env.str("DJANGO_TIME_ZONE")
@@ -320,7 +320,9 @@ REPORT_DATETIME_FIELD_NAME = "report_datetime"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # edc-appointment
-EDC_APPOINTMENT_ALLOW_SKIPPED_APPT_USING = [("intecomm_subject.nextappointment", "appt_date")]
+EDC_APPOINTMENT_ALLOW_SKIPPED_APPT_USING = {
+    "intecomm_subject.nextappointment": ("appt_date", "visitschedule")
+}
 EDC_APPOINTMENT_FORM_META_OPTIONS = {
     "labels": {"appt_type": "Where is the participant attending"},
     "help_texts": {
