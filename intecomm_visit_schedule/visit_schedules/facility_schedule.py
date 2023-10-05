@@ -14,7 +14,7 @@ facility_schedule = Schedule(
 
 visits = [visit00, visit01]
 for month in range(2, 12):
-    visits.append(get_followup_visit(month, start=1))
+    visits.append(get_followup_visit(month, start=1, allow_unscheduled=True))
 visits.append(visit12)
 
 for visit in visits:
