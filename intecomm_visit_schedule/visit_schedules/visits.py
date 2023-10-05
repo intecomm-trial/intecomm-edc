@@ -31,11 +31,13 @@ visit00 = Visit(
     timepoint=0,
 )
 
+
+# facility visit01
 visit01 = Visit(
     code=MONTH1,
     title="Followup month 1",
     add_window_gap_to_lower=True,
-    allow_unscheduled=False,
+    allow_unscheduled=True,
     crfs=crfs_followup,
     crfs_missed=crfs_missed,
     crfs_prn=crfs_prn,
@@ -77,8 +79,9 @@ def get_visit_code(mnth: int):
     return f"1{mnth*10}"
 
 
-def get_followup_visit(month, start: int | None = None):
+def get_followup_visit(month, start: int | None = None, allow_unscheduled: bool | None = None):
     start = 0 if start is None else start
+    allow_unscheduled = False if allow_unscheduled is None else allow_unscheduled
     if month == start or month >= 12:
         raise ValueError(
             f"Invalid month number. Follow visits are from {start}-11. Got {month}."
@@ -89,7 +92,7 @@ def get_followup_visit(month, start: int | None = None):
         code=get_visit_code(month),
         title=f"Followup month {month}",
         add_window_gap_to_lower=True,
-        allow_unscheduled=False,
+        allow_unscheduled=allow_unscheduled,
         crfs=crfs_followup,
         crfs_missed=crfs_missed,
         crfs_prn=crfs_prn,
