@@ -320,6 +320,7 @@ REPORT_DATETIME_FIELD_NAME = "report_datetime"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # edc-appointment
+EDC_APPOINTMENT_MAX_MONTHS_TO_NEXT_APPT = 7
 EDC_APPOINTMENT_ALLOW_SKIPPED_APPT_USING = {
     "intecomm_subject.nextappointment": ("appt_date", "visitschedule")
 }
@@ -545,4 +546,3 @@ if "test" in sys.argv:
 
 INTECOMM_MIN_GROUP_SIZE = 14
 INTECOMM_MIN_GROUP_SIZE_FOR_RATIO = 9
-INTECOMM_MAX_MONTHS_TO_NEXT_APPT = 7
