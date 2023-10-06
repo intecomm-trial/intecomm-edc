@@ -1,6 +1,11 @@
 Changes
 =======
 
+0.1.79
+------
+- bump edc 0.5.33
+- migrations to change from edc-next-appointment to edc-appointment
+
 0.1.78
 ------
 - bump edc 0.5.32
