@@ -138,7 +138,6 @@ project_settings = DefaultTestSettings(
         "edc_model_fields.apps.AppConfig",
         "edc_model_admin.apps.AppConfig",
         "edc_navbar.apps.AppConfig",
-        "edc_next_appointment.apps.AppConfig",
         "edc_notification.apps.AppConfig",
         "edc_offstudy.apps.AppConfig",
         "edc_pharmacy.apps.AppConfig",

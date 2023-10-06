@@ -1,12 +1,14 @@
 from django import forms
+from edc_appointment.modelform_mixins import NextAppointmentCrfModelFormMixin
 from edc_crf.modelform_mixins import CrfModelFormMixin
-from edc_next_appointment.modelform_mixins import NextAppointmentModelFormMixin
 from intecomm_form_validators.subject import NextAppointmentFormValidator
 
 from ..models import NextAppointment
 
 
-class NextAppointmentForm(NextAppointmentModelFormMixin, CrfModelFormMixin, forms.ModelForm):
+class NextAppointmentForm(
+    NextAppointmentCrfModelFormMixin, CrfModelFormMixin, forms.ModelForm
+):
     form_validator_cls = NextAppointmentFormValidator
 
     class Meta:

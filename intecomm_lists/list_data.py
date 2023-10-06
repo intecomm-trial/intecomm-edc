@@ -29,12 +29,13 @@ from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS, INSULIN
 from edc_he.constants import CHF, NHIF
 from edc_list_data.row import Row
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
-from edc_next_appointment.choices import MISSED_VISIT_REASONS
 from edc_offstudy.constants import COMPLETED_FOLLOWUP, CONSENT_WITHDRAWAL
 from edc_transfer.constants import TRANSFERRED
 
-from intecomm_lists.constants import HEALTH_RECORDS
 from intecomm_subject.constants import VIT_B_FOLIC_ACID
+
+from .choices import MISSED_VISIT_REASONS
+from .constants import HEALTH_RECORDS
 
 list_data = {
     "edc_appointment.appointmenttype": [
@@ -321,6 +322,18 @@ list_data = {
         (OTHER, "Other, specify"),
         (NOT_APPLICABLE, "Not applicable"),
     ],
+    "edc_appointment.infosources": [
+        (COMMUNITY, "Community group"),
+        (PATIENT, "Patient"),
+        (
+            PATIENT_REPRESENTATIVE,
+            "Patient representative (e.g., next of kin, relative, guardian)",
+        ),
+        (HEALTH_RECORDS, "Health records"),
+        (ESTIMATED, "Estimated by research staff"),
+        (OTHER, "Other"),
+    ],
+    # may be removed "edc_next_appointment.infosources"
     "edc_next_appointment.infosources": [
         (COMMUNITY, "Community group"),
         (PATIENT, "Patient"),
