@@ -1,4 +1,4 @@
-from edc_visit_schedule import Schedule
+from edc_visit_schedule.schedule import Schedule
 
 from ..constants import COMMUNITY_SCHEDULE
 from .visits import get_followup_visit, visit00, visit12

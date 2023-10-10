@@ -1,4 +1,4 @@
-from edc_visit_schedule import Crf, FormsCollection
+from edc_visit_schedule.visit import Crf, FormsCollection
 
 crfs_prn = FormsCollection(
     Crf(show_order=100, model="intecomm_subject.clinicalnote"),
