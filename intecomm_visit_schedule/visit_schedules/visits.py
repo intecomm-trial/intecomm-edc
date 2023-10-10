@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from dateutil.relativedelta import relativedelta
-from edc_visit_schedule import Visit
 from edc_visit_schedule.constants import MONTH0, MONTH1, MONTH12
+from edc_visit_schedule.visit import Visit
 
 from .crfs import crfs_d1, crfs_followup, crfs_missed, crfs_prn
 from .requisitions import (
