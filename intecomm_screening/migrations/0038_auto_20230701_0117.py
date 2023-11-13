@@ -3,10 +3,17 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import migrations
 from django.db.migrations import RunPython
 from edc_constants.constants import NO, NOT_APPLICABLE, TBD, YES
+from edc_list_data import PreloadData
 from tqdm import tqdm
+
+from intecomm_lists.list_data import list_data
 
 
 def update_willing_to_screen(apps, schema_editor):
+    data = {
+        k: v for k, v in list_data.items() if k == ("intecomm_lists.screeningrefusalreasons")
+    }
+    PreloadData(list_data=data, apps=apps)
     patientlog_cls = apps.get_model("intecomm_screening.patientlog")
     subjectscreening_cls = apps.get_model("intecomm_screening.subjectscreening")
     screeningrefusalreasons_cls = apps.get_model("intecomm_lists.screeningrefusalreasons")
@@ -30,6 +37,7 @@ def update_willing_to_screen(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
+        ("intecomm_lists", "0007_arvdrugs_extra_value_arvregimens_extra_value_and_more"),
         ("intecomm_screening", "0037_alter_consentrefusal_screening_identifier_and_more"),
     ]
 

@@ -28,7 +28,7 @@ def update_health_talk(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("intecomm_facility", "0002_auto_20230726_2030"),
+        # ("intecomm_facility", "0002_alter_healthfacility_device_created_and_more"),
         (
             "intecomm_screening",
             "0050_delete_healthfacility_healthtalklog_health_facility_and_more",

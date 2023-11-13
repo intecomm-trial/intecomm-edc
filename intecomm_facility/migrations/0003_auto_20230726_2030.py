@@ -43,7 +43,8 @@ def update_healthfacility(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("intecomm_facility", "0001_initial"),
+        ("intecomm_facility", "0002_alter_healthfacility_device_created_and_more"),
+        ("intecomm_screening", "0045_alter_consentrefusal_options_and_more"),
     ]
 
     operations = [migrations.RunPython(update_healthfacility)]

@@ -6,7 +6,6 @@ from edc_metadata.model_mixins.creates import CreatesMetadataModelMixin
 from edc_model.models import BaseUuidModel, HistoricalRecords
 from edc_model_fields.fields import OtherCharField
 from edc_offstudy.model_mixins import OffstudyNonCrfModelMixin
-from edc_reference.model_mixins import ReferenceModelMixin
 from edc_sites.models import CurrentSiteManager as BaseCurrentSiteManager
 from edc_sites.models import SiteModelMixin
 from edc_visit_tracking.managers import VisitModelManager
@@ -23,7 +22,6 @@ class CurrentSiteManager(VisitModelManager, BaseCurrentSiteManager):
 
 class SubjectVisit(
     VisitModelMixin,
-    ReferenceModelMixin,
     CreatesMetadataModelMixin,
     SiteModelMixin,
     RequiresConsentFieldsModelMixin,

@@ -1,19 +1,14 @@
 from edc_he.rule_groups import Predicates as BaseHealthEconomicsPredicates
-from edc_metadata.metadata_rules import PredicateCollection
 from edc_visit_schedule.utils import is_baseline
 from intecomm_rando.constants import FACILITY_ARM
 from intecomm_rando.utils import get_assignment_for_subject
 
 
 class HealthEconomicsPredicates(BaseHealthEconomicsPredicates):
-    app_label = "intecomm_subject"
-    visit_model = "intecomm_subject.subjectvisit"
+    pass
 
 
-class LocationUpdatePredicates(PredicateCollection):
-    app_label = "intecomm_subject"
-    visit_model = "intecomm_subject.subjectvisit"
-
+class LocationUpdatePredicates:
     @staticmethod
     def location_needs_update(visit, **kwargs) -> bool:
         required = False
@@ -29,10 +24,7 @@ class LocationUpdatePredicates(PredicateCollection):
         return required
 
 
-class NextAppointmentPredicates(PredicateCollection):
-    app_label = "intecomm_subject"
-    visit_model = "intecomm_subject.subjectvisit"
-
+class NextAppointmentPredicates:
     @staticmethod
     def is_required(visit, **kwargs) -> bool:
         return get_assignment_for_subject(visit.subject_identifier) == FACILITY_ARM

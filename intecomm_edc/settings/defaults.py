@@ -28,7 +28,6 @@ env = environ.Env(
     DJANGO_USE_I18N=(bool, False),
     DJANGO_USE_TZ=(bool, True),
     DEFENDER_ENABLED=(bool, False),
-    # EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER=(bool, True),
     EDC_LABEL_BROWSER_PRINT_PAGE_AUTO_BACK=(bool, True),
     TWILIO_ENABLED=(bool, False),
 )
@@ -135,7 +134,6 @@ INSTALLED_APPS = [
     "edc_prn.apps.AppConfig",
     "edc_qol.apps.AppConfig",
     "edc_randomization.apps.AppConfig",
-    "edc_reference.apps.AppConfig",
     "edc_refusal.apps.AppConfig",
     "edc_registration.apps.AppConfig",
     "edc_pdf_reports.apps.AppConfig",

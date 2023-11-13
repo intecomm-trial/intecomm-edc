@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("edc_he", "0003_ethnicities_extra_value_and_more"),
         ("intecomm_subject", "0075_auto_20230803_0459"),
     ]
 

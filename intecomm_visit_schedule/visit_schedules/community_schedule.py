@@ -14,7 +14,7 @@ community_schedule = Schedule(
 
 visits = [visit00]
 for month in range(1, 12):
-    visits.append(get_followup_visit(month))
+    visits.append(get_followup_visit(month, allow_unscheduled=True))
 visits.append(visit12)
 
 for visit in visits:

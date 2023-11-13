@@ -5,7 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("intecomm_facility", "0002_auto_20230726_2030"),
+        # ("intecomm_facility", "0002_alter_healthfacility_device_created_and_more"),
         ("intecomm_screening", "0053_rename_idenfifierformat_identifierformat_and_more"),
     ]
 
