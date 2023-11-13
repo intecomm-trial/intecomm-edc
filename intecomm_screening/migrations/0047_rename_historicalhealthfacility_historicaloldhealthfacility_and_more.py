@@ -7,7 +7,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
     dependencies = [
         ("sites", "0002_alter_domain_unique"),
-        ("intecomm_facility", "0002_auto_20230726_2030"),
+        # ("intecomm_facility", "0002_alter_healthfacility_device_created_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("intecomm_lists", "0006_consentrefusalreasons_screeningrefusalreasons_and_more"),
         ("intecomm_screening", "0046_alter_historicalpatientlog_legal_name_and_more"),

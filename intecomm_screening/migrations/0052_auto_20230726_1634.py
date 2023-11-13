@@ -27,7 +27,7 @@ def update_identifier_format(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("intecomm_facility", "0002_auto_20230726_2030"),
+        # ("intecomm_facility", "0002_alter_healthfacility_device_created_and_more"),
         ("intecomm_screening", "0051_auto_20230726_1631"),
     ]
 
