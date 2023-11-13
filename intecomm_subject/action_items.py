@@ -19,4 +19,4 @@ def register_actions():
         pass
 
 
-register_actions()
+# register_actions()
