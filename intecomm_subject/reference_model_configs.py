@@ -23,4 +23,4 @@ configs = {
 }
 
 for reference_name, fields in configs.items():
-    site_reference_configs.add_fields_to_config(name=reference_name, fields=fields)
+    site_reference_configs.add_fields_to_config(reference_name, fields=fields)

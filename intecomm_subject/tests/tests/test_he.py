@@ -16,7 +16,7 @@ from edc_he.models import (
 )
 from edc_metadata import KEYED, NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata
-from edc_metadata.utils import refresh_references_and_metadata_for_timepoint
+from edc_metadata.utils import refresh_metadata_for_timepoint
 from edc_utils import get_utcnow
 from edc_visit_schedule.constants import DAY1
 from faker import Faker
@@ -339,7 +339,7 @@ class TestHe(IntecommTestCaseMixin, TestCase):
         )
         self.assertTrue(qs.exists())
 
-        refresh_references_and_metadata_for_timepoint(subject_visit)
+        refresh_metadata_for_timepoint(subject_visit)
 
         qs = CrfMetadata.objects.filter(
             model="intecomm_subject.healtheconomicspatient",

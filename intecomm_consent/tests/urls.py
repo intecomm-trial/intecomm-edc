@@ -11,7 +11,6 @@ urlpatterns = [
     path("edc_device/", include("edc_device.urls")),
     path("edc_locator/", include("edc_locator.urls")),
     path("edc_protocol/", include("edc_protocol.urls")),
-    path("edc_reference/", include("edc_reference.urls")),
     path("edc_visit_schedule/", include("edc_visit_schedule.urls")),
     path("intecomm_consent/", include("intecomm_consent.urls")),
     path("administration", RedirectView.as_view(url="admin/"), name="administration_url"),

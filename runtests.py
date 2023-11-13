@@ -148,7 +148,6 @@ project_settings = DefaultTestSettings(
         "edc_prn.apps.AppConfig",
         "edc_qol.apps.AppConfig",
         "edc_randomization.apps.AppConfig",
-        "edc_reference.apps.AppConfig",
         "edc_refusal.apps.AppConfig",
         "edc_registration.apps.AppConfig",
         "edc_pdf_reports.apps.AppConfig",
