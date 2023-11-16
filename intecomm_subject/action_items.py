@@ -7,6 +7,7 @@ from edc_visit_tracking.action_items import MissedVisitAction as BaseMissedVisit
 class MissedVisitAction(BaseMissedVisitAction):
     reference_model = "intecomm_subject.subjectvisitmissed"
     admin_site_name: str = "intecomm_subject_admin"
+    show_on_dashboard = False
 
     def is_ltfu(self) -> bool:
         return False

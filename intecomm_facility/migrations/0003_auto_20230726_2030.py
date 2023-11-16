@@ -7,7 +7,7 @@ from intecomm_facility.list_data import list_data
 
 
 def update_healthfacility(apps, schema_editor):
-    healthfacility_old_model_cls = apps.get_model("intecomm_screening", "healthfacility")
+    healthfacility_old_model_cls = apps.get_model("intecomm_screening", "oldhealthfacility")
     healthfacility_model_cls = apps.get_model("intecomm_facility", "healthfacility")
     healthfacilitytype_old_model_cls = apps.get_model("intecomm_lists", "healthfacilitytypes")
     healthfacilitytype_model_cls = apps.get_model("edc_facility", "healthfacilitytypes")
@@ -20,7 +20,7 @@ def update_healthfacility(apps, schema_editor):
     for obj_old in tqdm(healthfacility_old_model_cls.objects.all(), total=total):
         obj_new = healthfacility_model_cls()
         for fld in healthfacility_model_cls._meta.get_fields():
-            if fld.name in ["nextappointment"]:
+            if fld.name in ["nextappointment", "healthtalklog"]:
                 continue
             fldname = fld.name
             if fld.name == "sun":

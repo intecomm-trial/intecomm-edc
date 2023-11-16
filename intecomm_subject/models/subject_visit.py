@@ -80,9 +80,9 @@ class SubjectVisit(
         choices=INFO_SOURCE,
     )
 
-    on_site = CurrentSiteManager()
-
     objects = VisitModelManager()
+
+    on_site = CurrentSiteManager()
 
     history = HistoricalRecords()
 

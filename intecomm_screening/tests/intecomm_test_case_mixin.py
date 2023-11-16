@@ -258,7 +258,10 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
 
     @classmethod
     def get_patient_group(
-        cls, report_datetime: datetime | None = None, conditions: list[str] | None = None
+        cls,
+        report_datetime: datetime | None = None,
+        conditions: list[str] | None = None,
+        group_name: str | None = None,
     ):
         conditions = conditions or ([HIV] * 4) + ([HTN] * 5) + ([DM] * 5)
         for i, condition_name in tqdm(enumerate(conditions), total=len(conditions)):
@@ -288,7 +291,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             cls.get_subject_consent(subject_screening, consent_datetime=report_datetime)
 
         patient_group = PatientGroup.objects.create(
-            name="BRANDX", report_datetime=report_datetime
+            name=group_name or "BRANDX", report_datetime=report_datetime
         )
         total = PatientLog.objects.filter(conditions__name__in=[HIV]).count()
         for obj in tqdm(PatientLog.objects.filter(conditions__name__in=[HIV]), total=total):
@@ -307,9 +310,12 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         report_datetime: datetime | None = None,
         patient_group: PatientGroup | None = None,
         conditions: list[str] | None = None,
+        group_name: str | None = None,
     ):
         patient_group = patient_group or cls.get_patient_group(
-            report_datetime=report_datetime, conditions=conditions
+            report_datetime=report_datetime,
+            conditions=conditions,
+            group_name=group_name,
         )
         patient_group.status = COMPLETE
         patient_group.save()

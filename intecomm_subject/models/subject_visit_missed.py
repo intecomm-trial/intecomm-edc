@@ -1,6 +1,5 @@
 from django.db import models
 from edc_model.models import BaseUuidModel
-from edc_visit_tracking.constants import VISIT_MISSED_ACTION
 from edc_visit_tracking.model_mixins import SubjectVisitMissedModelMixin
 
 from intecomm_lists.models import SubjectVisitMissedReasons
@@ -13,8 +12,6 @@ class SubjectVisitMissed(
     CrfWithActionModelMixin,
     BaseUuidModel,
 ):
-    action_name = VISIT_MISSED_ACTION
-
     missed_reasons = models.ManyToManyField(SubjectVisitMissedReasons, blank=True)
 
     appt_date = models.DateField(

@@ -1,9 +1,16 @@
 Changes
 =======
 
+0.1.82
+------
+- bump edc 0.5.40
+- clean up appt_type using migration, collapse 'hospital' into 'clinic'
+- fix location update CRF metadata rule
+
 0.1.80
 ------
 - bump edc 0.5.39
+- remove edc-reference
 
 0.1.79
 ------

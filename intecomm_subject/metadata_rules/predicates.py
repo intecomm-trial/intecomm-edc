@@ -1,6 +1,7 @@
+from edc_constants.constants import CLINIC, COMMUNITY
 from edc_he.rule_groups import Predicates as BaseHealthEconomicsPredicates
 from edc_visit_schedule.utils import is_baseline
-from intecomm_rando.constants import FACILITY_ARM
+from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 from intecomm_rando.utils import get_assignment_for_subject
 
 
@@ -18,7 +19,11 @@ class LocationUpdatePredicates:
             pass
         else:
             if not is_baseline(visit):
-                assignment = get_assignment_for_subject(visit.subject_identifier)
+                assignment = (
+                    COMMUNITY
+                    if get_assignment_for_subject(visit.subject_identifier) == COMMUNITY_ARM
+                    else CLINIC
+                )
                 if assignment != appt_type_name:
                     required = True
         return required

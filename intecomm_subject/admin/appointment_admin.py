@@ -8,8 +8,9 @@ from edc_appointment.form_validators import (
     AppointmentFormValidator as BaseFormValidator,
 )
 from edc_appointment.forms import AppointmentForm as BaseForm
-from edc_appointment.models import Appointment
+from edc_appointment.models import Appointment, AppointmentType
 from edc_appointment.utils import get_allow_skipped_appt_using
+from edc_constants.constants import HOSPITAL
 from edc_form_validators import INVALID_ERROR
 from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 from intecomm_rando.utils import get_assignment_for_subject
@@ -52,3 +53,9 @@ class AppointmentAdmin(BaseAdmin):
             else:
                 allow = True
         return allow
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "appt_type":
+            if request.GET.get("appt_type"):
+                kwargs["queryset"] = AppointmentType.objects.exclude(name=HOSPITAL)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
