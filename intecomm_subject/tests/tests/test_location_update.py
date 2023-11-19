@@ -11,9 +11,11 @@ from edc_appointment.models import Appointment, AppointmentType
 from edc_constants.constants import CLINIC, COMMUNITY, HTN
 from edc_metadata import REQUIRED
 from edc_metadata.models import CrfMetadata
+from edc_randomization.site_randomizers import site_randomizers
 from edc_utils import get_utcnow
 from edc_visit_tracking.constants import SCHEDULED
 from intecomm_rando.constants import COMMUNITY_ARM
+from intecomm_rando.randomizers import Randomizer
 from intecomm_rando.utils import get_assignment_for_subject
 
 from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin
@@ -22,13 +24,25 @@ from intecomm_subject.models import SubjectVisit
 utc_tz = ZoneInfo("UTC")
 
 
+@override_settings(
+    EDC_RANDOMIZATION_LIST_PATH=os.path.join(
+        settings.BASE_DIR, "intecomm_subject", "tests", "etc", "community_only"
+    )
+)
 @time_machine.travel(dt.datetime(2019, 5, 11, 8, 00, tzinfo=utc_tz))
 class TestLocationUpdate(IntecommTestCaseMixin, TestCase):
     patient_group = None
+    import_randomization_list = False
+    sid_count_for_tests = 2
 
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
+        site_randomizers._registry = {}
+        Randomizer.randomizationlist_folder = settings.EDC_RANDOMIZATION_LIST_PATH
+        site_randomizers.register(Randomizer)
+        randomizer_cls = site_randomizers.get("default")
+        randomizer_cls.import_list(verbose=False, sid_count_for_tests=cls.sid_count_for_tests)
         cls.patient_group = cls.get_randomized_patient_group(
             report_datetime=get_utcnow() - relativedelta(days=10), group_name="BRANDX"
         )
@@ -36,12 +50,7 @@ class TestLocationUpdate(IntecommTestCaseMixin, TestCase):
     def setUp(self):
         self.assertTrue(self.patient_group.randomized)
 
-    @tag("1")
-    @override_settings(
-        EDC_RANDOMIZATION_LIST_PATH=os.path.join(
-            settings.BASE_DIR, "intecomm_subject", "tests", "etc", "community_only"
-        )
-    )
+    @tag("5")
     def test_crf_metadata(self):
         patient_log = self.patient_group.patients.filter(conditions__name__in=[HTN]).first()
         self.get_subject_visit(subject_identifier=patient_log.subject_identifier)

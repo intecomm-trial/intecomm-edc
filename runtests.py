@@ -24,6 +24,9 @@ project_settings = DefaultTestSettings(
     EDC_AUTH_CODENAMES_WARN_ONLY=True,
     EDC_DX_REVIEW_LIST_MODEL_APP_LABEL="edc_dx_review",
     EDC_DX_REVIEW_APP_LABEL="intecomm_subject",
+    EDC_APPOINTMENT_ALLOW_SKIPPED_APPT_USING={
+        "intecomm_subject.nextappointment": ("appt_date", "visitschedule")
+    },
     BASE_DIR=base_dir,
     APP_NAME=app_name,
     SITE_ID=SiteID(default=101),

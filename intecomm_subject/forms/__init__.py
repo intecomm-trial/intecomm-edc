@@ -1,3 +1,4 @@
+from .appointment_form import AppointmentForm
 from .blood_results import (
     BloodResultsFbcForm,
     BloodResultsGluForm,
