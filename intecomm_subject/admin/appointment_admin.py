@@ -1,39 +1,17 @@
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.translation import gettext_lazy as _
+from django.db.models import QuerySet
 from edc_appointment.admin import AppointmentAdmin as BaseAdmin
 from edc_appointment.admin_site import edc_appointment_admin
-from edc_appointment.constants import SKIPPED_APPT
-from edc_appointment.form_validators import (
-    AppointmentFormValidator as BaseFormValidator,
-)
-from edc_appointment.forms import AppointmentForm as BaseForm
 from edc_appointment.models import Appointment, AppointmentType
 from edc_appointment.utils import get_allow_skipped_appt_using
-from edc_constants.constants import HOSPITAL
-from edc_form_validators import INVALID_ERROR
-from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
+from edc_constants.constants import HOSPITAL, NOT_APPLICABLE
+from intecomm_rando.constants import FACILITY_ARM
 from intecomm_rando.utils import get_assignment_for_subject
 
+from ..forms import AppointmentForm
+
 edc_appointment_admin.unregister(Appointment)
-
-
-class AppointmentFormValidator(BaseFormValidator):
-    def validate_appt_type(self):
-        """Community arm may not skip appointments."""
-        if (
-            get_assignment_for_subject(self.instance.subject_identifier) == COMMUNITY_ARM
-            and self.cleaned_data.get("appt_status") == SKIPPED_APPT
-        ):
-            self.raise_validation_error(
-                {"appt_status": _("Invalid. Community appointments may not be skipped")},
-                INVALID_ERROR,
-            )
-        super().validate_appt_type()
-
-
-class AppointmentForm(BaseForm):
-    form_validator_cls = AppointmentFormValidator
 
 
 @admin.register(Appointment, site=edc_appointment_admin)
@@ -54,8 +32,9 @@ class AppointmentAdmin(BaseAdmin):
                 allow = True
         return allow
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "appt_type":
-            if request.GET.get("appt_type"):
-                kwargs["queryset"] = AppointmentType.objects.exclude(name=HOSPITAL)
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    def get_appt_type_queryset(self, request) -> QuerySet:
+        if not self.allow_skipped_appointments(request):
+            return AppointmentType.objects.exclude(
+                name__in=[HOSPITAL, NOT_APPLICABLE]
+            ).order_by("display_index")
+        return AppointmentType.objects.exclude(name__in=[HOSPITAL]).order_by("display_index")

@@ -1,6 +1,13 @@
 Changes
 =======
 
+0.1.83
+------
+- bump edc 0.5.41
+- tighten up appointment form validation (appt_status, appt_type, appt_timing)
+  relative to randomization arm, tests
+- location update form validation and tests
+
 0.1.82
 ------
 - bump edc 0.5.40
