@@ -71,7 +71,7 @@ def get_assignment_description_for_patient_group(group_identifier: str | None) -
 
 
 def get_group_subject_dashboards_url(patient_group: PatientGroup | None) -> str | None:
-    """Returns a url to the listboard of subjects in followup
+    """Returns an url to the listboard of subjects in followup
     for this group.
     """
     url = None
