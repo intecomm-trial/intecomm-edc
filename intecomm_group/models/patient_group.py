@@ -12,7 +12,10 @@ from edc_utils import get_utcnow
 from intecomm_form_validators import RECRUITING
 
 from ..choices import GROUP_STATUS_CHOICES
-from .managers import PatientGroupManager
+
+
+class PatientGroupManager(models.Manager):
+    use_in_migrations = True
 
 
 class PatientGroup(SiteModelMixin, BaseUuidModel):

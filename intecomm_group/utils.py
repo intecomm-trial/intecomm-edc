@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import typing
 from decimal import Decimal
 from typing import Tuple
 
@@ -15,9 +14,8 @@ from edc_randomization.utils import (
 from intecomm_rando.constants import COMMUNITY_ARM
 
 from .exceptions import PatientGroupNotRandomized
-
-if typing.TYPE_CHECKING:
-    from .models import PatientGroup
+from .models import PatientGroup
+from .patient_group_updater import PatientGroupUpdater, PatientGroupUpdaterError
 
 
 class PatientGroupRatioError(Exception):
@@ -89,3 +87,19 @@ def get_group_subject_dashboards_url(patient_group: PatientGroup | None) -> str 
             url = reverse("intecomm_dashboard:facility_subject_listboard_url")
         return f"{url}?q={patient_group.group_identifier}"
     return None
+
+
+def add_subjects_to_group(group_name: str, subject_identifiers: list[str]):
+    patient_group = PatientGroup.objects.get(name=group_name)
+    for subject_identifier in subject_identifiers:
+        try:
+            updater = PatientGroupUpdater(patient_group, subject_identifier)
+        except PatientGroupUpdaterError as e:
+            print(f"   - skipping: {e}")
+        else:
+            try:
+                updater.add_subject_to_group()
+            except PatientGroupUpdaterError as e:
+                print(f"   - failed: {e}")
+            else:
+                print(f"    - added {subject_identifier}")
