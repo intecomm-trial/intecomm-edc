@@ -50,7 +50,7 @@ class TestLocationUpdate(IntecommTestCaseMixin, TestCase):
     def setUp(self):
         self.assertTrue(self.patient_group.randomized)
 
-    @tag("5")
+    @tag("2")
     def test_crf_metadata(self):
         patient_log = self.patient_group.patients.filter(conditions__name__in=[HTN]).first()
         self.get_subject_visit(subject_identifier=patient_log.subject_identifier)

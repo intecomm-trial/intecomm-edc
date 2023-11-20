@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from uuid import uuid4
 
 from django.db import models
@@ -10,10 +12,7 @@ from edc_utils import get_utcnow
 from intecomm_form_validators import RECRUITING
 
 from ..choices import GROUP_STATUS_CHOICES
-
-
-class PatientGroupManager(models.Manager):
-    use_in_migrations = True
+from .managers import PatientGroupManager
 
 
 class PatientGroup(SiteModelMixin, BaseUuidModel):
