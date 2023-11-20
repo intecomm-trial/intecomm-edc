@@ -3,6 +3,7 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Tuple
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from edc_constants.constants import DM, HIV, HTN
 from edc_randomization.site_randomizers import site_randomizers
@@ -90,16 +91,34 @@ def get_group_subject_dashboards_url(patient_group: PatientGroup | None) -> str 
 
 
 def add_subjects_to_group(group_name: str, subject_identifiers: list[str]):
-    patient_group = PatientGroup.objects.get(name=group_name)
-    for subject_identifier in subject_identifiers:
-        try:
-            updater = PatientGroupUpdater(patient_group, subject_identifier)
-        except PatientGroupUpdaterError as e:
-            print(f"   - skipping: {e}")
-        else:
+    """Add subjects to a group after the group has randomized.
+
+    Use with caution.
+
+    The update will work for a participant if:
+        * The patient group exists and has been randomized
+        * The participant to be added is NOT already in a patient
+          group.
+        * The participant to be added has been entered into the
+          PatientLog, screened and consented.
+    """
+    try:
+        patient_group = PatientGroup.objects.get(name=group_name)
+    except ObjectDoesNotExist:
+        print(f"PatientGroup does not exist. Got {group_name}.")
+    else:
+        for subject_identifier in subject_identifiers:
             try:
-                updater.add_subject_to_group()
+                updater = PatientGroupUpdater(patient_group, subject_identifier)
             except PatientGroupUpdaterError as e:
-                print(f"   - failed: {e}")
+                print(f"   - skipping: {e}")
+            except PatientGroupNotRandomized as e:
+                print(f"{e}")
+                break
             else:
-                print(f"    - added {subject_identifier}")
+                try:
+                    updater.add_subject_to_group()
+                except PatientGroupUpdaterError as e:
+                    print(f"   - failed: {e}")
+                else:
+                    print(f"    - added {subject_identifier}")

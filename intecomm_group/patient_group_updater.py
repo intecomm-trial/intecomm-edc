@@ -17,6 +17,10 @@ if TYPE_CHECKING:
     from intecomm_screening.models import PatientLog, SubjectScreening
 
 
+class PatientGroupNotRandomized(Exception):
+    pass
+
+
 class PatientGroupUpdaterError(Exception):
     pass
 
@@ -26,6 +30,10 @@ class PatientGroupUpdater:
         self.group_name: str = patient_group.name
         self.subject_identifier = subject_identifier
         self.patient_group = patient_group
+        if not patient_group.randomized:
+            raise PatientGroupNotRandomized(
+                f"PatientGroup has not been randomized. Got {self.group_name}."
+            )
         self.patient_log: PatientLog = self.get_patient_log_or_raise(subject_identifier)
         if self.patient_group.patients.filter(id=self.patient_log.id).exists():
             raise PatientGroupUpdaterError(
