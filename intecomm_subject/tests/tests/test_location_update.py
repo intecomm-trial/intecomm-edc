@@ -6,7 +6,7 @@ import time_machine
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.test import TestCase, override_settings, tag
+from django.test import TestCase, override_settings
 from edc_appointment.models import Appointment, AppointmentType
 from edc_constants.constants import CLINIC, COMMUNITY, HTN
 from edc_metadata import REQUIRED
@@ -50,7 +50,6 @@ class TestLocationUpdate(IntecommTestCaseMixin, TestCase):
     def setUp(self):
         self.assertTrue(self.patient_group.randomized)
 
-    @tag("2")
     def test_crf_metadata(self):
         patient_log = self.patient_group.patients.filter(conditions__name__in=[HTN]).first()
         self.get_subject_visit(subject_identifier=patient_log.subject_identifier)
