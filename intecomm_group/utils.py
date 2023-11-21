@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import typing
 from decimal import Decimal
 from typing import Tuple
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from edc_constants.constants import DM, HIV, HTN
 from edc_randomization.site_randomizers import site_randomizers
@@ -15,9 +15,8 @@ from edc_randomization.utils import (
 from intecomm_rando.constants import COMMUNITY_ARM
 
 from .exceptions import PatientGroupNotRandomized
-
-if typing.TYPE_CHECKING:
-    from .models import PatientGroup
+from .models import PatientGroup
+from .patient_group_updater import PatientGroupUpdater, PatientGroupUpdaterError
 
 
 class PatientGroupRatioError(Exception):
@@ -72,7 +71,7 @@ def get_assignment_description_for_patient_group(group_identifier: str | None) -
 
 
 def get_group_subject_dashboards_url(patient_group: PatientGroup | None) -> str | None:
-    """Returns a url to the listboard of subjects in followup
+    """Returns an url to the listboard of subjects in followup
     for this group.
     """
     url = None
@@ -89,3 +88,37 @@ def get_group_subject_dashboards_url(patient_group: PatientGroup | None) -> str 
             url = reverse("intecomm_dashboard:facility_subject_listboard_url")
         return f"{url}?q={patient_group.group_identifier}"
     return None
+
+
+def add_subjects_to_group(group_name: str, subject_identifiers: list[str]):
+    """Add subjects to a group after the group has randomized.
+
+    Use with caution.
+
+    The update will work for a participant if:
+        * The patient group exists and has been randomized
+        * The participant to be added is NOT already in a patient
+          group.
+        * The participant to be added has been entered into the
+          PatientLog, screened and consented.
+    """
+    try:
+        patient_group = PatientGroup.objects.get(name=group_name)
+    except ObjectDoesNotExist:
+        print(f"PatientGroup does not exist. Got {group_name}.")
+    else:
+        for subject_identifier in subject_identifiers:
+            try:
+                updater = PatientGroupUpdater(patient_group, subject_identifier)
+            except PatientGroupUpdaterError as e:
+                print(f"   - skipping: {e}")
+            except PatientGroupNotRandomized as e:
+                print(f"{e}")
+                break
+            else:
+                try:
+                    updater.add_subject_to_group()
+                except PatientGroupUpdaterError as e:
+                    print(f"   - failed: {e}")
+                else:
+                    print(f"    - added {subject_identifier}")

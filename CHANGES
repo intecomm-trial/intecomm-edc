@@ -1,6 +1,11 @@
 Changes
 =======
 
+0.1.85
+------
+- add util to add participants to an already randomized group.
+- remove duplicate code (intecomm-rando)
+
 0.1.84
 ------
 - bump edc 0.5.42
