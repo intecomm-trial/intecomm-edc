@@ -107,11 +107,12 @@ def add_subjects_to_group(group_name: str, subject_identifiers: list[str]):
     except ObjectDoesNotExist:
         print(f"PatientGroup does not exist. Got {group_name}.")
     else:
+        status = patient_group.status
         for subject_identifier in subject_identifiers:
             try:
                 updater = PatientGroupUpdater(patient_group, subject_identifier)
             except PatientGroupUpdaterError as e:
-                print(f"   - skipping: {e}")
+                print(f"    - skipping: {e}")
             except PatientGroupNotRandomized as e:
                 print(f"{e}")
                 break
@@ -122,3 +123,5 @@ def add_subjects_to_group(group_name: str, subject_identifiers: list[str]):
                     print(f"   - failed: {e}")
                 else:
                     print(f"    - added {subject_identifier}")
+        patient_group.status = status
+        patient_group.save()

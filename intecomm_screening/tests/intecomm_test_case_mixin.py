@@ -3,6 +3,7 @@ from __future__ import annotations
 import random
 from copy import deepcopy
 from datetime import datetime
+from typing import TYPE_CHECKING
 from uuid import uuid4
 from zoneinfo import ZoneInfo
 
@@ -50,6 +51,10 @@ from intecomm_screening.models import (
 from intecomm_sites.sites import fqdn
 from intecomm_sites.tests.site_test_case_mixin import SiteTestCaseMixin
 from intecomm_subject.models import ClinicalReview, ClinicalReviewBaseline, SubjectVisit
+
+if TYPE_CHECKING:
+    from intecomm_consent.models import SubjectConsent
+
 
 fake = Faker()
 now = datetime(2019, 5, 1).astimezone(ZoneInfo("UTC"))
@@ -150,6 +155,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             age_in_years=age_in_years or 20,
             hospital_identifier=hospital_identifier or uuid4().hex,
             contact_number="1234567890",
+            site=Site.objects.get(id=settings.SITE_ID),
         )
         opts.update(**kwargs)
         if country == UGANDA:
@@ -257,6 +263,41 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         )
 
     @classmethod
+    def get_consented_patient(
+        cls,
+        condition_name: str,
+        report_datetime: datetime | None = None,
+        index: int | None = None,
+    ) -> SubjectConsent:
+        """Creates patientlog->subjectscreening->subjectconsent."""
+
+        first_name = fake.first_name()
+        last_name = fake.last_name()
+        legal_name = f"{first_name} {last_name}"
+        initials = f"{first_name[0]}{last_name[0]}"
+        report_datetime = report_datetime or get_utcnow()
+        gender = random.choice([FEMALE, MALE])  # nosec B311
+        age_in_years = random.choice(  # nosec B311
+            [20, 25, 30, 35, 40, 45, 50, 55, 60, 65]  # nosec B311
+        )
+        contact_number = f"12345678{index}" if index else fake.credit_card_number()
+        patient_log_options = dict(
+            report_datetime=report_datetime,
+            legal_name=legal_name,
+            familiar_name=legal_name,
+            initials=initials,
+            gender=gender,
+            age_in_years=age_in_years,
+            hospital_identifier=uuid4().hex,
+            contact_number=contact_number,
+            conditions=[condition_name],
+        )
+        subject_screening = cls.get_subject_screening(
+            patient_log_options=patient_log_options, report_datetime=report_datetime
+        )
+        return cls.get_subject_consent(subject_screening, consent_datetime=report_datetime)
+
+    @classmethod
     def get_patient_group(
         cls,
         report_datetime: datetime | None = None,
@@ -265,31 +306,9 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
     ):
         conditions = conditions or ([HIV] * 4) + ([HTN] * 5) + ([DM] * 5)
         for i, condition_name in tqdm(enumerate(conditions), total=len(conditions)):
-            first_name = fake.first_name()
-            last_name = fake.last_name()
-            legal_name = f"{first_name} {last_name}"
-            initials = f"{first_name[0]}{last_name[0]}"
-            report_datetime = report_datetime or get_utcnow()
-            gender = random.choice([FEMALE, MALE])  # nosec B311
-            age_in_years = random.choice(  # nosec B311
-                [20, 25, 30, 35, 40, 45, 50, 55, 60, 65]  # nosec B311
+            cls.get_consented_patient(
+                condition_name=condition_name, report_datetime=report_datetime, index=i
             )
-            patient_log_options = dict(
-                report_datetime=report_datetime,
-                legal_name=legal_name,
-                familiar_name=legal_name,
-                initials=initials,
-                gender=gender,
-                age_in_years=age_in_years,
-                hospital_identifier=uuid4().hex,
-                contact_number=f"12345678{i}",
-                conditions=[condition_name],
-            )
-            subject_screening = cls.get_subject_screening(
-                patient_log_options=patient_log_options, report_datetime=report_datetime
-            )
-            cls.get_subject_consent(subject_screening, consent_datetime=report_datetime)
-
         patient_group = PatientGroup.objects.create(
             name=group_name or "BRANDX", report_datetime=report_datetime
         )

@@ -31,6 +31,7 @@ patientgroup = Recipe(
     status=RECRUITING,
     randomize_now=NO,
     group_identifier=None,
+    site=None,
 )
 
 patientlog = Recipe(
@@ -50,6 +51,7 @@ patientlog = Recipe(
     call_attempts=1,
     willing_to_screen=YES,
     screening_refusal_reason=None,
+    site=None,
 )
 
 patientlogug = Recipe(
