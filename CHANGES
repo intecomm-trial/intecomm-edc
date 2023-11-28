@@ -7,7 +7,7 @@ Changes
     - add 'calculated_land_surface_area' field (standardised to m2)
     - add additional units: Decimals (1/100th of Acre), Sq. feet
     - convert 'land_surface_area' to decimal field
-- bump edc 0.5.45
+- bump edc 0.5.46
 
 0.1.86
 ------
