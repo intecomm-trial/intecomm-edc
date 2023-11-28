@@ -2,6 +2,7 @@ from decimal import Decimal
 from unittest.mock import patch
 from uuid import uuid4
 
+from django.conf import settings
 from django.db import IntegrityError
 from django.test import TestCase
 from edc_constants.constants import (
@@ -51,6 +52,7 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
                 initials=f"N{initials[i]}A",
                 hospital_identifier=uuid4().hex,
                 contact_number=f"123456789{i}",
+                site_id=settings.SITE_ID,
             )
             obj.conditions.add(Conditions.objects.get(name=HIV))
         for i in range(0, 5):
@@ -60,6 +62,7 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
                 familiar_name=f"NAMEB{i}",
                 hospital_identifier=uuid4().hex,
                 contact_number=f"12345678{i}9",
+                site_id=settings.SITE_ID,
             )
             obj.conditions.add(Conditions.objects.get(name=DM))
         for i in range(0, 5):
@@ -69,6 +72,7 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
                 familiar_name=f"NAMEC{i}",
                 hospital_identifier=uuid4().hex,
                 contact_number=f"1234567{i}89",
+                site_id=settings.SITE_ID,
             )
             obj.conditions.add(Conditions.objects.get(name=HTN))
         for patient_log in PatientLog.objects.all():
@@ -102,6 +106,7 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
             screening_refusal_reason=ScreeningRefusalReasons.objects.get(
                 name="dont_have_time"
             ),
+            site_id=settings.SITE_ID,
         )
         patient_log.conditions.add(Conditions.objects.get(name=HIV))
         subject_screening = SubjectScreening(
@@ -131,6 +136,7 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
             contact_number="1234567890",
             willing_to_screen=YES,
             screening_refusal_reason=None,
+            site_id=settings.SITE_ID,
         )
         patient_log.conditions.add(Conditions.objects.get(name=HIV))
         subject_screening = SubjectScreening(
@@ -156,6 +162,7 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
             initials="NA",
             hospital_identifier="56d2c5ebc7384309990ddc14ee2cf1b2",
             contact_number="1234567890",
+            site_id=settings.SITE_ID,
         )
         patient_log.conditions.add(Conditions.objects.get(name=HIV))
         subject_screening = SubjectScreening(
@@ -183,6 +190,7 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
             initials="NA",
             hospital_identifier=uuid4().hex,
             contact_number="1234567890",
+            site_id=settings.SITE_ID,
         )
         patient_log.conditions.add(Conditions.objects.get(name=HIV))
         subject_screening = SubjectScreening(
