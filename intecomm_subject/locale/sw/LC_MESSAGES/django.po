@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-30 15:55-0500\n"
+"POT-Creation-Date: 2023-11-28 17:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -403,6 +403,14 @@ msgstr ""
 
 #: choices.py:238
 msgid "I estimated the date"
+msgstr ""
+
+#: forms/appointment_form.py:27
+msgid "Invalid. Community appointments may not be skipped"
+msgstr ""
+
+#: forms/appointment_form.py:39
+msgid "Invalid. A facility-based participant may not attend in the community"
 msgstr ""
 
 #: models/health_economics/assets.py:17 models/health_economics/assets.py:18
