@@ -1,9 +1,13 @@
 Changes
 +++++++
 
-unreleased
-----------
+0.1.88
+------
 - add module edc-form-runners
+- add custom form runners
+- remove unused fields on subject visit, subject visit missed
+- fix medication adherence form validator
+- bump edc 0.5.47
 
 0.1.87
 ------
