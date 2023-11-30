@@ -17,7 +17,7 @@ class SubjectVisitMissed(
     appt_date = models.DateField(
         verbose_name="Next scheduled routine/facility appointment",
         null=True,
-        blank=False,
+        blank=True,
         help_text="Should fall on an Integrated clinic day",
     )
 
