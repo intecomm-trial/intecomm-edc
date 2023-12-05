@@ -1,6 +1,10 @@
 Changes
 +++++++
 
+0.1.92
+------
+- fix setting.DJANGO_DEBUG_TOOLBAR_ENABLED
+
 0.1.91
 ------
 - bump edc 0.5.50

@@ -30,10 +30,11 @@ env = environ.Env(
     DEFENDER_ENABLED=(bool, False),
     EDC_LABEL_BROWSER_PRINT_PAGE_AUTO_BACK=(bool, True),
     TWILIO_ENABLED=(bool, False),
+    DJANGO_DEBUG_TOOLBAR=(bool, False),
 )
 
 DEBUG = env("DJANGO_DEBUG")
-DJTB_ENABLED = True
+DJANGO_DEBUG_TOOLBAR_ENABLED = env("DJANGO_DEBUG_TOOLBAR_ENABLED")
 
 if LOGGING_ENABLED := env("DJANGO_LOGGING_ENABLED"):
     from .logging import *  # noqa
@@ -167,7 +168,7 @@ INSTALLED_APPS = [
 if not DEFENDER_ENABLED:
     INSTALLED_APPS.pop(INSTALLED_APPS.index("defender"))
 
-if not DJTB_ENABLED:
+if not DJANGO_DEBUG_TOOLBAR_ENABLED:
     INSTALLED_APPS.pop(INSTALLED_APPS.index("debug_toolbar"))
 
 
@@ -190,7 +191,7 @@ MIDDLEWARE = [
 if not DEFENDER_ENABLED:
     MIDDLEWARE.pop(MIDDLEWARE.index("defender.middleware.FailedLoginMiddleware"))
 
-if not DJTB_ENABLED:
+if not DJANGO_DEBUG_TOOLBAR_ENABLED:
     MIDDLEWARE.pop(MIDDLEWARE.index("debug_toolbar.middleware.DebugToolbarMiddleware"))
 
 MIDDLEWARE.extend(
