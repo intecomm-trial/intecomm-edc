@@ -166,10 +166,4 @@ class Migration(migrations.Migration):
                 fields=["subject_visit", "site"], name="intecomm_su_subject_193cc0_idx"
             ),
         ),
-        migrations.AddIndex(
-            model_name="clinicalnote",
-            index=models.Index(
-                fields=["modified", "created"], name="intecomm_su_modifie_1e0564_idx"
-            ),
-        ),
     ]
