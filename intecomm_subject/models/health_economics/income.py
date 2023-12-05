@@ -15,3 +15,4 @@ class HealthEconomicsIncome(
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = _("Health Economics: Income")
         verbose_name_plural = _("Health Economics: Income")
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

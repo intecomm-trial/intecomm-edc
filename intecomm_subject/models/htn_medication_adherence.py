@@ -13,3 +13,4 @@ class HtnMedicationAdherence(
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Medication Adherence (Hypertension)"
         verbose_name_plural = "Medication Adherence (Hypertension)"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

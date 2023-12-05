@@ -31,5 +31,13 @@ class ProtocolIncident(
     def natural_key(self):
         return (self.action_identifier,)  # noqa
 
-    class Meta(ProtocolIncidentModelMixin.Meta, BaseUuidModel.Meta):
-        pass
+    class Meta(
+        ProtocolIncidentModelMixin.Meta,
+        NonUniqueSubjectIdentifierFieldMixin.Meta,
+        BaseUuidModel.Meta,
+    ):
+        indexes = (
+            ProtocolIncidentModelMixin.Meta.indexes
+            + NonUniqueSubjectIdentifierFieldMixin.Meta.indexes
+            + BaseUuidModel.Meta.indexes
+        )

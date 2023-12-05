@@ -22,4 +22,3 @@ class PatientFollowupCall(PatientCallModelMixin, SiteModelMixin, BaseUuidModel):
     class Meta(BaseUuidModel.Meta):
         verbose_name = "Patient Followup Call"
         verbose_name_plural = "Patient Followup Calls"
-        ordering = ["report_datetime"]

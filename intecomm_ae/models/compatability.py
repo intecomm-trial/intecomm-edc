@@ -12,17 +12,17 @@ from edc_model.models import BaseUuidModel
 
 class AeSusar(AeSusarModelMixin, BaseUuidModel):
     class Meta(AeSusarModelMixin.Meta, BaseUuidModel.Meta):
-        pass
+        indexes = AeSusarModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes
 
 
 class AeTmg(AeTmgModelMixin, BaseUuidModel):
     class Meta(AeTmgModelMixin.Meta, BaseUuidModel.Meta):
-        pass
+        indexes = AeTmgModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes
 
 
 class DeathReportTmg(DeathReportTmgModelMixin, BaseUuidModel):
     class Meta(DeathReportTmgModelMixin.Meta, BaseUuidModel.Meta):
-        pass
+        indexes = DeathReportTmgModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes
 
 
 class DeathReportTmgSecond(DeathReportTmg):

@@ -9,7 +9,7 @@ print(f"Settings file {__file__}")
 # IF UAT, PATIENT IDENTIFIERS MAY START WITH 999
 # EDC_PROTOCOL_NUMBER = 999
 # UG
-# SITE_ID = SiteID(default=101)  # Kasangati
+SITE_ID = SiteID(default=101)  # Kasangati
 # SITE_ID = SiteID(default=102)  # Kisugu
 # SITE_ID = SiteID(default=103)  # Kiswa
 # SITE_ID = SiteID(default=104)  # Kyazanga
@@ -22,7 +22,7 @@ print(f"Settings file {__file__}")
 
 # TZ
 # SITE_ID = SiteID(default=201)  # Amana
-SITE_ID = SiteID(default=202)  # Bagamoyo
+# SITE_ID = SiteID(default=202)  # Bagamoyo
 # SITE_ID = SiteID(default=203)  # Rugambwa
 # SITE_ID = SiteID(default=204)  # Hindu_Mandal
 # SITE_ID = SiteID(default=205)  # Kisarawe
@@ -34,7 +34,7 @@ SITE_ID = SiteID(default=202)  # Bagamoyo
 
 EDC_SITES_UAT_DOMAIN = False
 DEBUG = True
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 SECURE_SSL_REDIRECT = False
 EDC_MODEL_ADMIN_CSS_THEME = "edc_purple"
@@ -42,3 +42,5 @@ EDC_MODEL_ADMIN_CSS_THEME = "edc_purple"
 if os.path.exists(BASE_DIR) and not os.path.exists(KEY_PATH):  # noqa
     os.makedirs(KEY_PATH)  # noqa
     AUTO_CREATE_KEYS = True
+
+INTERNAL_IPS = ["127.0.0.1"]  # for djdt

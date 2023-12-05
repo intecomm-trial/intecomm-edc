@@ -1,12 +1,12 @@
 from django.db import models
 from edc_constants.choices import PRESENT_ABSENT_NA, YES_NO
 from edc_constants.constants import NOT_APPLICABLE
-from edc_model import models as edc_models
+from edc_model.models import BaseUuidModel
 
 from ..model_mixins import CrfModelMixin
 
 
-class UrineDipstickTest(CrfModelMixin, edc_models.BaseUuidModel):
+class UrineDipstickTest(CrfModelMixin, BaseUuidModel):
     performed = models.CharField(
         verbose_name="Was the urine dipstick test performed?",
         max_length=15,
@@ -38,6 +38,7 @@ class UrineDipstickTest(CrfModelMixin, edc_models.BaseUuidModel):
         default=NOT_APPLICABLE,
     )
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Urine dipstick test"
         verbose_name_plural = "Urine dipstick tests"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

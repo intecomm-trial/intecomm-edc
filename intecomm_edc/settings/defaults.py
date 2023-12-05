@@ -33,6 +33,7 @@ env = environ.Env(
 )
 
 DEBUG = env("DJANGO_DEBUG")
+DJTB_ENABLED = True
 
 if LOGGING_ENABLED := env("DJANGO_LOGGING_ENABLED"):
     from .logging import *  # noqa
@@ -51,8 +52,6 @@ else:
         )
     env.read_env(os.path.join(ENV_DIR, ".env"))
 
-DEBUG = env("DJANGO_DEBUG")
-
 SECRET_KEY = env.str("DJANGO_SECRET_KEY")
 
 APP_NAME = env.str("DJANGO_APP_NAME")
@@ -63,7 +62,6 @@ ETC_DIR = env.str("DJANGO_ETC_FOLDER")
 
 TEST_DIR = os.path.join(BASE_DIR, APP_NAME, "tests")
 
-# INTERNAL_IPS = ["127.0.0.1"] # for djdt
 ALLOWED_HOSTS = ["*"]  # env.list('DJANGO_ALLOWED_HOSTS')
 
 ENFORCE_RELATED_ACTION_ITEM_EXISTS = False
@@ -82,6 +80,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "debug_toolbar",
     "django.contrib.sites",
     "defender",
     "multisite",
@@ -89,7 +88,6 @@ INSTALLED_APPS = [
     "django_crypto_fields.apps.AppConfig",
     "django_revision.apps.AppConfig",
     # "django_extensions",
-    # "debug_toolbar",
     "logentry_admin",
     "simple_history",
     "storages",
@@ -169,7 +167,12 @@ INSTALLED_APPS = [
 if not DEFENDER_ENABLED:
     INSTALLED_APPS.pop(INSTALLED_APPS.index("defender"))
 
+if not DJTB_ENABLED:
+    INSTALLED_APPS.pop(INSTALLED_APPS.index("debug_toolbar"))
+
+
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -183,8 +186,12 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+
 if not DEFENDER_ENABLED:
     MIDDLEWARE.pop(MIDDLEWARE.index("defender.middleware.FailedLoginMiddleware"))
+
+if not DJTB_ENABLED:
+    MIDDLEWARE.pop(MIDDLEWARE.index("debug_toolbar.middleware.DebugToolbarMiddleware"))
 
 MIDDLEWARE.extend(
     [
@@ -484,6 +491,9 @@ DATA_DICTIONARY_APP_LABELS = [
     "edc_locator",
     "edc_offstudy",
 ]
+
+# edc_form_runners
+EDC_FORM_RUNNERS_ENABLED = True
 
 # edc_protocol
 EDC_PROTOCOL = env.str("EDC_PROTOCOL")

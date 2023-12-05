@@ -28,3 +28,4 @@ class BloodResultsIns(
     class Meta(CrfWithActionModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Blood Result: Insulin"
         verbose_name_plural = "Blood Results: Insulin"
+        indexes = CrfWithActionModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

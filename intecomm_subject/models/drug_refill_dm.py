@@ -16,3 +16,4 @@ class DrugRefillDm(DrugRefillModelMixin, CrfModelMixin, BaseUuidModel):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Drug Refill: Diabetes"
         verbose_name_plural = "Drug Refills: Diabetes"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

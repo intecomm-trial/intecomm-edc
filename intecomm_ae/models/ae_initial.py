@@ -1,7 +1,6 @@
 from django.db import models
 from edc_action_item.models import ActionModelMixin
 from edc_adverse_event.constants import AE_INITIAL_ACTION
-from edc_adverse_event.model_mixins import AeInitialModelMixin
 from edc_adverse_event.model_mixins.ae_initial import (
     AeInitialFieldsModelMixin,
     AeInitialMethodsModelMixin,
@@ -50,5 +49,11 @@ class AeInitial(
 
     ae_treatment = models.TextField(verbose_name="Specify action taken for treatment of AE:")
 
-    class Meta(AeInitialModelMixin.Meta, BaseUuidModel.Meta):
-        pass
+    class Meta(
+        NonUniqueSubjectIdentifierFieldMixin.Meta, ActionModelMixin.Meta, BaseUuidModel.Meta
+    ):
+        indexes = (
+            NonUniqueSubjectIdentifierFieldMixin.Meta.indexes
+            + ActionModelMixin.Meta.indexes
+            + BaseUuidModel.Meta.indexes
+        )

@@ -1,6 +1,7 @@
 from django.contrib.sites.managers import CurrentSiteManager
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import UniqueConstraint
 from edc_consent.field_mixins import (
     CitizenFieldsMixin,
     FullNamePersonalFieldsMixin,
@@ -115,7 +116,21 @@ class SubjectConsent(
         return "subject_identifier"
 
     class Meta(ConsentModelMixin.Meta, BaseUuidModel.Meta):
-        indexes = [
+        constraints = [
+            UniqueConstraint(
+                fields=["subject_identifier", "version"],
+                name="%(app_label)s_%(class)s_subj_ver_uniq",
+            ),
+            UniqueConstraint(
+                fields=[
+                    "legal_name",
+                    "initials",
+                    "version",
+                ],
+                name="%(app_label)s_%(class)s_legal_name_uniq",
+            ),
+        ]
+        indexes = BaseUuidModel.Meta.indexes + [
             models.Index(
                 fields=[
                     "subject_identifier",
@@ -126,19 +141,3 @@ class SubjectConsent(
                 ]
             )
         ]
-
-        unique_together = (
-            (
-                "subject_identifier",
-                "version",
-            ),
-            (
-                "subject_identifier",
-                "screening_identifier",
-            ),
-            (
-                "legal_name",
-                "initials",
-                "version",
-            ),
-        )

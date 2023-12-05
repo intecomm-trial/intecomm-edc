@@ -18,3 +18,4 @@ class HealthEconomicsHouseholdHead(
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = _("Health Economics: Household head")
         verbose_name_plural = _("Health Economics: Household head")
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

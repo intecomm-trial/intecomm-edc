@@ -173,3 +173,4 @@ class ComplicationsBaseline(CrfModelMixin, BaseUuidModel):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Complications: Baseline"
         verbose_name_plural = "Complications: Baseline"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

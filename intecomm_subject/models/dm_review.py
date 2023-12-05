@@ -8,3 +8,4 @@ class DmReview(FollowupReviewModelMixin, GlucoseModelMixin, CrfModelMixin, BaseU
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Diabetes Review"
         verbose_name_plural = "Diabetes Review"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

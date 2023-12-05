@@ -161,3 +161,4 @@ class OtherBaselineData(CrfModelMixin, BaseUuidModel):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Other Baseline Data"
         verbose_name_plural = "Other Baseline Data"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

@@ -102,3 +102,4 @@ class ComplicationsFollowup(CrfModelMixin, BaseUuidModel):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Complications: Followup"
         verbose_name_plural = "Complications: Followup"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

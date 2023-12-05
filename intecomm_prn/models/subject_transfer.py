@@ -7,4 +7,4 @@ class SubjectTransfer(
     BaseUuidModel,
 ):
     class Meta(SubjectTransferModelMixin.Meta, BaseUuidModel.Meta):
-        pass
+        indexes = SubjectTransferModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

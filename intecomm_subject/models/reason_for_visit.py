@@ -48,3 +48,4 @@ class ReasonForVisit(CrfModelMixin, BaseUuidModel):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Reason for Visit"
         verbose_name_plural = "Reason for Visits"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

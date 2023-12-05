@@ -110,3 +110,8 @@ class EndOfStudy(SiteModelMixin, ActionModelMixin, OffstudyModelMixin, BaseUuidM
     class Meta(OffstudyModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "End of Study"
         verbose_name_plural = "End of Study"
+        indexes = (
+            ActionModelMixin.Meta.indexes
+            + BaseUuidModel.Meta.indexes
+            + [models.Index(fields=["subject_identifier", "action_identifier", "site", "id"])]
+        )

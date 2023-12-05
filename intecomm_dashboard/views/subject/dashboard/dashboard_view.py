@@ -73,12 +73,11 @@ class DashboardView(SubjectDashboardView):
 
     @property
     def patient_log(self):
-        try:
+        if self.subject_identifier:
             return self.patient_log_model_cls.objects.get(
                 subject_identifier=self.subject_identifier
             )
-        except ObjectDoesNotExist:
-            return None
+        return None
 
     @property
     def patient_log_url(self) -> str:

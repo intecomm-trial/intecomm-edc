@@ -1,11 +1,11 @@
 from django.db import models
 from edc_constants.choices import POS_NEG_NA, YES_NO
-from edc_model import models as edc_models
+from edc_model.models import BaseUuidModel
 
 from ..model_mixins import CrfModelMixin
 
 
-class UrinePregnancy(CrfModelMixin, edc_models.BaseUuidModel):
+class UrinePregnancy(CrfModelMixin, BaseUuidModel):
     performed = models.CharField(
         verbose_name="Was the urine pregnancy test performed?",
         max_length=15,
@@ -36,6 +36,7 @@ class UrinePregnancy(CrfModelMixin, edc_models.BaseUuidModel):
         help_text="Auto-updated by Pregnancy Notification PRN form",
     )
 
-    class Meta(CrfModelMixin.Meta, edc_models.BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Urine pregnancy test"
         verbose_name_plural = "Urine pregnancy tests"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

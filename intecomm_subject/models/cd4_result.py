@@ -26,6 +26,7 @@ class Cd4Result(CrfWithRequisitionModelMixin, CrfModelMixin, BaseUuidModel):
         verbose_name="Units", max_length=25, default=CELLS_PER_MILLIMETER_CUBED, editable=False
     )
 
-    class Meta(CrfWithRequisitionModelMixin.Meta, BaseUuidModel.Meta):
+    class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "CD4 Result"
         verbose_name_plural = "CD4 Results"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

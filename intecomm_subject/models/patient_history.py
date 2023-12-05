@@ -90,3 +90,4 @@ class PatientHistory(
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "PatientHistory"
         verbose_name_plural = "PatientHistory"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

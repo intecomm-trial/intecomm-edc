@@ -12,3 +12,4 @@ class Eq5d3l(
     class Meta(Eq5d3lModelMixin.Meta, CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "EuroQol EQ-5D-3L Instrument"
         verbose_name_plural = "EuroQol EQ-5D-3L Instrument"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

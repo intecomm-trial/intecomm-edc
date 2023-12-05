@@ -55,4 +55,4 @@ class DeathReport(DeathReportModelMixin, BaseUuidModel):
     )
 
     class Meta(DeathReportModelMixin.Meta, BaseUuidModel.Meta):
-        pass
+        indexes = DeathReportModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

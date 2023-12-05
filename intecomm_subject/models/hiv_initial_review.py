@@ -106,3 +106,4 @@ class HivInitialReview(
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "HIV Initial Review"
         verbose_name_plural = "HIV Initial Reviews"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes
