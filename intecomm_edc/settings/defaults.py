@@ -30,7 +30,7 @@ env = environ.Env(
     DEFENDER_ENABLED=(bool, False),
     EDC_LABEL_BROWSER_PRINT_PAGE_AUTO_BACK=(bool, True),
     TWILIO_ENABLED=(bool, False),
-    DJANGO_DEBUG_TOOLBAR=(bool, False),
+    DJANGO_DEBUG_TOOLBAR_ENABLED=(bool, False),
 )
 
 DEBUG = env("DJANGO_DEBUG")
