@@ -3,6 +3,7 @@ from __future__ import annotations
 from uuid import uuid4
 
 from django.db import models
+from django.db.models import Index
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
 from edc_model.models import BaseUuidModel, HistoricalRecords
@@ -130,3 +131,4 @@ class PatientGroup(SiteModelMixin, BaseUuidModel):
     class Meta(BaseUuidModel.Meta):
         verbose_name = "Patient Group"
         verbose_name_plural = "Patient Groups"
+        indexes = BaseUuidModel.Meta.indexes + [Index(fields=["group_identifier", "status"])]

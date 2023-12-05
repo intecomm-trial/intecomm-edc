@@ -22,7 +22,7 @@ class Manager(models.Manager):
 
 
 class PatientCallModelMixin(models.Model):
-    report_datetime = models.DateTimeField(default=get_utcnow)
+    report_datetime = models.DateTimeField(default=get_utcnow, db_index=True)
 
     contact_number = EncryptedCharField(blank=False, validators=[phone_number])
 
@@ -82,4 +82,3 @@ class PatientCallModelMixin(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ["report_datetime"]

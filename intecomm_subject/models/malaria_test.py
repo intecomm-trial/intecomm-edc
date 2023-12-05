@@ -8,3 +8,4 @@ class MalariaTest(MalariaTestModelMixin, CrfModelMixin, BaseUuidModel):
     class Meta(MalariaTestModelMixin.Meta, CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Malaria Test"
         verbose_name_plural = "Malaria Tests"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

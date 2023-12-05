@@ -10,3 +10,4 @@ class OnScheduleComm(SiteModelMixin, OnScheduleModelMixin, BaseUuidModel):
     class Meta(OnScheduleModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "On-schedule community-based integrated care"
         verbose_name_plural = "On-schedule community-based integrated care"
+        indexes = OnScheduleModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

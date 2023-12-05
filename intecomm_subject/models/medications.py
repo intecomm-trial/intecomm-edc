@@ -43,3 +43,4 @@ class Medications(CrfModelMixin, BaseUuidModel):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Medications"
         verbose_name_plural = "Medications"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

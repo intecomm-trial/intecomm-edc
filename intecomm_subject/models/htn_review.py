@@ -39,3 +39,4 @@ class HtnReview(FollowupReviewModelMixin, CrfModelMixin, BaseUuidModel):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Hypertension Review"
         verbose_name_plural = "Hypertension Review"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

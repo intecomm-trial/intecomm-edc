@@ -10,4 +10,4 @@ class Icecapa(
     BaseUuidModel,
 ):
     class Meta(IcecapaModelMixin.Meta, CrfModelMixin.Meta, BaseUuidModel.Meta):
-        pass
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

@@ -38,3 +38,4 @@ class DrugRefillHiv(DrugRefillModelMixin, CrfModelMixin, BaseUuidModel):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Drug Refill: HIV"
         verbose_name_plural = "Drug Refills: HIV"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

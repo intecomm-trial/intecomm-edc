@@ -16,3 +16,4 @@ class DrugRefillHtn(DrugRefillModelMixin, CrfModelMixin, BaseUuidModel):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Drug Refill: Hypertension"
         verbose_name_plural = "Drug Refills: Hypertension"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

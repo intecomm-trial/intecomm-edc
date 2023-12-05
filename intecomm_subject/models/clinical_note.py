@@ -18,3 +18,4 @@ class ClinicalNote(CrfModelMixin, BaseUuidModel):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Clinical Note"
         verbose_name_plural = "Clinical Note"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

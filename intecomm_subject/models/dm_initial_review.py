@@ -50,3 +50,4 @@ class DmInitialReview(
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Diabetes Initial Review"
         verbose_name_plural = "Diabetes Initial Reviews"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

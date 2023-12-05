@@ -24,3 +24,4 @@ class SubjectVisitMissed(
     class Meta(CrfWithActionModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Missed Visit Report"
         verbose_name_plural = "Missed Visit Report"
+        indexes = CrfWithActionModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

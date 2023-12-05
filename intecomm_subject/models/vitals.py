@@ -85,3 +85,4 @@ class Vitals(
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Vitals"
         verbose_name_plural = "Vitals"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

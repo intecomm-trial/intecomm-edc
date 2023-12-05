@@ -1,6 +1,16 @@
 Changes
 +++++++
 
+0.1.91
+------
+- bump edc 0.5.50
+
+0.1.90
+------
+- bump edc 0.5.49
+- review index inheritance
+- track locale from django-audit-fields
+
 0.1.89
 ------
 - bump edc 0.5.48

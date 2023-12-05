@@ -62,9 +62,12 @@ class LossToFollowup(
         blank=False,
     )
 
-    class Meta(BaseUuidModel.Meta):
+    class Meta(ActionModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Loss to Follow Up"
         verbose_name_plural = "Loss to Follow Up"
-        indexes = [
-            models.Index(fields=["subject_identifier", "action_identifier", "site", "id"])
-        ]
+        indexes = (
+            NonUniqueSubjectIdentifierFieldMixin.Meta.indexes
+            + ActionModelMixin.Meta.indexes
+            + BaseUuidModel.Meta.indexes
+            + [models.Index(fields=["subject_identifier", "action_identifier", "site", "id"])]
+        )

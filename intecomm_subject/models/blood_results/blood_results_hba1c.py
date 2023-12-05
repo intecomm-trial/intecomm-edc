@@ -28,3 +28,4 @@ class BloodResultsHba1c(
     class Meta(CrfWithActionModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Blood Result: HbA1c"
         verbose_name_plural = "Blood Results: HbA1c"
+        indexes = CrfWithActionModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

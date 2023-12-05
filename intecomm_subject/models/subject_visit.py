@@ -72,3 +72,4 @@ class SubjectVisit(
     class Meta(VisitModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Subject visit"
         verbose_name_plural = "Subject visits"
+        indexes = VisitModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

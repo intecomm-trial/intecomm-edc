@@ -30,3 +30,4 @@ class ClinicalReviewBaseline(
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Clinical Review: Baseline"
         verbose_name_plural = "Clinical Review: Baseline"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

@@ -109,3 +109,4 @@ class FamilyHistory(CrfModelMixin, BaseUuidModel):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Family History and Knowledge"
         verbose_name_plural = "Family History and Knowledge"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

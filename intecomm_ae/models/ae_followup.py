@@ -4,4 +4,6 @@ from edc_model.models.base_uuid_model import BaseUuidModel
 
 class AeFollowup(AeFollowupModelMixin, BaseUuidModel):
     class Meta(AeFollowupModelMixin.Meta, BaseUuidModel.Meta):
-        pass
+        verbose_name = "AE Followup"
+        verbose_name_plural = "AE Followups"
+        indexes = AeFollowupModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

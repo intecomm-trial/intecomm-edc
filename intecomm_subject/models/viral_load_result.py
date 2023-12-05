@@ -34,3 +34,4 @@ class ViralLoadResult(CrfWithRequisitionModelMixin, CrfModelMixin, BaseUuidModel
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Viral Load Result"
         verbose_name_plural = "Viral Load Results"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

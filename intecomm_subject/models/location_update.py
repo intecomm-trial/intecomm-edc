@@ -40,3 +40,4 @@ class LocationUpdate(CrfModelMixin, BaseUuidModel):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Location update"
         verbose_name_plural = "Location updates"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

@@ -41,3 +41,4 @@ class BloodResultsLft(
     class Meta(CrfWithActionModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Blood Result: LFT"
         verbose_name_plural = "Blood Results: LFT"
+        indexes = CrfWithActionModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

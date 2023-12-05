@@ -12,3 +12,4 @@ class ConcomitantMedication(CrfModelMixin, BaseUuidModel):
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Concomitant Medication"
         verbose_name_plural = "Concomitant Medication"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

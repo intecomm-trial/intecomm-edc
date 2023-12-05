@@ -42,3 +42,4 @@ class HtnInitialReview(
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Hypertension Initial Review"
         verbose_name_plural = "Hypertension Initial Reviews"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

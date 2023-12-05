@@ -13,3 +13,4 @@ class DmMedicationAdherence(
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Medication Adherence (Diabetes)"
         verbose_name_plural = "Medication Adherence (Diabetes)"
+        indexes = CrfModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

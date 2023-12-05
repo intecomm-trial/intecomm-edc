@@ -7,3 +7,4 @@ class SubjectRequisition(RequisitionModelMixin, CrfStatusModelMixin, BaseUuidMod
     class Meta(RequisitionModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Subject requisition"
         verbose_name_plural = "Subject requisitions"
+        indexes = RequisitionModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes

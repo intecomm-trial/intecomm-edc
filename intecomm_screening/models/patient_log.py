@@ -5,6 +5,7 @@ import re
 from django.apps import apps as django_apps
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.utils.html import format_html
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
 from edc_consent.utils import get_remove_patient_names_from_countries
@@ -297,10 +298,8 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
     class Meta(BaseUuidModel.Meta):
         verbose_name = "Patient Log"
         verbose_name_plural = "Patient Log"
-
-        unique_together = (
-            (
-                "legal_name",
-                "initials",
-            ),
-        )
+        constraints = [
+            UniqueConstraint(
+                fields=["legal_name", "initials"], name="%(app_label)s_%(class)s_legal_n_uniq"
+            )
+        ]

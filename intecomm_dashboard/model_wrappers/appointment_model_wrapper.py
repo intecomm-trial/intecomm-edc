@@ -6,7 +6,7 @@ from intecomm_subject.models import SubjectVisitMissed
 
 class AppointmentModelWrapper(Base):
     @property
-    def subject_visit_missed(self) -> SubjectVisitMissed:
+    def subject_visit_missed(self) -> SubjectVisitMissed | None:
         obj = None
         if self.object.related_visit:
             opts = dict(subject_visit=self.object.related_visit)

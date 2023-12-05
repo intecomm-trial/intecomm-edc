@@ -1,5 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.utils.html import format_html
 from django_crypto_fields.fields import EncryptedCharField
 from edc_constants.choices import PREG_YES_NO_NA, SELECTION_METHOD, YES_NO, YES_NO_NA
@@ -287,10 +288,9 @@ class SubjectScreening(
     class Meta(BaseUuidModel.Meta):
         verbose_name = "Subject Screening"
         verbose_name_plural = "Subject Screening"
-
-        unique_together = (
-            (
-                "legal_name",
-                "initials",
-            ),
-        )
+        constraints = [
+            UniqueConstraint(
+                fields=["legal_name", "initials"], name="%(app_label)s_%(class)s_legal_n_uniq"
+            )
+        ]
+        indexes = ScreeningModelMixin.Meta.indexes + BaseUuidModel.Meta.indexes
