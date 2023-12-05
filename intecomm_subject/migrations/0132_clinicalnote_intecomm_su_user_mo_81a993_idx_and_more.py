@@ -12,6 +12,12 @@ class Migration(migrations.Migration):
         migrations.AddIndex(
             model_name="clinicalnote",
             index=models.Index(
+                fields=["modified", "created"], name="intecomm_su_modifie_1e0564_idx"
+            ),
+        ),
+        migrations.AddIndex(
+            model_name="clinicalnote",
+            index=models.Index(
                 fields=["user_modified", "user_created"], name="intecomm_su_user_mo_81a993_idx"
             ),
         ),
