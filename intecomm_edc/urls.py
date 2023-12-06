@@ -62,7 +62,7 @@ urlpatterns = [
     *paths_for_urlpatterns("intecomm_subject"),
 ]
 
-if settings.DJANGO_DEBUG_TOOLBAR_ENABLED:
+if getattr(settings, "DJANGO_DEBUG_TOOLBAR_ENABLED", False):
     urlpatterns.append(
         path("__debug__/", include("debug_toolbar.urls")),
     )

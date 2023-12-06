@@ -154,44 +154,4 @@ class Migration(migrations.Migration):
                 verbose_name="Locale modified",
             ),
         ),
-        migrations.AddIndex(
-            model_name="subjectconsent",
-            index=models.Index(
-                fields=["modified", "created"], name="intecomm_co_modifie_45691e_idx"
-            ),
-        ),
-        migrations.AddIndex(
-            model_name="subjectconsent",
-            index=models.Index(
-                fields=["user_modified", "user_created"],
-                name="intecomm_co_user_mo_5935e6_idx",
-            ),
-        ),
-        migrations.AddIndex(
-            model_name="subjectreconsent",
-            index=models.Index(
-                fields=["modified", "created"], name="intecomm_co_modifie_fddd38_idx"
-            ),
-        ),
-        migrations.AddIndex(
-            model_name="subjectreconsent",
-            index=models.Index(
-                fields=["user_modified", "user_created"],
-                name="intecomm_co_user_mo_4da839_idx",
-            ),
-        ),
-        migrations.AddConstraint(
-            model_name="subjectconsent",
-            constraint=models.UniqueConstraint(
-                fields=("subject_identifier", "version"),
-                name="intecomm_consent_subjectconsent_subj_ver_uniq",
-            ),
-        ),
-        migrations.AddConstraint(
-            model_name="subjectconsent",
-            constraint=models.UniqueConstraint(
-                fields=("legal_name", "initials", "version"),
-                name="intecomm_consent_subjectconsent_legal_name_uniq",
-            ),
-        ),
     ]

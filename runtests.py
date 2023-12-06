@@ -14,7 +14,7 @@ base_dir = dirname(abspath(__file__))
 LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
 django.conf.locale.LANG_INFO = LANG_INFO
 LANGUAGE_LIST = ["sw", "en-gb", "en", "mas", "ry", "lg", "rny"]
-
+DJANGO_DEBUG_TOOLBAR_ENABLED = False
 
 project_settings = DefaultTestSettings(
     calling_file=__file__,
@@ -129,7 +129,7 @@ project_settings = DefaultTestSettings(
         "edc_facility.apps.AppConfig",
         "edc_fieldsets.apps.AppConfig",
         "edc_form_validators.apps.AppConfig",
-        "edc_form_runner.apps.AppConfig",
+        "edc_form_runners.apps.AppConfig",
         "edc_he.apps.AppConfig",
         "edc_lab_dashboard.apps.AppConfig",
         "edc_label.apps.AppConfig",

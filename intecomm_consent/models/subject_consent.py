@@ -61,6 +61,7 @@ class SubjectConsent(
 
     subject_identifier_cls = SubjectIdentifier
 
+    # unique constraint here blocks more than one consent version
     screening_identifier = models.CharField(
         verbose_name="Screening identifier",
         max_length=50,
