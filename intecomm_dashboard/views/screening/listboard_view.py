@@ -7,7 +7,7 @@ from django.urls import reverse
 from edc_listboard.filters import ListboardFilter
 from edc_listboard.filters import ListboardViewFilters as Base
 from edc_listboard.views import ScreeningListboardView
-from edc_sites import get_current_country
+from edc_sites.site import sites
 
 from intecomm_screening.constants import UGANDA
 
@@ -63,12 +63,12 @@ class ListboardView(ScreeningListboardView):
 
     @property
     def listboard_model_cls(self):
-        if get_current_country(request=self.request) == UGANDA:
+        if sites.get_current_country(self.request) == UGANDA:
             return django_apps.get_model("intecomm_screening.subjectscreeningug")
         return django_apps.get_model(self.listboard_model)
 
     def get_patient_log_add_url(self):
-        if get_current_country(request=self.request) == UGANDA:
+        if sites.get_current_country(self.request) == UGANDA:
             return reverse("intecomm_screening_admin:intecomm_screening_patientlogug_add")
         return reverse("intecomm_screening_admin:intecomm_screening_patientlog_add")
 

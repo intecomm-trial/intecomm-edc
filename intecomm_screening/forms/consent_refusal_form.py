@@ -7,7 +7,6 @@ from edc_screening.utils import (
     get_subject_screening_or_raise,
     is_eligible_or_raise,
 )
-from edc_sites.get_country import get_current_country
 from edc_sites.modelform_mixins import SiteModelFormMixin
 from intecomm_form_validators import ConsentRefusalFormValidator
 
@@ -41,7 +40,7 @@ class ConsentRefusalForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm
 
     @property
     def changelist_url(self):
-        if get_current_country(site=Site.objects.get_current()) == UGANDA:
+        if Site.objects.get_current().siteprofile.country == UGANDA:
             return "intecomm_screening_admin:intecomm_screening_patientlogug_changlist"
         return "intecomm_screening_admin:intecomm_screening_patientlog_changlist"
 

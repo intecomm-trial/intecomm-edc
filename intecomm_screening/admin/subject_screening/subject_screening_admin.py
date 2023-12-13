@@ -4,8 +4,6 @@ from django.contrib import admin
 from django_audit_fields import audit_fieldset_tuple
 from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
 
-from intecomm_sites import all_sites
-
 from ...admin_site import intecomm_screening_admin
 from ...forms import SubjectScreeningForm
 from ...models import PatientLog, SubjectScreening
@@ -39,8 +37,6 @@ class SubjectScreeningAdmin(
     changelist_url = "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
     add_search_field_name = "patient_log_identifier"
     change_search_field_name = "screening_identifier"
-
-    all_sites: dict = all_sites
 
     fieldsets = (
         get_first_fieldset(),

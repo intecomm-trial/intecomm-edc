@@ -13,8 +13,7 @@ from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER
 from edc_constants.constants import UUID_PATTERN
 from edc_sites.admin import SiteModelAdminMixin
-
-from intecomm_sites.sites import all_sites
+from edc_sites.site import sites
 
 from ...models import PatientGroup
 from ..actions import render_pdf_action
@@ -42,8 +41,6 @@ class PatientLogModelAdminMixin(
     SiteModelAdminMixin,
     ChangeListTopBarModelAdminMixin,
 ):
-    all_sites = all_sites
-
     autocomplete_fields = ["site"]
     inlines = [AddPatientCallInline, ViewPatientCallInline]
     actions = [render_pdf_action]
@@ -154,7 +151,7 @@ class PatientLogModelAdminMixin(
             age_in_years=obj.age_in_years,
         )
         for country in get_remove_patient_names_from_countries():
-            if obj and obj.site.id in [s.site_id for s in self.all_sites.get(country)]:
+            if obj and obj.site.id in [s.site_id for s in sites.get_by_country(country)]:
                 context.pop("legal_name")
                 break
         return format_html(

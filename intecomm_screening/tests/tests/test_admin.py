@@ -23,6 +23,8 @@ class TestScreening(IntecommTestCaseMixin, WebTest):
         self.user.is_staff = True
         self.user.save()
         self.user.refresh_from_db()
+        self.user.userprofile.sites.add(Site.objects.get(id=101))
+        self.user.userprofile.sites.add(Site.objects.get(id=201))
 
     @override_settings(SITE_ID=201, EDC_CONSENT_REMOVE_PATIENT_NAMES_FROM_COUNTRIES=["uganda"])
     def test_add_patient_log_with_names(self):

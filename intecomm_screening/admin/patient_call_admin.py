@@ -5,7 +5,6 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 from edc_model_admin.mixins import ModelAdminLimitToSelectedForeignkey
-from edc_sites import get_current_country
 from edc_sites.admin import SiteModelAdminMixin
 
 from ..admin_site import intecomm_screening_admin
@@ -149,7 +148,7 @@ class PatientCallAdmin(
 
     @admin.display(description="Patient", ordering="patient_log")
     def patient_log_link(self, obj=None):
-        if get_current_country(site=obj.site) == UGANDA:
+        if obj.site.siteprofile.country == UGANDA:
             url = reverse(
                 "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
             )

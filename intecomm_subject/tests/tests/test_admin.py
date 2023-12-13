@@ -1,5 +1,7 @@
 from django.apps import apps as django_apps
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
+from django.test import override_settings
 from django.urls import NoReverseMatch, reverse
 from django_webtest import WebTest
 
@@ -22,6 +24,8 @@ class TestAdmin(WebTest):
             DrugSupplyHiv,
             OldHealthEconomics,
         ]
+        self.user.userprofile.sites.add(Site.objects.get(id=101))
+        self.user.userprofile.sites.add(Site.objects.get(id=201))
 
     def login(self):
         response = self.app.get(reverse("admin:index")).maybe_follow()
@@ -35,6 +39,7 @@ class TestAdmin(WebTest):
         form["password"] = "pass"  # nosec B105
         return form.submit()
 
+    @override_settings(SITE_ID=201)
     def test_admin_changelists_ok(self):
         self.login()
         app_config = django_apps.get_app_config("intecomm_subject")

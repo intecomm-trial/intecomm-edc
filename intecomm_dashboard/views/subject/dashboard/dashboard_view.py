@@ -5,7 +5,7 @@ from typing import Type
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from edc_sites import get_current_country
+from edc_sites.site import sites
 from edc_subject_dashboard.views import SubjectDashboardView
 
 from intecomm_consent.models import SubjectConsentUg
@@ -32,7 +32,7 @@ class DashboardView(SubjectDashboardView):
 
     @property
     def patient_log_model_cls(self) -> Type[PatientLog | PatientLogUg]:
-        if get_current_country(request=self.request) == UGANDA:
+        if sites.get_current_country(self.request) == UGANDA:
             return PatientLogUg
         return PatientLog
 
@@ -63,7 +63,7 @@ class DashboardView(SubjectDashboardView):
             group_subject_dashboards_url=get_group_subject_dashboards_url(self.patient_log),
         )
         # replace subject_consent_model_wrapper if UG
-        if get_current_country(request=self.request) == UGANDA:
+        if sites.get_current_country(self.request) == UGANDA:
             subject_consent = SubjectConsentUg.objects.get(id=context["consent"].object.id)
             subject_consent_model_wrapper = SubjectConsentUgModelWrapper(subject_consent)
             context.update(
@@ -82,8 +82,7 @@ class DashboardView(SubjectDashboardView):
     @property
     def patient_log_url(self) -> str:
         if self.patient_log:
-            country = get_current_country(site=self.patient_log.site)
-            if country == UGANDA:
+            if self.patient_log.site.siteprofile.country == UGANDA:
                 patient_log_url = reverse(
                     "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
                 )

@@ -1,6 +1,6 @@
-from unittest.mock import patch
-
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
+from django.test import override_settings
 from django.urls import reverse
 from django_webtest import WebTest
 from edc_dashboard import url_names
@@ -26,6 +26,7 @@ class TestSubjectDashboard(IntecommTestCaseMixin, WebTest):
             DrugSupplyHiv,
             OldHealthEconomics,
         ]
+        self.user.userprofile.sites.add(Site.objects.get(id=101))
 
     def login(self):
         form = None
@@ -40,9 +41,8 @@ class TestSubjectDashboard(IntecommTestCaseMixin, WebTest):
         form["password"] = "pass"  # nosec B105
         return form.submit()
 
-    @patch("intecomm_dashboard.views.subject.dashboard.dashboard_view.get_current_country")
-    def test_dashboard_ok(self, mock_get_current_country):
-        mock_get_current_country.result = "uganda"
+    @override_settings(SITE_ID=101)
+    def test_dashboard_ok(self):
         subject_screening = self.get_subject_screening()
         self.assertEqual(subject_screening.reasons_ineligible, None)
         self.assertTrue(subject_screening.eligible)

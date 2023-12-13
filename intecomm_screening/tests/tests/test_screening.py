@@ -1,10 +1,11 @@
 from decimal import Decimal
-from unittest.mock import patch
 from uuid import uuid4
 
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.db import IntegrityError
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from edc_constants.constants import (
     DM,
     FEMALE,
@@ -25,11 +26,20 @@ from intecomm_screening.models import PatientLog, SubjectScreening
 from intecomm_screening.models.subject_screening import SubjectScreeningError
 from intecomm_screening.utils import InvalidScreeningIdentifier
 
-from ...constants import UGANDA
 from ..intecomm_test_case_mixin import IntecommTestCaseMixin
 
 
 class TestScreening(IntecommTestCaseMixin, TestCase):
+    def setUp(self) -> None:
+        super().setUp()
+        self.user = User.objects.create_superuser("user_login", "u@example.com", "pass")
+        self.user.is_active = True
+        self.user.is_staff = True
+        self.user.is_superuser = True
+        self.user.save()
+        self.user.refresh_from_db()
+        self.user.userprofile.sites.add(Site.objects.get(id=101))
+
     def test_no_patients_ok(self):
         obj = make_recipe("intecomm_screening.patientgroup")
         self.assertEqual(obj.status, RECRUITING)
@@ -239,9 +249,8 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
         patient_log_two.screening_identifier = patient_log.screening_identifier
         self.assertRaises(IntegrityError, patient_log_two.save)
 
-    @patch("intecomm_screening.forms.subject_screening.modelform_mixins.get_current_country")
-    def test_unwilling_to_screen_in_patient_log_raises(self, mock_get_current_country):
-        mock_get_current_country.result = "uganda"
+    @override_settings(SITE_ID=101)
+    def test_unwilling_to_screen_in_patient_log_raises(self):
         patient_log = self.get_patient_log(
             willing_to_screen=NO,
             screening_refusal_reason=ScreeningRefusalReasons.objects.get(
@@ -267,9 +276,8 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
             "Patient is unwilling to screen", str(form._errors.get("__all__", ""))
         )
 
-    @patch("intecomm_screening.forms.subject_screening.modelform_mixins.get_current_country")
-    def test_gender(self, mock_get_current_country):
-        mock_get_current_country.result = "uganda"
+    @override_settings(SITE_ID=101)
+    def test_gender(self):
         patient_log = self.get_patient_log(
             gender=FEMALE,
             willing_to_screen=YES,
@@ -289,9 +297,8 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
         form.is_valid()
         self.assertNotIn("gender", form._errors)
 
-    @patch("intecomm_screening.forms.subject_screening.modelform_mixins.get_current_country")
-    def test_initials(self, mock_get_current_country):
-        mock_get_current_country.result = "uganda"
+    @override_settings(SITE_ID=101)
+    def test_initials(self):
         patient_log = self.get_patient_log(
             gender=FEMALE,
             initials="XX",
@@ -316,9 +323,8 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
         form.is_valid()
         self.assertNotIn("initials", form._errors)
 
-    @patch("intecomm_screening.forms.subject_screening.modelform_mixins.get_current_country")
-    def test_conditions_matching_patient_log(self, mock_get_current_country):
-        mock_get_current_country.result = UGANDA
+    @override_settings(SITE_ID=101)
+    def test_conditions_matching_patient_log(self):
         patient_log = self.get_patient_log(
             gender=MALE,
             age_in_years=20,
@@ -372,9 +378,8 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
             str(form._errors.get("__all__", "")),
         )
 
-    @patch("intecomm_screening.forms.subject_screening.modelform_mixins.get_current_country")
-    def test_health_talk_reponse_from_patientlog(self, mock_get_current_country):
-        mock_get_current_country.result = UGANDA
+    @override_settings(SITE_ID=101)
+    def test_health_talk_reponse_from_patientlog(self):
         patient_log = self.get_patient_log(
             gender=MALE,
             age_in_years=20,

@@ -29,7 +29,8 @@ from edc_facility.import_holidays import import_holidays
 from edc_list_data.site_list_data import site_list_data
 from edc_metadata.models import CrfMetadata
 from edc_randomization.site_randomizers import site_randomizers
-from edc_sites import add_or_update_django_sites, get_sites_by_country
+from edc_sites.site import sites
+from edc_sites.utils import add_or_update_django_sites
 from edc_utils import get_utcnow
 from edc_visit_schedule.constants import DAY1
 from edc_visit_tracking.constants import SCHEDULED
@@ -114,7 +115,7 @@ def get_current_country(site_id):
 class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
     fqdn = fqdn
 
-    default_sites = get_sites_by_country("tanzania")
+    default_sites = sites.get_by_country("tanzania", aslist=True)
 
     site_names = [s.name for s in default_sites]
 
@@ -125,7 +126,8 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
     @classmethod
     def setUpTestData(cls):
         import_holidays(test=True)
-        add_or_update_django_sites(sites=get_sites_by_country("tanzania"))
+        sites.autodiscover()
+        add_or_update_django_sites()
         if cls.import_randomization_list:
             randomizer_cls = site_randomizers.get("default")
             randomizer_cls.import_list(
