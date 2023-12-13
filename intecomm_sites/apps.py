@@ -5,21 +5,14 @@ from django.apps import apps as django_apps
 from django.core.management.color import color_style
 from django.db.models.signals import post_migrate
 
-from .sites import all_sites
-
 style = color_style()
 
 
 def post_migrate_update_sites(sender=None, **kwargs):
-    from edc_sites.add_or_update_django_sites import add_or_update_django_sites
+    from edc_sites.utils import add_or_update_django_sites
 
     sys.stdout.write(style.MIGRATE_HEADING("Updating sites:\n"))
-    for country, sites in all_sites.items():
-        add_or_update_django_sites(
-            apps=django_apps,
-            sites=sites,
-            verbose=True,
-        )
+    add_or_update_django_sites(apps=django_apps, verbose=True)
     sys.stdout.write("Done.\n")
     sys.stdout.flush()
 

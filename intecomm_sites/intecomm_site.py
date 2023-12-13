@@ -1,39 +1,14 @@
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+
 from edc_sites.single_site import SingleSite
 
 
+@dataclass(init=True)
 class IntecommSite(SingleSite):
-    def __init__(
-        self,
-        site_id,
-        name,
-        *,
-        health_facility_type: str = None,
-        clinic_days: list[int] | None = None,
-        **kwargs,
-    ):
-        self.health_facility_type = health_facility_type
-        self.clinic_days = clinic_days
-        super().__init__(site_id, name, **kwargs)
+    health_facility_type: str = field(kw_only=True, default="")
+    clinic_days: list[int] = field(kw_only=True, default_factory=list)
 
     def __str__(self):
-        return f"{self.name} {self.health_facility_type}"
-
-    @property
-    def site(self):
-        lst = super().site
-        lst.append(self.health_facility_type)
-        return lst
-
-    @property
-    def as_dict(self):
-        dct = super().as_dict()
-        dct.update(health_facility_type=self.health_facility_type)
-        return dct
-
-    def save(self, force_insert=False, force_update=False):
-        raise NotImplementedError("IntecommSite cannot be saved.")
-
-    def delete(self):
-        raise NotImplementedError("IntecommSite cannot be deleted.")
+        return f"{self.title} {self.health_facility_type.upper()} ({self.site_id})"
