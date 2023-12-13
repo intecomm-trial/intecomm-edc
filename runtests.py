@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 import logging
 from datetime import datetime
-from os.path import abspath, dirname, join
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
-import django
+from django.conf import locale
 from edc_constants.internationalization import EXTRA_LANG_INFO
 from edc_test_utils import DefaultTestSettings, func_main
 from multisite import SiteID
 
-app_name = "intecomm_edc"
-base_dir = dirname(abspath(__file__))
-LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
-django.conf.locale.LANG_INFO = LANG_INFO
+LANG_INFO = dict(locale.LANG_INFO, **EXTRA_LANG_INFO)
+locale.LANG_INFO = LANG_INFO
 LANGUAGE_LIST = ["sw", "en-gb", "en", "mas", "ry", "lg", "rny"]
-DJANGO_DEBUG_TOOLBAR_ENABLED = False
+
+app_name = "intecomm_edc"
+base_dir = Path(__file__).absolute().parent
 
 project_settings = DefaultTestSettings(
     calling_file=__file__,
@@ -34,7 +34,7 @@ project_settings = DefaultTestSettings(
     INDEX_PAGE="localhost:8000",
     LANGUAGE_CODE="en",
     LANGUAGES=[(code, LANG_INFO[code]["name"]) for code in LANGUAGE_LIST],
-    EXPORT_FOLDER=join(base_dir, "tests", "export"),
+    EXPORT_FOLDER=str(base_dir / "tests" / "export"),
     SUBJECT_APP_LABEL="intecomm_subject",
     SUBJECT_SCREENING_MODEL="intecomm_screening.subjectscreening",
     SUBJECT_VISIT_MODEL="intecomm_subject.subjectvisit",
@@ -79,7 +79,7 @@ project_settings = DefaultTestSettings(
         subject_dashboard_template="intecomm_dashboard/subject/dashboard.html",
         subject_review_listboard_template="edc_review_dashboard/subject_review_listboard.html",
     ),
-    ETC_DIR=join(base_dir, "intecomm_edc", "tests", "etc"),
+    ETC_DIR=str(base_dir / "intecomm_edc" / "tests" / "etc"),
     EDC_BOOTSTRAP=3,
     EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
     EMAIL_CONTACTS={
@@ -88,9 +88,9 @@ project_settings = DefaultTestSettings(
         "tmg": "someone@example.com",
     },
     EMAIL_ENABLED=True,
-    HOLIDAY_FILE=join(base_dir, "intecomm_edc", "tests", "holidays.csv"),
+    HOLIDAY_FILE=str(base_dir / "intecomm_edc" / "tests" / "holidays.csv"),
     LIVE_SYSTEM=False,
-    EDC_RANDOMIZATION_LIST_PATH=join(base_dir, "intecomm_edc", "tests", "etc"),
+    EDC_RANDOMIZATION_LIST_PATH=str(base_dir / "intecomm_edc" / "tests" / "etc"),
     EDC_SITES_MODULE_NAME="intecomm_sites",
     EDC_AUTH_SKIP_SITE_AUTHS=True,
     EDC_AUTH_SKIP_AUTH_UPDATER=True,
@@ -142,7 +142,7 @@ project_settings = DefaultTestSettings(
         "edc_model_fields.apps.AppConfig",
         "edc_model_admin.apps.AppConfig",
         "edc_navbar.apps.AppConfig",
-        "edc_next_appointment.apps.AppConfig",
+        "edc_next_appointment.apps.AppConfig",  # keep for migrate
         "edc_notification.apps.AppConfig",
         "edc_offstudy.apps.AppConfig",
         "edc_pharmacy.apps.AppConfig",
@@ -164,7 +164,6 @@ project_settings = DefaultTestSettings(
         "edc_unblinding.apps.AppConfig",
         "edc_form_describer.apps.AppConfig",
         "edc_adherence.apps.AppConfig",
-        "canned_views.apps.AppConfig",
         "intecomm_rando.apps.AppConfig",
         "intecomm_consent.apps.AppConfig",
         "intecomm_lists.apps.AppConfig",
@@ -185,7 +184,6 @@ project_settings = DefaultTestSettings(
     add_dashboard_middleware=True,
     add_lab_dashboard_middleware=True,
     add_adverse_event_dashboard_middleware=True,
-    # add_multisite_middleware=True,
 ).settings
 
 
