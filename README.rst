@@ -57,8 +57,8 @@ leaves most of the work to the class ``RandomizeGroup``. ``RandomizeGroup`` call
 .. |pypi| image:: https://img.shields.io/pypi/v/intecomm-edc.svg
     :target: https://pypi.python.org/pypi/intecomm-edc
 
-.. |actions| image:: https://github.com/intecomm-trial/intecomm-edc/workflows/build/badge.svg?branch=develop
-  :target: https://github.com/intecomm-trial/intecomm-edc/actions?query=workflow:build
+.. |actions| image:: https://github.com/intecomm-trial/intecomm-edc/actions/workflows/build.yml/badge.svg
+  :target: https://github.com/intecomm-trial/intecomm-edc/actions/workflows/build.yml
 
 .. |codecov| image:: https://codecov.io/gh/intecomm-trial/intecomm-edc/branch/develop/graph/badge.svg
   :target: https://codecov.io/gh/intecomm-trial/intecomm-edc

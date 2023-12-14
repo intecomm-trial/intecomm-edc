@@ -1,6 +1,6 @@
 from django.contrib.admin import SimpleListFilter
 from django.db.models import Count
-from edc_sites.permissions import site_ids_with_permissions
+from edc_sites.permissions import get_view_only_sites_for_user
 
 from intecomm_group.models import PatientGroup
 
@@ -10,7 +10,7 @@ class PatientGroupListFilter(SimpleListFilter):
     parameter_name = "subject_identifier"
 
     def lookups(self, request, model_admin):
-        site_ids = site_ids_with_permissions(request)
+        site_ids = get_view_only_sites_for_user(request.user, request.site.id, request=request)
         group_names = [
             (dct["name"], dct["name"].title())
             for dct in PatientGroup.objects.filter(randomized=True, site__in=site_ids)
