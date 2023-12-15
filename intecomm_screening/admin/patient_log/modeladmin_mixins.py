@@ -151,7 +151,9 @@ class PatientLogModelAdminMixin(
             age_in_years=obj.age_in_years,
         )
         for country in get_remove_patient_names_from_countries():
-            if obj and obj.site.id in [s.site_id for s in sites.get_by_country(country)]:
+            if obj and obj.site.id in [
+                s.site_id for s in sites.get_by_country(country, aslist=True)
+            ]:
                 context.pop("legal_name")
                 break
         return format_html(
