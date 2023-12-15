@@ -1,4 +1,6 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Permission, User
+from django.contrib.sites.models import Site
+from django.test import override_settings
 from django.urls import reverse
 from django_webtest import WebTest
 from edc_dashboard import url_names
@@ -29,6 +31,8 @@ class TestViews(WebTest):
             DrugSupplyHiv,
             OldHealthEconomics,
         ]
+        self.user.userprofile.sites.add(Site.objects.get(id=101))
+        self.user.user_permissions.add(Permission.objects.get(codename="view_appointment"))
 
     def login(self):
         response = self.app.get(reverse("admin:index")).maybe_follow()
@@ -42,6 +46,7 @@ class TestViews(WebTest):
         form["password"] = "pass"  # nosec B105
         return form.submit()
 
+    @override_settings(SITE_ID=101)
     def test_listboards_ok(self):
         self.login()
 

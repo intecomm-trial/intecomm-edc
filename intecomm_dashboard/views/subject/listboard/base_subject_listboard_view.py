@@ -7,7 +7,7 @@ from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.db.models import Q
 from django.urls import reverse
 from edc_listboard.views import SubjectListboardView
-from edc_sites import get_current_country
+from edc_sites.site import sites
 from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 from intecomm_rando.models import RandomizationList
 
@@ -59,7 +59,7 @@ class BaseSubjectListboardView(SubjectListboardView):
         )
         context.update(
             site=getattr(self.request, "site", None),
-            country=get_current_country(request=self.request),
+            country=sites.get_current_country(self.request),
         )
         return context
 

@@ -12,7 +12,6 @@ from django.utils.http import urlencode
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_constants.constants import COMPLETE, DM, HIV, HTN, UUID_PATTERN, YES
 from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
-from edc_sites import get_current_country
 from edc_sites.admin import SiteModelAdminMixin
 from edc_utils.round_up import round_up
 from intecomm_form_validators.utils import get_group_size_for_ratio
@@ -235,7 +234,7 @@ class PatientGroupAdmin(
     @admin.display(description="Patient Logs")
     def to_patients(self, obj=None):
         cnt = obj.patients.all().count()
-        if get_current_country(site=obj.site) == UGANDA:
+        if obj.site.siteprofile.country == UGANDA:
             url = reverse(
                 "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
             )

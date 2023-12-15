@@ -2,14 +2,13 @@ from django.contrib import admin
 from edc_facility.admin_site import edc_facility_admin
 from edc_facility.modeladmin_mixins import HealthFacilityModelAdminMixin
 from edc_facility.models import HealthFacility as DefaultHealthFacility
-from edc_sites import get_site_name
 from edc_sites.admin import SiteModelAdminMixin
+from edc_sites.site import sites
 
 from intecomm_screening.admin.modeladmin_mixins import (
     BaseModelAdminMixin,
     ChangeListTopBarModelAdminMixin,
 )
-from intecomm_sites import all_sites
 
 from .admin_site import intecomm_facility_admin
 from .forms import HealthFacilityForm
@@ -55,7 +54,5 @@ class HealthFacilityAdmin(
         list_display.insert(4, "distance_abbrev")
         return tuple(list_display)
 
-    @staticmethod
-    def site_name(obj=None):
-        get_site_name(obj.site.id, all_sites)
-        return obj.name
+    def site_name(self, obj=None):
+        return sites.get(obj.site.id).name

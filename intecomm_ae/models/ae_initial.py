@@ -9,7 +9,7 @@ from edc_adverse_event.models import AeClassification
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_model.models import BaseUuidModel
 from edc_model_fields.fields import OtherCharField
-from edc_sites.model_mixins import SiteModelMixin
+from edc_sites.models import SiteModelMixin
 
 from ..pdf_reports import AePdfReport
 

@@ -6,7 +6,7 @@ from edc_constants.constants import NO, TBD, YES
 from edc_dashboard.url_names import url_names
 from edc_dashboard.utils import get_bootstrap_version
 from edc_screening.constants import ELIGIBLE, NOT_ELIGIBLE
-from edc_sites.get_country import get_current_country
+from edc_sites.site import sites
 
 from intecomm_screening.constants import UGANDA
 from intecomm_screening.models import PatientLog
@@ -105,7 +105,7 @@ def patient_log_button(context, model_wrapper):
     except ObjectDoesNotExist:
         pass
     else:
-        if get_current_country(request=context["request"]) == UGANDA:
+        if sites.get_current_country(context["request"]) == UGANDA:
             change_list_href = reverse(
                 "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
             )
@@ -188,7 +188,7 @@ def dashboard_button(model_wrapper):
 )
 def intecomm_changelist_topbar(context, selected: str):
     context["selected"] = selected
-    if get_current_country(request=context["request"]) == UGANDA:
+    if sites.get_current_country(context["request"]) == UGANDA:
         patient_log_changelist_url = (
             "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
         )

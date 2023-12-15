@@ -10,6 +10,7 @@ from intecomm_rando.constants import FACILITY_ARM
 from intecomm_rando.utils import get_assignment_for_subject
 
 from ..forms import AppointmentForm
+from .list_filters import PatientGroupListFilter
 
 edc_appointment_admin.unregister(Appointment)
 
@@ -38,3 +39,8 @@ class AppointmentAdmin(BaseAdmin):
                 name__in=[HOSPITAL, NOT_APPLICABLE]
             ).order_by("display_index")
         return AppointmentType.objects.exclude(name__in=[HOSPITAL]).order_by("display_index")
+
+    def get_list_filter(self, request):
+        list_filter = super().get_list_filter(request)
+        list_filter = list_filter + (PatientGroupListFilter,)
+        return list_filter

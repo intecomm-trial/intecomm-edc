@@ -146,7 +146,7 @@ INSTALLED_APPS = [
     "edc_unblinding.apps.AppConfig",
     "edc_form_describer.apps.AppConfig",
     "edc_adherence.apps.AppConfig",
-    "canned_views.apps.AppConfig",
+    # "canned_views.apps.AppConfig",
     "intecomm_rando.apps.AppConfig",
     "intecomm_consent.apps.AppConfig",
     "intecomm_lists.apps.AppConfig",

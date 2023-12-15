@@ -19,9 +19,7 @@ from edc_model_admin.mixins import (
     TemplatesModelAdminMixin,
 )
 from edc_notification import NotificationModelAdminMixin
-from edc_sites.get_country import get_current_country
-
-from intecomm_sites import all_sites
+from edc_sites.site import sites
 
 from ..constants import UGANDA
 
@@ -51,7 +49,7 @@ class RedirectAllToPatientLogModelAdminMixin(ModelAdminRedirectAllToChangelistMi
     add_search_field_name = "screening_identifier"
 
     def get_changelist_url(self, request):
-        if get_current_country(request=request) == UGANDA:
+        if sites.get_current_country(request) == UGANDA:
             return "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
         return "intecomm_screening_admin:intecomm_screening_patientlog_changelist"
 
@@ -101,7 +99,7 @@ class InitialDataModelAdminMixin:
         """Return True if legal and familiar name may be included"""
         include_names = True
         for country in get_remove_patient_names_from_countries():
-            if request.site.id in [s.site_id for s in all_sites.get(country)]:
+            if request.site.id in [s.site_id for s in sites.get_by_country(country)]:
                 include_names = False
                 break
         return include_names

@@ -15,10 +15,10 @@ from edc_model.models import BaseUuidModel, HistoricalRecords, NameFieldsModelMi
 from edc_model.validators.phone import phone_number
 from edc_model_fields.fields import InitialsField, OtherCharField
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
+from edc_sites.site import sites
 from edc_utils import get_utcnow, get_uuid
 
 from intecomm_lists.models import Conditions, ScreeningRefusalReasons
-from intecomm_sites import all_sites
 
 from ..identifiers import FilingIdentifier, PatientLogIdentifier
 from ..utils import validate_screening_identifier, validate_subject_identifier
@@ -238,7 +238,9 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
         remove_patient_names = False
         g = "G" if self.group_identifier else ""
         for country in get_remove_patient_names_from_countries():
-            if self.site and self.site.id in [s.site_id for s in all_sites.get(country)]:
+            if self.site and self.site.id in [
+                s.site_id for s in sites.get_by_country(country, aslist=True)
+            ]:
                 remove_patient_names = True
                 break
         if remove_patient_names or re.match(UUID_PATTERN, str(self.legal_name)):

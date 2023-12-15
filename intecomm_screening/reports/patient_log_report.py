@@ -9,7 +9,7 @@ from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.constants import UUID_PATTERN
 from edc_identifier.utils import convert_to_human_readable
 from edc_pdf_reports import Report
-from edc_sites import get_sites_by_country
+from edc_sites.site import sites
 from edc_utils import convert_php_dateformat
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
@@ -497,7 +497,7 @@ class PatientLogReport(Report):
         has_pii_perms: bool | None = None
         user_sites = set([s.id for s in self.user.userprofile.sites.all()])
         for country in get_remove_patient_names_from_countries():
-            country_sites = set([s.site_id for s in get_sites_by_country(country)])
+            country_sites = set([s.site_id for s in sites.get_by_country(country)])
             if user_sites & country_sites:
                 has_pii_perms = False
                 break

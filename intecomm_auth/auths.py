@@ -11,6 +11,7 @@ from edc_auth.auth_objects import (
 )
 from edc_auth.site_auths import site_auths
 from edc_data_manager.auth_objects import DATA_MANAGER_EXPORT, DATA_MANAGER_ROLE
+from edc_data_manager.auth_objects import data_manager as data_manager_codenames
 from edc_export.auth_objects import DATA_EXPORTER_ROLE
 from edc_facility.auth_objects import (
     EDC_FACILITY,
@@ -28,6 +29,8 @@ site_auths.add_pii_model("intecomm_prn.subjectlocator")
 
 # update edc_auth default groups
 site_auths.update_group(*clinic_codenames, name=AUDITOR, view_only=True)
+site_auths.update_group(*data_manager_codenames, name=AUDITOR, view_only=True)
+
 site_auths.update_group(*clinic_codenames, name=CLINIC, no_delete=True)
 site_auths.update_group(*clinic_codenames, name=CLINIC_SUPER)
 site_auths.update_group(*screening_codenames, name=SCREENING, no_delete=True)

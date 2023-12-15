@@ -2,10 +2,9 @@ import os
 from getpass import getpass
 
 from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import BaseCommand, CommandError
-from edc_sites import get_sites_by_country
+from edc_sites.site import sites
 from edc_utils import get_utcnow
 from tqdm import tqdm
 
@@ -15,7 +14,7 @@ from intecomm_screening.reports import PatientLogReport
 
 class Command(BaseCommand):
     def __init__(self, **kwargs):
-        self.sites: list[int] = []
+        self.site_ids: list[int] = []
         super().__init__(**kwargs)
 
     def add_arguments(self, parser):
@@ -36,7 +35,7 @@ class Command(BaseCommand):
 
         parser.add_argument(
             "--site",
-            dest="site",
+            dest="site_ids",
             default="",
             help="only export data for site",
         )
@@ -46,10 +45,10 @@ class Command(BaseCommand):
         export_path = os.path.expanduser(options["path"])
         if not export_path or not os.path.exists(export_path):
             raise CommandError(f"Path does not exist. Got `{export_path}`")
-        sites = [options["site"]] if options["site"] else []
+        site_ids = [options["site_ids"]] if options["site_ids"] else []
         countries = [options["country"]] if options["country"] else []
-        self.sites = self.get_sites(sites=sites, countries=countries)
-        queryset = PatientLog.objects.filter(site__in=self.sites).order_by(
+        self.site_ids = site_ids or self.get_site_ids(countries=countries)
+        queryset = PatientLog.objects.filter(site__in=self.site_ids).order_by(
             "site", "filing_identifier"
         )
         total = queryset.count()
@@ -80,20 +79,11 @@ class Command(BaseCommand):
         return user
 
     @staticmethod
-    def get_sites(
-        sites: list[int] | list[str] | None,
+    def get_site_ids(
         countries: list[str] | None,
     ) -> list[int]:
-        if countries and sites:
-            raise CommandError("Invalid. Specify `sites` or `countries`, not both.")
-        for site in sites or []:
-            try:
-                obj = Site.objects.get(id=int(site))
-            except ObjectDoesNotExist:
-                raise CommandError(f"Invalid site. Got `{site}`.")
-            else:
-                sites.append(obj.id)
+        site_ids = []
         for country in countries or []:
-            for single_site in get_sites_by_country(country):
-                sites.append(single_site.site_id)
-        return sites
+            for single_site in sites.get_by_country(country):
+                site_ids.append(single_site.site_id)
+        return site_ids

@@ -2,7 +2,7 @@
 
 import django.db.models.deletion
 import edc_screening.model_mixins.screening_model_mixin
-import edc_sites.model_mixins
+import edc_sites.models
 from django.db import migrations, models
 
 import intecomm_screening.model_mixins.patient_call_model_mixin
@@ -108,7 +108,7 @@ class Migration(migrations.Migration):
             name="healthtalklog",
             managers=[
                 ("objects", intecomm_screening.models.health_talk_log.Manager()),
-                ("on_site", edc_sites.model_mixins.CurrentSiteManager()),
+                ("on_site", edc_sites.models.CurrentSiteManager()),
             ],
         ),
         migrations.AlterModelManagers(
@@ -118,14 +118,14 @@ class Migration(migrations.Migration):
                     "objects",
                     intecomm_screening.model_mixins.patient_call_model_mixin.Manager(),
                 ),
-                ("on_site", edc_sites.model_mixins.CurrentSiteManager()),
+                ("on_site", edc_sites.models.CurrentSiteManager()),
             ],
         ),
         migrations.AlterModelManagers(
             name="patientlog",
             managers=[
                 ("objects", intecomm_screening.models.patient_log.PatientLogManager()),
-                ("on_site", edc_sites.model_mixins.CurrentSiteManager()),
+                ("on_site", edc_sites.models.CurrentSiteManager()),
             ],
         ),
         migrations.AlterModelManagers(
@@ -135,7 +135,7 @@ class Migration(migrations.Migration):
                     "objects",
                     edc_screening.model_mixins.screening_model_mixin.ScreeningManager(),
                 ),
-                ("on_site", edc_sites.model_mixins.CurrentSiteManager()),
+                ("on_site", edc_sites.models.CurrentSiteManager()),
             ],
         ),
     ]

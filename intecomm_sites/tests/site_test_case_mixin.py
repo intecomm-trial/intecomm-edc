@@ -1,4 +1,4 @@
-from ..sites import all_sites
+from edc_sites.site import sites
 
 
 class SiteTestCaseMixin:
@@ -6,7 +6,7 @@ class SiteTestCaseMixin:
 
     @property
     def default_sites(self):
-        return all_sites.get(self.default_country)
+        return sites.get_by_country(self.default_country)
 
     @property
     def site_names(self):
@@ -14,4 +14,4 @@ class SiteTestCaseMixin:
 
     @property
     def default_all_sites(self):
-        return all_sites
+        return sites.all()

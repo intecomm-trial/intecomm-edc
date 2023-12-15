@@ -5,8 +5,6 @@ from django.contrib import admin
 from django_audit_fields import audit_fieldset_tuple
 from edc_model_admin.history import SimpleHistoryAdmin
 
-from intecomm_sites import all_sites
-
 from ..admin_site import intecomm_consent_admin
 from ..models import SubjectConsentUg
 from .fieldsets import (
@@ -22,8 +20,6 @@ class SubjectConsentUgAdmin(
     SubjectConsentModelAdminMixin,
     SimpleHistoryAdmin,
 ):
-    all_sites = all_sites
-
     # ModelAdminRedirectAllToChangelistMixin
     changelist_url = "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
     change_search_field_name = "screening_identifier"

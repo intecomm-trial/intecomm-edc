@@ -9,7 +9,6 @@ from django.utils.html import format_html
 from edc_constants.constants import DM, HIV, HTN, NO, TBD, YES
 from edc_dashboard import url_names
 from edc_form_validators import INVALID_ERROR
-from edc_sites.get_country import get_current_country
 from intecomm_form_validators import SubjectScreeningFormValidator
 
 from ...constants import UGANDA
@@ -53,7 +52,7 @@ class SubjectScreeningModelFormMixin:
                     {"patient_log_identifier": "Invalid. Patient log identifier not found."}
                 )
             if self._patient_log:
-                if get_current_country(site=self._patient_log.site) == UGANDA:
+                if self._patient_log.site.siteprofile.country == UGANDA:
                     self._patient_log = PatientLogUg.objects.get(
                         patient_log_identifier=self.cleaned_data.get("patient_log_identifier")
                     )
@@ -200,7 +199,7 @@ class SubjectScreeningModelFormMixin:
                 kwargs={"subject_identifier": self.instance.subject_identifier},
             )
         else:
-            if get_current_country(site=self.instance.site) == UGANDA:
+            if self.instance.site.siteprofile.country == UGANDA:
                 url = reverse(
                     "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
                 )

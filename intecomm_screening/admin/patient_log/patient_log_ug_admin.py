@@ -5,8 +5,6 @@ from django.contrib import admin
 from django_audit_fields import audit_fieldset_tuple
 from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
 
-from intecomm_sites.sites import all_sites
-
 from ...admin_site import intecomm_screening_admin
 from ...forms import PatientLogUgForm
 from ...models import PatientLogUg
@@ -43,8 +41,6 @@ class PatientLogUgAdmin(
     add_search_field_name = "screening_identifier"
 
     change_list_title = PatientLogUg._meta.verbose_name
-
-    all_sites = all_sites
 
     form = PatientLogUgForm
 

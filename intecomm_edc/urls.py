@@ -50,7 +50,7 @@ urlpatterns = [
     *paths_for_urlpatterns("edc_subject_dashboard"),
     *paths_for_urlpatterns("edc_unblinding"),
     *paths_for_urlpatterns("edc_visit_schedule"),
-    *paths_for_urlpatterns("canned_views"),
+    # *paths_for_urlpatterns("canned_views"),
     *paths_for_urlpatterns("intecomm_ae"),
     *paths_for_urlpatterns("intecomm_consent"),
     *paths_for_urlpatterns("intecomm_export"),
@@ -62,7 +62,7 @@ urlpatterns = [
     *paths_for_urlpatterns("intecomm_subject"),
 ]
 
-if settings.DJANGO_DEBUG_TOOLBAR_ENABLED:
+if getattr(settings, "DJANGO_DEBUG_TOOLBAR_ENABLED", False):
     urlpatterns.append(
         path("__debug__/", include("debug_toolbar.urls")),
     )

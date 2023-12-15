@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from edc_sites import get_current_country
+from edc_sites.site import sites
 
 from intecomm_screening.constants import UGANDA
 
@@ -12,7 +12,7 @@ class IntecommAdminSiteMixin:
 
     def get_app_list(self, request, app_label=None):
         app_list = super().get_app_list(request, app_label=app_label)
-        if get_current_country(request=request) == UGANDA:
+        if sites.get_current_country(request) == UGANDA:
             app_list_copy = deepcopy(app_list)
             for index, item in enumerate(app_list_copy):
                 for app_label, object_names in self.get_hidden_models(request).items():

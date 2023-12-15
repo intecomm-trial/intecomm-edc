@@ -13,7 +13,7 @@ import django_crypto_fields.fields.encrypted_text_field
 import django_revision.revision_field
 import edc_locator.model_mixins.locator_model_mixin
 import edc_model.validators.phone
-import edc_sites.model_mixins
+import edc_sites.models
 import edc_utils.date
 import simple_history.models
 from django.conf import settings
@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
                     "objects",
                     edc_locator.model_mixins.locator_model_mixin.LocatorManager(),
                 ),
-                ("on_site", edc_sites.model_mixins.CurrentSiteManager()),
+                ("on_site", edc_sites.models.CurrentSiteManager()),
             ],
         ),
         migrations.CreateModel(
