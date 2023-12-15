@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Permission, User
 from django.contrib.sites.models import Site
 from django.test import override_settings
 from django.urls import reverse
@@ -25,6 +25,7 @@ class TestScreening(IntecommTestCaseMixin, WebTest):
         self.user.refresh_from_db()
         self.user.userprofile.sites.add(Site.objects.get(id=101))
         self.user.userprofile.sites.add(Site.objects.get(id=201))
+        self.user.user_permissions.add(Permission.objects.get(codename="view_appointment"))
 
     @override_settings(SITE_ID=201, EDC_CONSENT_REMOVE_PATIENT_NAMES_FROM_COUNTRIES=["uganda"])
     def test_add_patient_log_with_names(self):

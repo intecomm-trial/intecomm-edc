@@ -1,5 +1,5 @@
 from django.apps import apps as django_apps
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Permission, User
 from django.contrib.sites.models import Site
 from django.test import override_settings
 from django.urls import NoReverseMatch, reverse
@@ -26,6 +26,7 @@ class TestAdmin(WebTest):
         ]
         self.user.userprofile.sites.add(Site.objects.get(id=101))
         self.user.userprofile.sites.add(Site.objects.get(id=201))
+        self.user.user_permissions.add(Permission.objects.get(codename="view_appointment"))
 
     def login(self):
         response = self.app.get(reverse("admin:index")).maybe_follow()
