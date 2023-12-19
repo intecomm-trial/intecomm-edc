@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import re
-from typing import List
 
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.db.models import Q
@@ -70,16 +69,15 @@ class BaseSubjectListboardView(SubjectListboardView):
         )
         return qs.filter(group_identifier__in=values_list)
 
-    def extra_search_options(self, search_term) -> List[Q]:
-        q_objects = super().extra_search_options(search_term)
-        if re.match(r"^[A-Za-z\-]+$", search_term):
-            q_objects.append(
-                Q(familiar_name__exact=search_term)
-                | Q(patientgroup__name__icontains=search_term)
-            )
-        if re.match(r"^[0-9\-]+$", search_term):
-            q_objects.append(Q(group_identifier__exact=search_term))
-        return q_objects
+    def get_queryset_filter_options(self, request, *args, **kwargs) -> tuple[Q, dict]:
+        q_object, options = super().get_queryset_filter_options(request, *args, **kwargs)
+        if self.search_term:
+            if re.match(r"^[A-Za-z\-]+$", self.search_term):
+                q_object |= Q(familiar_name__exact=self.search_term)
+                q_object |= Q(patientgroup__name__icontains=self.search_term)
+            if re.match(r"^[0-9\-]+$", self.search_term):
+                q_object |= Q(group_identifier__exact=self.search_term)
+        return q_object, options
 
     @property
     def patient_group(self) -> PatientGroup:

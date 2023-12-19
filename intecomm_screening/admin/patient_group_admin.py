@@ -5,7 +5,7 @@ from typing import Tuple
 import inflect
 from django.apps import apps as django_apps
 from django.contrib import admin
-from django.db.models import Count
+from django.db.models import Count, QuerySet
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.http import urlencode
@@ -40,8 +40,13 @@ class PatientGroupAdmin(
 ):
     form = PatientGroupForm
 
+    list_select_related = ["site"]
+    # SiteModelAdminMixin
+    limit_related_to_current_site = ["patients"]
+
     show_object_tools = True
-    list_per_page = 5
+    list_per_page = 15
+    ordering = ("site__id", "name")
 
     change_list_template: str = "intecomm_screening/admin/patientgroup_change_list.html"
     change_list_help = "Searches on encrypted data work on exact uppercase matches only"
@@ -59,9 +64,6 @@ class PatientGroupAdmin(
     add_search_field_name = "group_identifier"
     change_search_field_name = "group_identifier"
     changelist_url = "intecomm_screening_admin:intecomm_screening_patientgroup_changelist"
-
-    # SiteModelAdminMixin
-    limit_related_to_current_site = ["patients"]
 
     fieldsets = (
         (
@@ -209,6 +211,18 @@ class PatientGroupAdmin(
                 "status",
             )
         return fields
+
+    def get_queryset(self, request) -> QuerySet:
+        # TODO: does this improves performance?
+        queryset = super().get_queryset(request=request)
+        queryset.select_related("site").prefetch_related(
+            "patients",
+            "hiv_patients",
+            "dm_patients",
+            "htn_patients",
+            "multi_patients",
+        )
+        return queryset
 
     @admin.display(description="Opened", ordering="report_datetime")
     def opened(self, obj=None):

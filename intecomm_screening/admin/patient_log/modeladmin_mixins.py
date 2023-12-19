@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Type
 
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import QuerySet
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
@@ -44,9 +45,12 @@ class PatientLogModelAdminMixin(
     autocomplete_fields = ["site"]
     inlines = [AddPatientCallInline, ViewPatientCallInline]
     actions = [render_pdf_action]
+    ordering = ("site__id", "filing_identifier")
     list_per_page = 5
     show_object_tools = True
     show_cancel = True
+
+    list_select_related = ["site"]
 
     extra_pii_attrs = ["first_column"]
 
@@ -124,6 +128,14 @@ class PatientLogModelAdminMixin(
         "patient_log_identifier",
         "comment",
     )
+
+    def get_queryset(self, request) -> QuerySet:
+        # TODO: does this improves performance?
+        queryset = super().get_queryset(request=request)
+        queryset.select_related("site").prefetch_related(
+            "conditions", "patient_group", "patient_call"
+        )
+        return queryset
 
     @property
     def subject_screening_model_cls(self) -> Type[SubjectScreening, SubjectScreeningUg]:

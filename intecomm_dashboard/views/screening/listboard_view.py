@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 import re
-from typing import List
 
 from django.apps import apps as django_apps
 from django.db.models import Q
@@ -79,8 +80,8 @@ class ListboardView(ScreeningListboardView):
         )
         return context_data
 
-    def extra_search_options(self, search_term) -> List[Q]:
-        q_objects = super().extra_search_options(search_term)
-        if re.match(r"^[0-9\-]+$", search_term):
-            q_objects.append(Q(hospital_identifier__exact=search_term))
-        return q_objects
+    def get_queryset_filter_options(self, request, *args, **kwargs) -> tuple[Q, dict]:
+        q_object, options = super().get_queryset_filter_options(request, *args, **kwargs)
+        if self.search_term and re.match(r"^[0-9\-]+$", self.search_term):
+            q_object |= Q(hospital_identifier__exact=self.search_term)
+        return q_object, options

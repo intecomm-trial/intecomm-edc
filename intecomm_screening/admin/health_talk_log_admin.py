@@ -17,6 +17,7 @@ class HealthTalkLogAdmin(
     form = HealthTalkLogForm
     show_object_tools = True
     list_per_page = 5
+    ordering = ("site__id", "report_date")
 
     # TemplatesModelAdminMixin attrs
     change_list_template: str = "intecomm_screening/admin/healthtalklog_change_list.html"

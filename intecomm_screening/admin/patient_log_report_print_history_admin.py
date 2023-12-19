@@ -10,6 +10,7 @@ from .modeladmin_mixins import BaseModelAdminMixin
 @admin.register(PatientLogReportPrintHistory, site=intecomm_screening_admin)
 class PatientLogReportPrintHistoryAdmin(SiteModelAdminMixin, BaseModelAdminMixin):
     show_object_tools = False
+    ordering = ("site__id", "printed_datetime")
 
     fieldsets = (
         (
