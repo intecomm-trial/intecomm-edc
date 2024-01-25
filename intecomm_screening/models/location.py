@@ -1,6 +1,7 @@
 from edc_list_data.model_mixins import ListModelManager, ListModelMixin
 from edc_model.models import HistoricalRecords
-from edc_sites.models import CurrentSiteManager, SiteModelMixin
+from edc_sites.managers import CurrentSiteManager
+from edc_sites.model_mixins import SiteModelMixin
 
 
 class Location(SiteModelMixin, ListModelMixin):

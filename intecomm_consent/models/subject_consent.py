@@ -23,7 +23,7 @@ from edc_screening.utils import (
     validate_screening_identifier_format_or_raise,
 )
 from edc_search.model_mixins import SearchSlugManager
-from edc_sites.models import SiteModelMixin
+from edc_sites.model_mixins import SiteModelMixin
 
 from intecomm_screening.utils import raise_if_consent_refusal_exists
 

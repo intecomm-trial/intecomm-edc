@@ -14,7 +14,8 @@ from edc_constants.constants import TBD, UUID_PATTERN
 from edc_model.models import BaseUuidModel, HistoricalRecords, NameFieldsModelMixin
 from edc_model.validators.phone import phone_number
 from edc_model_fields.fields import InitialsField, OtherCharField
-from edc_sites.models import CurrentSiteManager, SiteModelMixin
+from edc_sites.managers import CurrentSiteManager
+from edc_sites.model_mixins import SiteModelMixin
 from edc_sites.site import sites
 from edc_utils import get_utcnow, get_uuid
 

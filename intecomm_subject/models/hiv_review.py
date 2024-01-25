@@ -7,6 +7,7 @@ from edc_model.models import BaseUuidModel
 from ..model_mixins import CrfModelMixin, FollowupReviewModelMixin
 
 
+# TODO: Ask for viral load if available since last visit
 class HivReview(
     rx_initial_review_model_mixin_factory(
         "rx_init", verbose_name_label="antiretroviral therapy (ART)"

@@ -54,8 +54,7 @@ from intecomm_sites.tests.site_test_case_mixin import SiteTestCaseMixin
 from intecomm_subject.models import ClinicalReview, ClinicalReviewBaseline, SubjectVisit
 
 if TYPE_CHECKING:
-    from intecomm_consent.models import SubjectConsent
-
+    from intecomm_consent.models import SubjectConsent, SubjectConsentUg
 
 fake = Faker()
 now = datetime(2019, 5, 1).astimezone(ZoneInfo("UTC"))
@@ -217,10 +216,12 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         return subject_screening
 
     @staticmethod
-    def get_subject_consent(subject_screening, consent_datetime=None, site_id=None):
+    def get_subject_consent(
+        subject_screening, consent_datetime=None, site_id=None
+    ) -> SubjectConsent | SubjectConsentUg:
         country = get_current_country(subject_screening.site.id)
         if country == UGANDA:
-            model_name = "intecomm_consent.subjectconsent"
+            model_name = "intecomm_consent.subjectconsentug"
         else:
             model_name = "intecomm_consent.subjectconsent"
 
@@ -270,7 +271,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         condition_name: str,
         report_datetime: datetime | None = None,
         index: int | None = None,
-    ) -> SubjectConsent:
+    ) -> SubjectConsent | SubjectConsentUg:
         """Creates patientlog->subjectscreening->subjectconsent."""
 
         first_name = fake.first_name()

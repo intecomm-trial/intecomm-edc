@@ -2,7 +2,7 @@
 
 import django.db.models.deletion
 import django.db.models.manager
-import edc_sites.models.model_mixins
+import edc_sites.managers
 from django.db import migrations, models
 
 
@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.AlterModelManagers(
             name="patientlogreportprinthistory",
             managers=[
-                ("on_site", edc_sites.models.model_mixins.CurrentSiteManager()),
+                ("on_site", edc_sites.managers.CurrentSiteManager()),
                 ("objects", django.db.models.manager.Manager()),
             ],
         ),

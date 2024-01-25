@@ -10,7 +10,7 @@ class PatientGroupListFilter(SimpleListFilter):
     parameter_name = "subject_identifier"
 
     def lookups(self, request, model_admin):
-        site_ids = sites.get_view_only_sites_for_user(request=request)
+        site_ids = sites.get_view_only_site_ids_for_user(request=request)
         group_names = [
             (dct["name"], dct["name"].title())
             for dct in PatientGroup.objects.filter(randomized=True, site__in=site_ids)

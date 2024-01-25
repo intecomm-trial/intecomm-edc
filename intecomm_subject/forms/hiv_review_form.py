@@ -14,7 +14,7 @@ class HivReviewForm(CrfModelFormMixin, forms.ModelForm):
         cleaned_data = super().clean()
         raise_if_clinical_review_does_not_exist(cleaned_data.get("subject_visit"))
         if is_rx_initiated(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.get_subject_identifier(),
             report_datetime=self.report_datetime,
             instance_id=self.instance.id,
         ):

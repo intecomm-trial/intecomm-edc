@@ -1,52 +1,41 @@
 from __future__ import annotations
 
-import re
-
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.db.models import Q
 from django.urls import reverse
 from edc_listboard.views import SubjectListboardView
 from edc_sites.site import sites
 from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
-from intecomm_rando.models import RandomizationList
 
 from intecomm_group.models import PatientGroup
 from intecomm_group.utils import get_assignment_for_patient_group
-from intecomm_screening.models import PatientLog
-
-from ....model_wrappers import PatientLogModelWrapper as BaseModelWrapper
-
-
-class PatientLogModelWrapper(BaseModelWrapper):
-    model = "intecomm_screening.patientlog"
-    next_url_attrs = ["subject_identifier"]
-    next_url_name = "subject_dashboard_url"
 
 
 class BaseSubjectListboardView(SubjectListboardView):
-    listboard_model = PatientLog
-    model_wrapper_cls = PatientLogModelWrapper
-    search_fields = [
-        "group_identifier",
-        "patientgroup__name",
-        "subject_identifier",
-        "screening_identifier",
-        "initials",
-        "filing_identifier",
-        "contact_number",
-        "patient_log_identifier",
-        "last_4_hospital_identifier",
-        "last_4_contact_number",
-    ]
-    name_search_field: str = "legal_name"
-    identity_regex: str = r"^[A-Z0-9\ ]+$"
-    identity_fields = ["hospital_identifier"]
+    listboard_model = "intecomm_screening.patientlog"
     assignment: str = None
     followup_url: str = None
+    show_change_form_button: bool = False
+
+    search_fields = [
+        "user_created",
+        "user_modified",
+        "screening_identifier",
+        "subject_identifier",
+        "group_identifier",
+        "patient_log_identifier",
+        "filing_identifier",
+        "initials__exact",
+        "hospital_identifier__exact",
+        "last_4_hospital_identifier",
+        "contact_number__exact",
+        "alt_contact_number__exact",
+        "last_4_contact_number",
+        "legal_name__exact",
+    ]
 
     def get_context_data(self, **kwargs) -> dict:
-        context = super().get_context_data(**kwargs)
-        context.update(
+        kwargs.update(
             followup_url=reverse(self.followup_url),
             patient_group_url=self.get_patient_group_url(**kwargs),
             patient_group_appointment_url=self.get_patient_group_appointment_url(**kwargs),
@@ -55,29 +44,15 @@ class BaseSubjectListboardView(SubjectListboardView):
             arm=self.arm,
             COMMUNITY_ARM=COMMUNITY_ARM,
             FACILITY_ARM=FACILITY_ARM,
-        )
-        context.update(
             site=getattr(self.request, "site", None),
             country=sites.get_current_country(self.request),
         )
-        return context
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        values_list = RandomizationList.objects.values_list("group_identifier").filter(
-            group_identifier__isnull=False, assignment=self.assignment
-        )
-        return qs.filter(group_identifier__in=values_list)
+        return super().get_context_data(**kwargs)
 
     def get_queryset_filter_options(self, request, *args, **kwargs) -> tuple[Q, dict]:
-        q_object, options = super().get_queryset_filter_options(request, *args, **kwargs)
-        if self.search_term:
-            if re.match(r"^[A-Za-z\-]+$", self.search_term):
-                q_object |= Q(familiar_name__exact=self.search_term)
-                q_object |= Q(patientgroup__name__icontains=self.search_term)
-            if re.match(r"^[0-9\-]+$", self.search_term):
-                q_object |= Q(group_identifier__exact=self.search_term)
-        return q_object, options
+        q_options, options = super().get_queryset_filter_options(request, *args, **kwargs)
+        options.update(subject_identifier__startswith="107-", group_identifier__isnull=False)
+        return q_options, options
 
     @property
     def patient_group(self) -> PatientGroup:

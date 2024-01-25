@@ -30,9 +30,11 @@
     <!-- begin results header -->
     <th>#</th>
     <th></th>
-    <th>Identifier</th>
     <th>Subject</th>
-    <th>Age</th>
+    <th>Age/MF</th>
+    <th>Patient log</th>
+    <th>Group</th>
+    {% if country == "uganda" %}<th>Filing</th>{% else %}<th>Name</th>{% endif %}
     <th>Consented</th>
     <th>Modified</th>
     <!-- end results header -->
@@ -42,18 +44,22 @@
 {% block listboard_table_columns %}
     <td>{{ result.subject_identifier }}</td>
     <td>
-       {% if result.gender == MALE %}
-           <i class="fas fa-male fa-lg"></i>
-       {% else %}
-           <i class="fas fa-female fa-lg"></i>
-       {% endif %}
+      {% if result.gender == MALE %}
+        <i class="fas fa-male fa-lg"></i>
+      {% else %}
+        <i class="fas fa-female fa-lg"></i>
+      {% endif %}
+      {{result.age_in_years}}{{ result.gender }}
+    </td>
+  <td><A href="{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist"  %}?q={{ result.patient_log_identifier }}">{{ result.patient_log_identifier }}</A></td>
+  <td><A href="{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist"  %}?q={{ result.group_identifier }}">{{ result.group_identifier }}</A></td>
+    <td>
        {% if country == "uganda" %}
-          {{result.object}}
+          {{result.filing_identifier}}
         {% else %}
-           {% if perms.edc_registration.display_firstname %}{{ result.familiar_name }}{% else %}******{% endif %} {% if perms.edc_registration.display_lastname %}{{ result.initials }}{% else %}******{% endif %}
+           {% if perms.edc_registration.display_firstname %}{{ result.familiar_name }}{% else %}******{% endif %} {% if perms.edc_registration.display_lastname %}{{ result.initials }}{% else %}{{result.filing_identifier}}{% endif %}
         {% endif %}
     </td>
-    <td>{{result.object.age_in_years}}yrs</td>
-    <td>{{ result.object.consent_datetime|date:"SHORT_DATE_FORMAT" }}</td>
-    <td>{{ result.object.modified|date:"SHORT_DATETIME_FORMAT" }}</td>
+    <td>{{ result.consent_datetime|date:"SHORT_DATE_FORMAT" }}</td>
+    <td>{{ result.modified|date:"SHORT_DATETIME_FORMAT" }}</td>
 {% endblock listboard_table_columns %}

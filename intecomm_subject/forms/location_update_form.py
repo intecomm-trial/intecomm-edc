@@ -13,7 +13,7 @@ class LocationUpdateForm(CrfModelFormMixin, forms.ModelForm):
 
     @property
     def group_identifier(self) -> str:
-        obj = PatientLog.objects.get(subject_identifier=self.subject_identifier)
+        obj = PatientLog.objects.get(subject_identifier=self.get_subject_identifier())
         return obj.group_identifier
 
     def clean(self) -> dict:

@@ -1,5 +1,5 @@
 from edc_action_item.auth_objects import ACTION_ITEM, ACTION_ITEM_EXPORT
-from edc_adverse_event.auth_objects import TMG_ROLE
+from edc_adverse_event.constants import TMG_ROLE
 from edc_appointment.auth_objects import APPOINTMENT_EXPORT
 from edc_auth.auth_objects import (
     AUDITOR,

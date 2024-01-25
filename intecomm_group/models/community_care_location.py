@@ -3,7 +3,7 @@ from django.db import models
 from edc_constants.constants import CLOSED, OPEN
 from edc_model.models import BaseUuidModel
 from edc_model_fields.fields import OtherCharField
-from edc_sites.models import SiteModelMixin
+from edc_sites.model_mixins import SiteModelMixin
 
 from intecomm_lists.models import LocationTypes
 

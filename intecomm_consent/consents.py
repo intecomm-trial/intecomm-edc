@@ -1,19 +1,31 @@
-from edc_consent.consent import Consent
+from edc_consent.consent_definition import ConsentDefinition
 from edc_consent.site_consents import site_consents
 from edc_constants.constants import FEMALE, MALE
 from edc_protocol import Protocol
 
-v1 = Consent(
-    "intecomm_consent.subjectconsent",
-    version="1",
-    start=Protocol().study_open_datetime,
-    end=Protocol().study_close_datetime,
-    age_min=18,
-    age_is_adult=18,
-    age_max=110,
-    gender=[MALE, FEMALE],
-    proxy_models=["intecomm_consent.subjectconsentug"],
+
+def opts() -> dict:
+    return dict(
+        version="1",
+        start=Protocol().study_open_datetime,
+        end=Protocol().study_close_datetime,
+        age_min=18,
+        age_is_adult=18,
+        age_max=110,
+        gender=[MALE, FEMALE],
+    )
+
+
+cdef_tz_v1 = ConsentDefinition(
+    model="intecomm_consent.subjectconsent",
+    country="tanzania",
+    **opts(),
+)
+cdef_ug_v1 = ConsentDefinition(
+    model="intecomm_consent.subjectconsentug",
+    country="uganda",
+    **opts(),
 )
 
-
-site_consents.register(v1)
+site_consents.register(cdef_tz_v1)
+site_consents.register(cdef_ug_v1)

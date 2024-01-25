@@ -4,7 +4,7 @@ from edc_constants.choices import YES_NO, YES_NO_UNSURE_NA
 from edc_constants.constants import NOT_APPLICABLE
 from edc_model.models import HistoricalRecords, OtherCharField
 from edc_model.validators.phone import phone_number
-from edc_sites.models import CurrentSiteManager
+from edc_sites.managers import CurrentSiteManager
 from edc_utils import get_utcnow
 
 from ..choices import RESPONDENT_CHOICES

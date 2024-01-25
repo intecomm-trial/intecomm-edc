@@ -18,8 +18,6 @@ from intecomm_screening.admin.modeladmin_mixins import (
     RedirectAllToPatientLogModelAdminMixin,
 )
 
-from ..forms import SubjectConsentForm
-
 if TYPE_CHECKING:
     from intecomm_screening.models import SubjectScreening, SubjectScreeningUg
 
@@ -31,8 +29,6 @@ class SubjectConsentModelAdminMixin(
     ConsentModelAdminMixin,
     ModelAdminSubjectDashboardMixin,
 ):
-    form = SubjectConsentForm
-
     list_per_page = 5
 
     show_object_tools = False

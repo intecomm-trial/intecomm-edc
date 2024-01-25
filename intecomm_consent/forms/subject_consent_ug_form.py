@@ -1,12 +1,12 @@
 from django import forms
 
-from ..models import SubjectConsent
+from ..models import SubjectConsentUg
 from .modelform_mixins import SubjectConsentModelFormMixin
 
 
-class SubjectConsentForm(
+class SubjectConsentUgForm(
     SubjectConsentModelFormMixin,
     forms.ModelForm,
 ):
     class Meta(SubjectConsentModelFormMixin.Meta):
-        model = SubjectConsent
+        model = SubjectConsentUg

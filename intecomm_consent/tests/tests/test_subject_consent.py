@@ -5,12 +5,12 @@ from typing import Dict
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.db import IntegrityError
-from django.test import TestCase, tag
+from django.test import TestCase, override_settings
 from edc_consent.constants import HOSPITAL_NUMBER
 from edc_constants.constants import NO, NOT_APPLICABLE, YES
 
-from intecomm_consent.forms import SubjectConsentForm
-from intecomm_consent.models import SubjectConsent
+from intecomm_consent.forms import SubjectConsentForm, SubjectConsentUgForm
+from intecomm_consent.models import SubjectConsent, SubjectConsentUg
 from intecomm_lists.models import ScreeningRefusalReasons
 from intecomm_screening.models import ConsentRefusal, Site, SubjectScreening
 from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin, now
@@ -95,6 +95,7 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
             "may_store_samples": NO,
         }
 
+    @override_settings(SITE_ID=201)
     def test_consent_ok(self):
         subject_screening = self.get_subject_screening()
         consent_form = SubjectConsentForm(
@@ -107,7 +108,20 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
         consent_form.save()
         self.assertEqual(SubjectConsent.objects.all().count(), 1)
 
-    @tag("1")
+    @override_settings(SITE_ID=101)
+    def test_consent_ug_ok(self):
+        subject_screening = self.get_subject_screening()
+        consent_form = SubjectConsentUgForm(
+            data=self.get_consent_data(subject_screening=subject_screening),
+            initial={"screening_identifier": subject_screening.screening_identifier},
+            instance=SubjectConsentUg(),
+        )
+        consent_form.is_valid()
+        self.assertEqual(consent_form._errors, {})
+        consent_form.save()
+        self.assertEqual(SubjectConsentUg.objects.all().count(), 1)
+
+    @override_settings(SITE_ID=201)
     def test_consent_after_already_consented_raises(self):
         subject_screening = self.get_subject_screening()
         consent_form = SubjectConsentForm(

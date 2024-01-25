@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-import re
-
 from django.apps import apps as django_apps
-from django.db.models import Q
 from django.urls import reverse
 from edc_listboard.filters import ListboardFilter
 from edc_listboard.filters import ListboardViewFilters as Base
@@ -11,8 +8,6 @@ from edc_listboard.views import ScreeningListboardView
 from edc_sites.site import sites
 
 from intecomm_screening.constants import UGANDA
-
-from ...model_wrappers import SubjectScreeningModelWrapper
 
 
 class ListboardViewFilters(Base):
@@ -57,7 +52,6 @@ class ListboardViewFilters(Base):
 
 class ListboardView(ScreeningListboardView):
     listboard_model = "intecomm_screening.subjectscreening"
-    model_wrapper_cls = SubjectScreeningModelWrapper
     navbar_selected_item = "screen_group"
     listboard_view_filters = ListboardViewFilters()
     listboard_panel_title = "Screening"
@@ -66,7 +60,7 @@ class ListboardView(ScreeningListboardView):
     def listboard_model_cls(self):
         if sites.get_current_country(self.request) == UGANDA:
             return django_apps.get_model("intecomm_screening.subjectscreeningug")
-        return django_apps.get_model(self.listboard_model)
+        return django_apps.get_model(self.get_listboard_model())
 
     def get_patient_log_add_url(self):
         if sites.get_current_country(self.request) == UGANDA:
@@ -74,14 +68,12 @@ class ListboardView(ScreeningListboardView):
         return reverse("intecomm_screening_admin:intecomm_screening_patientlog_add")
 
     def get_context_data(self, **kwargs) -> dict:
-        context_data = super().get_context_data(**kwargs)
-        context_data.update(
+        kwargs.update(
             patient_log_add_url=self.get_patient_log_add_url(),
         )
-        return context_data
+        return super().get_context_data(**kwargs)
 
-    def get_queryset_filter_options(self, request, *args, **kwargs) -> tuple[Q, dict]:
-        q_object, options = super().get_queryset_filter_options(request, *args, **kwargs)
-        if self.search_term and re.match(r"^[0-9\-]+$", self.search_term):
-            q_object |= Q(hospital_identifier__exact=self.search_term)
-        return q_object, options
+    def get_search_fields(self) -> list[str]:
+        fields = super().get_search_fields()
+        fields.append("hospital_identifier__exact")
+        return fields
