@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.contrib.admin import display
 from django_audit_fields.admin import audit_fieldset_tuple
 from edc_action_item.fieldsets import action_fieldset_tuple
 from edc_adverse_event.modeladmin_mixins import DeathReportModelAdminMixin
+from edc_adverse_event.modeladmin_mixins.list_filters import CauseOfDeathListFilter
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_sites.admin import SiteModelAdminMixin
 
@@ -70,8 +72,18 @@ class DeathReportAdmin(SiteModelAdminMixin, DeathReportModelAdminMixin, SimpleHi
         "death_certificate": admin.VERTICAL,
     }
 
-    # TODO: remove with Django > 4.2.5
-    def get_list_filter(self, request) -> tuple[str]:
+    def get_list_filter(self, request) -> tuple[str, ...]:
         list_filter = super().get_list_filter(request)
-        self.list_filter = list_filter
+        list_filter = list(list_filter)
+        index = list_filter.index(CauseOfDeathListFilter)
+        list_filter.remove(CauseOfDeathListFilter)
+        list_filter.insert(index, "cause_of_death")
+        list_filter = tuple(list_filter)
         return list_filter
+
+    @display(
+        description="Cause of death",
+        ordering="cause_of_death",
+    )
+    def cause_of_death_column(self, obj):
+        return obj.cause_of_death

@@ -7,6 +7,7 @@ from .predicates import (
     HealthEconomicsPredicates,
     LocationUpdatePredicates,
     NextAppointmentPredicates,
+    ViralLoadPredicates,
 )
 
 
@@ -179,3 +180,18 @@ class NextAppointmentRuleGroup(CrfRuleGroup):
         app_label = "intecomm_subject"
         source_model = "intecomm_subject.subjectvisit"
         predicates = NextAppointmentPredicates()
+
+
+@register()
+class ViralLoadRuleGroup(CrfRuleGroup):
+    crf = CrfRule(
+        predicate="is_required",
+        consequence=REQUIRED,
+        alternative=NOT_REQUIRED,
+        target_models=["viral_load_result"],
+    )
+
+    class Meta:
+        app_label = "intecomm_subject"
+        source_model = "intecomm_subject.subjectvisit"
+        predicates = ViralLoadPredicates()

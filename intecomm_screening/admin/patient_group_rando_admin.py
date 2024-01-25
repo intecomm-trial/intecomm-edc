@@ -28,6 +28,7 @@ class PatientGroupRandoAdmin(SiteModelAdminMixin, BaseModelAdminMixin):
     change_list_template: str = "intecomm_screening/admin/patientgroup_change_list.html"
     change_list_help = "Searches on encrypted data work on exact uppercase matches only"
     change_list_title = PatientGroupRando._meta.verbose_name_plural
+    ordering = ("site__id", "randomized_datetime")
 
     fieldsets = (
         (None, {"fields": ["name"]}),

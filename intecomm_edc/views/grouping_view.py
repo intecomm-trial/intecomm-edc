@@ -8,7 +8,3 @@ class GroupingView(EdcViewMixin, NavbarViewMixin, TemplateView):
     template_name = f"intecomm_edc/bootstrap{settings.EDC_BOOTSTRAP}/grouping.html"
     navbar_name = settings.APP_NAME
     navbar_selected_item = "screen_group"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context

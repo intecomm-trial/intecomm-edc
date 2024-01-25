@@ -12,6 +12,7 @@ crfs_prn = FormsCollection(
     Crf(show_order=295, model="intecomm_subject.urinedipsticktest"),
     Crf(show_order=365, model="intecomm_subject.concomitantmedication"),
     Crf(show_order=385, model="intecomm_subject.urinepregnancy"),
+    Crf(show_order=455, model="intecomm_subject.viralloadresult"),
     name="prn",
 )
 
@@ -50,6 +51,7 @@ crfs_followup = FormsCollection(
     Crf(show_order=115, model="intecomm_subject.dminitialreview", required=False),
     Crf(show_order=116, model="intecomm_subject.htninitialreview", required=False),
     Crf(show_order=131, model="intecomm_subject.hivreview", required=False),
+    Crf(show_order=135, model="intecomm_subject.viralloadresult", required=False),
     Crf(show_order=141, model="intecomm_subject.dmreview", required=False),
     Crf(show_order=151, model="intecomm_subject.htnreview", required=False),
     Crf(show_order=154, model="intecomm_subject.medications"),

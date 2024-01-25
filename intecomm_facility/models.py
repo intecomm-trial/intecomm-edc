@@ -1,7 +1,8 @@
 from django.db import models
 from edc_facility.model_mixins import HealthFacilityModelMixin, Manager
 from edc_model.models import BaseUuidModel, HistoricalRecords
-from edc_sites.models import CurrentSiteManager, SiteModelMixin
+from edc_sites.managers import CurrentSiteManager
+from edc_sites.model_mixins import SiteModelMixin
 
 
 class HealthFacility(SiteModelMixin, HealthFacilityModelMixin, BaseUuidModel):

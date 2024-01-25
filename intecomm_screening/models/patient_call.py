@@ -1,7 +1,7 @@
 from django.db import models
 from edc_constants.constants import NO
 from edc_model.models import BaseUuidModel
-from edc_sites.models import SiteModelMixin
+from edc_sites.model_mixins import SiteModelMixin
 from edc_utils import formatted_date
 from edc_utils.date import to_local
 

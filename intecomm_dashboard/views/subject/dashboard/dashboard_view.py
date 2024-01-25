@@ -1,59 +1,43 @@
 from __future__ import annotations
 
-from typing import Type
+from typing import Any, Type
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from edc_sites.site import sites
 from edc_subject_dashboard.views import SubjectDashboardView
 
-from intecomm_consent.models import SubjectConsentUg
 from intecomm_group.models import PatientGroup
 from intecomm_group.utils import get_group_subject_dashboards_url
 from intecomm_screening.constants import UGANDA
 from intecomm_screening.models import PatientLog, PatientLogUg
 
-from ....model_wrappers import (
-    AppointmentModelWrapper,
-    SubjectConsentModelWrapper,
-    SubjectConsentUgModelWrapper,
-)
-
 
 class DashboardView(SubjectDashboardView):
-    consent_model = "intecomm_consent.subjectconsent"
     navbar_selected_item = "consented_subject"
     visit_model = "intecomm_subject.subjectvisit"
     history_button_label = _("Audit")
 
-    appointment_model_wrapper_cls = AppointmentModelWrapper
-    consent_model_wrapper_cls = SubjectConsentModelWrapper
+    def __init__(self, **kwargs):
+        self._patient_group = None
+        super().__init__(**kwargs)
 
-    @property
-    def patient_log_model_cls(self) -> Type[PatientLog | PatientLogUg]:
-        if sites.get_current_country(self.request) == UGANDA:
-            return PatientLogUg
-        return PatientLog
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        try:
-            group = PatientGroup.objects.get(
-                group_identifier=context.get("consent").object.group_identifier
-            )
-        except ObjectDoesNotExist:
-            patient_group_url = None
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        if not self.patient_group:
             group_identifier = None
             group_name = None
+            patient_group_url = None
         else:
-            group_identifier = group.group_identifier
-            group_name = group.name
+            group_identifier = self.patient_group.group_identifier
+            group_name = self.patient_group.name
             patient_group_url = reverse(
                 "intecomm_group_admin:intecomm_group_patientgroup_changelist"
             )
-            patient_group_url = f"{patient_group_url}?q={group.name}"
-        context.update(
+            patient_group_url = f"{patient_group_url}?q={self.patient_group.name}"
+        kwargs.update(
             subject_listboard_url="screen_group_url",
             group_identifier=group_identifier,
             group_name=group_name,
@@ -62,14 +46,22 @@ class DashboardView(SubjectDashboardView):
             patient_log_url=self.patient_log_url,
             group_subject_dashboards_url=get_group_subject_dashboards_url(self.patient_log),
         )
-        # replace subject_consent_model_wrapper if UG
+        return super().get_context_data(**kwargs)
+
+    @property
+    def patient_log_model_cls(self) -> Type[PatientLog | PatientLogUg]:
         if sites.get_current_country(self.request) == UGANDA:
-            subject_consent = SubjectConsentUg.objects.get(id=context["consent"].object.id)
-            subject_consent_model_wrapper = SubjectConsentUgModelWrapper(subject_consent)
-            context.update(
-                consent=subject_consent_model_wrapper, consents=[subject_consent_model_wrapper]
-            )
-        return context
+            return PatientLogUg
+        return PatientLog
+
+    @property
+    def patient_group(self) -> PatientGroup | None:
+        if not self._patient_group:
+            if self.patient_log.group_identifier:
+                self._patient_group = PatientGroup.objects.get(
+                    group_identifier=self.patient_log.group_identifier
+                )
+        return self._patient_group
 
     @property
     def patient_log(self):

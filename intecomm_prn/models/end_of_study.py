@@ -10,7 +10,7 @@ from edc_offstudy.constants import (
     END_OF_STUDY_ACTION,
 )
 from edc_offstudy.model_mixins import OffstudyModelMixin
-from edc_sites.models import SiteModelMixin
+from edc_sites.model_mixins import SiteModelMixin
 from edc_transfer.constants import TRANSFERRED
 
 from intecomm_lists.models import OffstudyReasons

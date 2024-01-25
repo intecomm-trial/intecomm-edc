@@ -1,2 +1,4 @@
-from .subject_consent_form import SubjectConsentForm, SubjectConsentFormValidator
-from .subject_reconsent_form import SubjectReconsentForm
+from .subject_consent_form import SubjectConsentForm
+from .subject_consent_ug_form import SubjectConsentUgForm
+
+__all__ = ["SubjectConsentForm", "SubjectConsentUgForm"]

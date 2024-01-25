@@ -11,4 +11,4 @@ class IntecommSite(SingleSite):
     clinic_days: list[int] = field(kw_only=True, default_factory=list)
 
     def __str__(self):
-        return f"{self.title} {self.health_facility_type.upper()} ({self.site_id})"
+        return f"{self.description} {self.health_facility_type.upper()} ({self.site_id})"

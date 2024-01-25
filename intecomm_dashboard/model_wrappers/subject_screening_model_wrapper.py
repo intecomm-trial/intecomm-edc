@@ -1,6 +1,5 @@
 from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
-from edc_consent import ConsentModelWrapperMixin
 from edc_model_wrapper import ModelWrapper
 from edc_subject_model_wrappers import SubjectConsentModelWrapper as BaseModelWrapper
 
@@ -17,7 +16,7 @@ class SubjectConsentModelWrapper(BaseModelWrapper):
         )
 
 
-class SubjectScreeningModelWrapper(ConsentModelWrapperMixin, ModelWrapper):
+class SubjectScreeningModelWrapper(ModelWrapper):
     consent_model_wrapper_cls = SubjectConsentModelWrapper
     model = "intecomm_screening.subjectscreening"
     next_url_attrs = ["screening_identifier"]

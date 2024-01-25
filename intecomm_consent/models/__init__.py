@@ -6,4 +6,3 @@ from .signals import (
 )
 from .subject_consent import SubjectConsent
 from .subject_consent_ug import SubjectConsentUg
-from .subject_reconsent import SubjectReconsent

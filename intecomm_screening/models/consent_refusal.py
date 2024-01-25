@@ -5,7 +5,8 @@ from edc_model.models.historical_records import HistoricalRecords
 from edc_model_fields.fields.other_charfield import OtherCharField
 from edc_screening.utils import get_subject_screening_or_raise
 from edc_search.model_mixins import SearchSlugManager
-from edc_sites.models import CurrentSiteManager, SiteModelMixin
+from edc_sites.managers import CurrentSiteManager
+from edc_sites.model_mixins import SiteModelMixin
 from edc_utils import get_utcnow
 
 from intecomm_consent.utils import raise_if_subject_consent_exists

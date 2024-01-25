@@ -3,7 +3,7 @@ from edc_action_item.models import ActionModelMixin
 from edc_adverse_event.constants import HOSPITALIZATION_ACTION
 from edc_adverse_event.model_mixins import HospitalizationModelMixin
 from edc_model.models import BaseUuidModel
-from edc_sites.models import SiteModelMixin
+from edc_sites.model_mixins import SiteModelMixin
 
 
 class Hospitalization(

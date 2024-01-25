@@ -497,7 +497,9 @@ class PatientLogReport(Report):
         has_pii_perms: bool | None = None
         user_sites = set([s.id for s in self.user.userprofile.sites.all()])
         for country in get_remove_patient_names_from_countries():
-            country_sites = set([s.site_id for s in sites.get_by_country(country)])
+            country_sites = set(
+                [s.site_id for s in sites.get_by_country(country, aslist=True)]
+            )
             if user_sites & country_sites:
                 has_pii_perms = False
                 break

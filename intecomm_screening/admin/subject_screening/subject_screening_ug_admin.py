@@ -30,6 +30,7 @@ class SubjectScreeningUgAdmin(
     BaseModelAdminMixin,
 ):
     form = SubjectScreeningUgForm
+    ordering = ("site__id", "-report_datetime")
 
     # ModelAdminRedirectAllToChangelistMixin
     changelist_url = "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"

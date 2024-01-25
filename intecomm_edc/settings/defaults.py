@@ -34,7 +34,7 @@ env = environ.Env(
 )
 
 DEBUG = env("DJANGO_DEBUG")
-DJANGO_DEBUG_TOOLBAR_ENABLED = env("DJANGO_DEBUG_TOOLBAR_ENABLED")
+DJANGO_DEBUG_TOOLBAR_ENABLED = False  # env("DJANGO_DEBUG_TOOLBAR_ENABLED")
 
 if LOGGING_ENABLED := env("DJANGO_LOGGING_ENABLED"):
     from .logging import *  # noqa
@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     "logentry_admin",
     "simple_history",
     "storages",
+    "edc_sites.apps.AppConfig",
     "edc_action_item.apps.AppConfig",
     "edc_appointment.apps.AppConfig",
     "edc_auth.apps.AppConfig",
@@ -140,7 +141,6 @@ INSTALLED_APPS = [
     "edc_review_dashboard.apps.AppConfig",
     "edc_rx.apps.AppConfig",
     "edc_screening.apps.AppConfig",
-    "edc_sites.apps.AppConfig",
     "edc_subject_dashboard.apps.AppConfig",
     "edc_timepoint.apps.AppConfig",
     "edc_unblinding.apps.AppConfig",

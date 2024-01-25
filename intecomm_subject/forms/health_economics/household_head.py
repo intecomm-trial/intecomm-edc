@@ -30,7 +30,9 @@ class HealthEconomicsHouseholdHeadForm(
 
     @property
     def subject_consent(self):
-        return get_consent_model_cls().objects.get(subject_identifier=self.subject_identifier)
+        return get_consent_model_cls().objects.get(
+            subject_identifier=self.get_subject_identifier()
+        )
 
     class Meta:
         model = HealthEconomicsHouseholdHead

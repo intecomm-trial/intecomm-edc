@@ -1,5 +1,7 @@
 from edc_visit_schedule.schedule import Schedule
 
+from intecomm_consent.consents import cdef_tz_v1, cdef_ug_v1
+
 from ..constants import COMMUNITY_SCHEDULE
 from .visits import get_followup_visit, visit00, visit12
 
@@ -8,7 +10,7 @@ community_schedule = Schedule(
     verbose_name="Community-based integrated care",
     onschedule_model="intecomm_prn.onschedulecomm",
     offschedule_model="intecomm_prn.offschedulecomm",
-    consent_model="intecomm_consent.subjectconsent",
+    consent_definitions=[cdef_tz_v1, cdef_ug_v1],
     appointment_model="edc_appointment.appointment",
 )
 

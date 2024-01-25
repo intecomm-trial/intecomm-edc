@@ -30,6 +30,7 @@ class PatientCallAdmin(
     form = PatientCallForm
     show_object_tools = True
     list_per_page = 5
+    ordering = ("site__id", "report_datetime")
 
     # TemplatesModelAdminMixin attr
     change_list_template: str = "intecomm_screening/admin/patientcall_change_list.html"

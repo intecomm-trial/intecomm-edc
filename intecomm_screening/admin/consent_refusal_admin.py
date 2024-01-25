@@ -22,6 +22,7 @@ class ConsentRefusalAdmin(
     form = ConsentRefusalForm
     show_object_tools = True
     list_per_page = 5
+    ordering = ("site__id", "screening_identifier")
 
     fieldsets = (
         [

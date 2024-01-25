@@ -6,6 +6,7 @@ from django_audit_fields import audit_fieldset_tuple
 from edc_model_admin.history import SimpleHistoryAdmin
 
 from ..admin_site import intecomm_consent_admin
+from ..forms import SubjectConsentForm
 from ..models import SubjectConsent
 from .fieldsets import (
     get_first_fieldset,
@@ -17,6 +18,8 @@ from .modeladmin_mixins import SubjectConsentModelAdminMixin
 
 @admin.register(SubjectConsent, site=intecomm_consent_admin)
 class SubjectConsentAdmin(SubjectConsentModelAdminMixin, SimpleHistoryAdmin):
+    form = SubjectConsentForm
+
     fieldsets = (
         get_first_fieldset(include_pii=True),
         get_review_questions_fieldset(),

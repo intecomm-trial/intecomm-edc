@@ -99,7 +99,9 @@ class InitialDataModelAdminMixin:
         """Return True if legal and familiar name may be included"""
         include_names = True
         for country in get_remove_patient_names_from_countries():
-            if request.site.id in [s.site_id for s in sites.get_by_country(country)]:
+            if request.site.id in [
+                s.site_id for s in sites.get_by_country(country, aslist=True)
+            ]:
                 include_names = False
                 break
         return include_names

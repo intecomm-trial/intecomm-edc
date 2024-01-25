@@ -1,5 +1,7 @@
 from edc_visit_schedule.schedule import Schedule
 
+from intecomm_consent.consents import cdef_tz_v1, cdef_ug_v1
+
 from ..constants import FACILITY_SCHEDULE
 from .visits import get_followup_visit, visit00, visit01, visit12
 
@@ -8,7 +10,7 @@ facility_schedule = Schedule(
     verbose_name="Facility-based integrated care",
     onschedule_model="intecomm_prn.onscheduleinte",
     offschedule_model="intecomm_prn.offscheduleinte",
-    consent_model="intecomm_consent.subjectconsent",
+    consent_definitions=[cdef_tz_v1, cdef_ug_v1],
     appointment_model="edc_appointment.appointment",
 )
 

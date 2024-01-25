@@ -1,3 +1,5 @@
+from typing import Any
+
 from django import forms
 from django.db.models import BLANK_CHOICE_DASH
 from django.views.generic import TemplateView
@@ -30,7 +32,7 @@ class GroupManagementView(EdcViewMixin, NavbarViewMixin, TemplateView):
     navbar_selected_item = "home"
     navbar_name = "default"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
         context_data = super().get_context_data()
         context_data.update(patient_logs=self.fetch_patient_logs(kwargs.get("ids")))
         context_data.update(groups=PatientGroup.objects.filter(status__in=[NEW, RECRUITING]))

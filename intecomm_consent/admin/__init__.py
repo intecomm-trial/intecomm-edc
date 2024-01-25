@@ -1,3 +1,4 @@
 from .subject_consent_admin import SubjectConsentAdmin
 from .subject_consent_ug_admin import SubjectConsentUgAdmin
-from .subject_reconsent_admin import SubjectReconsentAdmin
+
+__all__ = ["SubjectConsentAdmin", "SubjectConsentUgAdmin"]

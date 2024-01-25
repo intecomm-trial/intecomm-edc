@@ -27,6 +27,7 @@ class TestSubjectDashboard(IntecommTestCaseMixin, WebTest):
             OldHealthEconomics,
         ]
         self.user.userprofile.sites.add(Site.objects.get(id=101))
+        self.user.userprofile.sites.add(Site.objects.get(id=201))
         self.user.user_permissions.add(Permission.objects.get(codename="view_appointment"))
 
     def login(self):
@@ -42,8 +43,25 @@ class TestSubjectDashboard(IntecommTestCaseMixin, WebTest):
         form["password"] = "pass"  # nosec B105
         return form.submit()
 
-    @override_settings(SITE_ID=101)
+    @override_settings(SITE_ID=201)
     def test_dashboard_ok(self):
+        subject_screening = self.get_subject_screening()
+        self.assertEqual(subject_screening.reasons_ineligible, None)
+        self.assertTrue(subject_screening.eligible)
+
+        subject_consent = self.get_subject_consent(subject_screening)
+        self.assertIsNotNone(subject_consent.subject_identifier)
+
+        self.login()
+
+        url_name = url_names.get(SubjectDashboardView.dashboard_url_name)
+        url = reverse(
+            url_name, kwargs=dict(subject_identifier=subject_consent.subject_identifier)
+        )
+        self.app.get(url, user=self.user, status=200)
+
+    @override_settings(SITE_ID=101)
+    def test_dashboard_ug_ok(self):
         subject_screening = self.get_subject_screening()
         self.assertEqual(subject_screening.reasons_ineligible, None)
         self.assertTrue(subject_screening.eligible)

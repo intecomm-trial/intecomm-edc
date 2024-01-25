@@ -1,9 +1,8 @@
-from django.contrib.auth.models import Permission, User
-from django.contrib.sites.models import Site
 from django.test import override_settings
 from django.urls import reverse
 from django_webtest import WebTest
 from edc_dashboard import url_names
+from edc_test_utils.get_user_for_tests import get_user_for_tests
 
 from intecomm_dashboard.views import (
     AeListboardView,
@@ -19,9 +18,7 @@ from intecomm_subject.models import HealthEconomics as OldHealthEconomics
 class TestViews(WebTest):
     def setUp(self) -> None:
         super().setUp()
-        self.user = User.objects.create_superuser("user_login", "u@example.com", "pass")
-        self.user.is_active = True
-        self.user.is_staff = True
+        self.user = get_user_for_tests()
         self.user.is_superuser = True
         self.user.save()
         self.user.refresh_from_db()
@@ -31,8 +28,6 @@ class TestViews(WebTest):
             DrugSupplyHiv,
             OldHealthEconomics,
         ]
-        self.user.userprofile.sites.add(Site.objects.get(id=101))
-        self.user.user_permissions.add(Permission.objects.get(codename="view_appointment"))
 
     def login(self):
         response = self.app.get(reverse("admin:index")).maybe_follow()
@@ -60,11 +55,6 @@ class TestViews(WebTest):
         response = self.app.get(url, user=self.user, status=200)
         self.assertIn(AeListboardView.listboard_panel_title, response.text)
 
-        url_name = url_names.get(DeathReportListboardView.listboard_url)
-        url = reverse(url_name)
-        response = self.app.get(url, user=self.user, status=200)
-        self.assertIn(DeathReportListboardView.listboard_panel_title, response.text)
-
         url_name = url_names.get(CommunitySubjectListboardView.listboard_url)
         url = reverse(url_name)
         response = self.app.get(url, user=self.user, status=200)
@@ -74,3 +64,8 @@ class TestViews(WebTest):
         url = reverse(url_name)
         response = self.app.get(url, user=self.user, status=200)
         self.assertIn(FacilitySubjectListboardView.listboard_panel_title, response.text)
+
+        url_name = url_names.get(DeathReportListboardView.listboard_url)
+        url = reverse(url_name)
+        response = self.app.get(url, user=self.user, status=200)
+        self.assertIn(DeathReportListboardView.listboard_panel_title, response.text)

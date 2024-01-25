@@ -31,6 +31,8 @@ class CrfModelAdmin(
     ModelAdminCrfDashboardMixin,
     SimpleHistoryAdmin,
 ):
+    ordering = ("site__id", "report_datetime")
+
     # TODO: remove with Django > 4.2.5
     def get_list_filter(self, request) -> tuple[str, ...]:
         list_filter = super().get_list_filter(request)
