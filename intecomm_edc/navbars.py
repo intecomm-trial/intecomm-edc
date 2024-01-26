@@ -11,24 +11,32 @@ from intecomm_dashboard.navbars import navbar as intecomm_dashboard_navbar
 
 navbar = Navbar(name=settings.APP_NAME)
 
-navbar_item = copy([item for item in lab_navbar.items if item.name == "specimens"][0])
+navbar_item = copy([item for item in lab_navbar.navbar_items if item.name == "specimens"][0])
 navbar_item.active = False
 navbar_item.label = "Specimens"
 navbar.append_item(navbar_item)
 
 navbar.append_item(
-    [item for item in intecomm_dashboard_navbar.items if item.name == "screen_group"][0]
+    [item for item in intecomm_dashboard_navbar.navbar_items if item.name == "screen_group"][0]
 )
 
 navbar.append_item(
-    [item for item in intecomm_dashboard_navbar.items if item.name == "community_followup"][0]
+    [
+        item
+        for item in intecomm_dashboard_navbar.navbar_items
+        if item.name == "community_followup"
+    ][0]
 )
 
 navbar.append_item(
-    [item for item in intecomm_dashboard_navbar.items if item.name == "facility_followup"][0]
+    [
+        item
+        for item in intecomm_dashboard_navbar.navbar_items
+        if item.name == "facility_followup"
+    ][0]
 )
 
-for item in review_navbar.items:
+for item in review_navbar.navbar_items:
     navbar.append_item(item)
 
 navbar.append_item(tmg_navbar_item)

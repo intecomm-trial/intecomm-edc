@@ -18,7 +18,7 @@ from edc_model_admin.mixins import (
     ModelAdminRedirectOnDeleteMixin,
     TemplatesModelAdminMixin,
 )
-from edc_notification import NotificationModelAdminMixin
+from edc_notification.modeladmin_mixins import NotificationModelAdminMixin
 from edc_sites.site import sites
 
 from ..constants import UGANDA

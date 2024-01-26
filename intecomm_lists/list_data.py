@@ -334,15 +334,15 @@ list_data = {
         (OTHER, "Other"),
     ],
     # may be removed "edc_next_appointment.infosources"
-    "edc_next_appointment.infosources": [
-        (COMMUNITY, "Community group"),
-        (PATIENT, "Patient"),
-        (
-            PATIENT_REPRESENTATIVE,
-            "Patient representative (e.g., next of kin, relative, guardian)",
-        ),
-        (HEALTH_RECORDS, "Health records"),
-        (ESTIMATED, "Estimated by research staff"),
-        (OTHER, "Other"),
-    ],
+    # "edc_next_appointment.infosources": [
+    #     (COMMUNITY, "Community group"),
+    #     (PATIENT, "Patient"),
+    #     (
+    #         PATIENT_REPRESENTATIVE,
+    #         "Patient representative (e.g., next of kin, relative, guardian)",
+    #     ),
+    #     (HEALTH_RECORDS, "Health records"),
+    #     (ESTIMATED, "Estimated by research staff"),
+    #     (OTHER, "Other"),
+    # ],
 }

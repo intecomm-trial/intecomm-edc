@@ -4,7 +4,7 @@ from tempfile import mkdtemp
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from edc_auth.auth_objects import PII, PII_VIEW
+from edc_auth.constants import PII, PII_VIEW
 from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.constants import UUID_PATTERN
 from edc_identifier.utils import convert_to_human_readable

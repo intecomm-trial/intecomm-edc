@@ -36,6 +36,8 @@ env = environ.Env(
 DEBUG = env("DJANGO_DEBUG")
 DJANGO_DEBUG_TOOLBAR_ENABLED = False  # env("DJANGO_DEBUG_TOOLBAR_ENABLED")
 
+EDC_APP_NAME = "intecomm_edc"
+
 if LOGGING_ENABLED := env("DJANGO_LOGGING_ENABLED"):
     from .logging import *  # noqa
 
@@ -125,7 +127,7 @@ INSTALLED_APPS = [
     "edc_model_fields.apps.AppConfig",
     "edc_model_admin.apps.AppConfig",
     "edc_navbar.apps.AppConfig",
-    "edc_next_appointment.apps.AppConfig",
+    "edc_next_appointment.apps.AppConfig",  # keep for migrate
     "edc_notification.apps.AppConfig",
     "edc_offstudy.apps.AppConfig",
     "edc_pharmacy.apps.AppConfig",
@@ -163,6 +165,7 @@ INSTALLED_APPS = [
     "intecomm_screening.apps.AppConfig",
     "intecomm_sites.apps.AppConfig",
     "intecomm_edc.apps.AppConfig",
+    "edc_appconfig.apps.AppConfig",
 ]
 
 if not DEFENDER_ENABLED:
@@ -196,7 +199,7 @@ if not DJANGO_DEBUG_TOOLBAR_ENABLED:
 
 MIDDLEWARE.extend(
     [
-        "edc_protocol.middleware.ProtocolMiddleware",
+        "edc_protocol.middleware.ResearchProtocolConfigMiddleware",
         "edc_dashboard.middleware.DashboardMiddleware",
         "edc_subject_dashboard.middleware.DashboardMiddleware",
         "edc_lab_dashboard.middleware.DashboardMiddleware",
