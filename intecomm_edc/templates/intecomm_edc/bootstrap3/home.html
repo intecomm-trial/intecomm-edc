@@ -34,8 +34,7 @@
         <a href="#" class="list-group-item disabled">Screen / Group</a>
         <a id="logs_list_group_home" href="{% url 'screen_group_url' %}" class="list-group-item"><i class="fas fa-users fa-lg fa-fw" aria-hidden="true"></i> Patient Logs / Patient Groups</a>
         <a href="#" class="list-group-item disabled">Follow-up</a>
-        <a id="followup_list_group_home" href="{% url 'followup_community_url' %}" class="list-group-item"><i class="fas fa-users-between-lines fa-lg fa-fw" aria-hidden="true"></i> Community care</a>
-        <a id="followup_list_group_home" href="{% url 'followup_facility_url' %}" class="list-group-item"><i class="fas fa-user-circle fa-lg fa-fw" aria-hidden="true"></i> Facility Care</a>
+        <a id="followup_list_group_home" href="{% url 'subjects_home_url' %}" class="list-group-item"><i class="fas fa-user-circle fa-lg fa-fw" aria-hidden="true"></i> Subjects</a>
         <a href="#" class="list-group-item disabled">General</a>
         {% if perms.edc_action_item.nav_action_item_section %}
           <a href="{% url 'edc_action_item:home_url' %}" class="list-group-item"><i class="fas fa-bolt fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Action items</a>

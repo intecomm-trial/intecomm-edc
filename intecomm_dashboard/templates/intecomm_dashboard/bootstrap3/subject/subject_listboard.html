@@ -1,0 +1,51 @@
+{% extends edc_listboard_template %}
+{% load edc_dashboard_extras %}
+
+
+{% block listboard_search_btn_group %}
+  <a id="home_button" title="Home" class="btn btn-sm btn-primary" role="button" href="{% url 'subjects_home_url' %}"><i class="fa-solid fa-reply fa-1x fa-fw" aria-hidden="true"></i> Home</a>
+  {% if patient_group %}
+    <a id="patient_group" title="Back to group" class="btn btn-sm btn-default" role="button" href="{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist"  %}?q={{ result.group_identifier }}">Patient Logs</a>
+    <a id="group_appointment" title="Back to group" class="btn btn-sm btn-default" role="button" href="{{ patient_group_appointment_url }}" disabled >Appointment</a>
+    <a id="group_meeting" title="Back to group" class="btn btn-sm btn-default" role="button" href="{{ patient_group_meeting_url }}"  disabled >Meeting</a>
+  {% endif %}
+{% endblock listboard_search_btn_group %}
+{% block listboard_table_header %}
+
+    <!-- begin results header -->
+    <th>#</th>
+    <th></th>
+    <th>Subject</th>
+    <th>Age/MF</th>
+    {% if country == "uganda" %}<th>Filing</th>{% else %}<th>Name</th>{% endif %}
+    <th>Patient log</th>
+    <th>Group</th>
+    <th>Consented</th>
+    <th>Modified</th>
+    <!-- end results header -->
+
+{% endblock listboard_table_header %}
+
+
+{% block listboard_table_button_column %}
+    {% include 'edc_listboard/bootstrap3/include/buttons_column.html' %}
+{% endblock listboard_table_button_column %}
+
+{% block listboard_table_columns %}
+    <td>{{ result.subject_identifier }}</td>
+    <td>
+      {% if result.gender == MALE %}
+        <i class="fas fa-male fa-lg"></i>
+      {% else %}
+        <i class="fas fa-female fa-lg"></i>
+      {% endif %}
+      {{result.age_in_years}}{{ result.gender }}
+    </td>
+  <td>{% if country == "uganda" %}{{result.filing_identifier}}{% else %}{% if perms.edc_registration.display_firstname %}{{ result.familiar_name }}{% else %}******{% endif %} {% if perms.edc_registration.display_lastname %}{{ result.initials }}{% else %}{{result.filing_identifier}}{% endif %}{% endif %}
+  <td><A href="{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist"  %}?q={{ result.patient_log_identifier }}">{{ result.patient_log_identifier }}</A></td>
+  <td><A href="{{ subject_listboard_url }}?q={{ result.group_identifier }}">{{ result.group_identifier }}</A></td>
+
+  </td>
+  <td>{{ result.consent_datetime|date:"SHORT_DATE_FORMAT" }}</td>
+  <td>{{ result.modified|date:"SHORT_DATETIME_FORMAT" }}</td>
+{% endblock listboard_table_columns %}

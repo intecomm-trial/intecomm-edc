@@ -20,26 +20,15 @@ navbar.register(
     )
 )
 
-navbar.register(
-    NavbarItem(
-        name="community_followup",
-        title="Community",
-        label="Community",
-        fa_icon="fa-users-between-lines",
-        codename="edc_subject_dashboard.view_subject_listboard",
-        url_name="followup_community_url",
-        no_url_namespace=no_url_namespace,
-    )
-)
 
 navbar.register(
     NavbarItem(
-        name="facility_followup",
-        title="Facility",
-        label="Facility",
+        name="subjects",
+        title="Subjects",
+        label="Subjects",
         fa_icon="fa-user-circle",
         codename="edc_subject_dashboard.view_subject_listboard",
-        url_name="followup_facility_url",
+        url_name="subject_listboard_url",
         no_url_namespace=no_url_namespace,
     )
 )

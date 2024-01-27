@@ -3,23 +3,17 @@ from edc_protocol.research_protocol_config import ResearchProtocolConfig
 from .patterns import screening_identifier
 from .views import (
     AeListboardView,
-    CommunitySubjectListboardView,
     DeathReportListboardView,
-    FacilitySubjectListboardView,
     ScreenGroupListboardView,
     SubjectDashboardView,
+    SubjectListboardView,
 )
 
 app_name = "intecomm_dashboard"
 
-urlpatterns = FacilitySubjectListboardView.urls(
+urlpatterns = SubjectListboardView.urls(
     namespace=app_name,
-    label="facility_subject_listboard",
-    identifier_pattern=ResearchProtocolConfig().subject_identifier_pattern,
-)
-urlpatterns += CommunitySubjectListboardView.urls(
-    namespace=app_name,
-    label="community_subject_listboard",
+    label="subject_listboard",
     identifier_pattern=ResearchProtocolConfig().subject_identifier_pattern,
 )
 urlpatterns += ScreenGroupListboardView.urls(

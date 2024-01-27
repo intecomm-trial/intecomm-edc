@@ -20,20 +20,16 @@ navbar.register(
     [item for item in intecomm_dashboard_navbar.navbar_items if item.name == "screen_group"][0]
 )
 
-navbar.register(
-    [
-        item
-        for item in intecomm_dashboard_navbar.navbar_items
-        if item.name == "community_followup"
-    ][0]
-)
+# navbar.register(
+#     [
+#         item
+#         for item in intecomm_dashboard_navbar.navbar_items
+#         if item.name == "community_followup"
+#     ][0]
+# )
 
 navbar.register(
-    [
-        item
-        for item in intecomm_dashboard_navbar.navbar_items
-        if item.name == "facility_followup"
-    ][0]
+    [item for item in intecomm_dashboard_navbar.navbar_items if item.name == "subjects"][0]
 )
 
 for navbar_item in review_navbar.navbar_items:
