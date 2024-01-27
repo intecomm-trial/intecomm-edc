@@ -8,45 +8,45 @@ no_url_namespace = False  # True if settings.APP_NAME == "intecomm_dashboard" el
 navbar = Navbar(name="intecomm_dashboard")
 
 
-navbar.append_item(
+navbar.register(
     NavbarItem(
         name="screen_group",
         title="Screen/Group",
         label="Screen/Group",
-        fa_icon="fa-solid fa-user-plus",
+        fa_icon="fa-user-plus",
         codename="edc_screening.view_screening_listboard",
         url_name="screen_group_url",
         no_url_namespace=no_url_namespace,
     )
 )
 
-navbar.append_item(
+navbar.register(
     NavbarItem(
         name="community_followup",
         title="Community",
         label="Community",
-        fa_icon="fa-solid fa-users-between-lines",
+        fa_icon="fa-users-between-lines",
         codename="edc_subject_dashboard.view_subject_listboard",
         url_name="followup_community_url",
         no_url_namespace=no_url_namespace,
     )
 )
 
-navbar.append_item(
+navbar.register(
     NavbarItem(
         name="facility_followup",
         title="Facility",
         label="Facility",
-        fa_icon="fa-solid fa-user-circle",
+        fa_icon="fa-user-circle",
         codename="edc_subject_dashboard.view_subject_listboard",
         url_name="followup_facility_url",
         no_url_namespace=no_url_namespace,
     )
 )
 
-navbar.append_item(review_navbar_item)
-navbar.append_item(tmg_navbar_item)
-navbar.append_item(ae_navbar_item)
-navbar.append_item(dm_navbar_item)
+navbar.register(review_navbar_item)
+navbar.register(tmg_navbar_item)
+navbar.register(ae_navbar_item)
+navbar.register(dm_navbar_item)
 
 site_navbars.register(navbar)
