@@ -31,7 +31,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">{{ protocol_name |default:project_name }} {{ site_title|default:request.site.name|title }}</div>
       <div class="list-group">
-        <a href="#" class="list-group-item disabled">Screen / Group</a>
+        <a href="#" class="list-group-item disabled">Screening and Grouping</a>
         <a id="logs_list_group_home" href="{% url 'screen_group_url' %}" class="list-group-item"><i class="fas fa-users fa-lg fa-fw" aria-hidden="true"></i> Patient Logs / Patient Groups</a>
         <a href="#" class="list-group-item disabled">Follow-up</a>
         <a id="followup_list_group_home" href="{% url 'subjects_home_url' %}" class="list-group-item"><i class="fas fa-user-circle fa-lg fa-fw" aria-hidden="true"></i> Subjects</a>

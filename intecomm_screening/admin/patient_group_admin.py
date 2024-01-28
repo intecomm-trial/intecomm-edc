@@ -277,8 +277,8 @@ class PatientGroupAdmin(
             else:
                 link = None
         else:
-            url = reverse("intecomm_group_admin:intecomm_group_patientgroup_changelist")
-            url = f"{url}?q={obj.name}"
+            url = reverse("intecomm_dashboard:subject_listboard_url")
+            url = f"{url}?q={obj.group_identifier}"
             link = format_html(
                 f'<a title="Go to patient groups in followup" href="{url}">{arm_as_str}</a>'
             )

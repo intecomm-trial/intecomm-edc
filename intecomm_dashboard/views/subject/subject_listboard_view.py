@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.db.models import Q
 from django.urls import reverse
@@ -13,9 +11,6 @@ from edc_sites import site_sites
 
 from intecomm_group.models import PatientGroup
 from intecomm_group.utils import get_assignment_for_patient_group
-
-if TYPE_CHECKING:
-    pass
 
 
 class SubjectListboardView(
@@ -34,6 +29,9 @@ class SubjectListboardView(
     listboard_view_permission_codename = "edc_subject_dashboard.view_subject_listboard"
     navbar_selected_item = "subjects"
     search_form_url = "subject_listboard_url"
+    ordering: str = "-subject_identifier"
+    show_change_form_button = False
+    paginate_by = 20
     search_fields = [
         "user_created",
         "user_modified",
