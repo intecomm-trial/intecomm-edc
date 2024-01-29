@@ -13,6 +13,8 @@ from edc_screening.screening_identifier import (
 from edc_vitals.model_mixins import BloodPressureModelMixin
 from intecomm_eligibility import ScreeningEligibility
 
+from intecomm_consent.consents import cdef_tz_v1
+
 from .patient_log import PatientLog
 from .proxy_models import Site
 
@@ -34,6 +36,7 @@ class SubjectScreening(
 ):
     identifier_cls = ScreeningIdentifier
     eligibility_cls = ScreeningEligibility
+    consent_definition = cdef_tz_v1
 
     # declare `site` explicitly as editable by user
     # (instead of using modelmixin)

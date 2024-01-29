@@ -46,7 +46,7 @@ from intecomm_screening.models import (
     PatientGroup,
     PatientGroupRando,
     PatientLog,
-    SubjectScreening,
+    SubjectScreeningTz,
     SubjectScreeningUg,
 )
 from intecomm_sites.sites import fqdn
@@ -146,6 +146,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         hospital_identifier: str | None = None,
         conditions: list[Conditions] | None = None,
         country: str | None = None,
+        site: int | None = None,
         **kwargs,
     ):
         opts = dict(
@@ -156,7 +157,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
             age_in_years=age_in_years or 20,
             hospital_identifier=hospital_identifier or uuid4().hex,
             contact_number="1234567890",
-            site=Site.objects.get(id=settings.SITE_ID),
+            site=site or Site.objects.get(id=settings.SITE_ID),
         )
         opts.update(**kwargs)
         if country == UGANDA:
@@ -178,7 +179,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         age_in_years: int | None = None,
         conditions: list[Conditions] | None = None,
         patient_log_options: dict | None = None,
-    ):
+    ) -> [SubjectScreeningTz, SubjectScreeningUg]:
         patient_log_opt = dict(
             gender=gender,
             age_in_years=age_in_years,
@@ -192,7 +193,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         if country == UGANDA:
             subject_screening_model_cls = SubjectScreeningUg
         else:
-            subject_screening_model_cls = SubjectScreening
+            subject_screening_model_cls = SubjectScreeningTz
         subject_screening = subject_screening_model_cls.objects.create(
             patient_log_identifier=patient_log.patient_log_identifier,
             user_created="erikvw",
@@ -201,7 +202,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         )
         screening_identifier = subject_screening.screening_identifier
 
-        subject_screening = SubjectScreening.objects.get(
+        subject_screening = subject_screening_model_cls.objects.get(
             screening_identifier=screening_identifier
         )
         patient_log.screening_identifier = screening_identifier
@@ -210,7 +211,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         if eligibility_datetime:
             subject_screening.eligibility_datetime = eligibility_datetime
             subject_screening.save()
-            subject_screening = SubjectScreening.objects.get(
+            subject_screening = subject_screening_model_cls.objects.get(
                 screening_identifier=screening_identifier
             )
         return subject_screening
@@ -223,7 +224,7 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         if country == UGANDA:
             model_name = "intecomm_consent.subjectconsentug"
         else:
-            model_name = "intecomm_consent.subjectconsent"
+            model_name = "intecomm_consent.subjectconsenttz"
 
         return baker.make_recipe(
             model_name,

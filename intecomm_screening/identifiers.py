@@ -1,5 +1,3 @@
-from typing import Type
-
 from django.core.exceptions import ObjectDoesNotExist
 from edc_identifier.identifier import Identifier
 from edc_identifier.simple_identifier import SimpleUniqueIdentifier
@@ -17,7 +15,7 @@ class FilingIdentifier(Identifier):
     separator = "-"
     prefix = "F"
 
-    def __init__(self, site_id: Type[int] = None, **kwargs):
+    def __init__(self, site_id: int = None, **kwargs):
         self.site_id = str(site_id)
         super().__init__(**kwargs)
 

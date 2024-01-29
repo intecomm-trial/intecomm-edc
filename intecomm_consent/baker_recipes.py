@@ -5,7 +5,7 @@ from edc_utils import get_utcnow
 from faker import Faker
 from model_bakery.recipe import Recipe, seq
 
-from .models import SubjectConsent, SubjectConsentUg, SubjectReconsent
+from .models import SubjectConsent, SubjectConsentTz, SubjectConsentUg
 
 fake = Faker()
 
@@ -35,15 +35,4 @@ consent_fields = dict(
 subjectconsent = Recipe(SubjectConsent, **consent_fields)
 
 subjectconsentug = Recipe(SubjectConsentUg, **consent_fields)
-
-subjectreconsent = Recipe(
-    SubjectReconsent,
-    site=Site.objects.get_current(),
-    consent_reviewed=YES,
-    assessment_score=YES,
-    study_questions=YES,
-    consent_copy=YES,
-    action_identifier=None,
-    user_created="erikvw",
-    user_modified="erikvw",
-)
+subjectconsenttz = Recipe(SubjectConsentTz, **consent_fields)

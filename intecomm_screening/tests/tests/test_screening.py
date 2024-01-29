@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.db import IntegrityError
-from django.test import TestCase, override_settings
+from django.test import TestCase, override_settings, tag
 from edc_constants.constants import (
     DM,
     FEMALE,
@@ -323,6 +323,7 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
         form.is_valid()
         self.assertNotIn("initials", form._errors)
 
+    @tag("1")
     @override_settings(SITE_ID=101)
     def test_conditions_matching_patient_log(self):
         patient_log = self.get_patient_log(
@@ -333,6 +334,7 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
             screening_refusal_reason=None,
             hospital_identifier="123456789",
             conditions=[DM],
+            site=Site.objects.get(id=settings.SITE_ID),
         )
         cleaned_data = dict(
             report_datetime=patient_log.report_datetime,
@@ -347,6 +349,7 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
             hiv_dx=NO,
             dm_dx=YES,
             htn_dx=YES,
+            site=Site.objects.get(id=settings.SITE_ID),
         )
         form = SubjectScreeningForm(data=cleaned_data, instance=SubjectScreening())
         form.is_valid()

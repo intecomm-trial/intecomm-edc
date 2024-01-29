@@ -5,6 +5,7 @@ from zoneinfo import ZoneInfo
 import time_machine
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.test import TestCase, override_settings
 from edc_appointment.constants import INCOMPLETE_APPT, ONTIME_APPT, SKIPPED_APPT
 from edc_appointment.models import Appointment, AppointmentType
@@ -83,6 +84,7 @@ class TestAppointmentCommunityArm(IntecommTestCaseMixin, TestCase):
             appt_timing=ONTIME_APPT,
             appt_type=AppointmentType.objects.get(name=COMMUNITY),
             appt_status=IN_PROGRESS_APPT,
+            site=Site.objects.get(id=settings.SITE_ID),
         )
 
     @time_machine.travel(dt.datetime(2019, 5, 11, 8, 00, tzinfo=utc_tz))
@@ -186,6 +188,7 @@ class TestAppointmentFacilityArm(IntecommTestCaseMixin, TestCase):
             appt_timing=ONTIME_APPT,
             appt_type=AppointmentType.objects.get(name=COMMUNITY),
             appt_status=IN_PROGRESS_APPT,
+            site=Site.objects.get(id=settings.SITE_ID),
         )
 
     @time_machine.travel(dt.datetime(2019, 5, 11, 8, 00, tzinfo=utc_tz))

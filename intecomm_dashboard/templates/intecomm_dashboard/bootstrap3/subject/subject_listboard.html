@@ -13,7 +13,7 @@
 {% block listboard_search_btn_group %}
   <a id="home_button" title="Home" class="btn btn-sm btn-primary" role="button" href="{% url 'subjects_home_url' %}"><i class="fa-solid fa-reply fa-1x fa-fw" aria-hidden="true"></i> Home</a>
   {% if patient_group %}
-    <a id="patient_group" title="Go to all patient logs for group {{ patient_group.name }}" class="btn btn-sm btn-default" role="button" href="{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist"  %}?q={{ result.group_identifier }}">Patient Logs</a>
+    <a id="patient_group" title="Go to all patient logs for group {{ patient_group.name }}" class="btn btn-sm btn-default" role="button" href="{% url "intecomm_screening_admin:intecomm_screening_patientlog_changelist"  %}?q={{ patient_group.group_identifier }}">Patient Logs</a>
     <a id="group_appointment" title="Back to group" class="btn btn-sm btn-default" role="button" disabled >Appointment</a>
     <a id="group_meeting" title="Back to group" class="btn btn-sm btn-default" role="button" disabled >Meeting</a>
   {% endif %}

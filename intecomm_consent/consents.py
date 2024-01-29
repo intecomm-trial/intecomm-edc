@@ -17,7 +17,7 @@ def opts() -> dict:
 
 
 cdef_tz_v1 = ConsentDefinition(
-    model="intecomm_consent.subjectconsent",
+    model="intecomm_consent.subjectconsenttz",
     country="tanzania",
     **opts(),
 )

@@ -1,9 +1,14 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from django.apps import apps as django_apps
 from django.contrib import admin
 from django_audit_fields import audit_fieldset_tuple
 from edc_model_admin.history import SimpleHistoryAdmin
+from edc_sites import site_sites
+
+from intecomm_screening.constants import UGANDA
 
 from ..admin_site import intecomm_consent_admin
 from ..forms import SubjectConsentUgForm
@@ -14,6 +19,11 @@ from .fieldsets import (
     get_review_questions_fieldset,
 )
 from .modeladmin_mixins import SubjectConsentModelAdminMixin
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
+
+__all__ = ["SubjectConsentUgAdmin"]
 
 
 @admin.register(SubjectConsentUg, site=intecomm_consent_admin)
@@ -45,3 +55,8 @@ class SubjectConsentUgAdmin(
     @property
     def subject_screening_model_cls(self):
         return django_apps.get_model("intecomm_screening.subjectscreeningug")
+
+    def get_queryset(self, request) -> QuerySet[SubjectConsentUg]:
+        queryset = super().get_queryset(request)
+        site_ids = [s.site_id for s in site_sites.get_by_country(UGANDA, aslist=True)]
+        return queryset.filter(site__in=site_ids)

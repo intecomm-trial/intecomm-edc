@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Dict
 
+from django.conf import settings
+from django.contrib.sites.models import Site
 from django.db import IntegrityError
 from django.test import TestCase
 from edc_constants.constants import FEMALE, MALE, NO, YES
@@ -63,6 +65,7 @@ class TestConsentRefusalForm(IntecommTestCaseMixin, TestCase):
             "report_datetime": get_utcnow(),
             "reason": refusal_reason,
             "other_reason": "",
+            "site": Site.objects.get(id=settings.SITE_ID),
         }
 
     def test_consent_refusal_ok2(self):

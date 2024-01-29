@@ -8,6 +8,7 @@ from .patient_call import PatientCall
 from .patient_log import PatientLog
 from .patient_log_ug import PatientLogUg
 from .subject_screening import SubjectScreening
+from .subject_screening_tz import SubjectScreeningTz
 from .subject_screening_ug import SubjectScreeningUg
 
 
@@ -42,6 +43,17 @@ def update_subjectscreening_post_delete(instance):
     dispatch_uid="update_subjectscreening_on_post_save",
 )
 def update_subjectscreening_on_post_save(sender, instance, raw, **kwargs):
+    if not raw:
+        update_subjectscreening(instance)
+
+
+@receiver(
+    post_save,
+    weak=False,
+    sender=SubjectScreeningTz,
+    dispatch_uid="update_subjectscreeningtz_on_post_save",
+)
+def update_subjectscreeningtz_on_post_save(sender, instance, raw, **kwargs):
     if not raw:
         update_subjectscreening(instance)
 
@@ -99,6 +111,19 @@ def subjectscreening_on_pre_delete(sender, instance, **kwargs):
 @receiver(
     pre_delete,
     weak=False,
+    sender=SubjectScreeningTz,
+    dispatch_uid="subjectscreeningtz_on_pre_delete",
+)
+def subjectscreeningtz_on_pre_delete(sender, instance, **kwargs):
+    if instance.consented:
+        raise SubjectScreeningDeleteError(
+            f"Not allowed. Subject is consented. Got {instance.screening_identifier}."
+        )
+
+
+@receiver(
+    pre_delete,
+    weak=False,
     sender=SubjectScreeningUg,
     dispatch_uid="subjectscreeningug_on_pre_delete",
 )
@@ -116,6 +141,16 @@ def subjectscreeningug_on_pre_delete(sender, instance, **kwargs):
     dispatch_uid="update_subjectscreening_on_post_delete",
 )
 def update_subjectscreening_on_post_delete(sender, instance, **kwargs):
+    update_subjectscreening_post_delete(instance)
+
+
+@receiver(
+    post_delete,
+    weak=False,
+    sender=SubjectScreeningTz,
+    dispatch_uid="update_subjectscreeningtz_on_post_delete",
+)
+def update_subjectscreeningtz_on_post_delete(sender, instance, **kwargs):
     update_subjectscreening_post_delete(instance)
 
 

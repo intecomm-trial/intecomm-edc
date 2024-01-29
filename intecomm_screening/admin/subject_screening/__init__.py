@@ -1,2 +1,3 @@
 from .subject_screening_admin import SubjectScreeningAdmin
+from .subject_screening_tz_admin import SubjectScreeningTzAdmin
 from .subject_screening_ug_admin import SubjectScreeningUgAdmin

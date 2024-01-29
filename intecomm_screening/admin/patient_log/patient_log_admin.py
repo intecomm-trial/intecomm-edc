@@ -63,8 +63,8 @@ class PatientLogAdmin(
 
     @property
     def subject_screening_model_cls(self):
-        return django_apps.get_model("intecomm_screening.subjectscreening")
+        return django_apps.get_model("intecomm_screening.subjectscreeningtz")
 
     @property
     def subject_consent_model_cls(self):
-        return django_apps.get_model("intecomm_consent.subjectconsent")
+        return django_apps.get_model("intecomm_consent.subjectconsenttz")

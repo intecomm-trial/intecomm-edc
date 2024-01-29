@@ -34,12 +34,13 @@ class TestAddToCommunityArmGroup(IntecommTestCaseMixin, TestCase):
     patient_group = None
     import_randomization_list = False
     sid_count_for_tests = 2
-    report_datetime = get_utcnow() - relativedelta(days=10)
+    report_datetime: dt.datetime = None
     patient_group_name = "BRANDX"
 
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
+        cls.report_datetime = get_utcnow() - relativedelta(days=10)
         site_randomizers._registry = {}
         Randomizer.randomizationlist_folder = settings.EDC_RANDOMIZATION_LIST_PATH
         site_randomizers.register(Randomizer)
