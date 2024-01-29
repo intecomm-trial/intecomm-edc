@@ -1,8 +1,12 @@
+from __future__ import annotations
+
 import datetime as dt
 from zoneinfo import ZoneInfo
 
 import time_machine
 from dateutil.relativedelta import relativedelta
+from django.conf import settings
+from django.contrib.sites.models import Site
 from django.core.management import call_command
 from django.test import TestCase
 from edc_constants.constants import COMPLETE, DM, HTN, MALE, NO, NOT_APPLICABLE, YES
@@ -78,6 +82,7 @@ class TestHe(IntecommTestCaseMixin, TestCase):
                 hoh_employment_type=get_obj(EmploymentType, NOT_APPLICABLE),
                 hoh_insurance=get_m2m_qs(InsuranceTypes, NOT_APPLICABLE),
                 crf_status=COMPLETE,
+                site=Site.objects.get(id=settings.SITE_ID),
             )
         else:
             opts = dict(
@@ -90,6 +95,7 @@ class TestHe(IntecommTestCaseMixin, TestCase):
                 hoh_employment_type=get_obj(EmploymentType),
                 hoh_insurance=get_m2m_qs(InsuranceTypes),
                 crf_status=COMPLETE,
+                site=Site.objects.get(id=settings.SITE_ID),
             )
         return opts
 
@@ -391,6 +397,7 @@ class TestHe(IntecommTestCaseMixin, TestCase):
             pat_marital_status="1",
             pat_insurance=get_m2m_qs(InsuranceTypes),
             crf_status=COMPLETE,
+            site=Site.objects.get(id=settings.SITE_ID),
         )
         form = HealthEconomicsPatientForm(data=cleaned_data)
         form.is_valid()

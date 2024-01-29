@@ -6,10 +6,9 @@ from edc_test_utils.get_user_for_tests import get_user_for_tests
 
 from intecomm_dashboard.views import (
     AeListboardView,
-    CommunitySubjectListboardView,
     DeathReportListboardView,
-    FacilitySubjectListboardView,
     ScreenGroupListboardView,
+    SubjectListboardView,
 )
 from intecomm_subject.models import DrugSupplyDm, DrugSupplyHiv, DrugSupplyHtn
 from intecomm_subject.models import HealthEconomics as OldHealthEconomics
@@ -55,15 +54,10 @@ class TestViews(WebTest):
         response = self.app.get(url, user=self.user, status=200)
         self.assertIn(AeListboardView.listboard_panel_title, response.text)
 
-        url_name = url_names.get(CommunitySubjectListboardView.listboard_url)
+        url_name = url_names.get(SubjectListboardView.listboard_url)
         url = reverse(url_name)
         response = self.app.get(url, user=self.user, status=200)
-        self.assertIn(CommunitySubjectListboardView.listboard_panel_title, response.text)
-
-        url_name = url_names.get(FacilitySubjectListboardView.listboard_url)
-        url = reverse(url_name)
-        response = self.app.get(url, user=self.user, status=200)
-        self.assertIn(FacilitySubjectListboardView.listboard_panel_title, response.text)
+        self.assertIn(SubjectListboardView.listboard_panel_title, response.text)
 
         url_name = url_names.get(DeathReportListboardView.listboard_url)
         url = reverse(url_name)

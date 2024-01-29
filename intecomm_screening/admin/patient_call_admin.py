@@ -6,9 +6,9 @@ from django.urls import reverse
 from django.utils.html import format_html
 from edc_model_admin.mixins import ModelAdminLimitToSelectedForeignkey
 from edc_sites.admin import SiteModelAdminMixin
+from intecomm_rando.constants import UGANDA
 
 from ..admin_site import intecomm_screening_admin
-from ..constants import UGANDA
 from ..forms import PatientCallForm
 from ..models import PatientCall, PatientLog
 from .list_filters import LastApptListFilter, NextApptListFilter

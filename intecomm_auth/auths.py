@@ -1,7 +1,7 @@
 from edc_action_item.auth_objects import ACTION_ITEM, ACTION_ITEM_EXPORT
 from edc_adverse_event.constants import TMG_ROLE
 from edc_appointment.auth_objects import APPOINTMENT_EXPORT
-from edc_auth.auth_objects import (
+from edc_auth.constants import (
     AUDITOR,
     AUDITOR_ROLE,
     CLINIC,
@@ -12,7 +12,7 @@ from edc_auth.auth_objects import (
 from edc_auth.site_auths import site_auths
 from edc_data_manager.auth_objects import DATA_MANAGER_EXPORT, DATA_MANAGER_ROLE
 from edc_data_manager.auth_objects import data_manager as data_manager_codenames
-from edc_export.auth_objects import DATA_EXPORTER_ROLE
+from edc_export.constants import DATA_EXPORTER_ROLE
 from edc_facility.auth_objects import (
     EDC_FACILITY,
     EDC_FACILITY_SUPER,

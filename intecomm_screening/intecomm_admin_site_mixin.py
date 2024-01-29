@@ -1,8 +1,7 @@
 from copy import deepcopy
 
 from edc_sites.site import sites
-
-from intecomm_screening.constants import UGANDA
+from intecomm_rando.constants import UGANDA
 
 
 class IntecommAdminSiteMixin:

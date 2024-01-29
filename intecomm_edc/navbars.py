@@ -11,29 +11,33 @@ from intecomm_dashboard.navbars import navbar as intecomm_dashboard_navbar
 
 navbar = Navbar(name=settings.APP_NAME)
 
-navbar_item = copy([item for item in lab_navbar.items if item.name == "specimens"][0])
+navbar_item = copy([item for item in lab_navbar.navbar_items if item.name == "specimens"][0])
 navbar_item.active = False
 navbar_item.label = "Specimens"
-navbar.append_item(navbar_item)
+navbar.register(navbar_item)
 
-navbar.append_item(
-    [item for item in intecomm_dashboard_navbar.items if item.name == "screen_group"][0]
+navbar.register(
+    [item for item in intecomm_dashboard_navbar.navbar_items if item.name == "screen_group"][0]
 )
 
-navbar.append_item(
-    [item for item in intecomm_dashboard_navbar.items if item.name == "community_followup"][0]
+# navbar.register(
+#     [
+#         item
+#         for item in intecomm_dashboard_navbar.navbar_items
+#         if item.name == "community_followup"
+#     ][0]
+# )
+
+navbar.register(
+    [item for item in intecomm_dashboard_navbar.navbar_items if item.name == "subjects"][0]
 )
 
-navbar.append_item(
-    [item for item in intecomm_dashboard_navbar.items if item.name == "facility_followup"][0]
-)
+for navbar_item in review_navbar.navbar_items:
+    navbar.register(navbar_item)
 
-for item in review_navbar.items:
-    navbar.append_item(item)
-
-navbar.append_item(tmg_navbar_item)
-navbar.append_item(ae_navbar_item)
-navbar.append_item(dm_navbar_item)
+navbar.register(tmg_navbar_item)
+navbar.register(ae_navbar_item)
+navbar.register(dm_navbar_item)
 
 
 site_navbars.register(navbar)

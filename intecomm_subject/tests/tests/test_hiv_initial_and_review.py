@@ -93,7 +93,7 @@ class TestInitialAndReview(IntecommTestCaseMixin, TestCase):
         self.assertIn(ClinicalReview._meta.verbose_name, str(form._errors.get("__all__")))
 
         # submit clinical review
-        baker.make_recipe(
+        clinicalreview_obj = baker.make_recipe(
             "intecomm_subject.clinicalreview",
             subject_visit=subject_visit,
             report_datetime=subject_visit.report_datetime,
@@ -106,6 +106,7 @@ class TestInitialAndReview(IntecommTestCaseMixin, TestCase):
             report_datetime=subject_visit.report_datetime,
             rx_init=YES,
             rx_init_date=subject_visit.report_datetime - relativedelta(years=5),
+            site=clinicalreview_obj.site,
         )
         form = HivReviewForm(data=cleaned_data)
 
@@ -119,6 +120,7 @@ class TestInitialAndReview(IntecommTestCaseMixin, TestCase):
             report_datetime=subject_visit.report_datetime,
             rx_init=NOT_APPLICABLE,
             rx_init_date=None,
+            site=clinicalreview_obj.site,
         )
         form = HivReviewForm(data=cleaned_data)
 

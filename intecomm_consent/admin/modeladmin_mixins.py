@@ -19,7 +19,7 @@ from intecomm_screening.admin.modeladmin_mixins import (
 )
 
 if TYPE_CHECKING:
-    from intecomm_screening.models import SubjectScreening, SubjectScreeningUg
+    from intecomm_screening.models import SubjectScreeningTz, SubjectScreeningUg
 
 
 class SubjectConsentModelAdminMixin(
@@ -55,7 +55,7 @@ class SubjectConsentModelAdminMixin(
     }
 
     @property
-    def subject_screening_model_cls(self) -> Type[SubjectScreening, SubjectScreeningUg]:
+    def subject_screening_model_cls(self) -> Type[SubjectScreeningTz, SubjectScreeningUg]:
         pass
 
     def formfield_for_choice_field(self, db_field, request, **kwargs):

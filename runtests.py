@@ -56,7 +56,7 @@ project_settings = DefaultTestSettings(
     EDC_NAVBAR_DEFAULT="intecomm_dashboard",
     EDC_PROTOCOL_STUDY_OPEN_DATETIME=datetime(2019, 4, 30, 0, 0, 0, tzinfo=ZoneInfo("UTC")),
     EDC_PROTOCOL_STUDY_CLOSE_DATETIME=datetime(
-        2023, 12, 31, 23, 59, 59, tzinfo=ZoneInfo("UTC")
+        2025, 12, 31, 23, 59, 59, tzinfo=ZoneInfo("UTC")
     ),
     DJANGO_LANGUAGES=dict(
         en="English",
@@ -70,11 +70,8 @@ project_settings = DefaultTestSettings(
         listboard_base_template="intecomm_edc/base.html",
         dashboard_base_template="intecomm_edc/base.html",
         screening_listboard_template="intecomm_dashboard/screening/listboard.html",
-        community_subject_listboard_template=(
-            "intecomm_dashboard/bootstrap3/subject/community_listboard.html"
-        ),
-        facility_subject_listboard_template=(
-            "intecomm_dashboard/bootstrap3/subject/facility_listboard.html"
+        subject_listboard_template=(
+            "intecomm_dashboard/bootstrap3/subject/subject_listboard.html"
         ),
         subject_dashboard_template="intecomm_dashboard/subject/dashboard.html",
         subject_review_listboard_template="edc_review_dashboard/subject_review_listboard.html",
@@ -86,6 +83,7 @@ project_settings = DefaultTestSettings(
         "data_request": "someone@example.com",
         "data_manager": "someone@example.com",
         "tmg": "someone@example.com",
+        "ae_reports": "aereports@example.com",
     },
     EMAIL_ENABLED=True,
     HOLIDAY_FILE=str(base_dir / "intecomm_edc" / "tests" / "holidays.csv"),
@@ -180,6 +178,7 @@ project_settings = DefaultTestSettings(
         "intecomm_screening.apps.AppConfig",
         "intecomm_sites.apps.AppConfig",
         "intecomm_edc.apps.AppConfig",
+        "edc_appconfig.apps.AppConfig",
     ],
     add_dashboard_middleware=True,
     add_lab_dashboard_middleware=True,

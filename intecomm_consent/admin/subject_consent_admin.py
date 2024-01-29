@@ -15,6 +15,8 @@ from .fieldsets import (
 )
 from .modeladmin_mixins import SubjectConsentModelAdminMixin
 
+__all__ = ["SubjectConsentAdmin"]
+
 
 @admin.register(SubjectConsent, site=intecomm_consent_admin)
 class SubjectConsentAdmin(SubjectConsentModelAdminMixin, SimpleHistoryAdmin):

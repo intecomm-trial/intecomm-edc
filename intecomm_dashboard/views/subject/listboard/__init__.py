@@ -1,2 +1,0 @@
-from .community_listboard_view import CommunitySubjectListboardView
-from .facility_listboard_view import FacilitySubjectListboardView

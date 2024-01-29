@@ -3,20 +3,35 @@ from __future__ import annotations
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.db.models import Q
 from django.urls import reverse
-from edc_listboard.views import SubjectListboardView
-from edc_sites.site import sites
-from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
+from edc_dashboard.view_mixins import EdcViewMixin
+from edc_listboard.view_mixins import ListboardFilterViewMixin, SearchFormViewMixin
+from edc_listboard.views import ListboardView as BaseListboardView
+from edc_navbar import NavbarViewMixin
+from edc_sites import site_sites
 
 from intecomm_group.models import PatientGroup
 from intecomm_group.utils import get_assignment_for_patient_group
 
 
-class BaseSubjectListboardView(SubjectListboardView):
+class SubjectListboardView(
+    EdcViewMixin,
+    NavbarViewMixin,
+    ListboardFilterViewMixin,
+    SearchFormViewMixin,
+    BaseListboardView,
+):
+    listboard_template = "subject_listboard_template"
+    listboard_url = "subject_listboard_url"
+    listboard_panel_style = "success"
+    listboard_panel_title = "Subjects in randomized groups"
+    listboard_fa_icon = "far fa-user-circle"
     listboard_model = "intecomm_screening.patientlog"
-    assignment: str = None
-    followup_url: str = None
-    show_change_form_button: bool = False
-
+    listboard_view_permission_codename = "edc_subject_dashboard.view_subject_listboard"
+    navbar_selected_item = "subjects"
+    search_form_url = "subject_listboard_url"
+    ordering: str = "-subject_identifier"
+    show_change_form_button = False
+    paginate_by = 20
     search_fields = [
         "user_created",
         "user_modified",
@@ -36,23 +51,22 @@ class BaseSubjectListboardView(SubjectListboardView):
 
     def get_context_data(self, **kwargs) -> dict:
         kwargs.update(
-            followup_url=reverse(self.followup_url),
             patient_group_url=self.get_patient_group_url(**kwargs),
             patient_group_appointment_url=self.get_patient_group_appointment_url(**kwargs),
             patient_group_meeting_url=self.get_patient_group_meeting_url(**kwargs),
             patient_group=self.patient_group,
-            arm=self.arm,
-            COMMUNITY_ARM=COMMUNITY_ARM,
-            FACILITY_ARM=FACILITY_ARM,
+            # arm=self.arm,
             site=getattr(self.request, "site", None),
-            country=sites.get_current_country(self.request),
+            country=site_sites.get_current_country(self.request),
         )
         return super().get_context_data(**kwargs)
 
     def get_queryset_filter_options(self, request, *args, **kwargs) -> tuple[Q, dict]:
-        q_options, options = super().get_queryset_filter_options(request, *args, **kwargs)
+        q_object, options = super().get_queryset_filter_options(request, *args, **kwargs)
         options.update(subject_identifier__startswith="107-", group_identifier__isnull=False)
-        return q_options, options
+        if kwargs.get("subject_identifier"):
+            options.update({"subject_identifier": kwargs.get("subject_identifier")})
+        return q_object, options
 
     @property
     def patient_group(self) -> PatientGroup:

@@ -7,11 +7,11 @@ from django.contrib import admin
 from django_audit_fields import audit_fieldset_tuple
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_sites import site_sites
-from intecomm_rando.constants import UGANDA
+from intecomm_rando.constants import TANZANIA
 
 from ..admin_site import intecomm_consent_admin
-from ..forms import SubjectConsentUgForm
-from ..models import SubjectConsentUg
+from ..forms import SubjectConsentForm
+from ..models import SubjectConsentTz
 from .fieldsets import (
     get_first_fieldset,
     get_group_fieldset,
@@ -22,23 +22,19 @@ from .modeladmin_mixins import SubjectConsentModelAdminMixin
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 
-__all__ = ["SubjectConsentUgAdmin"]
+
+__all__ = ["SubjectConsentTzAdmin"]
 
 
-@admin.register(SubjectConsentUg, site=intecomm_consent_admin)
-class SubjectConsentUgAdmin(
+@admin.register(SubjectConsentTz, site=intecomm_consent_admin)
+class SubjectConsentTzAdmin(
     SubjectConsentModelAdminMixin,
     SimpleHistoryAdmin,
 ):
-    form = SubjectConsentUgForm
-
-    # ModelAdminRedirectAllToChangelistMixin
-    changelist_url = "intecomm_screening_admin:intecomm_screening_patientlogug_changelist"
-    change_search_field_name = "screening_identifier"
-    add_search_field_name = "screening_identifier"
+    form = SubjectConsentForm
 
     fieldsets = (
-        get_first_fieldset(include_pii=False),
+        get_first_fieldset(include_pii=True),
         get_review_questions_fieldset(),
         get_group_fieldset(),
         audit_fieldset_tuple,
@@ -49,13 +45,15 @@ class SubjectConsentUgAdmin(
         "screening_identifier",
         "identity__exact",
         "initials__exact",
+        "legal_name__exact",
+        "familiar_name__exact",
     )
 
     @property
     def subject_screening_model_cls(self):
-        return django_apps.get_model("intecomm_screening.subjectscreeningug")
+        return django_apps.get_model("intecomm_screening.subjectscreening")
 
-    def get_queryset(self, request) -> QuerySet[SubjectConsentUg]:
+    def get_queryset(self, request) -> QuerySet[SubjectConsentTz]:
         queryset = super().get_queryset(request)
-        site_ids = [s.site_id for s in site_sites.get_by_country(UGANDA, aslist=True)]
+        site_ids = [s.site_id for s in site_sites.get_by_country(TANZANIA, aslist=True)]
         return queryset.filter(site__in=site_ids)

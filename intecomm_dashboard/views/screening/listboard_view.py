@@ -6,8 +6,7 @@ from edc_listboard.filters import ListboardFilter
 from edc_listboard.filters import ListboardViewFilters as Base
 from edc_listboard.views import ScreeningListboardView
 from edc_sites.site import sites
-
-from intecomm_screening.constants import UGANDA
+from intecomm_rando.constants import UGANDA
 
 
 class ListboardViewFilters(Base):

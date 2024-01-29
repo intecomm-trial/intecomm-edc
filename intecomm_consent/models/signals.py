@@ -2,9 +2,14 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from edc_registration.models import RegisteredSubject
 
-from intecomm_screening.models import SubjectScreening, SubjectScreeningUg
+from intecomm_screening.models import (
+    SubjectScreening,
+    SubjectScreeningTz,
+    SubjectScreeningUg,
+)
 
 from .subject_consent import SubjectConsent
+from .subject_consent_tz import SubjectConsentTz
 from .subject_consent_ug import SubjectConsentUg
 
 
@@ -48,6 +53,18 @@ def update_subjectconsent_on_post_save(sender, instance, raw, created, **kwargs)
     if not raw:
         if created:
             update_subjectconsent(instance, subject_screening_model_cls=SubjectScreening)
+
+
+@receiver(
+    post_save,
+    weak=False,
+    sender=SubjectConsentTz,
+    dispatch_uid="update_subjectconsenttz_on_post_save",
+)
+def update_subjectconsenttz_on_post_save(sender, instance, raw, created, **kwargs):
+    if not raw:
+        if created:
+            update_subjectconsent(instance, subject_screening_model_cls=SubjectScreeningTz)
 
 
 @receiver(

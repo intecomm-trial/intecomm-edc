@@ -266,7 +266,7 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
             if not self.filing_identifier or re.match(
                 UUID_PATTERN, str(self.filing_identifier)
             ):
-                self.filing_identifier = FilingIdentifier(site_id=self.site_id).identifier
+                self.filing_identifier = FilingIdentifier(site_id=self.site.id).identifier
             if not self.patient_log_identifier or re.match(
                 UUID_PATTERN, str(self.patient_log_identifier)
             ):

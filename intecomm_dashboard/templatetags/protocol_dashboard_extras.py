@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from bs4 import BeautifulSoup
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
@@ -7,10 +11,14 @@ from edc_dashboard.url_names import url_names
 from edc_dashboard.utils import get_bootstrap_version
 from edc_screening.constants import ELIGIBLE, NOT_ELIGIBLE
 from edc_sites.site import sites
+from intecomm_rando.constants import UGANDA
 
-from intecomm_screening.constants import UGANDA
 from intecomm_screening.models import PatientLog
 from intecomm_screening.utils import get_consent_refusal_url, get_subject_consent_url
+
+if TYPE_CHECKING:
+    pass
+
 
 register = template.Library()
 

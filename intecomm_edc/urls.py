@@ -7,7 +7,7 @@ from edc_dashboard.utils import get_index_page
 from edc_dashboard.views import AdministrationView
 from edc_utils.paths_for_urlpatterns import paths_for_urlpatterns
 
-from .views import FollowupCommunityView, FollowupFacilityView, GroupingView, HomeView
+from .views import GroupingView, HomeView, SubjectsHomeView
 
 handler403 = "edc_dashboard.views.edc_handler403"
 handler404 = "edc_dashboard.views.edc_handler404"
@@ -80,10 +80,7 @@ urlpatterns += [
         name="switch_sites_url",
     ),
     path("grouping/", GroupingView.as_view(), name="screen_group_url"),
-    path(
-        "followup_community/", FollowupCommunityView.as_view(), name="followup_community_url"
-    ),
-    path("followup_facility/", FollowupFacilityView.as_view(), name="followup_facility_url"),
+    path("subjects/", SubjectsHomeView.as_view(), name="subjects_home_url"),
     path("home/", HomeView.as_view(), name="home_url"),
     path("i18n/", include("django.conf.urls.i18n")),
     re_path(".", RedirectView.as_view(url="/"), name="home_url"),

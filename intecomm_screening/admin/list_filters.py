@@ -5,7 +5,7 @@ from django.db.models import Q, QuerySet
 from django.utils.translation import gettext_lazy as _
 from edc_constants.constants import DM, HIV, HTN, NCD, NO, TBD, YES
 from edc_model_admin.list_filters import FutureDateListFilter, PastDateListFilter
-from edc_protocol import Protocol
+from edc_protocol.research_protocol_config import ResearchProtocolConfig
 
 HIV_ONLY = "HIV_ONLY"
 NCD_ONLY = "NCD_ONLY"
@@ -107,17 +107,16 @@ class ConsentedListFilter(SimpleListFilter):
 
     def queryset(self, request, queryset) -> QuerySet | None:
         qs = None
+        number = ResearchProtocolConfig().protocol_number
         if self.value() == YES:
             qs = queryset.filter(
                 subjectscreening__subject_identifier__isnull=False,
-                subjectscreening__subject_identifier__startswith=Protocol().protocol_number,
+                subjectscreening__subject_identifier__startswith=number,
             )
         if self.value() == NO:
             qs = queryset.filter(
                 Q(subjectscreening__subject_identifier__isnull=False)
-                & ~Q(
-                    subjectscreening__subject_identifier__startswith=Protocol().protocol_number
-                ),
+                & ~Q(subjectscreening__subject_identifier__startswith=number),
             )
         return qs
 
