@@ -9,10 +9,10 @@ from edc_screening.utils import (
 )
 from edc_sites.modelform_mixins import SiteModelFormMixin
 from intecomm_form_validators import ConsentRefusalFormValidator
+from intecomm_rando.constants import UGANDA
 
 from intecomm_consent.utils import raise_if_subject_consent_exists
 
-from ..constants import UGANDA
 from ..models import ConsentRefusal
 
 

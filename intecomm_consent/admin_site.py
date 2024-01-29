@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from edc_model_admin.admin_site import EdcAdminSite
 from edc_sites.site import sites
+from intecomm_rando.constants import UGANDA
 
-from intecomm_screening.constants import UGANDA
 from intecomm_screening.intecomm_admin_site_mixin import IntecommAdminSiteMixin
 
 from .apps import AppConfig

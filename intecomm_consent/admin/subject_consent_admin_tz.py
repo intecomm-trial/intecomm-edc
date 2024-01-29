@@ -7,8 +7,7 @@ from django.contrib import admin
 from django_audit_fields import audit_fieldset_tuple
 from edc_model_admin.history import SimpleHistoryAdmin
 from edc_sites import site_sites
-
-from intecomm_screening.constants import TANZANIA
+from intecomm_rando.constants import TANZANIA
 
 from ..admin_site import intecomm_consent_admin
 from ..forms import SubjectConsentForm

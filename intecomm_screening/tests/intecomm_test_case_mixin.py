@@ -35,12 +35,12 @@ from edc_utils import get_utcnow
 from edc_visit_schedule.constants import DAY1
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
+from intecomm_rando.constants import UGANDA
 from model_bakery import baker
 from model_bakery.baker import make_recipe
 from tqdm import tqdm
 
 from intecomm_lists.models import Conditions
-from intecomm_screening.constants import UGANDA
 from intecomm_screening.models import (
     ConsentRefusal,
     PatientGroup,

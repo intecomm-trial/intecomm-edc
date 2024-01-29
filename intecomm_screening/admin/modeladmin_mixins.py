@@ -20,8 +20,7 @@ from edc_model_admin.mixins import (
 )
 from edc_notification.modeladmin_mixins import NotificationModelAdminMixin
 from edc_sites.site import sites
-
-from ..constants import UGANDA
+from intecomm_rando.constants import UGANDA
 
 if TYPE_CHECKING:
     from ..models import PatientLog, SubjectScreening

@@ -5,9 +5,9 @@ from django.db.models import QuerySet
 from django_audit_fields import audit_fieldset_tuple
 from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
 from edc_sites import site_sites
+from intecomm_rando.constants import TANZANIA
 
 from ...admin_site import intecomm_screening_admin
-from ...constants import TANZANIA
 from ...forms import SubjectScreeningForm
 from ...models import PatientLog, SubjectScreeningTz
 from ..modeladmin_mixins import BaseModelAdminMixin

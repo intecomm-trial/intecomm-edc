@@ -11,8 +11,8 @@ from edc_dashboard.url_names import url_names
 from edc_dashboard.utils import get_bootstrap_version
 from edc_screening.constants import ELIGIBLE, NOT_ELIGIBLE
 from edc_sites.site import sites
+from intecomm_rando.constants import UGANDA
 
-from intecomm_screening.constants import UGANDA
 from intecomm_screening.models import PatientLog
 from intecomm_screening.utils import get_consent_refusal_url, get_subject_consent_url
 

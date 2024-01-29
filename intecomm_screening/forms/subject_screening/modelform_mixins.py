@@ -10,8 +10,8 @@ from edc_constants.constants import DM, HIV, HTN, NO, TBD, YES
 from edc_dashboard import url_names
 from edc_form_validators import INVALID_ERROR
 from intecomm_form_validators import SubjectScreeningFormValidator
+from intecomm_rando.constants import UGANDA
 
-from ...constants import UGANDA
 from ...models import PatientLog, PatientLogUg
 
 

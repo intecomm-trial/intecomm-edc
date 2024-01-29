@@ -15,6 +15,7 @@ from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
 from edc_sites.admin import SiteModelAdminMixin
 from edc_utils.round_up import round_up
 from intecomm_form_validators.utils import get_group_size_for_ratio
+from intecomm_rando.constants import UGANDA
 
 from intecomm_group.exceptions import PatientGroupNotRandomized
 from intecomm_group.utils import (
@@ -23,7 +24,6 @@ from intecomm_group.utils import (
 )
 
 from ..admin_site import intecomm_screening_admin
-from ..constants import UGANDA
 from ..forms import PatientGroupForm
 from ..models import PatientGroup
 from .modeladmin_mixins import BaseModelAdminMixin, ChangeListTopBarModelAdminMixin

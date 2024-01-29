@@ -6,11 +6,11 @@ from django.contrib import admin
 from django_audit_fields import audit_fieldset_tuple
 from edc_model_admin.mixins import ModelAdminRedirectAllToChangelistMixin
 from edc_sites import site_sites
+from intecomm_rando.constants import UGANDA
 
 from intecomm_consent.models import SubjectConsentUg
 
 from ...admin_site import intecomm_screening_admin
-from ...constants import UGANDA
 from ...forms import SubjectScreeningUgForm
 from ...models import PatientLogUg, SubjectScreeningUg
 from ..modeladmin_mixins import BaseModelAdminMixin

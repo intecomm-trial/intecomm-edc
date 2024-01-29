@@ -6,10 +6,10 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from edc_sites.site import sites
 from edc_subject_dashboard.views import SubjectDashboardView as BaseSubjectDashboardView
+from intecomm_rando.constants import UGANDA
 
 from intecomm_group.models import PatientGroup
 from intecomm_group.utils import get_group_subject_dashboards_url
-from intecomm_screening.constants import UGANDA
 from intecomm_screening.models import PatientLog, PatientLogUg
 
 
