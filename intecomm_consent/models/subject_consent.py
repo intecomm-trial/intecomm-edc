@@ -87,9 +87,9 @@ class SubjectConsent(
         max_length=10, default=NO, choices=YES_NO, editable=False
     )
 
-    on_site = CurrentSiteManager()
-
     objects = SubjectConsentManager()
+
+    on_site = CurrentSiteManager()
 
     consent = ConsentManager()
 

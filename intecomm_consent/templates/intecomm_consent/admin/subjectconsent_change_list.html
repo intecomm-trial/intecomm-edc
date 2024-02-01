@@ -41,13 +41,15 @@
     </a>
   </li>
   <li>
-    <a href="{% url "intecomm_screening_admin:intecomm_screening_healthfacility_changelist" %}" class="changelink">
+    <a href="{% url "intecomm_facility_admin:intecomm_facility_healthfacility_changelist" %}" class="changelink">
       Facilities
     </a>
   </li>
   <li>
-    <a href="{% url "intecomm_consent_admin:intecomm_consent_subjectconsent_add" %}" class="addlink" style="background-color: darkorange;">
-      Add
-    </a>
-  </li>
+  {% if request|country == "uganda" %}
+    <a href="{% url "intecomm_consent_admin:intecomm_consent_subjectconsentug_add" %}" class="addlink" style="background-color: darkorange;">Add</a>
+  {% else %}
+    <a href="{% url "intecomm_consent_admin:intecomm_consent_subjectconsenttz_add" %}" class="addlink" style="background-color: darkorange;">Add</a>
+  {% endif %}
+</li>
 {% endblock %}
