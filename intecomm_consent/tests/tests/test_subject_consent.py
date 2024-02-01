@@ -5,12 +5,12 @@ from typing import Dict
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.db import IntegrityError
-from django.test import TestCase, override_settings
+from django.test import TestCase, override_settings, tag
 from edc_consent.constants import HOSPITAL_NUMBER
 from edc_constants.constants import NO, NOT_APPLICABLE, YES
 
-from intecomm_consent.forms import SubjectConsentForm, SubjectConsentUgForm
-from intecomm_consent.models import SubjectConsent, SubjectConsentUg
+from intecomm_consent.forms import SubjectConsentTzForm, SubjectConsentUgForm
+from intecomm_consent.models import SubjectConsentTz, SubjectConsentUg
 from intecomm_lists.models import ScreeningRefusalReasons
 from intecomm_screening.models import ConsentRefusal, Site, SubjectScreening
 from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin, now
@@ -98,15 +98,15 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
     @override_settings(SITE_ID=201)
     def test_consent_ok(self):
         subject_screening = self.get_subject_screening()
-        consent_form = SubjectConsentForm(
+        consent_form = SubjectConsentTzForm(
             data=self.get_consent_data(subject_screening=subject_screening),
             initial={"screening_identifier": subject_screening.screening_identifier},
-            instance=SubjectConsent(),
+            instance=SubjectConsentTz(),
         )
         consent_form.is_valid()
         self.assertEqual(consent_form._errors, {})
         consent_form.save()
-        self.assertEqual(SubjectConsent.objects.all().count(), 1)
+        self.assertEqual(SubjectConsentTz.objects.all().count(), 1)
 
     @override_settings(SITE_ID=101)
     def test_consent_ug_ok(self):
@@ -121,23 +121,24 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
         consent_form.save()
         self.assertEqual(SubjectConsentUg.objects.all().count(), 1)
 
+    @tag("1")
     @override_settings(SITE_ID=201)
     def test_consent_after_already_consented_raises(self):
         subject_screening = self.get_subject_screening()
-        consent_form = SubjectConsentForm(
+        consent_form = SubjectConsentTzForm(
             data=self.get_consent_data(subject_screening=subject_screening),
             initial={"screening_identifier": subject_screening.screening_identifier},
-            instance=SubjectConsent(),
+            instance=SubjectConsentTz(),
         )
         consent_form.is_valid()
         self.assertEqual(consent_form._errors, {})
         consent_form.save()
-        self.assertEqual(SubjectConsent.objects.all().count(), 1)
+        self.assertEqual(SubjectConsentTz.objects.all().count(), 1)
 
-        consent_form_two = SubjectConsentForm(
+        consent_form_two = SubjectConsentTzForm(
             data=self.get_consent_data(subject_screening=subject_screening),
             initial={"screening_identifier": subject_screening.screening_identifier},
-            instance=SubjectConsent(),
+            instance=SubjectConsentTz(),
         )
         consent_form_two.is_valid()
         self.assertNotEqual(consent_form_two._errors, {})
@@ -148,17 +149,18 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
         )
         with self.assertRaises(ValueError):
             consent_form_two.save()
-        self.assertEqual(SubjectConsent.objects.all().count(), 1)
+        self.assertEqual(SubjectConsentTz.objects.all().count(), 1)
 
+    @override_settings(SITE_ID=201)
     def test_consent_after_already_refused_raises(self):
         subject_screening = self.get_subject_screening()
         self.get_consent_refusal(screening_identifier=subject_screening.screening_identifier)
         self.assertEqual(ConsentRefusal.objects.all().count(), 1)
 
-        consent_form = SubjectConsentForm(
+        consent_form = SubjectConsentTzForm(
             data=self.get_consent_data(subject_screening=subject_screening),
             initial={"screening_identifier": subject_screening.screening_identifier},
-            instance=SubjectConsent(),
+            instance=SubjectConsentTz(),
         )
         consent_form.is_valid()
         self.assertNotEqual(consent_form._errors, {})
@@ -177,17 +179,18 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
         )
         with self.assertRaises(ValueError):
             consent_form.save()
-        self.assertEqual(SubjectConsent.objects.all().count(), 0)
+        self.assertEqual(SubjectConsentTz.objects.all().count(), 0)
 
+    @override_settings(SITE_ID=201)
     def test_consent_if_not_eligible_raises(self):
         subject_screening = self.get_subject_screening()
         subject_screening.in_care_6m = False
         subject_screening.save()
         self.assertFalse(subject_screening.eligible)
-        consent_form = SubjectConsentForm(
+        consent_form = SubjectConsentTzForm(
             data=self.get_consent_data(subject_screening=subject_screening),
             initial={"screening_identifier": subject_screening.screening_identifier},
-            instance=SubjectConsent(),
+            instance=SubjectConsentTz(),
         )
         consent_form.is_valid()
         self.assertNotEqual(consent_form._errors, {})
