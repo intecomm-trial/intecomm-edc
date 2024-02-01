@@ -46,8 +46,10 @@
     </a>
   </li>
   <li>
-    <a href="{% url "intecomm_consent_admin:intecomm_consent_subjectconsent_add" %}" class="addlink" style="background-color: darkorange;">
-      Add
-    </a>
-  </li>
+  {% if request|country == "uganda" %}
+    <a href="{% url "intecomm_consent_admin:intecomm_consent_subjectconsentug_add" %}" class="addlink" style="background-color: darkorange;">Add</a>
+  {% else %}
+    <a href="{% url "intecomm_consent_admin:intecomm_consent_subjectconsenttz_add" %}" class="addlink" style="background-color: darkorange;">Add</a>
+  {% endif %}
+</li>
 {% endblock %}
