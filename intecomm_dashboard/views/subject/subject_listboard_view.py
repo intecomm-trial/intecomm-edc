@@ -7,6 +7,7 @@ from edc_dashboard.view_mixins import EdcViewMixin
 from edc_listboard.view_mixins import ListboardFilterViewMixin, SearchFormViewMixin
 from edc_listboard.views import ListboardView as BaseListboardView
 from edc_navbar import NavbarViewMixin
+from edc_protocol.research_protocol_config import ResearchProtocolConfig
 from edc_sites import site_sites
 
 from intecomm_group.models import PatientGroup
@@ -62,8 +63,11 @@ class SubjectListboardView(
         return super().get_context_data(**kwargs)
 
     def get_queryset_filter_options(self, request, *args, **kwargs) -> tuple[Q, dict]:
+        number = ResearchProtocolConfig().protocol_number
         q_object, options = super().get_queryset_filter_options(request, *args, **kwargs)
-        options.update(subject_identifier__startswith="107-", group_identifier__isnull=False)
+        options.update(
+            subject_identifier__startswith=f"{number}-", group_identifier__isnull=False
+        )
         if kwargs.get("subject_identifier"):
             options.update({"subject_identifier": kwargs.get("subject_identifier")})
         return q_object, options

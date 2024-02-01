@@ -53,5 +53,4 @@ from .subject_visit import SubjectVisit
 from .subject_visit_missed import SubjectVisitMissed
 from .urine_dipstick_test import UrineDipstickTest
 from .urine_pregnancy import UrinePregnancy
-from .viral_load_result import ViralLoadResult
 from .vitals import Vitals
