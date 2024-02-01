@@ -10,7 +10,7 @@ from edc_sites import site_sites
 from intecomm_rando.constants import TANZANIA
 
 from ..admin_site import intecomm_consent_admin
-from ..forms import SubjectConsentForm
+from ..forms import SubjectConsentTzForm
 from ..models import SubjectConsentTz
 from .fieldsets import (
     get_first_fieldset,
@@ -31,7 +31,7 @@ class SubjectConsentTzAdmin(
     SubjectConsentModelAdminMixin,
     SimpleHistoryAdmin,
 ):
-    form = SubjectConsentForm
+    form = SubjectConsentTzForm
 
     fieldsets = (
         get_first_fieldset(include_pii=True),
