@@ -34,6 +34,8 @@ class SubjectConsentModelAdminMixin(
     show_object_tools = False
     show_cancel = True
     change_list_template: str = "intecomm_consent/admin/subjectconsent_change_list.html"
+    name_fields: list[str] = ["legal_name", "familiar_name"]
+    name_display_field: str = "familiar_name"
 
     actions = [
         flag_as_verified_against_paper,
