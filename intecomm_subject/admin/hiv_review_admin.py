@@ -17,13 +17,24 @@ class HivReviewAdmin(CrfModelAdmin):
         (None, {"fields": ("subject_visit", "report_datetime")}),
         care_delivery_fieldset_tuple,
         (
-            "Anit-retroviral therapy (ART)",
+            "Anti-retroviral therapy (ART)",
             {
                 "fields": (
                     "rx_init",
                     "rx_init_date",
                     "rx_init_ago",
                 )
+            },
+        ),
+        (
+            "Monitoring",
+            {
+                "fields": (
+                    "has_vl",
+                    "drawn_date",
+                    "vl",
+                    "vl_quantifier",
+                ),
             },
         ),
         crf_status_fieldset_tuple,
@@ -35,4 +46,6 @@ class HivReviewAdmin(CrfModelAdmin):
         "care_delivery": admin.VERTICAL,
         "crf_status": admin.VERTICAL,
         "dx": admin.VERTICAL,
+        "has_vl": admin.VERTICAL,
+        "vl_quantifier": admin.VERTICAL,
     }

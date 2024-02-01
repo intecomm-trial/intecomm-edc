@@ -22,14 +22,6 @@ requisitions_prn = FormsCollection(
     name="requisitions_prn",
 )
 
-requisitions_unscheduled = FormsCollection(
-    Requisition(show_order=200, panel=blood_glucose_panel, required=True, additional=False),
-    name="requisitions_unscheduled",
-)
-
-requisitions_d1 = FormsCollection(
-    name="requisitions_day1",
-)
-requisitions_followup = FormsCollection(
-    name="requisitions_followup",
-)
+requisitions_unscheduled = FormsCollection(name="requisitions_unscheduled")
+requisitions_d1 = FormsCollection(name="requisitions_day1")
+requisitions_followup = FormsCollection(name="requisitions_followup")

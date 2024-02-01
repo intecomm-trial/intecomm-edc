@@ -50,5 +50,4 @@ from .subject_visit_admin import SubjectVisitAdmin
 from .subject_visit_missed_admin import SubjectVisitMissedAdmin
 from .urine_dipstick_test_admin import UrineDipstickTestAdmin
 from .urine_pregnancy_admin import UrinePregnancyAdmin
-from .viral_load_result_admin import ViralLoadResultAdmin
 from .vitals_admin import VitalsAdmin

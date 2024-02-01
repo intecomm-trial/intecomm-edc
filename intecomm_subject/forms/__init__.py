@@ -50,5 +50,4 @@ from .subject_visit_form import SubjectVisitForm
 from .subject_visit_missed_form import SubjectVisitMissedForm
 from .urine_dipstick_test_form import UrineDipstickTestForm
 from .urine_pregnancy_form import UrinePregnancyForm
-from .viral_load_result_form import ViralLoadResultForm
 from .vitals_form import VitalsForm
