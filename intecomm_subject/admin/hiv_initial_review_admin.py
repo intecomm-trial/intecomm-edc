@@ -7,6 +7,7 @@ from edc_crf.admin import crf_status_fieldset_tuple
 from ..admin_site import intecomm_subject_admin
 from ..forms import HivInitialReviewForm
 from ..models import HivInitialReview
+from .list_filters import VlStatusListFilter
 from .modeladmin_mixins import CrfModelAdmin
 
 
@@ -59,11 +60,21 @@ class HivInitialReviewAdmin(CrfModelAdmin):
         "vl_quantifier": admin.VERTICAL,
     }
 
+    @admin.display(description="VL resulted", ordering="has_vl")
+    def vl_status(self, obj):
+        return obj.has_vl
+
     def get_list_filter(self, request) -> tuple[str, ...]:
         list_filters = super().get_list_filter(request)
         list_filters = list(list_filters) or []
-        list_filters.insert(4, "has_vl")
+        list_filters.insert(4, VlStatusListFilter)
         return tuple(list_filters)
+
+    def get_list_display(self, request) -> tuple[str, ...]:
+        list_display = super().get_list_display(request)
+        list_display = list(list_display) or []
+        list_display.insert(4, "vl_status")
+        return tuple(list_display)
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj=obj, **kwargs)
