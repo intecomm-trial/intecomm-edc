@@ -4,7 +4,6 @@ from edc_visit_schedule.model_mixins import OnScheduleModelMixin
 
 
 class OnScheduleInte(SiteModelMixin, OnScheduleModelMixin, BaseUuidModel):
-
     """A model used by the system. Auto-completed by subject_consent."""
 
     class Meta(OnScheduleModelMixin.Meta, BaseUuidModel.Meta):
