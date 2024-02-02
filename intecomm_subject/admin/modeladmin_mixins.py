@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Type
+
 from django.contrib import admin
 from django.utils.html import format_html
 from django_audit_fields import audit_fieldset_tuple
@@ -11,6 +13,9 @@ from edc_model_admin.mixins import ModelAdminProtectPiiMixin
 from edc_sites.admin import SiteModelAdminMixin
 
 from intecomm_subject.choices import MISSED_PILLS
+
+if TYPE_CHECKING:
+    from django.contrib.admin import SimpleListFilter
 
 medication_adherence_description = """
 <H5><B><font color="orange">Interviewer to read</font></B></H5>
@@ -34,7 +39,7 @@ class CrfModelAdmin(
     ordering = ("site__id", "report_datetime")
 
     # TODO: remove with Django > 4.2.5
-    def get_list_filter(self, request) -> tuple[str, ...]:
+    def get_list_filter(self, request) -> tuple[str | Type[SimpleListFilter], ...]:
         list_filter = super().get_list_filter(request)
         self.list_filter = list_filter
         return list_filter
