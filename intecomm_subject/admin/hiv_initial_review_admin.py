@@ -74,7 +74,6 @@ class HivInitialReviewAdmin(CrfModelAdmin):
         list_display = super().get_list_display(request)
         list_display = list(list_display) or []
         list_display.insert(4, "vl_status")
-        list_display.insert(5, "vl")
         return tuple(list_display)
 
     def get_form(self, request, obj=None, **kwargs):
