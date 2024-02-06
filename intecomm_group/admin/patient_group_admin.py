@@ -30,7 +30,6 @@ p = inflect.engine()
 class PatientGroupAdmin(
     SiteModelAdminMixin, ModelAdminRedirectAllToChangelistMixin, BaseModelAdminMixin
 ):
-
     """Modeladmin for patient groups in follow-up or dissolved.
 
     See `get_queryset`"""

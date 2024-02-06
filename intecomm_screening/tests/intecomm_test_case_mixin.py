@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import random
+import string
 from copy import deepcopy
 from datetime import datetime
 from typing import TYPE_CHECKING
@@ -274,11 +275,11 @@ class IntecommTestCaseMixin(AppointmentTestCaseMixin, SiteTestCaseMixin):
         index: int | None = None,
     ) -> SubjectConsent | SubjectConsentUg:
         """Creates patientlog->subjectscreening->subjectconsent."""
-
+        letter = random.choice(string.ascii_lowercase)  # nosec B311
         first_name = fake.first_name()
         last_name = fake.last_name()
         legal_name = f"{first_name} {last_name}"
-        initials = f"{first_name[0]}{last_name[0]}"
+        initials = f"{first_name[0]}{letter}{last_name[0]}"
         report_datetime = report_datetime or get_utcnow()
         gender = random.choice([FEMALE, MALE])  # nosec B311
         age_in_years = random.choice(  # nosec B311

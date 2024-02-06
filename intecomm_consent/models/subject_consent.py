@@ -56,7 +56,6 @@ class SubjectConsent(
     SearchSlugModelMixin,
     BaseUuidModel,
 ):
-
     """A model completed by the user that captures the ICF."""
 
     subject_identifier_cls = SubjectIdentifier

@@ -36,6 +36,7 @@ class HtnInitialReview(
         max_length=15,
         choices=HTN_MANAGEMENT,
         default=NOT_APPLICABLE,
+        blank=True,
         help_text="If patient is taking medication, complete the Drug Refill CRF.",
     )
 

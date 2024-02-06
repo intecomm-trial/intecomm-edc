@@ -25,6 +25,7 @@ from .drug_supply_dm_form import DrugSupplyDmForm
 from .drug_supply_hiv_form import DrugSupplyHivForm
 from .drug_supply_htn_form import DrugSupplyHtnForm
 from .eq5d3l_form import Eq5d3lForm
+from .family_history_form import FamilyHistoryForm
 from .health_economics import (
     HealthEconomicsAssetsForm,
     HealthEconomicsHouseholdHeadForm,

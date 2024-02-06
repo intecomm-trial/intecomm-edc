@@ -2,5 +2,8 @@ from .end_of_study_form import EndOfStudyForm
 from .loss_to_followup_form import LossToFollowupForm
 from .offschedule_comm_form import OffScheduleCommForm
 from .offschedule_inte_form import OffScheduleInteForm
+from .onschedule_comm_form import OnScheduleCommForm
+from .onschedule_inte_form import OnScheduleInteForm
 from .protocol_incident_form import ProtocolIncidentForm
+from .subject_locator_form import SubjectLocatorForm
 from .subject_transfer_form import SubjectTransferForm

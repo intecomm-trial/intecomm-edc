@@ -10,6 +10,7 @@ from edc_model_admin.history import SimpleHistoryAdmin
 from edc_sites.admin import SiteModelAdminMixin
 
 from intecomm_prn.admin_site import intecomm_prn_admin
+from intecomm_prn.forms import SubjectLocatorForm
 from intecomm_prn.models import SubjectLocator
 from intecomm_screening.models import PatientLog
 
@@ -25,11 +26,7 @@ class SubjectLocatorAdmin(
 ):
     list_per_page = 5
 
-    # TODO: remove with Django > 4.2.5
-    def get_list_filter(self, request) -> tuple[str]:
-        list_filter = super().get_list_filter(request)
-        self.list_filter = list_filter
-        return list_filter
+    form = SubjectLocatorForm
 
     @admin.display(description="Contacts")
     def contacts(self, obj):
