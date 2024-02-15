@@ -57,7 +57,7 @@ visit12 = Visit(
     code=MONTH12,
     title="Month 12 (End of study)",
     add_window_gap_to_lower=True,
-    allow_unscheduled=False,
+    allow_unscheduled=True,
     crfs=crfs_followup,
     crfs_missed=crfs_missed,
     crfs_prn=crfs_prn,
@@ -67,8 +67,8 @@ visit12 = Visit(
     requisitions=requisitions_followup,
     requisitions_prn=requisitions_prn,
     requisitions_unscheduled=requisitions_unscheduled,
-    rlower=relativedelta(days=5),
-    rupper=relativedelta(days=10),
+    rlower=relativedelta(days=13),
+    rupper=relativedelta(months=3),
     timepoint=12,
 )
 

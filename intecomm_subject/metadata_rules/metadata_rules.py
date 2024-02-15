@@ -131,6 +131,7 @@ class MedicationsRuleGroup(CrfRuleGroup):
         target_models=["dmmedicationadherence"],
     )
 
+    # TODO: not required if managed_by for diet and lifestyle
     adherence_htn = CrfRule(
         predicate=P("refill_htn", "in", [YES, NO]),
         consequence=REQUIRED,

@@ -148,7 +148,6 @@ INSTALLED_APPS = [
     "edc_unblinding.apps.AppConfig",
     "edc_form_describer.apps.AppConfig",
     "edc_adherence.apps.AppConfig",
-    # "canned_views.apps.AppConfig",
     "intecomm_rando.apps.AppConfig",
     "intecomm_consent.apps.AppConfig",
     "intecomm_lists.apps.AppConfig",
@@ -190,7 +189,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
 if not DEFENDER_ENABLED:
     MIDDLEWARE.pop(MIDDLEWARE.index("defender.middleware.FailedLoginMiddleware"))
 
@@ -208,6 +206,7 @@ MIDDLEWARE.extend(
         "edc_review_dashboard.middleware.DashboardMiddleware",
     ]
 )
+
 
 ROOT_URLCONF = f"{APP_NAME}.urls"
 
