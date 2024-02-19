@@ -68,7 +68,6 @@ crfs_followup = FormsCollection(
     Crf(show_order=320, model="intecomm_subject.healtheconomicsassets", required=False),
     Crf(show_order=330, model="intecomm_subject.healtheconomicsproperty", required=False),
     Crf(show_order=340, model="intecomm_subject.healtheconomicsincome", required=False),
-    # TODO: glucose not appearing if keyed
     Crf(show_order=350, model="intecomm_subject.glucose", required=False),
     Crf(show_order=400, model="intecomm_subject.nextappointment"),
     name="followup",
