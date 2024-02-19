@@ -55,7 +55,7 @@ def get_m2m_qs(model_cls, name: str = None):
 utc_tz = ZoneInfo("UTC")
 
 
-@time_machine.travel(dt.datetime(2019, 5, 11, 8, 00, tzinfo=utc_tz))
+@time_machine.travel(dt.datetime(2023, 8, 11, 8, 00, tzinfo=utc_tz))
 class TestHe(IntecommTestCaseMixin, TestCase):
     patient_group = None
 
