@@ -1,4 +1,4 @@
-# INTECOMM-EDC Forms Reference
+# INTECOMM_SUBJECT Forms Reference
 ## Table of contents
 
 
@@ -35,25 +35,25 @@
 5. <a href="#user-content-diabetes-initial-review-1">Diabetes Initial Review</a>
 6. <a href="#user-content-hypertension-initial-review-1">Hypertension Initial Review</a>
 7. <a href="#user-content-hiv-review">Hiv Review</a>
-8. <a href="#user-content-viral-load-result">Viral Load Result</a>
-9. <a href="#user-content-diabetes-review">Diabetes Review</a>
-10. <a href="#user-content-hypertension-review">Hypertension Review</a>
-11. <a href="#user-content-medications-1">Medications</a>
-12. <a href="#user-content-drug-refill-hypertension-1">Drug Refill: Hypertension</a>
-13. <a href="#user-content-drug-refill-diabetes-1">Drug Refill: Diabetes</a>
-14. <a href="#user-content-drug-refill-hiv-1">Drug Refill: Hiv</a>
-15. <a href="#user-content-medication-adherence-hiv-1">Medication Adherence (Hiv)</a>
-16. <a href="#user-content-medication-adherence-diabetes-1">Medication Adherence (Diabetes)</a>
-17. <a href="#user-content-medication-adherence-hypertension-1">Medication Adherence (Hypertension)</a>
-18. <a href="#user-content-complications-followup">Complications: Followup</a>
-19. <a href="#user-content-family-history-and-knowledge-1">Family History And Knowledge</a>
-20. <a href="#user-content-overall-quality-of-life-icecap-a-v2-1">Overall Quality Of Life (Icecap-A V2)</a>
-21. <a href="#user-content-euroqol-eq-5d-3l-instrument-1">Euroqol Eq-5D-3L Instrument</a>
-22. <a href="#user-content-health-economics-household-head-1">Health Economics: Household Head</a>
-23. <a href="#user-content-health-economics-patient-1">Health Economics: Patient</a>
-24. <a href="#user-content-health-economics-assets-1">Health Economics: Assets</a>
-25. <a href="#user-content-health-economics-property-1">Health Economics: Property</a>
-26. <a href="#user-content-health-economics-income-1">Health Economics: Income</a>
+8. <a href="#user-content-diabetes-review">Diabetes Review</a>
+9. <a href="#user-content-hypertension-review">Hypertension Review</a>
+10. <a href="#user-content-medications-1">Medications</a>
+11. <a href="#user-content-drug-refill-hypertension-1">Drug Refill: Hypertension</a>
+12. <a href="#user-content-drug-refill-diabetes-1">Drug Refill: Diabetes</a>
+13. <a href="#user-content-drug-refill-hiv-1">Drug Refill: Hiv</a>
+14. <a href="#user-content-medication-adherence-hiv-1">Medication Adherence (Hiv)</a>
+15. <a href="#user-content-medication-adherence-diabetes-1">Medication Adherence (Diabetes)</a>
+16. <a href="#user-content-medication-adherence-hypertension-1">Medication Adherence (Hypertension)</a>
+17. <a href="#user-content-complications-followup">Complications: Followup</a>
+18. <a href="#user-content-family-history-and-knowledge-1">Family History And Knowledge</a>
+19. <a href="#user-content-overall-quality-of-life-icecap-a-v2-1">Overall Quality Of Life (Icecap-A V2)</a>
+20. <a href="#user-content-euroqol-eq-5d-3l-instrument-1">Euroqol Eq-5D-3L Instrument</a>
+21. <a href="#user-content-health-economics-household-head-1">Health Economics: Household Head</a>
+22. <a href="#user-content-health-economics-patient-1">Health Economics: Patient</a>
+23. <a href="#user-content-health-economics-assets-1">Health Economics: Assets</a>
+24. <a href="#user-content-health-economics-property-1">Health Economics: Property</a>
+25. <a href="#user-content-health-economics-income-1">Health Economics: Income</a>
+26. <a href="#user-content-glucose">Glucose</a>
 27. <a href="#user-content-next-appointment-1">Next Appointment</a>
 
 <a href="#user-content-1020">**1020.**</a>
@@ -64,25 +64,25 @@
 5. <a href="#user-content-diabetes-initial-review-2">Diabetes Initial Review</a>
 6. <a href="#user-content-hypertension-initial-review-2">Hypertension Initial Review</a>
 7. <a href="#user-content-hiv-review-1">Hiv Review</a>
-8. <a href="#user-content-viral-load-result-1">Viral Load Result</a>
-9. <a href="#user-content-diabetes-review-1">Diabetes Review</a>
-10. <a href="#user-content-hypertension-review-1">Hypertension Review</a>
-11. <a href="#user-content-medications-2">Medications</a>
-12. <a href="#user-content-drug-refill-hypertension-2">Drug Refill: Hypertension</a>
-13. <a href="#user-content-drug-refill-diabetes-2">Drug Refill: Diabetes</a>
-14. <a href="#user-content-drug-refill-hiv-2">Drug Refill: Hiv</a>
-15. <a href="#user-content-medication-adherence-hiv-2">Medication Adherence (Hiv)</a>
-16. <a href="#user-content-medication-adherence-diabetes-2">Medication Adherence (Diabetes)</a>
-17. <a href="#user-content-medication-adherence-hypertension-2">Medication Adherence (Hypertension)</a>
-18. <a href="#user-content-complications-followup-1">Complications: Followup</a>
-19. <a href="#user-content-family-history-and-knowledge-2">Family History And Knowledge</a>
-20. <a href="#user-content-overall-quality-of-life-icecap-a-v2-2">Overall Quality Of Life (Icecap-A V2)</a>
-21. <a href="#user-content-euroqol-eq-5d-3l-instrument-2">Euroqol Eq-5D-3L Instrument</a>
-22. <a href="#user-content-health-economics-household-head-2">Health Economics: Household Head</a>
-23. <a href="#user-content-health-economics-patient-2">Health Economics: Patient</a>
-24. <a href="#user-content-health-economics-assets-2">Health Economics: Assets</a>
-25. <a href="#user-content-health-economics-property-2">Health Economics: Property</a>
-26. <a href="#user-content-health-economics-income-2">Health Economics: Income</a>
+8. <a href="#user-content-diabetes-review-1">Diabetes Review</a>
+9. <a href="#user-content-hypertension-review-1">Hypertension Review</a>
+10. <a href="#user-content-medications-2">Medications</a>
+11. <a href="#user-content-drug-refill-hypertension-2">Drug Refill: Hypertension</a>
+12. <a href="#user-content-drug-refill-diabetes-2">Drug Refill: Diabetes</a>
+13. <a href="#user-content-drug-refill-hiv-2">Drug Refill: Hiv</a>
+14. <a href="#user-content-medication-adherence-hiv-2">Medication Adherence (Hiv)</a>
+15. <a href="#user-content-medication-adherence-diabetes-2">Medication Adherence (Diabetes)</a>
+16. <a href="#user-content-medication-adherence-hypertension-2">Medication Adherence (Hypertension)</a>
+17. <a href="#user-content-complications-followup-1">Complications: Followup</a>
+18. <a href="#user-content-family-history-and-knowledge-2">Family History And Knowledge</a>
+19. <a href="#user-content-overall-quality-of-life-icecap-a-v2-2">Overall Quality Of Life (Icecap-A V2)</a>
+20. <a href="#user-content-euroqol-eq-5d-3l-instrument-2">Euroqol Eq-5D-3L Instrument</a>
+21. <a href="#user-content-health-economics-household-head-2">Health Economics: Household Head</a>
+22. <a href="#user-content-health-economics-patient-2">Health Economics: Patient</a>
+23. <a href="#user-content-health-economics-assets-2">Health Economics: Assets</a>
+24. <a href="#user-content-health-economics-property-2">Health Economics: Property</a>
+25. <a href="#user-content-health-economics-income-2">Health Economics: Income</a>
+26. <a href="#user-content-glucose-1">Glucose</a>
 27. <a href="#user-content-next-appointment-2">Next Appointment</a>
 
 <a href="#user-content-1030">**1030.**</a>
@@ -93,25 +93,25 @@
 5. <a href="#user-content-diabetes-initial-review-3">Diabetes Initial Review</a>
 6. <a href="#user-content-hypertension-initial-review-3">Hypertension Initial Review</a>
 7. <a href="#user-content-hiv-review-2">Hiv Review</a>
-8. <a href="#user-content-viral-load-result-2">Viral Load Result</a>
-9. <a href="#user-content-diabetes-review-2">Diabetes Review</a>
-10. <a href="#user-content-hypertension-review-2">Hypertension Review</a>
-11. <a href="#user-content-medications-3">Medications</a>
-12. <a href="#user-content-drug-refill-hypertension-3">Drug Refill: Hypertension</a>
-13. <a href="#user-content-drug-refill-diabetes-3">Drug Refill: Diabetes</a>
-14. <a href="#user-content-drug-refill-hiv-3">Drug Refill: Hiv</a>
-15. <a href="#user-content-medication-adherence-hiv-3">Medication Adherence (Hiv)</a>
-16. <a href="#user-content-medication-adherence-diabetes-3">Medication Adherence (Diabetes)</a>
-17. <a href="#user-content-medication-adherence-hypertension-3">Medication Adherence (Hypertension)</a>
-18. <a href="#user-content-complications-followup-2">Complications: Followup</a>
-19. <a href="#user-content-family-history-and-knowledge-3">Family History And Knowledge</a>
-20. <a href="#user-content-overall-quality-of-life-icecap-a-v2-3">Overall Quality Of Life (Icecap-A V2)</a>
-21. <a href="#user-content-euroqol-eq-5d-3l-instrument-3">Euroqol Eq-5D-3L Instrument</a>
-22. <a href="#user-content-health-economics-household-head-3">Health Economics: Household Head</a>
-23. <a href="#user-content-health-economics-patient-3">Health Economics: Patient</a>
-24. <a href="#user-content-health-economics-assets-3">Health Economics: Assets</a>
-25. <a href="#user-content-health-economics-property-3">Health Economics: Property</a>
-26. <a href="#user-content-health-economics-income-3">Health Economics: Income</a>
+8. <a href="#user-content-diabetes-review-2">Diabetes Review</a>
+9. <a href="#user-content-hypertension-review-2">Hypertension Review</a>
+10. <a href="#user-content-medications-3">Medications</a>
+11. <a href="#user-content-drug-refill-hypertension-3">Drug Refill: Hypertension</a>
+12. <a href="#user-content-drug-refill-diabetes-3">Drug Refill: Diabetes</a>
+13. <a href="#user-content-drug-refill-hiv-3">Drug Refill: Hiv</a>
+14. <a href="#user-content-medication-adherence-hiv-3">Medication Adherence (Hiv)</a>
+15. <a href="#user-content-medication-adherence-diabetes-3">Medication Adherence (Diabetes)</a>
+16. <a href="#user-content-medication-adherence-hypertension-3">Medication Adherence (Hypertension)</a>
+17. <a href="#user-content-complications-followup-2">Complications: Followup</a>
+18. <a href="#user-content-family-history-and-knowledge-3">Family History And Knowledge</a>
+19. <a href="#user-content-overall-quality-of-life-icecap-a-v2-3">Overall Quality Of Life (Icecap-A V2)</a>
+20. <a href="#user-content-euroqol-eq-5d-3l-instrument-3">Euroqol Eq-5D-3L Instrument</a>
+21. <a href="#user-content-health-economics-household-head-3">Health Economics: Household Head</a>
+22. <a href="#user-content-health-economics-patient-3">Health Economics: Patient</a>
+23. <a href="#user-content-health-economics-assets-3">Health Economics: Assets</a>
+24. <a href="#user-content-health-economics-property-3">Health Economics: Property</a>
+25. <a href="#user-content-health-economics-income-3">Health Economics: Income</a>
+26. <a href="#user-content-glucose-2">Glucose</a>
 27. <a href="#user-content-next-appointment-3">Next Appointment</a>
 
 <a href="#user-content-1040">**1040.**</a>
@@ -122,25 +122,25 @@
 5. <a href="#user-content-diabetes-initial-review-4">Diabetes Initial Review</a>
 6. <a href="#user-content-hypertension-initial-review-4">Hypertension Initial Review</a>
 7. <a href="#user-content-hiv-review-3">Hiv Review</a>
-8. <a href="#user-content-viral-load-result-3">Viral Load Result</a>
-9. <a href="#user-content-diabetes-review-3">Diabetes Review</a>
-10. <a href="#user-content-hypertension-review-3">Hypertension Review</a>
-11. <a href="#user-content-medications-4">Medications</a>
-12. <a href="#user-content-drug-refill-hypertension-4">Drug Refill: Hypertension</a>
-13. <a href="#user-content-drug-refill-diabetes-4">Drug Refill: Diabetes</a>
-14. <a href="#user-content-drug-refill-hiv-4">Drug Refill: Hiv</a>
-15. <a href="#user-content-medication-adherence-hiv-4">Medication Adherence (Hiv)</a>
-16. <a href="#user-content-medication-adherence-diabetes-4">Medication Adherence (Diabetes)</a>
-17. <a href="#user-content-medication-adherence-hypertension-4">Medication Adherence (Hypertension)</a>
-18. <a href="#user-content-complications-followup-3">Complications: Followup</a>
-19. <a href="#user-content-family-history-and-knowledge-4">Family History And Knowledge</a>
-20. <a href="#user-content-overall-quality-of-life-icecap-a-v2-4">Overall Quality Of Life (Icecap-A V2)</a>
-21. <a href="#user-content-euroqol-eq-5d-3l-instrument-4">Euroqol Eq-5D-3L Instrument</a>
-22. <a href="#user-content-health-economics-household-head-4">Health Economics: Household Head</a>
-23. <a href="#user-content-health-economics-patient-4">Health Economics: Patient</a>
-24. <a href="#user-content-health-economics-assets-4">Health Economics: Assets</a>
-25. <a href="#user-content-health-economics-property-4">Health Economics: Property</a>
-26. <a href="#user-content-health-economics-income-4">Health Economics: Income</a>
+8. <a href="#user-content-diabetes-review-3">Diabetes Review</a>
+9. <a href="#user-content-hypertension-review-3">Hypertension Review</a>
+10. <a href="#user-content-medications-4">Medications</a>
+11. <a href="#user-content-drug-refill-hypertension-4">Drug Refill: Hypertension</a>
+12. <a href="#user-content-drug-refill-diabetes-4">Drug Refill: Diabetes</a>
+13. <a href="#user-content-drug-refill-hiv-4">Drug Refill: Hiv</a>
+14. <a href="#user-content-medication-adherence-hiv-4">Medication Adherence (Hiv)</a>
+15. <a href="#user-content-medication-adherence-diabetes-4">Medication Adherence (Diabetes)</a>
+16. <a href="#user-content-medication-adherence-hypertension-4">Medication Adherence (Hypertension)</a>
+17. <a href="#user-content-complications-followup-3">Complications: Followup</a>
+18. <a href="#user-content-family-history-and-knowledge-4">Family History And Knowledge</a>
+19. <a href="#user-content-overall-quality-of-life-icecap-a-v2-4">Overall Quality Of Life (Icecap-A V2)</a>
+20. <a href="#user-content-euroqol-eq-5d-3l-instrument-4">Euroqol Eq-5D-3L Instrument</a>
+21. <a href="#user-content-health-economics-household-head-4">Health Economics: Household Head</a>
+22. <a href="#user-content-health-economics-patient-4">Health Economics: Patient</a>
+23. <a href="#user-content-health-economics-assets-4">Health Economics: Assets</a>
+24. <a href="#user-content-health-economics-property-4">Health Economics: Property</a>
+25. <a href="#user-content-health-economics-income-4">Health Economics: Income</a>
+26. <a href="#user-content-glucose-3">Glucose</a>
 27. <a href="#user-content-next-appointment-4">Next Appointment</a>
 
 <a href="#user-content-1050">**1050.**</a>
@@ -151,25 +151,25 @@
 5. <a href="#user-content-diabetes-initial-review-5">Diabetes Initial Review</a>
 6. <a href="#user-content-hypertension-initial-review-5">Hypertension Initial Review</a>
 7. <a href="#user-content-hiv-review-4">Hiv Review</a>
-8. <a href="#user-content-viral-load-result-4">Viral Load Result</a>
-9. <a href="#user-content-diabetes-review-4">Diabetes Review</a>
-10. <a href="#user-content-hypertension-review-4">Hypertension Review</a>
-11. <a href="#user-content-medications-5">Medications</a>
-12. <a href="#user-content-drug-refill-hypertension-5">Drug Refill: Hypertension</a>
-13. <a href="#user-content-drug-refill-diabetes-5">Drug Refill: Diabetes</a>
-14. <a href="#user-content-drug-refill-hiv-5">Drug Refill: Hiv</a>
-15. <a href="#user-content-medication-adherence-hiv-5">Medication Adherence (Hiv)</a>
-16. <a href="#user-content-medication-adherence-diabetes-5">Medication Adherence (Diabetes)</a>
-17. <a href="#user-content-medication-adherence-hypertension-5">Medication Adherence (Hypertension)</a>
-18. <a href="#user-content-complications-followup-4">Complications: Followup</a>
-19. <a href="#user-content-family-history-and-knowledge-5">Family History And Knowledge</a>
-20. <a href="#user-content-overall-quality-of-life-icecap-a-v2-5">Overall Quality Of Life (Icecap-A V2)</a>
-21. <a href="#user-content-euroqol-eq-5d-3l-instrument-5">Euroqol Eq-5D-3L Instrument</a>
-22. <a href="#user-content-health-economics-household-head-5">Health Economics: Household Head</a>
-23. <a href="#user-content-health-economics-patient-5">Health Economics: Patient</a>
-24. <a href="#user-content-health-economics-assets-5">Health Economics: Assets</a>
-25. <a href="#user-content-health-economics-property-5">Health Economics: Property</a>
-26. <a href="#user-content-health-economics-income-5">Health Economics: Income</a>
+8. <a href="#user-content-diabetes-review-4">Diabetes Review</a>
+9. <a href="#user-content-hypertension-review-4">Hypertension Review</a>
+10. <a href="#user-content-medications-5">Medications</a>
+11. <a href="#user-content-drug-refill-hypertension-5">Drug Refill: Hypertension</a>
+12. <a href="#user-content-drug-refill-diabetes-5">Drug Refill: Diabetes</a>
+13. <a href="#user-content-drug-refill-hiv-5">Drug Refill: Hiv</a>
+14. <a href="#user-content-medication-adherence-hiv-5">Medication Adherence (Hiv)</a>
+15. <a href="#user-content-medication-adherence-diabetes-5">Medication Adherence (Diabetes)</a>
+16. <a href="#user-content-medication-adherence-hypertension-5">Medication Adherence (Hypertension)</a>
+17. <a href="#user-content-complications-followup-4">Complications: Followup</a>
+18. <a href="#user-content-family-history-and-knowledge-5">Family History And Knowledge</a>
+19. <a href="#user-content-overall-quality-of-life-icecap-a-v2-5">Overall Quality Of Life (Icecap-A V2)</a>
+20. <a href="#user-content-euroqol-eq-5d-3l-instrument-5">Euroqol Eq-5D-3L Instrument</a>
+21. <a href="#user-content-health-economics-household-head-5">Health Economics: Household Head</a>
+22. <a href="#user-content-health-economics-patient-5">Health Economics: Patient</a>
+23. <a href="#user-content-health-economics-assets-5">Health Economics: Assets</a>
+24. <a href="#user-content-health-economics-property-5">Health Economics: Property</a>
+25. <a href="#user-content-health-economics-income-5">Health Economics: Income</a>
+26. <a href="#user-content-glucose-4">Glucose</a>
 27. <a href="#user-content-next-appointment-5">Next Appointment</a>
 
 <a href="#user-content-1060">**1060.**</a>
@@ -180,25 +180,25 @@
 5. <a href="#user-content-diabetes-initial-review-6">Diabetes Initial Review</a>
 6. <a href="#user-content-hypertension-initial-review-6">Hypertension Initial Review</a>
 7. <a href="#user-content-hiv-review-5">Hiv Review</a>
-8. <a href="#user-content-viral-load-result-5">Viral Load Result</a>
-9. <a href="#user-content-diabetes-review-5">Diabetes Review</a>
-10. <a href="#user-content-hypertension-review-5">Hypertension Review</a>
-11. <a href="#user-content-medications-6">Medications</a>
-12. <a href="#user-content-drug-refill-hypertension-6">Drug Refill: Hypertension</a>
-13. <a href="#user-content-drug-refill-diabetes-6">Drug Refill: Diabetes</a>
-14. <a href="#user-content-drug-refill-hiv-6">Drug Refill: Hiv</a>
-15. <a href="#user-content-medication-adherence-hiv-6">Medication Adherence (Hiv)</a>
-16. <a href="#user-content-medication-adherence-diabetes-6">Medication Adherence (Diabetes)</a>
-17. <a href="#user-content-medication-adherence-hypertension-6">Medication Adherence (Hypertension)</a>
-18. <a href="#user-content-complications-followup-5">Complications: Followup</a>
-19. <a href="#user-content-family-history-and-knowledge-6">Family History And Knowledge</a>
-20. <a href="#user-content-overall-quality-of-life-icecap-a-v2-6">Overall Quality Of Life (Icecap-A V2)</a>
-21. <a href="#user-content-euroqol-eq-5d-3l-instrument-6">Euroqol Eq-5D-3L Instrument</a>
-22. <a href="#user-content-health-economics-household-head-6">Health Economics: Household Head</a>
-23. <a href="#user-content-health-economics-patient-6">Health Economics: Patient</a>
-24. <a href="#user-content-health-economics-assets-6">Health Economics: Assets</a>
-25. <a href="#user-content-health-economics-property-6">Health Economics: Property</a>
-26. <a href="#user-content-health-economics-income-6">Health Economics: Income</a>
+8. <a href="#user-content-diabetes-review-5">Diabetes Review</a>
+9. <a href="#user-content-hypertension-review-5">Hypertension Review</a>
+10. <a href="#user-content-medications-6">Medications</a>
+11. <a href="#user-content-drug-refill-hypertension-6">Drug Refill: Hypertension</a>
+12. <a href="#user-content-drug-refill-diabetes-6">Drug Refill: Diabetes</a>
+13. <a href="#user-content-drug-refill-hiv-6">Drug Refill: Hiv</a>
+14. <a href="#user-content-medication-adherence-hiv-6">Medication Adherence (Hiv)</a>
+15. <a href="#user-content-medication-adherence-diabetes-6">Medication Adherence (Diabetes)</a>
+16. <a href="#user-content-medication-adherence-hypertension-6">Medication Adherence (Hypertension)</a>
+17. <a href="#user-content-complications-followup-5">Complications: Followup</a>
+18. <a href="#user-content-family-history-and-knowledge-6">Family History And Knowledge</a>
+19. <a href="#user-content-overall-quality-of-life-icecap-a-v2-6">Overall Quality Of Life (Icecap-A V2)</a>
+20. <a href="#user-content-euroqol-eq-5d-3l-instrument-6">Euroqol Eq-5D-3L Instrument</a>
+21. <a href="#user-content-health-economics-household-head-6">Health Economics: Household Head</a>
+22. <a href="#user-content-health-economics-patient-6">Health Economics: Patient</a>
+23. <a href="#user-content-health-economics-assets-6">Health Economics: Assets</a>
+24. <a href="#user-content-health-economics-property-6">Health Economics: Property</a>
+25. <a href="#user-content-health-economics-income-6">Health Economics: Income</a>
+26. <a href="#user-content-glucose-5">Glucose</a>
 27. <a href="#user-content-next-appointment-6">Next Appointment</a>
 
 <a href="#user-content-1070">**1070.**</a>
@@ -209,25 +209,25 @@
 5. <a href="#user-content-diabetes-initial-review-7">Diabetes Initial Review</a>
 6. <a href="#user-content-hypertension-initial-review-7">Hypertension Initial Review</a>
 7. <a href="#user-content-hiv-review-6">Hiv Review</a>
-8. <a href="#user-content-viral-load-result-6">Viral Load Result</a>
-9. <a href="#user-content-diabetes-review-6">Diabetes Review</a>
-10. <a href="#user-content-hypertension-review-6">Hypertension Review</a>
-11. <a href="#user-content-medications-7">Medications</a>
-12. <a href="#user-content-drug-refill-hypertension-7">Drug Refill: Hypertension</a>
-13. <a href="#user-content-drug-refill-diabetes-7">Drug Refill: Diabetes</a>
-14. <a href="#user-content-drug-refill-hiv-7">Drug Refill: Hiv</a>
-15. <a href="#user-content-medication-adherence-hiv-7">Medication Adherence (Hiv)</a>
-16. <a href="#user-content-medication-adherence-diabetes-7">Medication Adherence (Diabetes)</a>
-17. <a href="#user-content-medication-adherence-hypertension-7">Medication Adherence (Hypertension)</a>
-18. <a href="#user-content-complications-followup-6">Complications: Followup</a>
-19. <a href="#user-content-family-history-and-knowledge-7">Family History And Knowledge</a>
-20. <a href="#user-content-overall-quality-of-life-icecap-a-v2-7">Overall Quality Of Life (Icecap-A V2)</a>
-21. <a href="#user-content-euroqol-eq-5d-3l-instrument-7">Euroqol Eq-5D-3L Instrument</a>
-22. <a href="#user-content-health-economics-household-head-7">Health Economics: Household Head</a>
-23. <a href="#user-content-health-economics-patient-7">Health Economics: Patient</a>
-24. <a href="#user-content-health-economics-assets-7">Health Economics: Assets</a>
-25. <a href="#user-content-health-economics-property-7">Health Economics: Property</a>
-26. <a href="#user-content-health-economics-income-7">Health Economics: Income</a>
+8. <a href="#user-content-diabetes-review-6">Diabetes Review</a>
+9. <a href="#user-content-hypertension-review-6">Hypertension Review</a>
+10. <a href="#user-content-medications-7">Medications</a>
+11. <a href="#user-content-drug-refill-hypertension-7">Drug Refill: Hypertension</a>
+12. <a href="#user-content-drug-refill-diabetes-7">Drug Refill: Diabetes</a>
+13. <a href="#user-content-drug-refill-hiv-7">Drug Refill: Hiv</a>
+14. <a href="#user-content-medication-adherence-hiv-7">Medication Adherence (Hiv)</a>
+15. <a href="#user-content-medication-adherence-diabetes-7">Medication Adherence (Diabetes)</a>
+16. <a href="#user-content-medication-adherence-hypertension-7">Medication Adherence (Hypertension)</a>
+17. <a href="#user-content-complications-followup-6">Complications: Followup</a>
+18. <a href="#user-content-family-history-and-knowledge-7">Family History And Knowledge</a>
+19. <a href="#user-content-overall-quality-of-life-icecap-a-v2-7">Overall Quality Of Life (Icecap-A V2)</a>
+20. <a href="#user-content-euroqol-eq-5d-3l-instrument-7">Euroqol Eq-5D-3L Instrument</a>
+21. <a href="#user-content-health-economics-household-head-7">Health Economics: Household Head</a>
+22. <a href="#user-content-health-economics-patient-7">Health Economics: Patient</a>
+23. <a href="#user-content-health-economics-assets-7">Health Economics: Assets</a>
+24. <a href="#user-content-health-economics-property-7">Health Economics: Property</a>
+25. <a href="#user-content-health-economics-income-7">Health Economics: Income</a>
+26. <a href="#user-content-glucose-6">Glucose</a>
 27. <a href="#user-content-next-appointment-7">Next Appointment</a>
 
 <a href="#user-content-1080">**1080.**</a>
@@ -238,25 +238,25 @@
 5. <a href="#user-content-diabetes-initial-review-8">Diabetes Initial Review</a>
 6. <a href="#user-content-hypertension-initial-review-8">Hypertension Initial Review</a>
 7. <a href="#user-content-hiv-review-7">Hiv Review</a>
-8. <a href="#user-content-viral-load-result-7">Viral Load Result</a>
-9. <a href="#user-content-diabetes-review-7">Diabetes Review</a>
-10. <a href="#user-content-hypertension-review-7">Hypertension Review</a>
-11. <a href="#user-content-medications-8">Medications</a>
-12. <a href="#user-content-drug-refill-hypertension-8">Drug Refill: Hypertension</a>
-13. <a href="#user-content-drug-refill-diabetes-8">Drug Refill: Diabetes</a>
-14. <a href="#user-content-drug-refill-hiv-8">Drug Refill: Hiv</a>
-15. <a href="#user-content-medication-adherence-hiv-8">Medication Adherence (Hiv)</a>
-16. <a href="#user-content-medication-adherence-diabetes-8">Medication Adherence (Diabetes)</a>
-17. <a href="#user-content-medication-adherence-hypertension-8">Medication Adherence (Hypertension)</a>
-18. <a href="#user-content-complications-followup-7">Complications: Followup</a>
-19. <a href="#user-content-family-history-and-knowledge-8">Family History And Knowledge</a>
-20. <a href="#user-content-overall-quality-of-life-icecap-a-v2-8">Overall Quality Of Life (Icecap-A V2)</a>
-21. <a href="#user-content-euroqol-eq-5d-3l-instrument-8">Euroqol Eq-5D-3L Instrument</a>
-22. <a href="#user-content-health-economics-household-head-8">Health Economics: Household Head</a>
-23. <a href="#user-content-health-economics-patient-8">Health Economics: Patient</a>
-24. <a href="#user-content-health-economics-assets-8">Health Economics: Assets</a>
-25. <a href="#user-content-health-economics-property-8">Health Economics: Property</a>
-26. <a href="#user-content-health-economics-income-8">Health Economics: Income</a>
+8. <a href="#user-content-diabetes-review-7">Diabetes Review</a>
+9. <a href="#user-content-hypertension-review-7">Hypertension Review</a>
+10. <a href="#user-content-medications-8">Medications</a>
+11. <a href="#user-content-drug-refill-hypertension-8">Drug Refill: Hypertension</a>
+12. <a href="#user-content-drug-refill-diabetes-8">Drug Refill: Diabetes</a>
+13. <a href="#user-content-drug-refill-hiv-8">Drug Refill: Hiv</a>
+14. <a href="#user-content-medication-adherence-hiv-8">Medication Adherence (Hiv)</a>
+15. <a href="#user-content-medication-adherence-diabetes-8">Medication Adherence (Diabetes)</a>
+16. <a href="#user-content-medication-adherence-hypertension-8">Medication Adherence (Hypertension)</a>
+17. <a href="#user-content-complications-followup-7">Complications: Followup</a>
+18. <a href="#user-content-family-history-and-knowledge-8">Family History And Knowledge</a>
+19. <a href="#user-content-overall-quality-of-life-icecap-a-v2-8">Overall Quality Of Life (Icecap-A V2)</a>
+20. <a href="#user-content-euroqol-eq-5d-3l-instrument-8">Euroqol Eq-5D-3L Instrument</a>
+21. <a href="#user-content-health-economics-household-head-8">Health Economics: Household Head</a>
+22. <a href="#user-content-health-economics-patient-8">Health Economics: Patient</a>
+23. <a href="#user-content-health-economics-assets-8">Health Economics: Assets</a>
+24. <a href="#user-content-health-economics-property-8">Health Economics: Property</a>
+25. <a href="#user-content-health-economics-income-8">Health Economics: Income</a>
+26. <a href="#user-content-glucose-7">Glucose</a>
 27. <a href="#user-content-next-appointment-8">Next Appointment</a>
 
 <a href="#user-content-1090">**1090.**</a>
@@ -267,25 +267,25 @@
 5. <a href="#user-content-diabetes-initial-review-9">Diabetes Initial Review</a>
 6. <a href="#user-content-hypertension-initial-review-9">Hypertension Initial Review</a>
 7. <a href="#user-content-hiv-review-8">Hiv Review</a>
-8. <a href="#user-content-viral-load-result-8">Viral Load Result</a>
-9. <a href="#user-content-diabetes-review-8">Diabetes Review</a>
-10. <a href="#user-content-hypertension-review-8">Hypertension Review</a>
-11. <a href="#user-content-medications-9">Medications</a>
-12. <a href="#user-content-drug-refill-hypertension-9">Drug Refill: Hypertension</a>
-13. <a href="#user-content-drug-refill-diabetes-9">Drug Refill: Diabetes</a>
-14. <a href="#user-content-drug-refill-hiv-9">Drug Refill: Hiv</a>
-15. <a href="#user-content-medication-adherence-hiv-9">Medication Adherence (Hiv)</a>
-16. <a href="#user-content-medication-adherence-diabetes-9">Medication Adherence (Diabetes)</a>
-17. <a href="#user-content-medication-adherence-hypertension-9">Medication Adherence (Hypertension)</a>
-18. <a href="#user-content-complications-followup-8">Complications: Followup</a>
-19. <a href="#user-content-family-history-and-knowledge-9">Family History And Knowledge</a>
-20. <a href="#user-content-overall-quality-of-life-icecap-a-v2-9">Overall Quality Of Life (Icecap-A V2)</a>
-21. <a href="#user-content-euroqol-eq-5d-3l-instrument-9">Euroqol Eq-5D-3L Instrument</a>
-22. <a href="#user-content-health-economics-household-head-9">Health Economics: Household Head</a>
-23. <a href="#user-content-health-economics-patient-9">Health Economics: Patient</a>
-24. <a href="#user-content-health-economics-assets-9">Health Economics: Assets</a>
-25. <a href="#user-content-health-economics-property-9">Health Economics: Property</a>
-26. <a href="#user-content-health-economics-income-9">Health Economics: Income</a>
+8. <a href="#user-content-diabetes-review-8">Diabetes Review</a>
+9. <a href="#user-content-hypertension-review-8">Hypertension Review</a>
+10. <a href="#user-content-medications-9">Medications</a>
+11. <a href="#user-content-drug-refill-hypertension-9">Drug Refill: Hypertension</a>
+12. <a href="#user-content-drug-refill-diabetes-9">Drug Refill: Diabetes</a>
+13. <a href="#user-content-drug-refill-hiv-9">Drug Refill: Hiv</a>
+14. <a href="#user-content-medication-adherence-hiv-9">Medication Adherence (Hiv)</a>
+15. <a href="#user-content-medication-adherence-diabetes-9">Medication Adherence (Diabetes)</a>
+16. <a href="#user-content-medication-adherence-hypertension-9">Medication Adherence (Hypertension)</a>
+17. <a href="#user-content-complications-followup-8">Complications: Followup</a>
+18. <a href="#user-content-family-history-and-knowledge-9">Family History And Knowledge</a>
+19. <a href="#user-content-overall-quality-of-life-icecap-a-v2-9">Overall Quality Of Life (Icecap-A V2)</a>
+20. <a href="#user-content-euroqol-eq-5d-3l-instrument-9">Euroqol Eq-5D-3L Instrument</a>
+21. <a href="#user-content-health-economics-household-head-9">Health Economics: Household Head</a>
+22. <a href="#user-content-health-economics-patient-9">Health Economics: Patient</a>
+23. <a href="#user-content-health-economics-assets-9">Health Economics: Assets</a>
+24. <a href="#user-content-health-economics-property-9">Health Economics: Property</a>
+25. <a href="#user-content-health-economics-income-9">Health Economics: Income</a>
+26. <a href="#user-content-glucose-8">Glucose</a>
 27. <a href="#user-content-next-appointment-9">Next Appointment</a>
 
 <a href="#user-content-1100">**1100.**</a>
@@ -296,25 +296,25 @@
 5. <a href="#user-content-diabetes-initial-review-10">Diabetes Initial Review</a>
 6. <a href="#user-content-hypertension-initial-review-10">Hypertension Initial Review</a>
 7. <a href="#user-content-hiv-review-9">Hiv Review</a>
-8. <a href="#user-content-viral-load-result-9">Viral Load Result</a>
-9. <a href="#user-content-diabetes-review-9">Diabetes Review</a>
-10. <a href="#user-content-hypertension-review-9">Hypertension Review</a>
-11. <a href="#user-content-medications-10">Medications</a>
-12. <a href="#user-content-drug-refill-hypertension-10">Drug Refill: Hypertension</a>
-13. <a href="#user-content-drug-refill-diabetes-10">Drug Refill: Diabetes</a>
-14. <a href="#user-content-drug-refill-hiv-10">Drug Refill: Hiv</a>
-15. <a href="#user-content-medication-adherence-hiv-10">Medication Adherence (Hiv)</a>
-16. <a href="#user-content-medication-adherence-diabetes-10">Medication Adherence (Diabetes)</a>
-17. <a href="#user-content-medication-adherence-hypertension-10">Medication Adherence (Hypertension)</a>
-18. <a href="#user-content-complications-followup-9">Complications: Followup</a>
-19. <a href="#user-content-family-history-and-knowledge-10">Family History And Knowledge</a>
-20. <a href="#user-content-overall-quality-of-life-icecap-a-v2-10">Overall Quality Of Life (Icecap-A V2)</a>
-21. <a href="#user-content-euroqol-eq-5d-3l-instrument-10">Euroqol Eq-5D-3L Instrument</a>
-22. <a href="#user-content-health-economics-household-head-10">Health Economics: Household Head</a>
-23. <a href="#user-content-health-economics-patient-10">Health Economics: Patient</a>
-24. <a href="#user-content-health-economics-assets-10">Health Economics: Assets</a>
-25. <a href="#user-content-health-economics-property-10">Health Economics: Property</a>
-26. <a href="#user-content-health-economics-income-10">Health Economics: Income</a>
+8. <a href="#user-content-diabetes-review-9">Diabetes Review</a>
+9. <a href="#user-content-hypertension-review-9">Hypertension Review</a>
+10. <a href="#user-content-medications-10">Medications</a>
+11. <a href="#user-content-drug-refill-hypertension-10">Drug Refill: Hypertension</a>
+12. <a href="#user-content-drug-refill-diabetes-10">Drug Refill: Diabetes</a>
+13. <a href="#user-content-drug-refill-hiv-10">Drug Refill: Hiv</a>
+14. <a href="#user-content-medication-adherence-hiv-10">Medication Adherence (Hiv)</a>
+15. <a href="#user-content-medication-adherence-diabetes-10">Medication Adherence (Diabetes)</a>
+16. <a href="#user-content-medication-adherence-hypertension-10">Medication Adherence (Hypertension)</a>
+17. <a href="#user-content-complications-followup-9">Complications: Followup</a>
+18. <a href="#user-content-family-history-and-knowledge-10">Family History And Knowledge</a>
+19. <a href="#user-content-overall-quality-of-life-icecap-a-v2-10">Overall Quality Of Life (Icecap-A V2)</a>
+20. <a href="#user-content-euroqol-eq-5d-3l-instrument-10">Euroqol Eq-5D-3L Instrument</a>
+21. <a href="#user-content-health-economics-household-head-10">Health Economics: Household Head</a>
+22. <a href="#user-content-health-economics-patient-10">Health Economics: Patient</a>
+23. <a href="#user-content-health-economics-assets-10">Health Economics: Assets</a>
+24. <a href="#user-content-health-economics-property-10">Health Economics: Property</a>
+25. <a href="#user-content-health-economics-income-10">Health Economics: Income</a>
+26. <a href="#user-content-glucose-9">Glucose</a>
 27. <a href="#user-content-next-appointment-10">Next Appointment</a>
 
 <a href="#user-content-1110">**1110.**</a>
@@ -325,25 +325,25 @@
 5. <a href="#user-content-diabetes-initial-review-11">Diabetes Initial Review</a>
 6. <a href="#user-content-hypertension-initial-review-11">Hypertension Initial Review</a>
 7. <a href="#user-content-hiv-review-10">Hiv Review</a>
-8. <a href="#user-content-viral-load-result-10">Viral Load Result</a>
-9. <a href="#user-content-diabetes-review-10">Diabetes Review</a>
-10. <a href="#user-content-hypertension-review-10">Hypertension Review</a>
-11. <a href="#user-content-medications-11">Medications</a>
-12. <a href="#user-content-drug-refill-hypertension-11">Drug Refill: Hypertension</a>
-13. <a href="#user-content-drug-refill-diabetes-11">Drug Refill: Diabetes</a>
-14. <a href="#user-content-drug-refill-hiv-11">Drug Refill: Hiv</a>
-15. <a href="#user-content-medication-adherence-hiv-11">Medication Adherence (Hiv)</a>
-16. <a href="#user-content-medication-adherence-diabetes-11">Medication Adherence (Diabetes)</a>
-17. <a href="#user-content-medication-adherence-hypertension-11">Medication Adherence (Hypertension)</a>
-18. <a href="#user-content-complications-followup-10">Complications: Followup</a>
-19. <a href="#user-content-family-history-and-knowledge-11">Family History And Knowledge</a>
-20. <a href="#user-content-overall-quality-of-life-icecap-a-v2-11">Overall Quality Of Life (Icecap-A V2)</a>
-21. <a href="#user-content-euroqol-eq-5d-3l-instrument-11">Euroqol Eq-5D-3L Instrument</a>
-22. <a href="#user-content-health-economics-household-head-11">Health Economics: Household Head</a>
-23. <a href="#user-content-health-economics-patient-11">Health Economics: Patient</a>
-24. <a href="#user-content-health-economics-assets-11">Health Economics: Assets</a>
-25. <a href="#user-content-health-economics-property-11">Health Economics: Property</a>
-26. <a href="#user-content-health-economics-income-11">Health Economics: Income</a>
+8. <a href="#user-content-diabetes-review-10">Diabetes Review</a>
+9. <a href="#user-content-hypertension-review-10">Hypertension Review</a>
+10. <a href="#user-content-medications-11">Medications</a>
+11. <a href="#user-content-drug-refill-hypertension-11">Drug Refill: Hypertension</a>
+12. <a href="#user-content-drug-refill-diabetes-11">Drug Refill: Diabetes</a>
+13. <a href="#user-content-drug-refill-hiv-11">Drug Refill: Hiv</a>
+14. <a href="#user-content-medication-adherence-hiv-11">Medication Adherence (Hiv)</a>
+15. <a href="#user-content-medication-adherence-diabetes-11">Medication Adherence (Diabetes)</a>
+16. <a href="#user-content-medication-adherence-hypertension-11">Medication Adherence (Hypertension)</a>
+17. <a href="#user-content-complications-followup-10">Complications: Followup</a>
+18. <a href="#user-content-family-history-and-knowledge-11">Family History And Knowledge</a>
+19. <a href="#user-content-overall-quality-of-life-icecap-a-v2-11">Overall Quality Of Life (Icecap-A V2)</a>
+20. <a href="#user-content-euroqol-eq-5d-3l-instrument-11">Euroqol Eq-5D-3L Instrument</a>
+21. <a href="#user-content-health-economics-household-head-11">Health Economics: Household Head</a>
+22. <a href="#user-content-health-economics-patient-11">Health Economics: Patient</a>
+23. <a href="#user-content-health-economics-assets-11">Health Economics: Assets</a>
+24. <a href="#user-content-health-economics-property-11">Health Economics: Property</a>
+25. <a href="#user-content-health-economics-income-11">Health Economics: Income</a>
+26. <a href="#user-content-glucose-10">Glucose</a>
 27. <a href="#user-content-next-appointment-11">Next Appointment</a>
 
 <a href="#user-content-1120">**1120.**</a>
@@ -354,25 +354,25 @@
 5. <a href="#user-content-diabetes-initial-review-12">Diabetes Initial Review</a>
 6. <a href="#user-content-hypertension-initial-review-12">Hypertension Initial Review</a>
 7. <a href="#user-content-hiv-review-11">Hiv Review</a>
-8. <a href="#user-content-viral-load-result-11">Viral Load Result</a>
-9. <a href="#user-content-diabetes-review-11">Diabetes Review</a>
-10. <a href="#user-content-hypertension-review-11">Hypertension Review</a>
-11. <a href="#user-content-medications-12">Medications</a>
-12. <a href="#user-content-drug-refill-hypertension-12">Drug Refill: Hypertension</a>
-13. <a href="#user-content-drug-refill-diabetes-12">Drug Refill: Diabetes</a>
-14. <a href="#user-content-drug-refill-hiv-12">Drug Refill: Hiv</a>
-15. <a href="#user-content-medication-adherence-hiv-12">Medication Adherence (Hiv)</a>
-16. <a href="#user-content-medication-adherence-diabetes-12">Medication Adherence (Diabetes)</a>
-17. <a href="#user-content-medication-adherence-hypertension-12">Medication Adherence (Hypertension)</a>
-18. <a href="#user-content-complications-followup-11">Complications: Followup</a>
-19. <a href="#user-content-family-history-and-knowledge-12">Family History And Knowledge</a>
-20. <a href="#user-content-overall-quality-of-life-icecap-a-v2-12">Overall Quality Of Life (Icecap-A V2)</a>
-21. <a href="#user-content-euroqol-eq-5d-3l-instrument-12">Euroqol Eq-5D-3L Instrument</a>
-22. <a href="#user-content-health-economics-household-head-12">Health Economics: Household Head</a>
-23. <a href="#user-content-health-economics-patient-12">Health Economics: Patient</a>
-24. <a href="#user-content-health-economics-assets-12">Health Economics: Assets</a>
-25. <a href="#user-content-health-economics-property-12">Health Economics: Property</a>
-26. <a href="#user-content-health-economics-income-12">Health Economics: Income</a>
+8. <a href="#user-content-diabetes-review-11">Diabetes Review</a>
+9. <a href="#user-content-hypertension-review-11">Hypertension Review</a>
+10. <a href="#user-content-medications-12">Medications</a>
+11. <a href="#user-content-drug-refill-hypertension-12">Drug Refill: Hypertension</a>
+12. <a href="#user-content-drug-refill-diabetes-12">Drug Refill: Diabetes</a>
+13. <a href="#user-content-drug-refill-hiv-12">Drug Refill: Hiv</a>
+14. <a href="#user-content-medication-adherence-hiv-12">Medication Adherence (Hiv)</a>
+15. <a href="#user-content-medication-adherence-diabetes-12">Medication Adherence (Diabetes)</a>
+16. <a href="#user-content-medication-adherence-hypertension-12">Medication Adherence (Hypertension)</a>
+17. <a href="#user-content-complications-followup-11">Complications: Followup</a>
+18. <a href="#user-content-family-history-and-knowledge-12">Family History And Knowledge</a>
+19. <a href="#user-content-overall-quality-of-life-icecap-a-v2-12">Overall Quality Of Life (Icecap-A V2)</a>
+20. <a href="#user-content-euroqol-eq-5d-3l-instrument-12">Euroqol Eq-5D-3L Instrument</a>
+21. <a href="#user-content-health-economics-household-head-12">Health Economics: Household Head</a>
+22. <a href="#user-content-health-economics-patient-12">Health Economics: Patient</a>
+23. <a href="#user-content-health-economics-assets-12">Health Economics: Assets</a>
+24. <a href="#user-content-health-economics-property-12">Health Economics: Property</a>
+25. <a href="#user-content-health-economics-income-12">Health Economics: Income</a>
+26. <a href="#user-content-glucose-11">Glucose</a>
 27. <a href="#user-content-next-appointment-12">Next Appointment</a>
 
 
@@ -5650,7 +5650,7 @@
 - type: TextField
 ---
 
-**Section: Anit-retroviral therapy (ART)**
+**Section: Anti-retroviral therapy (ART)**
 
 **4.0.** Has the patient started antiretroviral therapy (ART)?
 - db_table: intecomm_subject_hivreview
@@ -5682,9 +5682,52 @@
 - responses: *free text*
 ---
 
+**Section: Monitoring**
+
+**7.0.** Is the patient's most recent viral load result available?
+- db_table: intecomm_subject_hivreview
+- column: has_vl
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `PENDING`: *Pending*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Date specimen drawn
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If exact date not known, please estimate*
+- db_table: intecomm_subject_hivreview
+- column: drawn_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**9.0.** Most recent viral load
+
+&nbsp;&nbsp;&nbsp;&nbsp; *copies/mL*
+- db_table: intecomm_subject_hivreview
+- column: vl
+- type: IntegerField
+---
+
+**10.0.** vl quantifier
+- db_table: intecomm_subject_hivreview
+- column: vl_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `<`: *<*
+  - `N/A`: *Not applicable*
+---
+
 **Section: CRF status**
 
-**7.0.** CRF status
+**11.0.** CRF status
 
 &nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
 - db_table: intecomm_subject_hivreview
@@ -5696,64 +5739,12 @@
   - `COMPLETE`: *Complete*
 ---
 
-**8.0.** Any comments related to status of this CRF
+**12.0.** Any comments related to status of this CRF
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_hivreview
 - column: crf_status_comments
 - type: TextField
----
-
-
-#### Viral Load Result
-*[missing model class docstring]*
-
-
-*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
-
-
-**Section: Main**
-
-**1.0.** subject visit
-- db_table: intecomm_subject_viralloadresult
-- column: subject_visit
-- type: OneToOneField
----
-
-**2.0.** Report Date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
-- db_table: intecomm_subject_viralloadresult
-- column: report_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: Requisition and Result Date**
-
-**3.0.** Requisition
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Start typing the requisition identifier or select one from this visit*
-- db_table: intecomm_subject_viralloadresult
-- column: requisition
-- type: ForeignKey
----
-
-**4.0.** Result assay date and time
-- db_table: intecomm_subject_viralloadresult
-- column: assay_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: VL**
-
-**5.0.** VL Result
-
-&nbsp;&nbsp;&nbsp;&nbsp; *in copies/mL*
-- db_table: intecomm_subject_viralloadresult
-- column: vl_value
-- type: IntegerField
 ---
 
 
@@ -9005,6 +8996,118 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_healtheconomicsincome
+- column: crf_status_comments
+- type: TextField
+---
+
+
+#### Glucose
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+
+**Section: Main**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_glucose
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_glucose
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: Blood Sugar Measurement**
+
+**3.0.** Has the participant fasted?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**4.0.** How long have they fasted in hours and/or minutes?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient. Duration of fast. Format is `HHhMMm`. For example 1h23m, 12h7m, etc*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting_duration_str
+- type: CharField
+- length: 8
+- responses: *free text*
+---
+
+**5.0.** Glucose date measured
+- db_table: intecomm_subject_glucose
+- column: glucose_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**6.0.** Glucose level
+
+&nbsp;&nbsp;&nbsp;&nbsp; *A `HIGH` reading may be entered as 9999.99*
+- db_table: intecomm_subject_glucose
+- column: glucose_value
+- type: DecimalField
+---
+
+**7.0.** Glucose quantifier
+- db_table: intecomm_subject_glucose
+- column: glucose_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `>=`: *>=*
+  - `<`: *<*
+  - `<=`: *<=*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Glucose units
+- db_table: intecomm_subject_glucose
+- column: glucose_units
+- type: CharField
+- length: 15
+- responses:
+  - `mg/dL`: *mg/dL*
+  - `mmol/L`: *mmol/L (millimoles/L)*
+  - `N/A`: *Not applicable*
+---
+
+**Section: CRF status**
+
+**9.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_glucose
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**10.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_glucose
 - column: crf_status_comments
 - type: TextField
 ---
@@ -10157,7 +10260,7 @@
 - type: TextField
 ---
 
-**Section: Anit-retroviral therapy (ART)**
+**Section: Anti-retroviral therapy (ART)**
 
 **4.0.** Has the patient started antiretroviral therapy (ART)?
 - db_table: intecomm_subject_hivreview
@@ -10189,9 +10292,52 @@
 - responses: *free text*
 ---
 
+**Section: Monitoring**
+
+**7.0.** Is the patient's most recent viral load result available?
+- db_table: intecomm_subject_hivreview
+- column: has_vl
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `PENDING`: *Pending*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Date specimen drawn
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If exact date not known, please estimate*
+- db_table: intecomm_subject_hivreview
+- column: drawn_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**9.0.** Most recent viral load
+
+&nbsp;&nbsp;&nbsp;&nbsp; *copies/mL*
+- db_table: intecomm_subject_hivreview
+- column: vl
+- type: IntegerField
+---
+
+**10.0.** vl quantifier
+- db_table: intecomm_subject_hivreview
+- column: vl_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `<`: *<*
+  - `N/A`: *Not applicable*
+---
+
 **Section: CRF status**
 
-**7.0.** CRF status
+**11.0.** CRF status
 
 &nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
 - db_table: intecomm_subject_hivreview
@@ -10203,64 +10349,12 @@
   - `COMPLETE`: *Complete*
 ---
 
-**8.0.** Any comments related to status of this CRF
+**12.0.** Any comments related to status of this CRF
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_hivreview
 - column: crf_status_comments
 - type: TextField
----
-
-
-#### Viral Load Result
-*[missing model class docstring]*
-
-
-*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
-
-
-**Section: Main**
-
-**1.0.** subject visit
-- db_table: intecomm_subject_viralloadresult
-- column: subject_visit
-- type: OneToOneField
----
-
-**2.0.** Report Date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
-- db_table: intecomm_subject_viralloadresult
-- column: report_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: Requisition and Result Date**
-
-**3.0.** Requisition
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Start typing the requisition identifier or select one from this visit*
-- db_table: intecomm_subject_viralloadresult
-- column: requisition
-- type: ForeignKey
----
-
-**4.0.** Result assay date and time
-- db_table: intecomm_subject_viralloadresult
-- column: assay_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: VL**
-
-**5.0.** VL Result
-
-&nbsp;&nbsp;&nbsp;&nbsp; *in copies/mL*
-- db_table: intecomm_subject_viralloadresult
-- column: vl_value
-- type: IntegerField
 ---
 
 
@@ -13512,6 +13606,118 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_healtheconomicsincome
+- column: crf_status_comments
+- type: TextField
+---
+
+
+#### Glucose
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+
+**Section: Main**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_glucose
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_glucose
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: Blood Sugar Measurement**
+
+**3.0.** Has the participant fasted?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**4.0.** How long have they fasted in hours and/or minutes?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient. Duration of fast. Format is `HHhMMm`. For example 1h23m, 12h7m, etc*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting_duration_str
+- type: CharField
+- length: 8
+- responses: *free text*
+---
+
+**5.0.** Glucose date measured
+- db_table: intecomm_subject_glucose
+- column: glucose_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**6.0.** Glucose level
+
+&nbsp;&nbsp;&nbsp;&nbsp; *A `HIGH` reading may be entered as 9999.99*
+- db_table: intecomm_subject_glucose
+- column: glucose_value
+- type: DecimalField
+---
+
+**7.0.** Glucose quantifier
+- db_table: intecomm_subject_glucose
+- column: glucose_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `>=`: *>=*
+  - `<`: *<*
+  - `<=`: *<=*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Glucose units
+- db_table: intecomm_subject_glucose
+- column: glucose_units
+- type: CharField
+- length: 15
+- responses:
+  - `mg/dL`: *mg/dL*
+  - `mmol/L`: *mmol/L (millimoles/L)*
+  - `N/A`: *Not applicable*
+---
+
+**Section: CRF status**
+
+**9.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_glucose
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**10.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_glucose
 - column: crf_status_comments
 - type: TextField
 ---
@@ -14664,7 +14870,7 @@
 - type: TextField
 ---
 
-**Section: Anit-retroviral therapy (ART)**
+**Section: Anti-retroviral therapy (ART)**
 
 **4.0.** Has the patient started antiretroviral therapy (ART)?
 - db_table: intecomm_subject_hivreview
@@ -14696,9 +14902,52 @@
 - responses: *free text*
 ---
 
+**Section: Monitoring**
+
+**7.0.** Is the patient's most recent viral load result available?
+- db_table: intecomm_subject_hivreview
+- column: has_vl
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `PENDING`: *Pending*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Date specimen drawn
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If exact date not known, please estimate*
+- db_table: intecomm_subject_hivreview
+- column: drawn_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**9.0.** Most recent viral load
+
+&nbsp;&nbsp;&nbsp;&nbsp; *copies/mL*
+- db_table: intecomm_subject_hivreview
+- column: vl
+- type: IntegerField
+---
+
+**10.0.** vl quantifier
+- db_table: intecomm_subject_hivreview
+- column: vl_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `<`: *<*
+  - `N/A`: *Not applicable*
+---
+
 **Section: CRF status**
 
-**7.0.** CRF status
+**11.0.** CRF status
 
 &nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
 - db_table: intecomm_subject_hivreview
@@ -14710,64 +14959,12 @@
   - `COMPLETE`: *Complete*
 ---
 
-**8.0.** Any comments related to status of this CRF
+**12.0.** Any comments related to status of this CRF
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_hivreview
 - column: crf_status_comments
 - type: TextField
----
-
-
-#### Viral Load Result
-*[missing model class docstring]*
-
-
-*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
-
-
-**Section: Main**
-
-**1.0.** subject visit
-- db_table: intecomm_subject_viralloadresult
-- column: subject_visit
-- type: OneToOneField
----
-
-**2.0.** Report Date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
-- db_table: intecomm_subject_viralloadresult
-- column: report_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: Requisition and Result Date**
-
-**3.0.** Requisition
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Start typing the requisition identifier or select one from this visit*
-- db_table: intecomm_subject_viralloadresult
-- column: requisition
-- type: ForeignKey
----
-
-**4.0.** Result assay date and time
-- db_table: intecomm_subject_viralloadresult
-- column: assay_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: VL**
-
-**5.0.** VL Result
-
-&nbsp;&nbsp;&nbsp;&nbsp; *in copies/mL*
-- db_table: intecomm_subject_viralloadresult
-- column: vl_value
-- type: IntegerField
 ---
 
 
@@ -18019,6 +18216,118 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_healtheconomicsincome
+- column: crf_status_comments
+- type: TextField
+---
+
+
+#### Glucose
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+
+**Section: Main**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_glucose
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_glucose
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: Blood Sugar Measurement**
+
+**3.0.** Has the participant fasted?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**4.0.** How long have they fasted in hours and/or minutes?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient. Duration of fast. Format is `HHhMMm`. For example 1h23m, 12h7m, etc*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting_duration_str
+- type: CharField
+- length: 8
+- responses: *free text*
+---
+
+**5.0.** Glucose date measured
+- db_table: intecomm_subject_glucose
+- column: glucose_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**6.0.** Glucose level
+
+&nbsp;&nbsp;&nbsp;&nbsp; *A `HIGH` reading may be entered as 9999.99*
+- db_table: intecomm_subject_glucose
+- column: glucose_value
+- type: DecimalField
+---
+
+**7.0.** Glucose quantifier
+- db_table: intecomm_subject_glucose
+- column: glucose_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `>=`: *>=*
+  - `<`: *<*
+  - `<=`: *<=*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Glucose units
+- db_table: intecomm_subject_glucose
+- column: glucose_units
+- type: CharField
+- length: 15
+- responses:
+  - `mg/dL`: *mg/dL*
+  - `mmol/L`: *mmol/L (millimoles/L)*
+  - `N/A`: *Not applicable*
+---
+
+**Section: CRF status**
+
+**9.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_glucose
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**10.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_glucose
 - column: crf_status_comments
 - type: TextField
 ---
@@ -19171,7 +19480,7 @@
 - type: TextField
 ---
 
-**Section: Anit-retroviral therapy (ART)**
+**Section: Anti-retroviral therapy (ART)**
 
 **4.0.** Has the patient started antiretroviral therapy (ART)?
 - db_table: intecomm_subject_hivreview
@@ -19203,9 +19512,52 @@
 - responses: *free text*
 ---
 
+**Section: Monitoring**
+
+**7.0.** Is the patient's most recent viral load result available?
+- db_table: intecomm_subject_hivreview
+- column: has_vl
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `PENDING`: *Pending*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Date specimen drawn
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If exact date not known, please estimate*
+- db_table: intecomm_subject_hivreview
+- column: drawn_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**9.0.** Most recent viral load
+
+&nbsp;&nbsp;&nbsp;&nbsp; *copies/mL*
+- db_table: intecomm_subject_hivreview
+- column: vl
+- type: IntegerField
+---
+
+**10.0.** vl quantifier
+- db_table: intecomm_subject_hivreview
+- column: vl_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `<`: *<*
+  - `N/A`: *Not applicable*
+---
+
 **Section: CRF status**
 
-**7.0.** CRF status
+**11.0.** CRF status
 
 &nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
 - db_table: intecomm_subject_hivreview
@@ -19217,64 +19569,12 @@
   - `COMPLETE`: *Complete*
 ---
 
-**8.0.** Any comments related to status of this CRF
+**12.0.** Any comments related to status of this CRF
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_hivreview
 - column: crf_status_comments
 - type: TextField
----
-
-
-#### Viral Load Result
-*[missing model class docstring]*
-
-
-*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
-
-
-**Section: Main**
-
-**1.0.** subject visit
-- db_table: intecomm_subject_viralloadresult
-- column: subject_visit
-- type: OneToOneField
----
-
-**2.0.** Report Date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
-- db_table: intecomm_subject_viralloadresult
-- column: report_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: Requisition and Result Date**
-
-**3.0.** Requisition
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Start typing the requisition identifier or select one from this visit*
-- db_table: intecomm_subject_viralloadresult
-- column: requisition
-- type: ForeignKey
----
-
-**4.0.** Result assay date and time
-- db_table: intecomm_subject_viralloadresult
-- column: assay_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: VL**
-
-**5.0.** VL Result
-
-&nbsp;&nbsp;&nbsp;&nbsp; *in copies/mL*
-- db_table: intecomm_subject_viralloadresult
-- column: vl_value
-- type: IntegerField
 ---
 
 
@@ -22526,6 +22826,118 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_healtheconomicsincome
+- column: crf_status_comments
+- type: TextField
+---
+
+
+#### Glucose
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+
+**Section: Main**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_glucose
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_glucose
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: Blood Sugar Measurement**
+
+**3.0.** Has the participant fasted?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**4.0.** How long have they fasted in hours and/or minutes?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient. Duration of fast. Format is `HHhMMm`. For example 1h23m, 12h7m, etc*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting_duration_str
+- type: CharField
+- length: 8
+- responses: *free text*
+---
+
+**5.0.** Glucose date measured
+- db_table: intecomm_subject_glucose
+- column: glucose_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**6.0.** Glucose level
+
+&nbsp;&nbsp;&nbsp;&nbsp; *A `HIGH` reading may be entered as 9999.99*
+- db_table: intecomm_subject_glucose
+- column: glucose_value
+- type: DecimalField
+---
+
+**7.0.** Glucose quantifier
+- db_table: intecomm_subject_glucose
+- column: glucose_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `>=`: *>=*
+  - `<`: *<*
+  - `<=`: *<=*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Glucose units
+- db_table: intecomm_subject_glucose
+- column: glucose_units
+- type: CharField
+- length: 15
+- responses:
+  - `mg/dL`: *mg/dL*
+  - `mmol/L`: *mmol/L (millimoles/L)*
+  - `N/A`: *Not applicable*
+---
+
+**Section: CRF status**
+
+**9.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_glucose
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**10.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_glucose
 - column: crf_status_comments
 - type: TextField
 ---
@@ -23678,7 +24090,7 @@
 - type: TextField
 ---
 
-**Section: Anit-retroviral therapy (ART)**
+**Section: Anti-retroviral therapy (ART)**
 
 **4.0.** Has the patient started antiretroviral therapy (ART)?
 - db_table: intecomm_subject_hivreview
@@ -23710,9 +24122,52 @@
 - responses: *free text*
 ---
 
+**Section: Monitoring**
+
+**7.0.** Is the patient's most recent viral load result available?
+- db_table: intecomm_subject_hivreview
+- column: has_vl
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `PENDING`: *Pending*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Date specimen drawn
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If exact date not known, please estimate*
+- db_table: intecomm_subject_hivreview
+- column: drawn_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**9.0.** Most recent viral load
+
+&nbsp;&nbsp;&nbsp;&nbsp; *copies/mL*
+- db_table: intecomm_subject_hivreview
+- column: vl
+- type: IntegerField
+---
+
+**10.0.** vl quantifier
+- db_table: intecomm_subject_hivreview
+- column: vl_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `<`: *<*
+  - `N/A`: *Not applicable*
+---
+
 **Section: CRF status**
 
-**7.0.** CRF status
+**11.0.** CRF status
 
 &nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
 - db_table: intecomm_subject_hivreview
@@ -23724,64 +24179,12 @@
   - `COMPLETE`: *Complete*
 ---
 
-**8.0.** Any comments related to status of this CRF
+**12.0.** Any comments related to status of this CRF
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_hivreview
 - column: crf_status_comments
 - type: TextField
----
-
-
-#### Viral Load Result
-*[missing model class docstring]*
-
-
-*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
-
-
-**Section: Main**
-
-**1.0.** subject visit
-- db_table: intecomm_subject_viralloadresult
-- column: subject_visit
-- type: OneToOneField
----
-
-**2.0.** Report Date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
-- db_table: intecomm_subject_viralloadresult
-- column: report_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: Requisition and Result Date**
-
-**3.0.** Requisition
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Start typing the requisition identifier or select one from this visit*
-- db_table: intecomm_subject_viralloadresult
-- column: requisition
-- type: ForeignKey
----
-
-**4.0.** Result assay date and time
-- db_table: intecomm_subject_viralloadresult
-- column: assay_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: VL**
-
-**5.0.** VL Result
-
-&nbsp;&nbsp;&nbsp;&nbsp; *in copies/mL*
-- db_table: intecomm_subject_viralloadresult
-- column: vl_value
-- type: IntegerField
 ---
 
 
@@ -27033,6 +27436,118 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_healtheconomicsincome
+- column: crf_status_comments
+- type: TextField
+---
+
+
+#### Glucose
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+
+**Section: Main**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_glucose
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_glucose
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: Blood Sugar Measurement**
+
+**3.0.** Has the participant fasted?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**4.0.** How long have they fasted in hours and/or minutes?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient. Duration of fast. Format is `HHhMMm`. For example 1h23m, 12h7m, etc*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting_duration_str
+- type: CharField
+- length: 8
+- responses: *free text*
+---
+
+**5.0.** Glucose date measured
+- db_table: intecomm_subject_glucose
+- column: glucose_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**6.0.** Glucose level
+
+&nbsp;&nbsp;&nbsp;&nbsp; *A `HIGH` reading may be entered as 9999.99*
+- db_table: intecomm_subject_glucose
+- column: glucose_value
+- type: DecimalField
+---
+
+**7.0.** Glucose quantifier
+- db_table: intecomm_subject_glucose
+- column: glucose_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `>=`: *>=*
+  - `<`: *<*
+  - `<=`: *<=*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Glucose units
+- db_table: intecomm_subject_glucose
+- column: glucose_units
+- type: CharField
+- length: 15
+- responses:
+  - `mg/dL`: *mg/dL*
+  - `mmol/L`: *mmol/L (millimoles/L)*
+  - `N/A`: *Not applicable*
+---
+
+**Section: CRF status**
+
+**9.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_glucose
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**10.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_glucose
 - column: crf_status_comments
 - type: TextField
 ---
@@ -28185,7 +28700,7 @@
 - type: TextField
 ---
 
-**Section: Anit-retroviral therapy (ART)**
+**Section: Anti-retroviral therapy (ART)**
 
 **4.0.** Has the patient started antiretroviral therapy (ART)?
 - db_table: intecomm_subject_hivreview
@@ -28217,9 +28732,52 @@
 - responses: *free text*
 ---
 
+**Section: Monitoring**
+
+**7.0.** Is the patient's most recent viral load result available?
+- db_table: intecomm_subject_hivreview
+- column: has_vl
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `PENDING`: *Pending*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Date specimen drawn
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If exact date not known, please estimate*
+- db_table: intecomm_subject_hivreview
+- column: drawn_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**9.0.** Most recent viral load
+
+&nbsp;&nbsp;&nbsp;&nbsp; *copies/mL*
+- db_table: intecomm_subject_hivreview
+- column: vl
+- type: IntegerField
+---
+
+**10.0.** vl quantifier
+- db_table: intecomm_subject_hivreview
+- column: vl_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `<`: *<*
+  - `N/A`: *Not applicable*
+---
+
 **Section: CRF status**
 
-**7.0.** CRF status
+**11.0.** CRF status
 
 &nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
 - db_table: intecomm_subject_hivreview
@@ -28231,64 +28789,12 @@
   - `COMPLETE`: *Complete*
 ---
 
-**8.0.** Any comments related to status of this CRF
+**12.0.** Any comments related to status of this CRF
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_hivreview
 - column: crf_status_comments
 - type: TextField
----
-
-
-#### Viral Load Result
-*[missing model class docstring]*
-
-
-*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
-
-
-**Section: Main**
-
-**1.0.** subject visit
-- db_table: intecomm_subject_viralloadresult
-- column: subject_visit
-- type: OneToOneField
----
-
-**2.0.** Report Date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
-- db_table: intecomm_subject_viralloadresult
-- column: report_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: Requisition and Result Date**
-
-**3.0.** Requisition
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Start typing the requisition identifier or select one from this visit*
-- db_table: intecomm_subject_viralloadresult
-- column: requisition
-- type: ForeignKey
----
-
-**4.0.** Result assay date and time
-- db_table: intecomm_subject_viralloadresult
-- column: assay_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: VL**
-
-**5.0.** VL Result
-
-&nbsp;&nbsp;&nbsp;&nbsp; *in copies/mL*
-- db_table: intecomm_subject_viralloadresult
-- column: vl_value
-- type: IntegerField
 ---
 
 
@@ -31540,6 +32046,118 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_healtheconomicsincome
+- column: crf_status_comments
+- type: TextField
+---
+
+
+#### Glucose
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+
+**Section: Main**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_glucose
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_glucose
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: Blood Sugar Measurement**
+
+**3.0.** Has the participant fasted?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**4.0.** How long have they fasted in hours and/or minutes?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient. Duration of fast. Format is `HHhMMm`. For example 1h23m, 12h7m, etc*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting_duration_str
+- type: CharField
+- length: 8
+- responses: *free text*
+---
+
+**5.0.** Glucose date measured
+- db_table: intecomm_subject_glucose
+- column: glucose_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**6.0.** Glucose level
+
+&nbsp;&nbsp;&nbsp;&nbsp; *A `HIGH` reading may be entered as 9999.99*
+- db_table: intecomm_subject_glucose
+- column: glucose_value
+- type: DecimalField
+---
+
+**7.0.** Glucose quantifier
+- db_table: intecomm_subject_glucose
+- column: glucose_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `>=`: *>=*
+  - `<`: *<*
+  - `<=`: *<=*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Glucose units
+- db_table: intecomm_subject_glucose
+- column: glucose_units
+- type: CharField
+- length: 15
+- responses:
+  - `mg/dL`: *mg/dL*
+  - `mmol/L`: *mmol/L (millimoles/L)*
+  - `N/A`: *Not applicable*
+---
+
+**Section: CRF status**
+
+**9.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_glucose
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**10.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_glucose
 - column: crf_status_comments
 - type: TextField
 ---
@@ -32692,7 +33310,7 @@
 - type: TextField
 ---
 
-**Section: Anit-retroviral therapy (ART)**
+**Section: Anti-retroviral therapy (ART)**
 
 **4.0.** Has the patient started antiretroviral therapy (ART)?
 - db_table: intecomm_subject_hivreview
@@ -32724,9 +33342,52 @@
 - responses: *free text*
 ---
 
+**Section: Monitoring**
+
+**7.0.** Is the patient's most recent viral load result available?
+- db_table: intecomm_subject_hivreview
+- column: has_vl
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `PENDING`: *Pending*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Date specimen drawn
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If exact date not known, please estimate*
+- db_table: intecomm_subject_hivreview
+- column: drawn_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**9.0.** Most recent viral load
+
+&nbsp;&nbsp;&nbsp;&nbsp; *copies/mL*
+- db_table: intecomm_subject_hivreview
+- column: vl
+- type: IntegerField
+---
+
+**10.0.** vl quantifier
+- db_table: intecomm_subject_hivreview
+- column: vl_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `<`: *<*
+  - `N/A`: *Not applicable*
+---
+
 **Section: CRF status**
 
-**7.0.** CRF status
+**11.0.** CRF status
 
 &nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
 - db_table: intecomm_subject_hivreview
@@ -32738,64 +33399,12 @@
   - `COMPLETE`: *Complete*
 ---
 
-**8.0.** Any comments related to status of this CRF
+**12.0.** Any comments related to status of this CRF
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_hivreview
 - column: crf_status_comments
 - type: TextField
----
-
-
-#### Viral Load Result
-*[missing model class docstring]*
-
-
-*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
-
-
-**Section: Main**
-
-**1.0.** subject visit
-- db_table: intecomm_subject_viralloadresult
-- column: subject_visit
-- type: OneToOneField
----
-
-**2.0.** Report Date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
-- db_table: intecomm_subject_viralloadresult
-- column: report_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: Requisition and Result Date**
-
-**3.0.** Requisition
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Start typing the requisition identifier or select one from this visit*
-- db_table: intecomm_subject_viralloadresult
-- column: requisition
-- type: ForeignKey
----
-
-**4.0.** Result assay date and time
-- db_table: intecomm_subject_viralloadresult
-- column: assay_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: VL**
-
-**5.0.** VL Result
-
-&nbsp;&nbsp;&nbsp;&nbsp; *in copies/mL*
-- db_table: intecomm_subject_viralloadresult
-- column: vl_value
-- type: IntegerField
 ---
 
 
@@ -36047,6 +36656,118 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_healtheconomicsincome
+- column: crf_status_comments
+- type: TextField
+---
+
+
+#### Glucose
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+
+**Section: Main**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_glucose
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_glucose
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: Blood Sugar Measurement**
+
+**3.0.** Has the participant fasted?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**4.0.** How long have they fasted in hours and/or minutes?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient. Duration of fast. Format is `HHhMMm`. For example 1h23m, 12h7m, etc*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting_duration_str
+- type: CharField
+- length: 8
+- responses: *free text*
+---
+
+**5.0.** Glucose date measured
+- db_table: intecomm_subject_glucose
+- column: glucose_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**6.0.** Glucose level
+
+&nbsp;&nbsp;&nbsp;&nbsp; *A `HIGH` reading may be entered as 9999.99*
+- db_table: intecomm_subject_glucose
+- column: glucose_value
+- type: DecimalField
+---
+
+**7.0.** Glucose quantifier
+- db_table: intecomm_subject_glucose
+- column: glucose_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `>=`: *>=*
+  - `<`: *<*
+  - `<=`: *<=*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Glucose units
+- db_table: intecomm_subject_glucose
+- column: glucose_units
+- type: CharField
+- length: 15
+- responses:
+  - `mg/dL`: *mg/dL*
+  - `mmol/L`: *mmol/L (millimoles/L)*
+  - `N/A`: *Not applicable*
+---
+
+**Section: CRF status**
+
+**9.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_glucose
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**10.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_glucose
 - column: crf_status_comments
 - type: TextField
 ---
@@ -37199,7 +37920,7 @@
 - type: TextField
 ---
 
-**Section: Anit-retroviral therapy (ART)**
+**Section: Anti-retroviral therapy (ART)**
 
 **4.0.** Has the patient started antiretroviral therapy (ART)?
 - db_table: intecomm_subject_hivreview
@@ -37231,9 +37952,52 @@
 - responses: *free text*
 ---
 
+**Section: Monitoring**
+
+**7.0.** Is the patient's most recent viral load result available?
+- db_table: intecomm_subject_hivreview
+- column: has_vl
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `PENDING`: *Pending*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Date specimen drawn
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If exact date not known, please estimate*
+- db_table: intecomm_subject_hivreview
+- column: drawn_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**9.0.** Most recent viral load
+
+&nbsp;&nbsp;&nbsp;&nbsp; *copies/mL*
+- db_table: intecomm_subject_hivreview
+- column: vl
+- type: IntegerField
+---
+
+**10.0.** vl quantifier
+- db_table: intecomm_subject_hivreview
+- column: vl_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `<`: *<*
+  - `N/A`: *Not applicable*
+---
+
 **Section: CRF status**
 
-**7.0.** CRF status
+**11.0.** CRF status
 
 &nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
 - db_table: intecomm_subject_hivreview
@@ -37245,64 +38009,12 @@
   - `COMPLETE`: *Complete*
 ---
 
-**8.0.** Any comments related to status of this CRF
+**12.0.** Any comments related to status of this CRF
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_hivreview
 - column: crf_status_comments
 - type: TextField
----
-
-
-#### Viral Load Result
-*[missing model class docstring]*
-
-
-*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
-
-
-**Section: Main**
-
-**1.0.** subject visit
-- db_table: intecomm_subject_viralloadresult
-- column: subject_visit
-- type: OneToOneField
----
-
-**2.0.** Report Date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
-- db_table: intecomm_subject_viralloadresult
-- column: report_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: Requisition and Result Date**
-
-**3.0.** Requisition
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Start typing the requisition identifier or select one from this visit*
-- db_table: intecomm_subject_viralloadresult
-- column: requisition
-- type: ForeignKey
----
-
-**4.0.** Result assay date and time
-- db_table: intecomm_subject_viralloadresult
-- column: assay_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: VL**
-
-**5.0.** VL Result
-
-&nbsp;&nbsp;&nbsp;&nbsp; *in copies/mL*
-- db_table: intecomm_subject_viralloadresult
-- column: vl_value
-- type: IntegerField
 ---
 
 
@@ -40554,6 +41266,118 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_healtheconomicsincome
+- column: crf_status_comments
+- type: TextField
+---
+
+
+#### Glucose
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+
+**Section: Main**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_glucose
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_glucose
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: Blood Sugar Measurement**
+
+**3.0.** Has the participant fasted?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**4.0.** How long have they fasted in hours and/or minutes?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient. Duration of fast. Format is `HHhMMm`. For example 1h23m, 12h7m, etc*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting_duration_str
+- type: CharField
+- length: 8
+- responses: *free text*
+---
+
+**5.0.** Glucose date measured
+- db_table: intecomm_subject_glucose
+- column: glucose_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**6.0.** Glucose level
+
+&nbsp;&nbsp;&nbsp;&nbsp; *A `HIGH` reading may be entered as 9999.99*
+- db_table: intecomm_subject_glucose
+- column: glucose_value
+- type: DecimalField
+---
+
+**7.0.** Glucose quantifier
+- db_table: intecomm_subject_glucose
+- column: glucose_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `>=`: *>=*
+  - `<`: *<*
+  - `<=`: *<=*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Glucose units
+- db_table: intecomm_subject_glucose
+- column: glucose_units
+- type: CharField
+- length: 15
+- responses:
+  - `mg/dL`: *mg/dL*
+  - `mmol/L`: *mmol/L (millimoles/L)*
+  - `N/A`: *Not applicable*
+---
+
+**Section: CRF status**
+
+**9.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_glucose
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**10.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_glucose
 - column: crf_status_comments
 - type: TextField
 ---
@@ -41706,7 +42530,7 @@
 - type: TextField
 ---
 
-**Section: Anit-retroviral therapy (ART)**
+**Section: Anti-retroviral therapy (ART)**
 
 **4.0.** Has the patient started antiretroviral therapy (ART)?
 - db_table: intecomm_subject_hivreview
@@ -41738,9 +42562,52 @@
 - responses: *free text*
 ---
 
+**Section: Monitoring**
+
+**7.0.** Is the patient's most recent viral load result available?
+- db_table: intecomm_subject_hivreview
+- column: has_vl
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `PENDING`: *Pending*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Date specimen drawn
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If exact date not known, please estimate*
+- db_table: intecomm_subject_hivreview
+- column: drawn_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**9.0.** Most recent viral load
+
+&nbsp;&nbsp;&nbsp;&nbsp; *copies/mL*
+- db_table: intecomm_subject_hivreview
+- column: vl
+- type: IntegerField
+---
+
+**10.0.** vl quantifier
+- db_table: intecomm_subject_hivreview
+- column: vl_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `<`: *<*
+  - `N/A`: *Not applicable*
+---
+
 **Section: CRF status**
 
-**7.0.** CRF status
+**11.0.** CRF status
 
 &nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
 - db_table: intecomm_subject_hivreview
@@ -41752,64 +42619,12 @@
   - `COMPLETE`: *Complete*
 ---
 
-**8.0.** Any comments related to status of this CRF
+**12.0.** Any comments related to status of this CRF
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_hivreview
 - column: crf_status_comments
 - type: TextField
----
-
-
-#### Viral Load Result
-*[missing model class docstring]*
-
-
-*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
-
-
-**Section: Main**
-
-**1.0.** subject visit
-- db_table: intecomm_subject_viralloadresult
-- column: subject_visit
-- type: OneToOneField
----
-
-**2.0.** Report Date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
-- db_table: intecomm_subject_viralloadresult
-- column: report_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: Requisition and Result Date**
-
-**3.0.** Requisition
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Start typing the requisition identifier or select one from this visit*
-- db_table: intecomm_subject_viralloadresult
-- column: requisition
-- type: ForeignKey
----
-
-**4.0.** Result assay date and time
-- db_table: intecomm_subject_viralloadresult
-- column: assay_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: VL**
-
-**5.0.** VL Result
-
-&nbsp;&nbsp;&nbsp;&nbsp; *in copies/mL*
-- db_table: intecomm_subject_viralloadresult
-- column: vl_value
-- type: IntegerField
 ---
 
 
@@ -45061,6 +45876,118 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_healtheconomicsincome
+- column: crf_status_comments
+- type: TextField
+---
+
+
+#### Glucose
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+
+**Section: Main**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_glucose
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_glucose
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: Blood Sugar Measurement**
+
+**3.0.** Has the participant fasted?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**4.0.** How long have they fasted in hours and/or minutes?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient. Duration of fast. Format is `HHhMMm`. For example 1h23m, 12h7m, etc*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting_duration_str
+- type: CharField
+- length: 8
+- responses: *free text*
+---
+
+**5.0.** Glucose date measured
+- db_table: intecomm_subject_glucose
+- column: glucose_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**6.0.** Glucose level
+
+&nbsp;&nbsp;&nbsp;&nbsp; *A `HIGH` reading may be entered as 9999.99*
+- db_table: intecomm_subject_glucose
+- column: glucose_value
+- type: DecimalField
+---
+
+**7.0.** Glucose quantifier
+- db_table: intecomm_subject_glucose
+- column: glucose_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `>=`: *>=*
+  - `<`: *<*
+  - `<=`: *<=*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Glucose units
+- db_table: intecomm_subject_glucose
+- column: glucose_units
+- type: CharField
+- length: 15
+- responses:
+  - `mg/dL`: *mg/dL*
+  - `mmol/L`: *mmol/L (millimoles/L)*
+  - `N/A`: *Not applicable*
+---
+
+**Section: CRF status**
+
+**9.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_glucose
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**10.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_glucose
 - column: crf_status_comments
 - type: TextField
 ---
@@ -46213,7 +47140,7 @@
 - type: TextField
 ---
 
-**Section: Anit-retroviral therapy (ART)**
+**Section: Anti-retroviral therapy (ART)**
 
 **4.0.** Has the patient started antiretroviral therapy (ART)?
 - db_table: intecomm_subject_hivreview
@@ -46245,9 +47172,52 @@
 - responses: *free text*
 ---
 
+**Section: Monitoring**
+
+**7.0.** Is the patient's most recent viral load result available?
+- db_table: intecomm_subject_hivreview
+- column: has_vl
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `PENDING`: *Pending*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Date specimen drawn
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If exact date not known, please estimate*
+- db_table: intecomm_subject_hivreview
+- column: drawn_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**9.0.** Most recent viral load
+
+&nbsp;&nbsp;&nbsp;&nbsp; *copies/mL*
+- db_table: intecomm_subject_hivreview
+- column: vl
+- type: IntegerField
+---
+
+**10.0.** vl quantifier
+- db_table: intecomm_subject_hivreview
+- column: vl_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `<`: *<*
+  - `N/A`: *Not applicable*
+---
+
 **Section: CRF status**
 
-**7.0.** CRF status
+**11.0.** CRF status
 
 &nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
 - db_table: intecomm_subject_hivreview
@@ -46259,64 +47229,12 @@
   - `COMPLETE`: *Complete*
 ---
 
-**8.0.** Any comments related to status of this CRF
+**12.0.** Any comments related to status of this CRF
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_hivreview
 - column: crf_status_comments
 - type: TextField
----
-
-
-#### Viral Load Result
-*[missing model class docstring]*
-
-
-*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
-
-
-**Section: Main**
-
-**1.0.** subject visit
-- db_table: intecomm_subject_viralloadresult
-- column: subject_visit
-- type: OneToOneField
----
-
-**2.0.** Report Date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
-- db_table: intecomm_subject_viralloadresult
-- column: report_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: Requisition and Result Date**
-
-**3.0.** Requisition
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Start typing the requisition identifier or select one from this visit*
-- db_table: intecomm_subject_viralloadresult
-- column: requisition
-- type: ForeignKey
----
-
-**4.0.** Result assay date and time
-- db_table: intecomm_subject_viralloadresult
-- column: assay_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: VL**
-
-**5.0.** VL Result
-
-&nbsp;&nbsp;&nbsp;&nbsp; *in copies/mL*
-- db_table: intecomm_subject_viralloadresult
-- column: vl_value
-- type: IntegerField
 ---
 
 
@@ -49568,6 +50486,118 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_healtheconomicsincome
+- column: crf_status_comments
+- type: TextField
+---
+
+
+#### Glucose
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+
+**Section: Main**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_glucose
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_glucose
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: Blood Sugar Measurement**
+
+**3.0.** Has the participant fasted?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**4.0.** How long have they fasted in hours and/or minutes?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient. Duration of fast. Format is `HHhMMm`. For example 1h23m, 12h7m, etc*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting_duration_str
+- type: CharField
+- length: 8
+- responses: *free text*
+---
+
+**5.0.** Glucose date measured
+- db_table: intecomm_subject_glucose
+- column: glucose_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**6.0.** Glucose level
+
+&nbsp;&nbsp;&nbsp;&nbsp; *A `HIGH` reading may be entered as 9999.99*
+- db_table: intecomm_subject_glucose
+- column: glucose_value
+- type: DecimalField
+---
+
+**7.0.** Glucose quantifier
+- db_table: intecomm_subject_glucose
+- column: glucose_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `>=`: *>=*
+  - `<`: *<*
+  - `<=`: *<=*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Glucose units
+- db_table: intecomm_subject_glucose
+- column: glucose_units
+- type: CharField
+- length: 15
+- responses:
+  - `mg/dL`: *mg/dL*
+  - `mmol/L`: *mmol/L (millimoles/L)*
+  - `N/A`: *Not applicable*
+---
+
+**Section: CRF status**
+
+**9.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_glucose
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**10.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_glucose
 - column: crf_status_comments
 - type: TextField
 ---
@@ -50720,7 +51750,7 @@
 - type: TextField
 ---
 
-**Section: Anit-retroviral therapy (ART)**
+**Section: Anti-retroviral therapy (ART)**
 
 **4.0.** Has the patient started antiretroviral therapy (ART)?
 - db_table: intecomm_subject_hivreview
@@ -50752,9 +51782,52 @@
 - responses: *free text*
 ---
 
+**Section: Monitoring**
+
+**7.0.** Is the patient's most recent viral load result available?
+- db_table: intecomm_subject_hivreview
+- column: has_vl
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `PENDING`: *Pending*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Date specimen drawn
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If exact date not known, please estimate*
+- db_table: intecomm_subject_hivreview
+- column: drawn_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**9.0.** Most recent viral load
+
+&nbsp;&nbsp;&nbsp;&nbsp; *copies/mL*
+- db_table: intecomm_subject_hivreview
+- column: vl
+- type: IntegerField
+---
+
+**10.0.** vl quantifier
+- db_table: intecomm_subject_hivreview
+- column: vl_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `<`: *<*
+  - `N/A`: *Not applicable*
+---
+
 **Section: CRF status**
 
-**7.0.** CRF status
+**11.0.** CRF status
 
 &nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
 - db_table: intecomm_subject_hivreview
@@ -50766,64 +51839,12 @@
   - `COMPLETE`: *Complete*
 ---
 
-**8.0.** Any comments related to status of this CRF
+**12.0.** Any comments related to status of this CRF
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_hivreview
 - column: crf_status_comments
 - type: TextField
----
-
-
-#### Viral Load Result
-*[missing model class docstring]*
-
-
-*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
-
-
-**Section: Main**
-
-**1.0.** subject visit
-- db_table: intecomm_subject_viralloadresult
-- column: subject_visit
-- type: OneToOneField
----
-
-**2.0.** Report Date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
-- db_table: intecomm_subject_viralloadresult
-- column: report_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: Requisition and Result Date**
-
-**3.0.** Requisition
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Start typing the requisition identifier or select one from this visit*
-- db_table: intecomm_subject_viralloadresult
-- column: requisition
-- type: ForeignKey
----
-
-**4.0.** Result assay date and time
-- db_table: intecomm_subject_viralloadresult
-- column: assay_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: VL**
-
-**5.0.** VL Result
-
-&nbsp;&nbsp;&nbsp;&nbsp; *in copies/mL*
-- db_table: intecomm_subject_viralloadresult
-- column: vl_value
-- type: IntegerField
 ---
 
 
@@ -54075,6 +55096,118 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_healtheconomicsincome
+- column: crf_status_comments
+- type: TextField
+---
+
+
+#### Glucose
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+
+**Section: Main**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_glucose
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_glucose
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: Blood Sugar Measurement**
+
+**3.0.** Has the participant fasted?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**4.0.** How long have they fasted in hours and/or minutes?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient. Duration of fast. Format is `HHhMMm`. For example 1h23m, 12h7m, etc*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting_duration_str
+- type: CharField
+- length: 8
+- responses: *free text*
+---
+
+**5.0.** Glucose date measured
+- db_table: intecomm_subject_glucose
+- column: glucose_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**6.0.** Glucose level
+
+&nbsp;&nbsp;&nbsp;&nbsp; *A `HIGH` reading may be entered as 9999.99*
+- db_table: intecomm_subject_glucose
+- column: glucose_value
+- type: DecimalField
+---
+
+**7.0.** Glucose quantifier
+- db_table: intecomm_subject_glucose
+- column: glucose_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `>=`: *>=*
+  - `<`: *<*
+  - `<=`: *<=*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Glucose units
+- db_table: intecomm_subject_glucose
+- column: glucose_units
+- type: CharField
+- length: 15
+- responses:
+  - `mg/dL`: *mg/dL*
+  - `mmol/L`: *mmol/L (millimoles/L)*
+  - `N/A`: *Not applicable*
+---
+
+**Section: CRF status**
+
+**9.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_glucose
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**10.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_glucose
 - column: crf_status_comments
 - type: TextField
 ---
@@ -55227,7 +56360,7 @@
 - type: TextField
 ---
 
-**Section: Anit-retroviral therapy (ART)**
+**Section: Anti-retroviral therapy (ART)**
 
 **4.0.** Has the patient started antiretroviral therapy (ART)?
 - db_table: intecomm_subject_hivreview
@@ -55259,9 +56392,52 @@
 - responses: *free text*
 ---
 
+**Section: Monitoring**
+
+**7.0.** Is the patient's most recent viral load result available?
+- db_table: intecomm_subject_hivreview
+- column: has_vl
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `PENDING`: *Pending*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Date specimen drawn
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If exact date not known, please estimate*
+- db_table: intecomm_subject_hivreview
+- column: drawn_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**9.0.** Most recent viral load
+
+&nbsp;&nbsp;&nbsp;&nbsp; *copies/mL*
+- db_table: intecomm_subject_hivreview
+- column: vl
+- type: IntegerField
+---
+
+**10.0.** vl quantifier
+- db_table: intecomm_subject_hivreview
+- column: vl_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `<`: *<*
+  - `N/A`: *Not applicable*
+---
+
 **Section: CRF status**
 
-**7.0.** CRF status
+**11.0.** CRF status
 
 &nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
 - db_table: intecomm_subject_hivreview
@@ -55273,64 +56449,12 @@
   - `COMPLETE`: *Complete*
 ---
 
-**8.0.** Any comments related to status of this CRF
+**12.0.** Any comments related to status of this CRF
 
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
 - db_table: intecomm_subject_hivreview
 - column: crf_status_comments
 - type: TextField
----
-
-
-#### Viral Load Result
-*[missing model class docstring]*
-
-
-*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
-
-
-**Section: Main**
-
-**1.0.** subject visit
-- db_table: intecomm_subject_viralloadresult
-- column: subject_visit
-- type: OneToOneField
----
-
-**2.0.** Report Date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
-- db_table: intecomm_subject_viralloadresult
-- column: report_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: Requisition and Result Date**
-
-**3.0.** Requisition
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Start typing the requisition identifier or select one from this visit*
-- db_table: intecomm_subject_viralloadresult
-- column: requisition
-- type: ForeignKey
----
-
-**4.0.** Result assay date and time
-- db_table: intecomm_subject_viralloadresult
-- column: assay_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: VL**
-
-**5.0.** VL Result
-
-&nbsp;&nbsp;&nbsp;&nbsp; *in copies/mL*
-- db_table: intecomm_subject_viralloadresult
-- column: vl_value
-- type: IntegerField
 ---
 
 
@@ -58587,6 +59711,118 @@
 ---
 
 
+#### Glucose
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+
+**Section: Main**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_glucose
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_glucose
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: Blood Sugar Measurement**
+
+**3.0.** Has the participant fasted?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**4.0.** How long have they fasted in hours and/or minutes?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *As reported by patient. Duration of fast. Format is `HHhMMm`. For example 1h23m, 12h7m, etc*
+- db_table: intecomm_subject_glucose
+- column: glucose_fasting_duration_str
+- type: CharField
+- length: 8
+- responses: *free text*
+---
+
+**5.0.** Glucose date measured
+- db_table: intecomm_subject_glucose
+- column: glucose_date
+- type: DateField
+- format: YYYY-MM-DD
+---
+
+**6.0.** Glucose level
+
+&nbsp;&nbsp;&nbsp;&nbsp; *A `HIGH` reading may be entered as 9999.99*
+- db_table: intecomm_subject_glucose
+- column: glucose_value
+- type: DecimalField
+---
+
+**7.0.** Glucose quantifier
+- db_table: intecomm_subject_glucose
+- column: glucose_quantifier
+- type: CharField
+- length: 10
+- responses:
+  - `=`: *=*
+  - `>`: *>*
+  - `>=`: *>=*
+  - `<`: *<*
+  - `<=`: *<=*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** Glucose units
+- db_table: intecomm_subject_glucose
+- column: glucose_units
+- type: CharField
+- length: 15
+- responses:
+  - `mg/dL`: *mg/dL*
+  - `mmol/L`: *mmol/L (millimoles/L)*
+  - `N/A`: *Not applicable*
+---
+
+**Section: CRF status**
+
+**9.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_glucose
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**10.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_glucose
+- column: crf_status_comments
+- type: TextField
+---
+
+
 #### Next Appointment
 *[missing model class docstring]*
 
@@ -58679,6 +59915,6 @@
 
 
 
-*Rendered on 2024-01-30 08:39*
+*Rendered on 2024-02-22 08:45*
 
 

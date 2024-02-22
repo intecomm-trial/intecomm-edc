@@ -28,6 +28,8 @@ from .eq5d3l import Eq5d3l
 from .family_history import FamilyHistory
 from .glucose import Glucose
 from .health_economics import (
+    CareseekingA,
+    CareseekingB,
     HealthEconomicsAssets,
     HealthEconomicsHouseholdHead,
     HealthEconomicsIncome,

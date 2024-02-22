@@ -26,6 +26,8 @@ from .eq5d3l_admin import Eq5d3lAdmin
 from .family_history_admin import FamilyHistoryAdmin
 from .glucose_admin import GlucoseAdmin
 from .health_economics import (
+    CareseekingAAdmin,
+    CareseekingBAdmin,
     HealthEconomicsAssetsAdmin,
     HealthEconomicsHouseholdHeadAdmin,
     HealthEconomicsIncomeAdmin,

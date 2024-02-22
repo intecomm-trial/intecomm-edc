@@ -1,4 +1,4 @@
-from edc_list_data.model_mixins import ListModelMixin
+from edc_list_data.model_mixins import ListModelMixin, ListModelMixin2
 
 
 class ArvDrugs(ListModelMixin):
@@ -133,12 +133,6 @@ class ToxicityWithdrawalReasons(ListModelMixin):
         verbose_name_plural = "Toxicity Withdrawal Reasons"
 
 
-class VisitReasons(ListModelMixin):
-    class Meta(ListModelMixin.Meta):
-        verbose_name = "Visit Reasons"
-        verbose_name_plural = "Visit Reasons"
-
-
 class SubjectVisitMissedReasons(ListModelMixin):
     class Meta(ListModelMixin.Meta):
         verbose_name = "Subject Missed Visit Reasons"
@@ -197,3 +191,28 @@ class ConsentRefusalReasons(ListModelMixin):
     class Meta(ListModelMixin.Meta):
         verbose_name = "Consent Refusal Reasons"
         verbose_name_plural = "Consent Refusal Reasons"
+
+
+# careseeking part A
+class Accompanied(ListModelMixin2):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Accompanied by"
+        verbose_name_plural = "Accompanied by"
+
+
+class MoneySources(ListModelMixin2):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Money sources"
+        verbose_name_plural = "Money sources"
+
+
+class TravelMethods(ListModelMixin2):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Travel methods"
+        verbose_name_plural = "Travel methods"
+
+
+class VisitReasons(ListModelMixin2):
+    class Meta(ListModelMixin.Meta):
+        verbose_name = "Visit Reasons"
+        verbose_name_plural = "Visit Reasons"
