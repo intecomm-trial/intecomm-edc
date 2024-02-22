@@ -965,6 +965,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_dminitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -1147,6 +1148,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_htninitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -1828,6 +1830,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_hivmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -1968,6 +1971,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_dmmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -2108,6 +2112,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_htnmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -2319,6 +2324,7 @@
 **15.1.** If other, please specify ...
 - db_table: intecomm_subject_otherbaselinedata
 - column: employment_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3054,6 +3060,7 @@
 **8.1.** If OTHER relationship, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: relationship_to_hoh_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3072,6 +3079,7 @@
 **9.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3090,6 +3098,7 @@
 **10.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3108,6 +3117,7 @@
 **11.1.** If OTHER education, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3147,6 +3157,7 @@
 **13.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -3175,6 +3186,7 @@
 **14.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3203,6 +3215,7 @@
 **15.1.** If OTHER, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3268,6 +3281,7 @@
 **3.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3282,6 +3296,7 @@
 **4.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3296,6 +3311,7 @@
 **5.1.** If OTHER level of education, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3329,6 +3345,7 @@
 **7.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -3353,6 +3370,7 @@
 **8.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3377,6 +3395,7 @@
 **9.1.** If OTHER health insurance status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3506,6 +3525,7 @@
 **9.1.** If OTHER roof material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: roof_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3531,6 +3551,7 @@
 **10.1.** If OTHER external wall material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_wall_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3554,6 +3575,7 @@
 **11.1.** If OTHER external window material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_window_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3579,6 +3601,7 @@
 **12.1.** If OTHER floor material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: floor_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3610,6 +3633,7 @@
 **14.1.** If OTHER lighting source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: lighting_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3634,6 +3658,7 @@
 **15.1.** If OTHER cooking fuel, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: cooking_fuel_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3666,6 +3691,7 @@
 **16.1.** If OTHER water source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: water_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -3717,6 +3743,7 @@
 **18.1.** If OTHER type of toilet, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: toilet_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -4891,6 +4918,7 @@
 **3.1.** If other, please specify ...
 - db_table: intecomm_subject_locationupdate
 - column: location_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -5378,6 +5406,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_dminitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -5560,6 +5589,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_htninitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -6572,6 +6602,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_hivmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -6712,6 +6743,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_dmmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -6852,6 +6884,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_htnmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -7552,6 +7585,7 @@
 **8.1.** If OTHER relationship, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: relationship_to_hoh_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -7570,6 +7604,7 @@
 **9.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -7588,6 +7623,7 @@
 **10.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -7606,6 +7642,7 @@
 **11.1.** If OTHER education, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -7645,6 +7682,7 @@
 **13.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -7673,6 +7711,7 @@
 **14.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -7701,6 +7740,7 @@
 **15.1.** If OTHER, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -7766,6 +7806,7 @@
 **3.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -7780,6 +7821,7 @@
 **4.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -7794,6 +7836,7 @@
 **5.1.** If OTHER level of education, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -7827,6 +7870,7 @@
 **7.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -7851,6 +7895,7 @@
 **8.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -7875,6 +7920,7 @@
 **9.1.** If OTHER health insurance status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -8004,6 +8050,7 @@
 **9.1.** If OTHER roof material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: roof_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -8029,6 +8076,7 @@
 **10.1.** If OTHER external wall material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_wall_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -8052,6 +8100,7 @@
 **11.1.** If OTHER external window material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_window_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -8077,6 +8126,7 @@
 **12.1.** If OTHER floor material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: floor_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -8108,6 +8158,7 @@
 **14.1.** If OTHER lighting source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: lighting_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -8132,6 +8183,7 @@
 **15.1.** If OTHER cooking fuel, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: cooking_fuel_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -8164,6 +8216,7 @@
 **16.1.** If OTHER water source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: water_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -8215,6 +8268,7 @@
 **18.1.** If OTHER type of toilet, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: toilet_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -9501,6 +9555,7 @@
 **3.1.** If other, please specify ...
 - db_table: intecomm_subject_locationupdate
 - column: location_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -9988,6 +10043,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_dminitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -10170,6 +10226,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_htninitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -11182,6 +11239,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_hivmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -11322,6 +11380,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_dmmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -11462,6 +11521,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_htnmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12162,6 +12222,7 @@
 **8.1.** If OTHER relationship, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: relationship_to_hoh_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12180,6 +12241,7 @@
 **9.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12198,6 +12260,7 @@
 **10.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12216,6 +12279,7 @@
 **11.1.** If OTHER education, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12255,6 +12319,7 @@
 **13.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -12283,6 +12348,7 @@
 **14.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12311,6 +12377,7 @@
 **15.1.** If OTHER, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12376,6 +12443,7 @@
 **3.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12390,6 +12458,7 @@
 **4.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12404,6 +12473,7 @@
 **5.1.** If OTHER level of education, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12437,6 +12507,7 @@
 **7.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -12461,6 +12532,7 @@
 **8.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12485,6 +12557,7 @@
 **9.1.** If OTHER health insurance status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12614,6 +12687,7 @@
 **9.1.** If OTHER roof material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: roof_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12639,6 +12713,7 @@
 **10.1.** If OTHER external wall material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_wall_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12662,6 +12737,7 @@
 **11.1.** If OTHER external window material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_window_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12687,6 +12763,7 @@
 **12.1.** If OTHER floor material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: floor_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12718,6 +12795,7 @@
 **14.1.** If OTHER lighting source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: lighting_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12742,6 +12820,7 @@
 **15.1.** If OTHER cooking fuel, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: cooking_fuel_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12774,6 +12853,7 @@
 **16.1.** If OTHER water source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: water_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -12825,6 +12905,7 @@
 **18.1.** If OTHER type of toilet, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: toilet_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -14111,6 +14192,7 @@
 **3.1.** If other, please specify ...
 - db_table: intecomm_subject_locationupdate
 - column: location_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -14598,6 +14680,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_dminitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -14780,6 +14863,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_htninitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -15792,6 +15876,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_hivmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -15932,6 +16017,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_dmmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -16072,6 +16158,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_htnmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -16772,6 +16859,7 @@
 **8.1.** If OTHER relationship, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: relationship_to_hoh_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -16790,6 +16878,7 @@
 **9.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -16808,6 +16897,7 @@
 **10.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -16826,6 +16916,7 @@
 **11.1.** If OTHER education, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -16865,6 +16956,7 @@
 **13.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -16893,6 +16985,7 @@
 **14.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -16921,6 +17014,7 @@
 **15.1.** If OTHER, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -16986,6 +17080,7 @@
 **3.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -17000,6 +17095,7 @@
 **4.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -17014,6 +17110,7 @@
 **5.1.** If OTHER level of education, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -17047,6 +17144,7 @@
 **7.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -17071,6 +17169,7 @@
 **8.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -17095,6 +17194,7 @@
 **9.1.** If OTHER health insurance status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -17224,6 +17324,7 @@
 **9.1.** If OTHER roof material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: roof_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -17249,6 +17350,7 @@
 **10.1.** If OTHER external wall material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_wall_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -17272,6 +17374,7 @@
 **11.1.** If OTHER external window material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_window_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -17297,6 +17400,7 @@
 **12.1.** If OTHER floor material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: floor_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -17328,6 +17432,7 @@
 **14.1.** If OTHER lighting source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: lighting_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -17352,6 +17457,7 @@
 **15.1.** If OTHER cooking fuel, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: cooking_fuel_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -17384,6 +17490,7 @@
 **16.1.** If OTHER water source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: water_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -17435,6 +17542,7 @@
 **18.1.** If OTHER type of toilet, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: toilet_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -18721,6 +18829,7 @@
 **3.1.** If other, please specify ...
 - db_table: intecomm_subject_locationupdate
 - column: location_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -19208,6 +19317,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_dminitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -19390,6 +19500,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_htninitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -20402,6 +20513,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_hivmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -20542,6 +20654,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_dmmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -20682,6 +20795,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_htnmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21382,6 +21496,7 @@
 **8.1.** If OTHER relationship, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: relationship_to_hoh_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21400,6 +21515,7 @@
 **9.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21418,6 +21534,7 @@
 **10.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21436,6 +21553,7 @@
 **11.1.** If OTHER education, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21475,6 +21593,7 @@
 **13.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -21503,6 +21622,7 @@
 **14.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21531,6 +21651,7 @@
 **15.1.** If OTHER, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21596,6 +21717,7 @@
 **3.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21610,6 +21732,7 @@
 **4.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21624,6 +21747,7 @@
 **5.1.** If OTHER level of education, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21657,6 +21781,7 @@
 **7.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -21681,6 +21806,7 @@
 **8.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21705,6 +21831,7 @@
 **9.1.** If OTHER health insurance status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21834,6 +21961,7 @@
 **9.1.** If OTHER roof material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: roof_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21859,6 +21987,7 @@
 **10.1.** If OTHER external wall material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_wall_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21882,6 +22011,7 @@
 **11.1.** If OTHER external window material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_window_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21907,6 +22037,7 @@
 **12.1.** If OTHER floor material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: floor_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21938,6 +22069,7 @@
 **14.1.** If OTHER lighting source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: lighting_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21962,6 +22094,7 @@
 **15.1.** If OTHER cooking fuel, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: cooking_fuel_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -21994,6 +22127,7 @@
 **16.1.** If OTHER water source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: water_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -22045,6 +22179,7 @@
 **18.1.** If OTHER type of toilet, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: toilet_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -23331,6 +23466,7 @@
 **3.1.** If other, please specify ...
 - db_table: intecomm_subject_locationupdate
 - column: location_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -23818,6 +23954,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_dminitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -24000,6 +24137,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_htninitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -25012,6 +25150,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_hivmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -25152,6 +25291,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_dmmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -25292,6 +25432,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_htnmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -25992,6 +26133,7 @@
 **8.1.** If OTHER relationship, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: relationship_to_hoh_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26010,6 +26152,7 @@
 **9.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26028,6 +26171,7 @@
 **10.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26046,6 +26190,7 @@
 **11.1.** If OTHER education, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26085,6 +26230,7 @@
 **13.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -26113,6 +26259,7 @@
 **14.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26141,6 +26288,7 @@
 **15.1.** If OTHER, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26206,6 +26354,7 @@
 **3.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26220,6 +26369,7 @@
 **4.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26234,6 +26384,7 @@
 **5.1.** If OTHER level of education, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26267,6 +26418,7 @@
 **7.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -26291,6 +26443,7 @@
 **8.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26315,6 +26468,7 @@
 **9.1.** If OTHER health insurance status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26444,6 +26598,7 @@
 **9.1.** If OTHER roof material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: roof_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26469,6 +26624,7 @@
 **10.1.** If OTHER external wall material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_wall_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26492,6 +26648,7 @@
 **11.1.** If OTHER external window material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_window_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26517,6 +26674,7 @@
 **12.1.** If OTHER floor material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: floor_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26548,6 +26706,7 @@
 **14.1.** If OTHER lighting source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: lighting_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26572,6 +26731,7 @@
 **15.1.** If OTHER cooking fuel, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: cooking_fuel_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26604,6 +26764,7 @@
 **16.1.** If OTHER water source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: water_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -26655,6 +26816,7 @@
 **18.1.** If OTHER type of toilet, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: toilet_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -27941,6 +28103,7 @@
 **3.1.** If other, please specify ...
 - db_table: intecomm_subject_locationupdate
 - column: location_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -28428,6 +28591,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_dminitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -28610,6 +28774,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_htninitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -29622,6 +29787,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_hivmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -29762,6 +29928,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_dmmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -29902,6 +30069,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_htnmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -30602,6 +30770,7 @@
 **8.1.** If OTHER relationship, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: relationship_to_hoh_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -30620,6 +30789,7 @@
 **9.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -30638,6 +30808,7 @@
 **10.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -30656,6 +30827,7 @@
 **11.1.** If OTHER education, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -30695,6 +30867,7 @@
 **13.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -30723,6 +30896,7 @@
 **14.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -30751,6 +30925,7 @@
 **15.1.** If OTHER, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -30816,6 +30991,7 @@
 **3.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -30830,6 +31006,7 @@
 **4.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -30844,6 +31021,7 @@
 **5.1.** If OTHER level of education, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -30877,6 +31055,7 @@
 **7.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -30901,6 +31080,7 @@
 **8.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -30925,6 +31105,7 @@
 **9.1.** If OTHER health insurance status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -31054,6 +31235,7 @@
 **9.1.** If OTHER roof material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: roof_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -31079,6 +31261,7 @@
 **10.1.** If OTHER external wall material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_wall_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -31102,6 +31285,7 @@
 **11.1.** If OTHER external window material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_window_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -31127,6 +31311,7 @@
 **12.1.** If OTHER floor material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: floor_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -31158,6 +31343,7 @@
 **14.1.** If OTHER lighting source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: lighting_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -31182,6 +31368,7 @@
 **15.1.** If OTHER cooking fuel, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: cooking_fuel_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -31214,6 +31401,7 @@
 **16.1.** If OTHER water source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: water_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -31265,6 +31453,7 @@
 **18.1.** If OTHER type of toilet, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: toilet_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -32551,6 +32740,7 @@
 **3.1.** If other, please specify ...
 - db_table: intecomm_subject_locationupdate
 - column: location_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -33038,6 +33228,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_dminitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -33220,6 +33411,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_htninitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -34232,6 +34424,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_hivmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -34372,6 +34565,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_dmmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -34512,6 +34706,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_htnmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35212,6 +35407,7 @@
 **8.1.** If OTHER relationship, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: relationship_to_hoh_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35230,6 +35426,7 @@
 **9.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35248,6 +35445,7 @@
 **10.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35266,6 +35464,7 @@
 **11.1.** If OTHER education, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35305,6 +35504,7 @@
 **13.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -35333,6 +35533,7 @@
 **14.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35361,6 +35562,7 @@
 **15.1.** If OTHER, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35426,6 +35628,7 @@
 **3.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35440,6 +35643,7 @@
 **4.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35454,6 +35658,7 @@
 **5.1.** If OTHER level of education, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35487,6 +35692,7 @@
 **7.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -35511,6 +35717,7 @@
 **8.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35535,6 +35742,7 @@
 **9.1.** If OTHER health insurance status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35664,6 +35872,7 @@
 **9.1.** If OTHER roof material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: roof_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35689,6 +35898,7 @@
 **10.1.** If OTHER external wall material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_wall_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35712,6 +35922,7 @@
 **11.1.** If OTHER external window material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_window_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35737,6 +35948,7 @@
 **12.1.** If OTHER floor material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: floor_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35768,6 +35980,7 @@
 **14.1.** If OTHER lighting source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: lighting_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35792,6 +36005,7 @@
 **15.1.** If OTHER cooking fuel, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: cooking_fuel_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35824,6 +36038,7 @@
 **16.1.** If OTHER water source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: water_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -35875,6 +36090,7 @@
 **18.1.** If OTHER type of toilet, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: toilet_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -37161,6 +37377,7 @@
 **3.1.** If other, please specify ...
 - db_table: intecomm_subject_locationupdate
 - column: location_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -37648,6 +37865,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_dminitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -37830,6 +38048,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_htninitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -38842,6 +39061,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_hivmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -38982,6 +39202,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_dmmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -39122,6 +39343,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_htnmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -39822,6 +40044,7 @@
 **8.1.** If OTHER relationship, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: relationship_to_hoh_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -39840,6 +40063,7 @@
 **9.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -39858,6 +40082,7 @@
 **10.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -39876,6 +40101,7 @@
 **11.1.** If OTHER education, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -39915,6 +40141,7 @@
 **13.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -39943,6 +40170,7 @@
 **14.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -39971,6 +40199,7 @@
 **15.1.** If OTHER, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -40036,6 +40265,7 @@
 **3.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -40050,6 +40280,7 @@
 **4.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -40064,6 +40295,7 @@
 **5.1.** If OTHER level of education, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -40097,6 +40329,7 @@
 **7.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -40121,6 +40354,7 @@
 **8.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -40145,6 +40379,7 @@
 **9.1.** If OTHER health insurance status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -40274,6 +40509,7 @@
 **9.1.** If OTHER roof material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: roof_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -40299,6 +40535,7 @@
 **10.1.** If OTHER external wall material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_wall_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -40322,6 +40559,7 @@
 **11.1.** If OTHER external window material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_window_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -40347,6 +40585,7 @@
 **12.1.** If OTHER floor material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: floor_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -40378,6 +40617,7 @@
 **14.1.** If OTHER lighting source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: lighting_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -40402,6 +40642,7 @@
 **15.1.** If OTHER cooking fuel, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: cooking_fuel_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -40434,6 +40675,7 @@
 **16.1.** If OTHER water source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: water_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -40485,6 +40727,7 @@
 **18.1.** If OTHER type of toilet, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: toilet_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -41771,6 +42014,7 @@
 **3.1.** If other, please specify ...
 - db_table: intecomm_subject_locationupdate
 - column: location_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -42258,6 +42502,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_dminitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -42440,6 +42685,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_htninitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -43452,6 +43698,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_hivmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -43592,6 +43839,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_dmmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -43732,6 +43980,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_htnmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44432,6 +44681,7 @@
 **8.1.** If OTHER relationship, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: relationship_to_hoh_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44450,6 +44700,7 @@
 **9.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44468,6 +44719,7 @@
 **10.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44486,6 +44738,7 @@
 **11.1.** If OTHER education, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44525,6 +44778,7 @@
 **13.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -44553,6 +44807,7 @@
 **14.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44581,6 +44836,7 @@
 **15.1.** If OTHER, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44646,6 +44902,7 @@
 **3.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44660,6 +44917,7 @@
 **4.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44674,6 +44932,7 @@
 **5.1.** If OTHER level of education, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44707,6 +44966,7 @@
 **7.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -44731,6 +44991,7 @@
 **8.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44755,6 +45016,7 @@
 **9.1.** If OTHER health insurance status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44884,6 +45146,7 @@
 **9.1.** If OTHER roof material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: roof_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44909,6 +45172,7 @@
 **10.1.** If OTHER external wall material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_wall_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44932,6 +45196,7 @@
 **11.1.** If OTHER external window material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_window_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44957,6 +45222,7 @@
 **12.1.** If OTHER floor material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: floor_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -44988,6 +45254,7 @@
 **14.1.** If OTHER lighting source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: lighting_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -45012,6 +45279,7 @@
 **15.1.** If OTHER cooking fuel, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: cooking_fuel_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -45044,6 +45312,7 @@
 **16.1.** If OTHER water source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: water_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -45095,6 +45364,7 @@
 **18.1.** If OTHER type of toilet, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: toilet_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -46381,6 +46651,7 @@
 **3.1.** If other, please specify ...
 - db_table: intecomm_subject_locationupdate
 - column: location_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -46868,6 +47139,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_dminitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -47050,6 +47322,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_htninitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -48062,6 +48335,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_hivmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -48202,6 +48476,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_dmmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -48342,6 +48617,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_htnmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49042,6 +49318,7 @@
 **8.1.** If OTHER relationship, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: relationship_to_hoh_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49060,6 +49337,7 @@
 **9.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49078,6 +49356,7 @@
 **10.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49096,6 +49375,7 @@
 **11.1.** If OTHER education, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49135,6 +49415,7 @@
 **13.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -49163,6 +49444,7 @@
 **14.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49191,6 +49473,7 @@
 **15.1.** If OTHER, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49256,6 +49539,7 @@
 **3.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49270,6 +49554,7 @@
 **4.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49284,6 +49569,7 @@
 **5.1.** If OTHER level of education, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49317,6 +49603,7 @@
 **7.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -49341,6 +49628,7 @@
 **8.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49365,6 +49653,7 @@
 **9.1.** If OTHER health insurance status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49494,6 +49783,7 @@
 **9.1.** If OTHER roof material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: roof_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49519,6 +49809,7 @@
 **10.1.** If OTHER external wall material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_wall_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49542,6 +49833,7 @@
 **11.1.** If OTHER external window material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_window_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49567,6 +49859,7 @@
 **12.1.** If OTHER floor material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: floor_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49598,6 +49891,7 @@
 **14.1.** If OTHER lighting source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: lighting_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49622,6 +49916,7 @@
 **15.1.** If OTHER cooking fuel, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: cooking_fuel_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49654,6 +49949,7 @@
 **16.1.** If OTHER water source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: water_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -49705,6 +50001,7 @@
 **18.1.** If OTHER type of toilet, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: toilet_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -50991,6 +51288,7 @@
 **3.1.** If other, please specify ...
 - db_table: intecomm_subject_locationupdate
 - column: location_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -51478,6 +51776,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_dminitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -51660,6 +51959,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_htninitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -52672,6 +52972,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_hivmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -52812,6 +53113,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_dmmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -52952,6 +53254,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_htnmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -53652,6 +53955,7 @@
 **8.1.** If OTHER relationship, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: relationship_to_hoh_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -53670,6 +53974,7 @@
 **9.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -53688,6 +53993,7 @@
 **10.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -53706,6 +54012,7 @@
 **11.1.** If OTHER education, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -53745,6 +54052,7 @@
 **13.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -53773,6 +54081,7 @@
 **14.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -53801,6 +54110,7 @@
 **15.1.** If OTHER, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -53866,6 +54176,7 @@
 **3.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -53880,6 +54191,7 @@
 **4.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -53894,6 +54206,7 @@
 **5.1.** If OTHER level of education, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -53927,6 +54240,7 @@
 **7.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -53951,6 +54265,7 @@
 **8.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -53975,6 +54290,7 @@
 **9.1.** If OTHER health insurance status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -54104,6 +54420,7 @@
 **9.1.** If OTHER roof material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: roof_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -54129,6 +54446,7 @@
 **10.1.** If OTHER external wall material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_wall_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -54152,6 +54470,7 @@
 **11.1.** If OTHER external window material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_window_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -54177,6 +54496,7 @@
 **12.1.** If OTHER floor material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: floor_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -54208,6 +54528,7 @@
 **14.1.** If OTHER lighting source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: lighting_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -54232,6 +54553,7 @@
 **15.1.** If OTHER cooking fuel, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: cooking_fuel_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -54264,6 +54586,7 @@
 **16.1.** If OTHER water source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: water_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -54315,6 +54638,7 @@
 **18.1.** If OTHER type of toilet, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: toilet_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -55601,6 +55925,7 @@
 **3.1.** If other, please specify ...
 - db_table: intecomm_subject_locationupdate
 - column: location_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -56088,6 +56413,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_dminitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -56270,6 +56596,7 @@
 **5.1.** If other, please specify ...
 - db_table: intecomm_subject_htninitialreview
 - column: managed_by_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -57282,6 +57609,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_hivmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -57422,6 +57750,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_dmmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -57562,6 +57891,7 @@
 **10.1.** If `other` reason for not having medications, specify
 - db_table: intecomm_subject_htnmedicationadherence
 - column: meds_shortage_reason_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58262,6 +58592,7 @@
 **8.1.** If OTHER relationship, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: relationship_to_hoh_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58280,6 +58611,7 @@
 **9.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58298,6 +58630,7 @@
 **10.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58316,6 +58649,7 @@
 **11.1.** If OTHER education, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58355,6 +58689,7 @@
 **13.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -58383,6 +58718,7 @@
 **14.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58411,6 +58747,7 @@
 **15.1.** If OTHER, specify ...
 - db_table: intecomm_subject_healtheconomicshouseholdhead
 - column: hoh_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58476,6 +58813,7 @@
 **3.1.** If OTHER religious orientation, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_religion_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58490,6 +58828,7 @@
 **4.1.** If OTHER ethnic background, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_ethnicity_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58504,6 +58843,7 @@
 **5.1.** If OTHER level of education, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_education_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58537,6 +58877,7 @@
 **7.1.** If OTHER type of employment, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_employment_type_other
+- metadata: None
 - type: CharField
 - length: 100
 - responses: *free text*
@@ -58561,6 +58902,7 @@
 **8.1.** If OTHER marital status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_marital_status_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58585,6 +58927,7 @@
 **9.1.** If OTHER health insurance status, specify ...
 - db_table: intecomm_subject_healtheconomicspatient
 - column: pat_insurance_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58714,6 +59057,7 @@
 **9.1.** If OTHER roof material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: roof_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58739,6 +59083,7 @@
 **10.1.** If OTHER external wall material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_wall_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58762,6 +59107,7 @@
 **11.1.** If OTHER external window material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: external_window_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58787,6 +59133,7 @@
 **12.1.** If OTHER floor material, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: floor_material_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58818,6 +59165,7 @@
 **14.1.** If OTHER lighting source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: lighting_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58842,6 +59190,7 @@
 **15.1.** If OTHER cooking fuel, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: cooking_fuel_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58874,6 +59223,7 @@
 **16.1.** If OTHER water source, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: water_source_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -58925,6 +59275,7 @@
 **18.1.** If OTHER type of toilet, specify
 - db_table: intecomm_subject_healtheconomicsassets
 - column: toilet_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -59748,6 +60099,7 @@
 **3.0.** How did you travel here?
 - db_table: intecomm_subject_careseekinga
 - column: travel_method
+- metadata: FTRA1
 - type: ManyToManyField2
 ---
 
@@ -59756,6 +60108,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in hours and minutes (format HH:MM)*
 - db_table: intecomm_subject_careseekinga
 - column: travel_time
+- metadata: FTRATIME1
 - type: CharField
 - length: 5
 - responses: *free text*
@@ -59766,6 +60119,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
 - db_table: intecomm_subject_careseekinga
 - column: travel_cost
+- metadata: FTRAVCOST1
 - type: IntegerField
 ---
 
@@ -59774,12 +60128,14 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
 - db_table: intecomm_subject_careseekinga
 - column: food_cost
+- metadata: FFOODCOST1
 - type: IntegerField
 ---
 
 **7.0.** What was the reason for today’s visit?
 - db_table: intecomm_subject_careseekinga
 - column: visit_reason
+- metadata: FMEDCOND1
 - type: ManyToManyField2
 ---
 
@@ -59788,6 +60144,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
 - db_table: intecomm_subject_careseekinga
 - column: visit_cost
+- metadata: FFEECOST1
 - type: IntegerField
 ---
 
@@ -59796,6 +60153,7 @@
 **9.0.** Were you prescribed any medicines during this visit?
 - db_table: intecomm_subject_careseekinga
 - column: med_prescribed
+- metadata: FMED1
 - type: CharField
 - length: 25
 - responses:
@@ -59806,12 +60164,14 @@
 **10.0.** What were the medicines were for?
 - db_table: intecomm_subject_careseekinga
 - column: med_conditions
+- metadata: FMEDCOND1
 - type: ManyToManyField2
 ---
 
 **10.1.** If other, please specify ...
 - db_table: intecomm_subject_careseekinga
 - column: med_conditions_other
+- metadata: FMEDCONDOTHER1
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -59820,6 +60180,7 @@
 **11.0.** Did you receive/collect these medicines (whether paid or received for free)?
 - db_table: intecomm_subject_careseekinga
 - column: med_collected
+- metadata: FMEDCOLL1
 - type: CharField
 - length: 25
 - responses:
@@ -59830,6 +60191,7 @@
 **12.0.** Why were these medicines not received/collected?
 - db_table: intecomm_subject_careseekinga
 - column: med_not_collected_reason
+- metadata: FMED1
 - type: CharField
 - length: 25
 - responses:
@@ -59846,6 +60208,7 @@
 **12.1.** If other, please specify ...
 - db_table: intecomm_subject_careseekinga
 - column: med_not_collected_reason_other
+- metadata: FMEDOTHER1
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -59856,6 +60219,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
 - db_table: intecomm_subject_careseekinga
 - column: med_cost_tot
+- metadata: FMEDCOST1
 - type: IntegerField
 ---
 
@@ -59864,6 +60228,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *Leave blank if not applicable. In local currency*
 - db_table: intecomm_subject_careseekinga
 - column: med_cost_hiv
+- metadata: FMEDCOSTHIV1
 - type: IntegerField
 ---
 
@@ -59872,6 +60237,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *Leave blank if not applicable. In local currency*
 - db_table: intecomm_subject_careseekinga
 - column: med_cost_htn
+- metadata: FMEDCOSTHTN1
 - type: IntegerField
 ---
 
@@ -59880,6 +60246,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *Leave blank if not applicable. In local currency*
 - db_table: intecomm_subject_careseekinga
 - column: med_cost_dm
+- metadata: FMEDCOSTDM1
 - type: IntegerField
 ---
 
@@ -59888,6 +60255,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *Leave blank if not applicable. In local currency*
 - db_table: intecomm_subject_careseekinga
 - column: med_cost_other
+- metadata: FMEDCOSTOTHER1
 - type: IntegerField
 ---
 
@@ -59896,6 +60264,7 @@
 **17.0.** Did the healthcare worker request for any tests to be done during this visit?
 - db_table: intecomm_subject_careseekinga
 - column: tests_requested
+- metadata: FTEST1
 - type: CharField
 - length: 25
 - responses:
@@ -59906,6 +60275,7 @@
 **18.0.** Were the tests performed?
 - db_table: intecomm_subject_careseekinga
 - column: tests_done
+- metadata: FTESTDONE1
 - type: CharField
 - length: 25
 - responses:
@@ -59917,6 +60287,7 @@
 **19.0.** Why were the tests not performed?
 - db_table: intecomm_subject_careseekinga
 - column: tests_not_done_reason
+- metadata: FTESTNO1
 - type: CharField
 - length: 25
 - responses:
@@ -59931,6 +60302,7 @@
 **19.1.** If other, please specify ...
 - db_table: intecomm_subject_careseekinga
 - column: tests_not_done_other
+- metadata: FTESTNOOTHER1
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -59941,6 +60313,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
 - db_table: intecomm_subject_careseekinga
 - column: tests_cost
+- metadata: FTESTCOST1
 - type: IntegerField
 ---
 
@@ -59951,6 +60324,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in hours and minutes (format HH:MM)*
 - db_table: intecomm_subject_careseekinga
 - column: visit_duration
+- metadata: FFACTIME1
 - type: CharField
 - length: 5
 - responses: *free text*
@@ -59961,6 +60335,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in hours and minutes (format HH:MM)*
 - db_table: intecomm_subject_careseekinga
 - column: wait_duration
+- metadata: FWAITIME1
 - type: CharField
 - length: 5
 - responses: *free text*
@@ -59971,6 +60346,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in hours and minutes (format HH:MM)*
 - db_table: intecomm_subject_careseekinga
 - column: with_hcw_duration
+- metadata: FWORKTIME1
 - type: CharField
 - length: 5
 - responses: *free text*
@@ -59979,6 +60355,7 @@
 **24.0.** If you were not attending the visit today, what would you have been doing?
 - db_table: intecomm_subject_careseekinga
 - column: missed_activities
+- metadata: FACTIVITY1
 - type: CharField
 - length: 25
 - responses:
@@ -59992,6 +60369,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *In local currency. Ask for cash value or equivalent cash value for in-kind*
 - db_table: intecomm_subject_careseekinga
 - column: visit_lost_income
+- metadata: FPAID1
 - type: IntegerField
 ---
 
@@ -60000,6 +60378,7 @@
 **26.0.** As a result of your visit today, have you been referred for further care?
 - db_table: intecomm_subject_careseekinga
 - column: referral
+- metadata: FREFER1
 - type: CharField
 - length: 15
 - responses:
@@ -60010,6 +60389,7 @@
 **27.0.** Is this for inpatient or outpatient care?
 - db_table: intecomm_subject_careseekinga
 - column: referral_type
+- metadata: FREFTYPE1
 - type: CharField
 - length: 25
 - responses:
@@ -60020,6 +60400,7 @@
 **28.0.** What type of facility have you been referred to?
 - db_table: intecomm_subject_careseekinga
 - column: referral_facility
+- metadata: FREFAC1
 - type: CharField
 - length: 25
 - responses:
@@ -60037,18 +60418,21 @@
 **29.0.** Who accompanied you here today?
 - db_table: intecomm_subject_careseekinga
 - column: accompany
+- metadata: FACMP1
 - type: ManyToManyField2
 ---
 
 **30.0.** Number of people who accompanied you here today
 - db_table: intecomm_subject_careseekinga
 - column: accompany_num
+- metadata: FACMP1
 - type: IntegerField
 ---
 
 **31.0.** Did the people accompanying you wait for you during the visit?
 - db_table: intecomm_subject_careseekinga
 - column: accompany_wait
+- metadata: FACMPWAIT1
 - type: CharField
 - length: 15
 - responses:
@@ -60060,6 +60444,7 @@
 **32.0.** If those accompanying you were not attending the visit with you today, what would they have been doing?
 - db_table: intecomm_subject_careseekinga
 - column: accompany_alt
+- metadata: FACMPACT1
 - type: CharField
 - length: 25
 - responses:
@@ -60073,6 +60458,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *In local currency. Ask for cash value or equivalent cash value for in-kind*
 - db_table: intecomm_subject_careseekinga
 - column: accompany_lost_income
+- metadata: FACMP1
 - type: IntegerField
 ---
 
@@ -60083,12 +60469,14 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *Select up to three sources. If ‘other’, please specify.*
 - db_table: intecomm_subject_careseekinga
 - column: money_sources
+- metadata: FTODSOURCE
 - type: ManyToManyField2
 ---
 
 **34.1.** If other 'source of payment', please specify ...
 - db_table: intecomm_subject_careseekinga
 - column: money_sources_other
+- metadata: FTODSOURCEOTHER
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -60097,6 +60485,7 @@
 **35.0.** Of the various sources that you have just mentioned, what was the main source of payment?
 - db_table: intecomm_subject_careseekinga
 - column: money_source_main
+- metadata: FTODSOURCEMAIN1
 - type: CharField
 - length: 25
 - responses:
@@ -60119,6 +60508,7 @@
 **35.1.** If other main 'source of payment', please specify ...
 - db_table: intecomm_subject_careseekinga
 - column: money_source_main_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -60183,6 +60573,7 @@
 **3.0.** Other than today’s visit, and thinking about the past 3 months, were you ill or in need of healthcare at any point for HIV, Hypertension, Diabetes or anything related to you having these conditions?
 - db_table: intecomm_subject_careseekingb
 - column: ill_month
+- metadata: FILLMONTH1
 - type: CharField
 - length: 15
 - responses:
@@ -60195,6 +60586,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *from a public facility, local pharmacy, traditional doctor, etc*
 - db_table: intecomm_subject_careseekingb
 - column: seek_advice
+- metadata: FSEEK1
 - type: CharField
 - length: 15
 - responses:
@@ -60205,6 +60597,7 @@
 **5.0.** If no, why did you not seek advice or treatment?
 - db_table: intecomm_subject_careseekingb
 - column: no_seek_advice
+- metadata: FNOSEEK1
 - type: CharField
 - length: 25
 - responses:
@@ -60226,6 +60619,7 @@
 **5.1.** If OTHER reason, please explain ...
 - db_table: intecomm_subject_careseekingb
 - column: no_seek_advice_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -60234,6 +60628,7 @@
 **6.0.** If yes, where did you seek advice or treatment?
 - db_table: intecomm_subject_careseekingb
 - column: seek_facility
+- metadata: FSEEKFAC1
 - type: CharField
 - length: 25
 - responses:
@@ -60253,6 +60648,7 @@
 **6.1.** If OTHER place, please explain ...
 - db_table: intecomm_subject_careseekingb
 - column: seek_facility_other
+- metadata: None
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -60261,6 +60657,7 @@
 **7.0.** If yes, what type of care was this?
 - db_table: intecomm_subject_careseekingb
 - column: seek_care_type
+- metadata: FSEEKTYPE1
 - type: CharField
 - length: 25
 - responses:
@@ -60273,6 +60670,7 @@
 **8.0.** If yes and OUTPATIENT, how many visits in total?
 - db_table: intecomm_subject_careseekingb
 - column: outpatient_visits
+- metadata: FOUT1
 - type: IntegerField
 ---
 
@@ -60281,6 +60679,7 @@
 **9.0.** Thinking about your last/most recent visit, how did you travel to the visit?
 - db_table: intecomm_subject_careseekingb
 - column: travel_method
+- metadata: FOUTTRA1
 - type: ManyToManyField2
 ---
 
@@ -60289,6 +60688,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in hours and minutes (format HH:MM)*
 - db_table: intecomm_subject_careseekingb
 - column: travel_duration
+- metadata: FOUTTRATIME1
 - type: CharField
 - length: 5
 - responses: *free text*
@@ -60299,6 +60699,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *In local currency*
 - db_table: intecomm_subject_careseekingb
 - column: travel_costs
+- metadata: FOUTTRACOST1
 - type: IntegerField
 ---
 
@@ -60307,6 +60708,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *In local currency*
 - db_table: intecomm_subject_careseekingb
 - column: food_costs
+- metadata: FOUTFOODCOST1
 - type: IntegerField
 ---
 
@@ -60315,6 +60717,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *In local currency*
 - db_table: intecomm_subject_careseekingb
 - column: care_costs
+- metadata: FOUTFEECOST1
 - type: IntegerField
 ---
 
@@ -60323,6 +60726,7 @@
 **14.0.** Were you prescribed any medicines during your last/most recent visit?
 - db_table: intecomm_subject_careseekingb
 - column: med_prescribed
+- metadata: FOUTMED1
 - type: CharField
 - length: 15
 - responses:
@@ -60333,12 +60737,14 @@
 **15.0.** What were the medicines were for?
 - db_table: intecomm_subject_careseekingb
 - column: med_conditions
+- metadata: FOUTMEDCOND1
 - type: ManyToManyField2
 ---
 
 **15.1.** If other, please specify ...
 - db_table: intecomm_subject_careseekingb
 - column: med_conditions_other
+- metadata: FOUTMEDCONDOTHER1
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -60347,6 +60753,7 @@
 **16.0.** Did you receive/collect these medicines (whether paid or received for free)?
 - db_table: intecomm_subject_careseekingb
 - column: med_collected
+- metadata: FOUTMEDCOLL1
 - type: CharField
 - length: 25
 - responses:
@@ -60357,6 +60764,7 @@
 **17.0.** Why were these medicines not received/collected?
 - db_table: intecomm_subject_careseekingb
 - column: med_not_collected_reason
+- metadata: FOUTMEDNO1
 - type: CharField
 - length: 25
 - responses:
@@ -60373,6 +60781,7 @@
 **17.1.** If other, please specify ...
 - db_table: intecomm_subject_careseekingb
 - column: med_not_collected_reason_other
+- metadata: FOUTMEDNOOTHER1
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -60383,6 +60792,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
 - db_table: intecomm_subject_careseekingb
 - column: med_cost_tot
+- metadata: FOUTMEDCOST1
 - type: IntegerField
 ---
 
@@ -60393,6 +60803,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *for example, blood pressure, viral load, glucose etc.*
 - db_table: intecomm_subject_careseekingb
 - column: tests_requested
+- metadata: FOUTTEST1
 - type: CharField
 - length: 25
 - responses:
@@ -60403,6 +60814,7 @@
 **20.0.** Were the tests performed?
 - db_table: intecomm_subject_careseekingb
 - column: tests_done
+- metadata: FOUTTESTDONE1
 - type: CharField
 - length: 25
 - responses:
@@ -60414,6 +60826,7 @@
 **21.0.** Why were the tests not performed?
 - db_table: intecomm_subject_careseekingb
 - column: tests_not_done_reason
+- metadata: FOUTTESTNO1
 - type: CharField
 - length: 25
 - responses:
@@ -60428,6 +60841,7 @@
 **21.1.** If other, please specify ...
 - db_table: intecomm_subject_careseekingb
 - column: tests_not_done_other
+- metadata: FOUTTESTNOOTHER1
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -60438,6 +60852,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
 - db_table: intecomm_subject_careseekingb
 - column: tests_cost
+- metadata: FOUTTESTCOST1
 - type: IntegerField
 ---
 
@@ -60448,6 +60863,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in hours and minutes (format HH:MM)*
 - db_table: intecomm_subject_careseekingb
 - column: visit_duration
+- metadata: FOUTTIME1
 - type: CharField
 - length: 5
 - responses: *free text*
@@ -60456,6 +60872,7 @@
 **24.0.** If you were not attending the visit, what would you have been doing?
 - db_table: intecomm_subject_careseekingb
 - column: missed_activities
+- metadata: FOUTACTIVITY1
 - type: CharField
 - length: 25
 - responses:
@@ -60469,6 +60886,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *In local currency. Ask for cash value or equivalent cash value for in-kind*
 - db_table: intecomm_subject_careseekingb
 - column: visit_lost_income
+- metadata: FOUTPAID1
 - type: IntegerField
 ---
 
@@ -60477,18 +60895,21 @@
 **26.0.** Who accompanied you to your last/most recent visit?
 - db_table: intecomm_subject_careseekingb
 - column: accompany
+- metadata: FOUTACMP1
 - type: ManyToManyField2
 ---
 
 **27.0.** Number of people who accompanied you here today
 - db_table: intecomm_subject_careseekingb
 - column: accompany_num
+- metadata: FOUTACMPNUM1
 - type: IntegerField
 ---
 
 **28.0.** Did the people accompanying you wait for you during your last/most recent visit?
 - db_table: intecomm_subject_careseekingb
 - column: accompany_wait
+- metadata: FOUTACMPWAIT1
 - type: CharField
 - length: 15
 - responses:
@@ -60500,6 +60921,7 @@
 **29.0.** If those accompanying you were not attending your last/most recent visit with you, what would they have been doing?
 - db_table: intecomm_subject_careseekingb
 - column: accompany_alt
+- metadata: FOUTACMPACT1
 - type: CharField
 - length: 25
 - responses:
@@ -60513,6 +60935,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *In local currency. Ask for cash value or equivalent cash value for in-kind*
 - db_table: intecomm_subject_careseekingb
 - column: accompany_lost_income
+- metadata: FOUTACMPPAID1
 - type: IntegerField
 ---
 
@@ -60523,12 +60946,14 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *Select up to three sources. If ‘other’, please specify.*
 - db_table: intecomm_subject_careseekingb
 - column: money_sources
+- metadata: FOUTSOURCE
 - type: ManyToManyField2
 ---
 
 **31.1.** If other 'source of payment', please specify ...
 - db_table: intecomm_subject_careseekingb
 - column: money_sources_other
+- metadata: FOUTSOURCEOTHER
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -60537,6 +60962,7 @@
 **32.0.** Of the various sources that you have just mentioned, what was the main source of payment?
 - db_table: intecomm_subject_careseekingb
 - column: money_source_main
+- metadata: FOUTSOURCEMAIN1
 - type: CharField
 - length: 25
 - responses:
@@ -60561,18 +60987,21 @@
 **33.0.** How many days in total were you admitted as an INPATIENT?
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_days
+- metadata: FINDAYS1
 - type: IntegerField
 ---
 
 **34.0.** What was this INPATIENT care for?
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_reasons
+- metadata: FINDAYSCOND1
 - type: ManyToManyField2
 ---
 
 **34.1.** If other 'INPATIENT care' reason, please specify ...
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_reasons_other
+- metadata: FINDAYSCOND1
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -60583,6 +61012,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_cost
+- metadata: FINCOST1
 - type: IntegerField
 ---
 
@@ -60591,6 +61021,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *for example: guesthouse, hotel, friend or relative’s house*
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_accompany
+- metadata: FINACMP1
 - type: CharField
 - length: 15
 - responses:
@@ -60602,6 +61033,7 @@
 **37.0.** When you were first admitted to the facility, was any food and drink bought for people who accompanied you?
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_food
+- metadata: FINFOOD1
 - type: CharField
 - length: 15
 - responses:
@@ -60616,18 +61048,21 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_food_cost
+- metadata: FINFOODCOST1
 - type: IntegerField
 ---
 
 **39.0.** When you were ill, how many days were you not able to go to work?
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_nowork_days
+- metadata: FINWRKMISS1
 - type: IntegerField
 ---
 
 **40.0.** Apart from the person that accompanied you, was there anyone else in your household who could not go to work because of your illness?
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_accompany_nowork
+- metadata: FINOWRKMISS1
 - type: CharField
 - length: 15
 - responses:
@@ -60639,6 +61074,7 @@
 **41.0.** How many days did they not go to work?
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_accompany_nowork_days
+- metadata: FINODAYSMISS1
 - type: IntegerField
 ---
 
@@ -60647,12 +61083,14 @@
 &nbsp;&nbsp;&nbsp;&nbsp; *Select up to three sources. If ‘other’, please specify.*
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_money_sources
+- metadata: FINSOURCE
 - type: ManyToManyField2
 ---
 
 **42.1.** If other 'source of payment', please specify ...
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_money_sources_other
+- metadata: FINSOURCEOTHER
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -60661,12 +61099,14 @@
 **43.0.** Of the various sources that you have just mentioned, what was the main source of payment?
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_money_sources_main
+- metadata: FINSOURCEMAIN1
 - type: ManyToManyField2
 ---
 
 **43.1.** If other main 'source of payment', please specify ...
 - db_table: intecomm_subject_careseekingb
 - column: inpatient_money_sources_main_other
+- metadata: FINSOURCEMAIN1OTHER
 - type: CharField
 - length: 35
 - responses: *free text*
@@ -60811,6 +61251,6 @@
 
 
 
-*Rendered on 2024-02-22 09:03*
+*Rendered on 2024-02-22 09:10*
 
 
