@@ -372,8 +372,9 @@
 23. <a href="#user-content-health-economics-assets-12">Health Economics: Assets</a>
 24. <a href="#user-content-health-economics-property-12">Health Economics: Property</a>
 25. <a href="#user-content-health-economics-income-12">Health Economics: Income</a>
-26. <a href="#user-content-glucose-11">Glucose</a>
-27. <a href="#user-content-next-appointment-12">Next Appointment</a>
+26. <a href="#user-content-cost-of-careseeking-part-a">Cost Of Careseeking: Part A</a>
+27. <a href="#user-content-cost-of-careseeking-part-b">Cost Of Careseeking: Part B</a>
+28. <a href="#user-content-glucose-11">Glucose</a>
 
 
 ### 1000
@@ -59711,6 +59712,989 @@
 ---
 
 
+#### Cost Of Careseeking: Part A
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+*Additional instructions*:
+<H5><B><span style="color:orange">Interviewer to read</span></B></H5>
+<p>I would like to ask you some questions to understand more about your visit today.
+  <BR>This will include questions on your travel here, the time spent on this visit and any costs you may have incurred.
+</p>
+
+
+
+**Section: PART A: INFORMATION ON TODAY’S VISIT**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_careseekinga
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_careseekinga
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: A1: Travel, expenses and reason for today's visit**
+
+**3.0.** How did you travel here?
+- db_table: intecomm_subject_careseekinga
+- column: travel_method
+- type: ManyToManyField2
+---
+
+**4.0.** How long did it take you to reach here?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in hours and minutes (format HH:MM)*
+- db_table: intecomm_subject_careseekinga
+- column: travel_time
+- type: CharField
+- length: 5
+- responses: *free text*
+---
+
+**5.0.** Thinking about yourself and anyone that accompanied you, how much was spent on travel from your home to reach here?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
+- db_table: intecomm_subject_careseekinga
+- column: travel_cost
+- type: IntegerField
+---
+
+**6.0.** Thinking about yourself and anyone that accompanied you, how much did you have to pay for food, drink or other refreshments during your travel or during your visit? (e.g. food, drink, etc.)
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
+- db_table: intecomm_subject_careseekinga
+- column: food_cost
+- type: IntegerField
+---
+
+**7.0.** What was the reason for today’s visit?
+- db_table: intecomm_subject_careseekinga
+- column: visit_reason
+- type: ManyToManyField2
+---
+
+**8.0.** How much money did you spend on healthworker and consultation fees during this visit?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
+- db_table: intecomm_subject_careseekinga
+- column: visit_cost
+- type: IntegerField
+---
+
+**Section: A3: Medication costs for today's visit**
+
+**9.0.** Were you prescribed any medicines during this visit?
+- db_table: intecomm_subject_careseekinga
+- column: med_prescribed
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+---
+
+**10.0.** What were the medicines were for?
+- db_table: intecomm_subject_careseekinga
+- column: med_conditions
+- type: ManyToManyField2
+---
+
+**10.1.** If other, please specify ...
+- db_table: intecomm_subject_careseekinga
+- column: med_conditions_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**11.0.** Did you receive/collect these medicines (whether paid or received for free)?
+- db_table: intecomm_subject_careseekinga
+- column: med_collected
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+---
+
+**12.0.** Why were these medicines not received/collected?
+- db_table: intecomm_subject_careseekinga
+- column: med_not_collected_reason
+- type: CharField
+- length: 25
+- responses:
+  - `meds_at_home`: *Already had the medicines at home*
+  - `unavailable`: *Medicines were not available*
+  - `expensive`: *Medicines were too expensive*
+  - `home_remedies`: *Home remedies are better*
+  - `unimportant`: *Did not think it was important to get these medicines*
+  - `too_busy`: *Did not have the time to collect or buy medicines*
+  - `problematic`: *Taking medicines caused problems*
+  - `OTHER`: *Other, please specify ...*
+---
+
+**12.1.** If other, please specify ...
+- db_table: intecomm_subject_careseekinga
+- column: med_not_collected_reason_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**13.0.** How much was spent on these medicines?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
+- db_table: intecomm_subject_careseekinga
+- column: med_cost_tot
+- type: IntegerField
+---
+
+**14.0.** How much was spent on HIV medicines?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *Leave blank if not applicable. In local currency*
+- db_table: intecomm_subject_careseekinga
+- column: med_cost_hiv
+- type: IntegerField
+---
+
+**15.0.** How much was spent on Hypertension medicines?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *Leave blank if not applicable. In local currency*
+- db_table: intecomm_subject_careseekinga
+- column: med_cost_htn
+- type: IntegerField
+---
+
+**16.0.** How much was spent on Diabetes medicines?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *Leave blank if not applicable. In local currency*
+- db_table: intecomm_subject_careseekinga
+- column: med_cost_dm
+- type: IntegerField
+---
+
+**16.1.** How much was spent on OTHER medicines?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *Leave blank if not applicable. In local currency*
+- db_table: intecomm_subject_careseekinga
+- column: med_cost_other
+- type: IntegerField
+---
+
+**Section: A4: Diagnostic costs for today's visit**
+
+**17.0.** Did the healthcare worker request for any tests to be done during this visit?
+- db_table: intecomm_subject_careseekinga
+- column: tests_requested
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+---
+
+**18.0.** Were the tests performed?
+- db_table: intecomm_subject_careseekinga
+- column: tests_done
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**19.0.** Why were the tests not performed?
+- db_table: intecomm_subject_careseekinga
+- column: tests_not_done_reason
+- type: CharField
+- length: 25
+- responses:
+  - `unavailable`: *Tests were not available*
+  - `expensive`: *Tests were too expensive*
+  - `unimportant`: *Did not think it was important to do these tests *
+  - `too_busy`: *Did not have the time to do these tests*
+  - `OTHER`: *Other, please specify ...*
+  - `N/A`: *Not applicable*
+---
+
+**19.1.** If other, please specify ...
+- db_table: intecomm_subject_careseekinga
+- column: tests_not_done_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**20.0.** How much did you spend on these tests?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
+- db_table: intecomm_subject_careseekinga
+- column: tests_cost
+- type: IntegerField
+---
+
+**Section: A5: Time for today's visit**
+
+**21.0.** How much time did you spend during your visit today -- from arrival to this place until the end of your visit?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in hours and minutes (format HH:MM)*
+- db_table: intecomm_subject_careseekinga
+- column: visit_duration
+- type: CharField
+- length: 5
+- responses: *free text*
+---
+
+**22.0.** How much time did you spend waiting?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in hours and minutes (format HH:MM)*
+- db_table: intecomm_subject_careseekinga
+- column: wait_duration
+- type: CharField
+- length: 5
+- responses: *free text*
+---
+
+**23.0.** How much time did you spend with the healthcare worker?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in hours and minutes (format HH:MM)*
+- db_table: intecomm_subject_careseekinga
+- column: with_hcw_duration
+- type: CharField
+- length: 5
+- responses: *free text*
+---
+
+**24.0.** If you were not attending the visit today, what would you have been doing?
+- db_table: intecomm_subject_careseekinga
+- column: missed_activities
+- type: CharField
+- length: 25
+- responses:
+  - `paid_work`: *Paid work (e.g. full-time employment, small business owners/traders, day jobs, etc.)*
+  - `unpaid_work`: *Unpaid work (e.g. subsistence farming, housework etc.)*
+  - `OTHER`: *Other (specify)*
+---
+
+**25.0.** How much would you have made in cash or in-kind for a day’s work?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *In local currency. Ask for cash value or equivalent cash value for in-kind*
+- db_table: intecomm_subject_careseekinga
+- column: visit_lost_income
+- type: IntegerField
+---
+
+**Section: A6: Referral from today's visit**
+
+**26.0.** As a result of your visit today, have you been referred for further care?
+- db_table: intecomm_subject_careseekinga
+- column: referral
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+---
+
+**27.0.** Is this for inpatient or outpatient care?
+- db_table: intecomm_subject_careseekinga
+- column: referral_type
+- type: CharField
+- length: 25
+- responses:
+  - `inpatient`: *Inpatient*
+  - `outpatient`: *Outpatient (includes laboratory testing)*
+---
+
+**28.0.** What type of facility have you been referred to?
+- db_table: intecomm_subject_careseekinga
+- column: referral_facility
+- type: CharField
+- length: 25
+- responses:
+  - `public_clinic`: *Public facility below tertiary level*
+  - `private_clinic`: *Private clinic*
+  - `private_dx_facility`: *Private diagnostic facility*
+  - `ngo_clinic`: *NGO clinic*
+  - `public_hospital`: *Public Hospital/tertiary facility*
+  - `private_hospital`: *Private hospital*
+  - `pharmacy`: *Pharmacy*
+---
+
+**Section: A7: People who accompanied you to today's visit**
+
+**29.0.** Who accompanied you here today?
+- db_table: intecomm_subject_careseekinga
+- column: accompany
+- type: ManyToManyField2
+---
+
+**30.0.** Number of people who accompanied you here today
+- db_table: intecomm_subject_careseekinga
+- column: accompany_num
+- type: IntegerField
+---
+
+**31.0.** Did the people accompanying you wait for you during the visit?
+- db_table: intecomm_subject_careseekinga
+- column: accompany_wait
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**32.0.** If those accompanying you were not attending the visit with you today, what would they have been doing?
+- db_table: intecomm_subject_careseekinga
+- column: accompany_alt
+- type: CharField
+- length: 25
+- responses:
+  - `paid_work`: *Paid work (e.g. full-time employment, small business owners/traders, day jobs, etc.)*
+  - `unpaid_work`: *Unpaid work (e.g. subsistence farming, housework etc.)*
+  - `OTHER`: *Other (specify)*
+---
+
+**33.0.** How much would they have made in cash or in-kind for a day’s work?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *In local currency. Ask for cash value or equivalent cash value for in-kind*
+- db_table: intecomm_subject_careseekinga
+- column: accompany_lost_income
+- type: IntegerField
+---
+
+**Section: A8: Your expenses for today's visit**
+
+**34.0.** Thinking about the expenses you have reported for today’s visit, what were the source(s) of payment for all these expenses?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *Select up to three sources. If ‘other’, please specify.*
+- db_table: intecomm_subject_careseekinga
+- column: money_sources
+- type: ManyToManyField2
+---
+
+**34.1.** If other 'source of payment', please specify ...
+- db_table: intecomm_subject_careseekinga
+- column: money_sources_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**35.0.** Of the various sources that you have just mentioned, what was the main source of payment?
+- db_table: intecomm_subject_careseekinga
+- column: money_source_main
+- type: CharField
+- length: 25
+- responses:
+  - `own_savings`: *Own saving (e.g. “loose funds”, bank savings)*
+  - `family_gift`: *Loan from family members that does not need to be repaid*
+  - `family_loan`: *Loan from family member that needs to be repaid*
+  - `gift_relative`: *Loan from relative/neighbour that does not need to be repaid*
+  - `loan_relative`: *Loan from relative/neighbour that needs to be repaid*
+  - `loan_money_lender`: *Loan from money lender*
+  - `loan_bank`: *Loan from another source eg bank*
+  - `community`: *Self-help community group*
+  - `national_insurance`: *National health insurance*
+  - `private_insurance`: *Private health insurance*
+  - `community_insurance`: *Community health insurance*
+  - `waiver`: *Government waiver*
+  - `asset_sale`: *Sale of assets (property, livestock, jewellery, household goods, etc)*
+  - `OTHER`: *Other (specify)*
+---
+
+**35.1.** If other main 'source of payment', please specify ...
+- db_table: intecomm_subject_careseekinga
+- column: money_source_main_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**Section: CRF status**
+
+**36.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_careseekinga
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**37.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_careseekinga
+- column: crf_status_comments
+- type: TextField
+---
+
+
+#### Cost Of Careseeking: Part B
+*[missing model class docstring]*
+
+
+*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
+
+*Additional instructions*:
+<H5><B><span style="color:orange">Interviewer to read</span></B></H5>
+<p>I would like to ask you some questions to understand more about your visit today.
+  <BR>This will include questions on your travel here, the time spent on this visit and any costs you may have incurred.
+</p>
+
+
+
+**Section: Part B: INFORMATION ON ANY CARESEEKING IN THE PAST 3 MONTHS**
+
+**1.0.** subject visit
+- db_table: intecomm_subject_careseekingb
+- column: subject_visit
+- type: OneToOneField
+---
+
+**2.0.** Report Date
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
+- db_table: intecomm_subject_careseekingb
+- column: report_datetime
+- type: DateTimeField
+- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
+---
+
+**Section: B1:**
+
+**3.0.** Other than today’s visit, and thinking about the past 3 months, were you ill or in need of healthcare at any point for HIV, Hypertension, Diabetes or anything related to you having these conditions?
+- db_table: intecomm_subject_careseekingb
+- column: ill_month
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+---
+
+**4.0.** Did you seek advice or treatment?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *from a public facility, local pharmacy, traditional doctor, etc*
+- db_table: intecomm_subject_careseekingb
+- column: seek_advice
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+---
+
+**5.0.** If no, why did you not seek advice or treatment?
+- db_table: intecomm_subject_careseekingb
+- column: no_seek_advice
+- type: CharField
+- length: 25
+- responses:
+  - `not_necessary`: *Did not think it was necessary *
+  - `recovered`: *Recovered before I could go *
+  - `home_remedy`: *Home remedy given by family member, relatives, neighbours *
+  - `too_expensive`: *Too expensive *
+  - `no_time`: *Wanted to but could not find time*
+  - `no_transport`: *There was no one to take me*
+  - `facility_too_far`: *The health facility is too far/ not easy to reach *
+  - `hcw_unavailable`: *Health care practitioner mostly unavailable *
+  - `med_problems`: *Taking medicines caused problems*
+  - `hcw_confusing`: *Do not understand what the healthcare practitioner says *
+  - `hcw_incompetent`: *Practitioner is not competent in their work *
+  - `OTHER`: *Other (specify)*
+  - `N/A`: *Not applicable*
+---
+
+**5.1.** If OTHER reason, please explain ...
+- db_table: intecomm_subject_careseekingb
+- column: no_seek_advice_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**6.0.** If yes, where did you seek advice or treatment?
+- db_table: intecomm_subject_careseekingb
+- column: seek_facility
+- type: CharField
+- length: 25
+- responses:
+  - `comm_health_centre`: *Community health centre/health post*
+  - `gov_dispensary`: *Government dispensary*
+  - `phc`: *Primary health care center (PHC)*
+  - `private_clinic`: *Private clinic*
+  - `ngo`: *NGO clinic*
+  - `public_hospital`: *Public Hospital*
+  - `private_hospital`: *Private hospital*
+  - `pharmacy`: *Pharmacy*
+  - `hcw_home`: *Any healthcare practitioner’s home*
+  - `OTHER`: *Other (specify)*
+  - `N/A`: *Not applicable*
+---
+
+**6.1.** If OTHER place, please explain ...
+- db_table: intecomm_subject_careseekingb
+- column: seek_facility_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**7.0.** If yes, what type of care was this?
+- db_table: intecomm_subject_careseekingb
+- column: seek_care_type
+- type: CharField
+- length: 25
+- responses:
+  - `outpatient`: *Outpatient (includes laboratory testing)*
+  - `inpatient`: *Inpatient*
+  - `both`: *Both*
+  - `N/A`: *Not applicable*
+---
+
+**8.0.** If yes and OUTPATIENT, how many visits in total?
+- db_table: intecomm_subject_careseekingb
+- column: outpatient_visits
+- type: IntegerField
+---
+
+**Section: B2: Travel and expenses at last/most recent visit**
+
+**9.0.** Thinking about your last/most recent visit, how did you travel to the visit?
+- db_table: intecomm_subject_careseekingb
+- column: travel_method
+- type: ManyToManyField2
+---
+
+**10.0.** How long did it take you to get there?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in hours and minutes (format HH:MM)*
+- db_table: intecomm_subject_careseekingb
+- column: travel_duration
+- type: CharField
+- length: 5
+- responses: *free text*
+---
+
+**11.0.** Thinking about yourself and anyone that accompanied you, how much was spent on travel from your home to your last/most recent visit?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *In local currency*
+- db_table: intecomm_subject_careseekingb
+- column: travel_costs
+- type: IntegerField
+---
+
+**12.0.** Thinking about yourself and anyone that accompanied you, did you have to pay for food, drink or other refreshments during your travel or during your last/most recent visit? (e.g. food, drink, etc.)
+
+&nbsp;&nbsp;&nbsp;&nbsp; *In local currency*
+- db_table: intecomm_subject_careseekingb
+- column: food_costs
+- type: IntegerField
+---
+
+**13.0.** How much money did you spend on healthworker and consultation fees during your last/most recent visit?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *In local currency*
+- db_table: intecomm_subject_careseekingb
+- column: care_costs
+- type: IntegerField
+---
+
+**Section: B3: Medications at last/most recent visit**
+
+**14.0.** Were you prescribed any medicines during your last/most recent visit?
+- db_table: intecomm_subject_careseekingb
+- column: med_prescribed
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+---
+
+**15.0.** What were the medicines were for?
+- db_table: intecomm_subject_careseekingb
+- column: med_conditions
+- type: ManyToManyField2
+---
+
+**15.1.** If other, please specify ...
+- db_table: intecomm_subject_careseekingb
+- column: med_conditions_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**16.0.** Did you receive/collect these medicines (whether paid or received for free)?
+- db_table: intecomm_subject_careseekingb
+- column: med_collected
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+---
+
+**17.0.** Why were these medicines not received/collected?
+- db_table: intecomm_subject_careseekingb
+- column: med_not_collected_reason
+- type: CharField
+- length: 25
+- responses:
+  - `meds_at_home`: *Already had the medicines at home*
+  - `unavailable`: *Medicines were not available*
+  - `expensive`: *Medicines were too expensive*
+  - `home_remedies`: *Home remedies are better*
+  - `unimportant`: *Did not think it was important to get these medicines*
+  - `too_busy`: *Did not have the time to collect or buy medicines*
+  - `problematic`: *Taking medicines caused problems*
+  - `OTHER`: *Other, please specify ...*
+---
+
+**17.1.** If other, please specify ...
+- db_table: intecomm_subject_careseekingb
+- column: med_not_collected_reason_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**18.0.** How much was spent on these medicines?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
+- db_table: intecomm_subject_careseekingb
+- column: med_cost_tot
+- type: IntegerField
+---
+
+**Section: B4: Tests at last/most recent visit**
+
+**19.0.** Did the healthcare worker request for any tests to be done during your last/most recent visit?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, blood pressure, viral load, glucose etc.*
+- db_table: intecomm_subject_careseekingb
+- column: tests_requested
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+---
+
+**20.0.** Were the tests performed?
+- db_table: intecomm_subject_careseekingb
+- column: tests_done
+- type: CharField
+- length: 25
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**21.0.** Why were the tests not performed?
+- db_table: intecomm_subject_careseekingb
+- column: tests_not_done_reason
+- type: CharField
+- length: 25
+- responses:
+  - `unavailable`: *Tests were not available*
+  - `expensive`: *Tests were too expensive*
+  - `unimportant`: *Did not think it was important to do these tests *
+  - `too_busy`: *Did not have the time to do these tests*
+  - `OTHER`: *Other, please specify ...*
+  - `N/A`: *Not applicable*
+---
+
+**21.1.** If other, please specify ...
+- db_table: intecomm_subject_careseekingb
+- column: tests_not_done_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**22.0.** How much did you spend on these tests?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
+- db_table: intecomm_subject_careseekingb
+- column: tests_cost
+- type: IntegerField
+---
+
+**Section: B5: Time and expenses at last/most recent visit**
+
+**23.0.** Roughly how much time did you spend during your last/most recent visit?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in hours and minutes (format HH:MM)*
+- db_table: intecomm_subject_careseekingb
+- column: visit_duration
+- type: CharField
+- length: 5
+- responses: *free text*
+---
+
+**24.0.** If you were not attending the visit, what would you have been doing?
+- db_table: intecomm_subject_careseekingb
+- column: missed_activities
+- type: CharField
+- length: 25
+- responses:
+  - `paid_work`: *Paid work (e.g. full-time employment, small business owners/traders, day jobs, etc.)*
+  - `unpaid_work`: *Unpaid work (e.g. subsistence farming, housework etc.)*
+  - `OTHER`: *Other (specify)*
+---
+
+**25.0.** How much would you have made in cash or in-kind for a day’s work?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *In local currency. Ask for cash value or equivalent cash value for in-kind*
+- db_table: intecomm_subject_careseekingb
+- column: visit_lost_income
+- type: IntegerField
+---
+
+**Section: B6: People who accompanied you to last/most recent visit**
+
+**26.0.** Who accompanied you to your last/most recent visit?
+- db_table: intecomm_subject_careseekingb
+- column: accompany
+- type: ManyToManyField2
+---
+
+**27.0.** Number of people who accompanied you here today
+- db_table: intecomm_subject_careseekingb
+- column: accompany_num
+- type: IntegerField
+---
+
+**28.0.** Did the people accompanying you wait for you during your last/most recent visit?
+- db_table: intecomm_subject_careseekingb
+- column: accompany_wait
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**29.0.** If those accompanying you were not attending your last/most recent visit with you, what would they have been doing?
+- db_table: intecomm_subject_careseekingb
+- column: accompany_alt
+- type: CharField
+- length: 25
+- responses:
+  - `paid_work`: *Paid work (e.g. full-time employment, small business owners/traders, day jobs, etc.)*
+  - `unpaid_work`: *Unpaid work (e.g. subsistence farming, housework etc.)*
+  - `OTHER`: *Other (specify)*
+---
+
+**30.0.** How much would they have made in cash or in-kind for a day’s work?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *In local currency. Ask for cash value or equivalent cash value for in-kind*
+- db_table: intecomm_subject_careseekingb
+- column: accompany_lost_income
+- type: IntegerField
+---
+
+**Section: B7: Your expenses in the past 3 months**
+
+**31.0.** Thinking about the expenses you have reported in the past 3 months, and excluding today’s visit, what were the source(s) of payment for all these expenses?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *Select up to three sources. If ‘other’, please specify.*
+- db_table: intecomm_subject_careseekingb
+- column: money_sources
+- type: ManyToManyField2
+---
+
+**31.1.** If other 'source of payment', please specify ...
+- db_table: intecomm_subject_careseekingb
+- column: money_sources_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**32.0.** Of the various sources that you have just mentioned, what was the main source of payment?
+- db_table: intecomm_subject_careseekingb
+- column: money_source_main
+- type: CharField
+- length: 25
+- responses:
+  - `own_savings`: *Own saving (e.g. “loose funds”, bank savings)*
+  - `family_gift`: *Loan from family members that does not need to be repaid*
+  - `family_loan`: *Loan from family member that needs to be repaid*
+  - `gift_relative`: *Loan from relative/neighbour that does not need to be repaid*
+  - `loan_relative`: *Loan from relative/neighbour that needs to be repaid*
+  - `loan_money_lender`: *Loan from money lender*
+  - `loan_bank`: *Loan from another source eg bank*
+  - `community`: *Self-help community group*
+  - `national_insurance`: *National health insurance*
+  - `private_insurance`: *Private health insurance*
+  - `community_insurance`: *Community health insurance*
+  - `waiver`: *Government waiver*
+  - `asset_sale`: *Sale of assets (property, livestock, jewellery, household goods, etc)*
+  - `OTHER`: *Other (specify)*
+---
+
+**Section: B7: About your inpatient visit**
+
+**33.0.** How many days in total were you admitted as an INPATIENT?
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_days
+- type: IntegerField
+---
+
+**34.0.** What was this INPATIENT care for?
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_reasons
+- type: ManyToManyField2
+---
+
+**34.1.** If other 'INPATIENT care' reason, please specify ...
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_reasons_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**35.0.** How much was spent in total on your hospital stay?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_cost
+- type: IntegerField
+---
+
+**36.0.** Did anyone stay with you at the facility or somewhere else at night?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example: guesthouse, hotel, friend or relative’s house*
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_accompany
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**37.0.** When you were first admitted to the facility, was any food and drink bought for people who accompanied you?
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_food
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `dont_know`: *Don't know*
+  - `N/A`: *Not applicable*
+---
+
+**38.0.** How much was spent on this food and drink?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *in local currency*
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_food_cost
+- type: IntegerField
+---
+
+**39.0.** When you were ill, how many days were you not able to go to work?
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_nowork_days
+- type: IntegerField
+---
+
+**40.0.** Apart from the person that accompanied you, was there anyone else in your household who could not go to work because of your illness?
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_accompany_nowork
+- type: CharField
+- length: 15
+- responses:
+  - `Yes`: *Yes*
+  - `No`: *No*
+  - `N/A`: *Not applicable*
+---
+
+**41.0.** How many days did they not go to work?
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_accompany_nowork_days
+- type: IntegerField
+---
+
+**42.0.** What were the source(s) of payment for all these expenses for your hospital stay?
+
+&nbsp;&nbsp;&nbsp;&nbsp; *Select up to three sources. If ‘other’, please specify.*
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_money_sources
+- type: ManyToManyField2
+---
+
+**42.1.** If other 'source of payment', please specify ...
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_money_sources_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**43.0.** Of the various sources that you have just mentioned, what was the main source of payment?
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_money_sources_main
+- type: ManyToManyField2
+---
+
+**43.1.** If other main 'source of payment', please specify ...
+- db_table: intecomm_subject_careseekingb
+- column: inpatient_money_sources_main_other
+- type: CharField
+- length: 35
+- responses: *free text*
+---
+
+**Section: CRF status**
+
+**44.0.** CRF status
+
+&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
+- db_table: intecomm_subject_careseekingb
+- column: crf_status
+- type: CharField
+- length: 25
+- responses:
+  - `INCOMPLETE`: *Incomplete (some data pending)*
+  - `COMPLETE`: *Complete*
+---
+
+**45.0.** Any comments related to status of this CRF
+
+&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
+- db_table: intecomm_subject_careseekingb
+- column: crf_status_comments
+- type: TextField
+---
+
+
 #### Glucose
 *[missing model class docstring]*
 
@@ -59823,98 +60807,10 @@
 ---
 
 
-#### Next Appointment
-*[missing model class docstring]*
-
-
-*Instructions*: Please complete the form below. Required questions are in bold. When all required questions are complete click SAVE or, if available, SAVE NEXT. Based on your responses, additional questions may be required or some answers may need to be corrected.
-
-
-**Section: Main**
-
-**1.0.** subject visit
-- db_table: intecomm_subject_nextappointment
-- column: subject_visit
-- type: OneToOneField
----
-
-**2.0.** Report Date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If reporting today, use today's date/time, otherwise use the date/time this information was reported.*
-- db_table: intecomm_subject_nextappointment
-- column: report_datetime
-- type: DateTimeField
-- format: YYYY-MM-DD HH:MM:SS.sss (tz=UTC)
----
-
-**Section: Integrated Clinic**
-
-**3.0.** What is the source of this appointment date
-- db_table: intecomm_subject_nextappointment
-- column: info_source
-- type: ForeignKey
-- length: 15
----
-
-**4.0.** health facility
-- db_table: intecomm_subject_nextappointment
-- column: health_facility
-- type: ForeignKey
----
-
-**5.0.** Next scheduled routine/facility appointment
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Should fall on an Integrated clinic day*
-- db_table: intecomm_subject_nextappointment
-- column: appt_date
-- type: DateField
-- format: YYYY-MM-DD
----
-
-**6.0.** Override date check?
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Override date check to allow the EDC to create an interim appointment if the date is within window period of the current appointment.*
-- db_table: intecomm_subject_nextappointment
-- column: allow_create_interim
-- type: BooleanField
----
-
-**7.0.** Which study visit code is closest to this appointment date
-
-&nbsp;&nbsp;&nbsp;&nbsp; *Click SAVE to let the EDC suggest. Once selected, interim appointments will be flagged as not required/missed.*
-- db_table: intecomm_subject_nextappointment
-- column: visitschedule
-- type: ForeignKey
-- length: 15
----
-
-**Section: CRF status**
-
-**8.0.** CRF status
-
-&nbsp;&nbsp;&nbsp;&nbsp; *If some data is still pending, flag this CRF as incomplete*
-- db_table: intecomm_subject_nextappointment
-- column: crf_status
-- type: CharField
-- length: 25
-- responses:
-  - `INCOMPLETE`: *Incomplete (some data pending)*
-  - `COMPLETE`: *Complete*
----
-
-**9.0.** Any comments related to status of this CRF
-
-&nbsp;&nbsp;&nbsp;&nbsp; *for example, why some data is still pending*
-- db_table: intecomm_subject_nextappointment
-- column: crf_status_comments
-- type: TextField
----
-
-
 #### Requisitions
 
 
 
-*Rendered on 2024-02-22 08:45*
+*Rendered on 2024-02-22 09:03*
 
 
