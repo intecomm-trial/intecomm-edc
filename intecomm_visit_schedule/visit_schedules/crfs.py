@@ -3,7 +3,6 @@ from edc_visit_schedule.visit import Crf, FormsCollection
 crfs_prn = FormsCollection(
     Crf(show_order=105, model="intecomm_subject.clinicalnote"),
     Crf(show_order=215, model="intecomm_subject.bloodresultsfbc"),
-    # Crf(show_order=225, model="intecomm_subject.bloodresultsglu"),
     Crf(show_order=235, model="intecomm_subject.bloodresultshba1c"),
     Crf(show_order=245, model="intecomm_subject.bloodresultsrft"),
     Crf(show_order=255, model="intecomm_subject.bloodresultslft"),
