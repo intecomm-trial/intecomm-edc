@@ -1,4 +1,6 @@
 from .assets_form import HealthEconomicsAssetsForm
+from .careseeking_a_form import CareseekingAForm
+from .careseeking_b_form import CareseekingBForm
 from .household_head import HealthEconomicsHouseholdHeadForm
 from .income_form import HealthEconomicsIncomeForm
 from .patient_form import HealthEconomicsPatientForm

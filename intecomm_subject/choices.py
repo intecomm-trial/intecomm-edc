@@ -1,8 +1,13 @@
 from django.utils.translation import gettext_lazy as _
 from edc_constants.constants import (
+    BOTH,
     DIVORCED,
+    DM,
     DONT_KNOW,
     ESTIMATED,
+    HIV,
+    HTN,
+    INPATIENT,
     LAST_WEEK,
     MARRIED,
     MEASURED,
@@ -11,6 +16,7 @@ from edc_constants.constants import (
     NOT_APPLICABLE,
     ONGOING,
     OTHER,
+    OUTPATIENT,
     PATIENT,
     RESOLVED,
     SINGLE,
@@ -21,6 +27,7 @@ from edc_constants.constants import (
 )
 from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS, THIS_CLINIC
 from edc_facility.constants import HEALTH_FACILITY
+from edc_model_fields.utils import Choices
 from edc_reportable import (
     MILLIGRAMS_PER_DECILITER,
     MILLIMOLES_PER_LITER,
@@ -28,7 +35,18 @@ from edc_reportable import (
 )
 from edc_visit_tracking.constants import MISSED_VISIT, SCHEDULED, UNSCHEDULED
 
-from .constants import COMMUNITY_CLINIC, GTE_3HRS, NURSE, SITTING
+from .constants import (
+    COMMUNITY_CLINIC,
+    EXPENSIVE,
+    GTE_3HRS,
+    HOME_REMEDIES,
+    NURSE,
+    PROBLEMATIC,
+    SITTING,
+    TOO_BUSY,
+    UNAVAILABLE,
+    UNIMPORTANT,
+)
 
 ALCOHOL_CONSUMPTION = (
     ("occasionally", _("Occasionally")),
@@ -236,4 +254,167 @@ APPT_DATE_INFO_SOURCES = (
     ("health_records", _("Health record")),
     (PATIENT, _("Patient")),
     ("estimated", _("I estimated the date")),
+)
+
+
+TRAVEL_METHODS = Choices(
+    ("walking", _("Walking"), 1),
+    ("public_transport", _("Public Transport (government bus, etc)")),
+    ("hired_transport", _("Hired / shared transport (bus, taxi etc)")),
+    (
+        "own_transport",
+        _(
+            "Own vehicle (bicycle, animal-drawn cart, motorcycle, scooter, tractor, car, etc)",
+        ),
+    ),
+    (
+        "borrowed_transport",
+        (
+            _(
+                "Somebody else’s vehicle (bicycle, animal-drawn cart, "
+                "motorcycle, scooter, tractor, car, etc)"
+            )
+        ),
+    ),
+    fillmeta=True,
+)
+
+VISIT_REASONS = Choices(
+    ("routine", "Regular follow-up/check-up", 1),
+    ("tests", "Diagnostic tests"),
+    ("refill", "Medicines pick-up/refill"),
+    ("unwell", "Need treatment/care for illness"),
+    ("study_visit", "Only for study visit"),
+    fillmeta=True,
+)
+
+
+MEDS = Choices(
+    (HIV, "HIV"),
+    (HTN, "Hypertension"),
+    (DM, "Diabetes"),
+    (OTHER, "Other, please specify ..."),
+    fillmeta=True,
+)
+
+NOT_COLLECTED_REASONS = Choices(
+    ("meds_at_home", "Already had the medicines at home", 1),
+    (UNAVAILABLE, "Medicines were not available"),
+    (EXPENSIVE, "Medicines were too expensive"),
+    (HOME_REMEDIES, "Home remedies are better"),
+    (UNIMPORTANT, "Did not think it was important to get these medicines"),
+    (TOO_BUSY, "Did not have the time to collect or buy medicines"),
+    (PROBLEMATIC, "Taking medicines caused problems"),
+    (OTHER, "Other, please specify ..."),
+    fillmeta=True,
+)
+
+
+TESTS_NOT_DONE_REASONS = Choices(
+    (UNAVAILABLE, "Tests were not available", 1),
+    (EXPENSIVE, "Tests were too expensive"),
+    (UNIMPORTANT, "Did not think it was important to do these tests "),
+    (TOO_BUSY, "Did not have the time to do these tests"),
+    (OTHER, "Other, please specify ..."),
+    (NOT_APPLICABLE, "Not applicable"),
+    fillmeta=True,
+)
+
+
+FACILITY_VISIT_ALTERNATIVES = Choices(
+    (
+        "paid_work",
+        "Paid work (e.g. full-time employment, small business owners/traders, day jobs, etc.)",
+        1,
+    ),
+    ("unpaid_work", "Unpaid work (e.g. subsistence farming, housework etc.)"),
+    (OTHER, "Other (specify)"),
+    fillmeta=True,
+)
+
+REFERRAL_TYPE = Choices(
+    ("inpatient", "Inpatient", 1),
+    ("outpatient", "Outpatient (includes laboratory testing)"),
+    fillmeta=True,
+)
+
+REFERRAL_FACILITY = Choices(
+    ("public_clinic", "Public facility below tertiary level", 1),
+    ("private_clinic", "Private clinic"),
+    ("private_dx_facility", "Private diagnostic facility"),
+    ("ngo_clinic", "NGO clinic"),
+    ("public_hospital", "Public Hospital/tertiary facility"),
+    ("private_hospital", "Private hospital"),
+    ("pharmacy", "Pharmacy"),
+    fillmeta=True,
+)
+
+ACCOMPANIED_BY = Choices(
+    ("alone", "No one, I came alone", 1),
+    ("main_earner", "Main household earner"),
+    ("adult", "Other family member/relatives/friends (adults)"),
+    ("child", "Other family member/relatives/friends (children)"),
+    fillmeta=True,
+)
+
+MONEY_SOURCES = Choices(
+    ("own_savings", "Own saving (e.g. “loose funds”, bank savings)", 1),
+    ("family_gift", "Loan from family members that does not need to be repaid"),
+    ("family_loan", "Loan from family member that needs to be repaid"),
+    ("gift_relative", "Loan from relative/neighbour that does not need to be repaid"),
+    ("loan_relative", "Loan from relative/neighbour that needs to be repaid"),
+    ("loan_money_lender", "Loan from money lender"),
+    ("loan_bank", "Loan from another source eg bank"),
+    ("community", "Self-help community group"),
+    ("national_insurance", "National health insurance"),
+    ("private_insurance", "Private health insurance"),
+    ("community_insurance", "Community health insurance"),
+    ("waiver", "Government waiver"),
+    (
+        "asset_sale",
+        "Sale of assets (property, livestock, jewellery, household goods, etc)",
+    ),
+    (OTHER, "Other (specify)"),
+    fillmeta=True,
+)
+
+
+NO_SEEK_REASONS = Choices(
+    ("not_necessary", "Did not think it was necessary ", 1),
+    ("recovered", "Recovered before I could go "),
+    ("home_remedy", "Home remedy given by family member, relatives, neighbours "),
+    ("too_expensive", "Too expensive "),
+    ("no_time", "Wanted to but could not find time"),
+    ("no_transport", "There was no one to take me"),
+    ("facility_too_far", "The health facility is too far/ not easy to reach "),
+    ("hcw_unavailable", "Health care practitioner mostly unavailable "),
+    ("med_problems", "Taking medicines caused problems"),
+    ("hcw_confusing", "Do not understand what the healthcare practitioner says "),
+    ("hcw_incompetent", "Practitioner is not competent in their work "),
+    (OTHER, "Other (specify)"),
+    (NOT_APPLICABLE, "Not applicable"),
+    fillmeta=True,
+)
+
+SEEK_FACILITIES = Choices(
+    ("comm_health_centre", "Community health centre/health post", 1),
+    ("gov_dispensary", "Government dispensary"),
+    ("phc", "Primary health care center (PHC)"),
+    ("private_clinic", "Private clinic"),
+    ("ngo", "NGO clinic"),
+    ("public_hospital", "Public Hospital"),
+    ("private_hospital", "Private hospital"),
+    ("pharmacy", "Pharmacy"),
+    ("hcw_home", "Any healthcare practitioner’s home"),
+    (OTHER, "Other (specify)"),
+    (NOT_APPLICABLE, "Not applicable"),
+    fillmeta=True,
+)
+
+SEEKK_CARE_TYPES = Choices(
+    (OUTPATIENT, "Outpatient (includes laboratory testing)", 1),
+    (INPATIENT, "Inpatient"),
+    (BOTH, "Both"),
+    (NOT_APPLICABLE, "Not applicable"),
+    fillmeta=True,
 )

@@ -27,11 +27,17 @@ from edc_constants.constants import (
 )
 from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS, INSULIN
 from edc_he.constants import CHF, NHIF
-from edc_list_data.row import Row
+from edc_list_data.row import AsListData, Row
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_offstudy.constants import COMPLETED_FOLLOWUP, CONSENT_WITHDRAWAL
 from edc_transfer.constants import TRANSFERRED
 
+from intecomm_subject.choices import (
+    ACCOMPANIED_BY,
+    MONEY_SOURCES,
+    TRAVEL_METHODS,
+    VISIT_REASONS,
+)
 from intecomm_subject.constants import VIT_B_FOLIC_ACID
 
 from .choices import MISSED_VISIT_REASONS
@@ -282,18 +288,6 @@ list_data = {
         (OTHER, "Other, specify"),
         (NOT_APPLICABLE, "Not applicable"),
     ],
-    # TODO: = Update TZ tribes
-    #   1 = Msukuma
-    #   2 = Wapogoro
-    #   3 = Mzaramo
-    #   4 = Mnyiramba
-    #   5 = Mkara/Mkerewe
-    #   6 = Mhaya
-    #   7 = Mmakonde
-    #   8 = Mkuria/Mshashi
-    #   9 = Mchaga
-    #   10 = Mhindi
-    #   11 = Mwarabu
     "edc_he.ethnicities": [
         Row(("acholi", "Acholi"), extra="uganda"),
         Row(("alur", "Alur"), extra="uganda"),
@@ -333,16 +327,8 @@ list_data = {
         (ESTIMATED, "Estimated by research staff"),
         (OTHER, "Other"),
     ],
-    # may be removed "edc_next_appointment.infosources"
-    # "edc_next_appointment.infosources": [
-    #     (COMMUNITY, "Community group"),
-    #     (PATIENT, "Patient"),
-    #     (
-    #         PATIENT_REPRESENTATIVE,
-    #         "Patient representative (e.g., next of kin, relative, guardian)",
-    #     ),
-    #     (HEALTH_RECORDS, "Health records"),
-    #     (ESTIMATED, "Estimated by research staff"),
-    #     (OTHER, "Other"),
-    # ],
+    "intecomm_lists.accompanied": AsListData(ACCOMPANIED_BY),
+    "intecomm_lists.moneysources": AsListData(MONEY_SOURCES),
+    "intecomm_lists.travelmethods": AsListData(TRAVEL_METHODS),
+    "intecomm_lists.visitreasons": AsListData(VISIT_REASONS),
 }

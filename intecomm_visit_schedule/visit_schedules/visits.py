@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 from edc_visit_schedule.constants import MONTH0, MONTH1, MONTH12
 from edc_visit_schedule.visit import Visit
 
-from .crfs import crfs_d1, crfs_followup, crfs_missed, crfs_prn
+from .crfs import crfs_d1, crfs_followup, crfs_missed, crfs_month12, crfs_prn
 from .requisitions import (
     requisitions_d1,
     requisitions_followup,
@@ -58,7 +58,7 @@ visit12 = Visit(
     title="Month 12 (End of study)",
     add_window_gap_to_lower=True,
     allow_unscheduled=True,
-    crfs=crfs_followup,
+    crfs=crfs_month12,
     crfs_missed=crfs_missed,
     crfs_prn=crfs_prn,
     crfs_unscheduled=crfs_followup,
