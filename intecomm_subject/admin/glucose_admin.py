@@ -34,4 +34,5 @@ class GlucoseAdmin(CrfModelAdmin):
         "crf_status": admin.VERTICAL,
         "glucose_units": admin.VERTICAL,
         "glucose_fasting": admin.VERTICAL,
+        "glucose_quantifier": admin.VERTICAL,
     }
