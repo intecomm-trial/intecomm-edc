@@ -179,8 +179,8 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.contrib.sites.middleware.CurrentSiteMiddleware",
     "multisite.middleware.DynamicSiteMiddleware",
+    "django.contrib.sites.middleware.CurrentSiteMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "defender.middleware.FailedLoginMiddleware",
@@ -437,8 +437,10 @@ EDC_RANDOMIZATION_LIST_PATH = env.str("EDC_RANDOMIZATION_LIST_PATH")
 EDC_SITES_MODULE_NAME = env.str("EDC_SITES_MODULE_NAME")
 
 # django-multisite
-CACHE_MULTISITE_KEY_PREFIX = APP_NAME
+CACHE_MULTISITE_KEY_PREFIX = "intecomm_uat"
 SILENCED_SYSTEM_CHECKS = ["sites.E101"]
+MULTISITE_SYNC_ALIAS_MANUALLY = True
+MULTISITE_REGISTER_POST_MIGRATE_SYNC_ALIAS = False
 
 # django-defender
 # see if env.str("DJANGO_CACHE") == "redis" above
@@ -473,9 +475,6 @@ EXPORT_FOLDER = env.str("DJANGO_EXPORT_FOLDER") or os.path.expanduser("~/")
 
 # django_simple_history
 SIMPLE_HISTORY_ENFORCE_HISTORY_MODEL_PERMISSIONS = True
-
-# django_multisite2
-MULTISITE_REGISTER_POST_MIGRATE_SYNC_ALIAS = False
 
 FQDN = env.str("DJANGO_FQDN")  # ???
 INDEX_PAGE = env.str("DJANGO_INDEX_PAGE")
