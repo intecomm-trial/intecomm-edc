@@ -36,16 +36,19 @@ from edc_reportable import (
 from edc_visit_tracking.constants import MISSED_VISIT, SCHEDULED, UNSCHEDULED
 
 from .constants import (
+    ALONE,
     COMMUNITY_CLINIC,
     EXPENSIVE,
     GTE_3HRS,
     HOME_REMEDIES,
     NURSE,
+    PAID_WORK,
     PROBLEMATIC,
     SITTING,
     TOO_BUSY,
     UNAVAILABLE,
     UNIMPORTANT,
+    UNPAID_WORK,
 )
 
 ALCOHOL_CONSUMPTION = (
@@ -290,7 +293,7 @@ VISIT_REASONS = Choices(
 
 
 MEDS = Choices(
-    (HIV, "HIV"),
+    (HIV, "HIV", 1),
     (HTN, "Hypertension"),
     (DM, "Diabetes"),
     (OTHER, "Other, please specify ..."),
@@ -306,6 +309,7 @@ NOT_COLLECTED_REASONS = Choices(
     (TOO_BUSY, "Did not have the time to collect or buy medicines"),
     (PROBLEMATIC, "Taking medicines caused problems"),
     (OTHER, "Other, please specify ..."),
+    (NOT_APPLICABLE, "Not applicable"),
     fillmeta=True,
 )
 
@@ -320,21 +324,22 @@ TESTS_NOT_DONE_REASONS = Choices(
     fillmeta=True,
 )
 
-
 FACILITY_VISIT_ALTERNATIVES = Choices(
     (
-        "paid_work",
+        PAID_WORK,
         "Paid work (e.g. full-time employment, small business owners/traders, day jobs, etc.)",
         1,
     ),
-    ("unpaid_work", "Unpaid work (e.g. subsistence farming, housework etc.)"),
+    (UNPAID_WORK, "Unpaid work (e.g. subsistence farming, housework etc.)"),
     (OTHER, "Other (specify)"),
+    (NOT_APPLICABLE, "Not applicable"),
     fillmeta=True,
 )
 
 REFERRAL_TYPE = Choices(
     ("inpatient", "Inpatient", 1),
     ("outpatient", "Outpatient (includes laboratory testing)"),
+    (NOT_APPLICABLE, "Not applicable"),
     fillmeta=True,
 )
 
@@ -346,11 +351,12 @@ REFERRAL_FACILITY = Choices(
     ("public_hospital", "Public Hospital/tertiary facility"),
     ("private_hospital", "Private hospital"),
     ("pharmacy", "Pharmacy"),
+    (NOT_APPLICABLE, "Not applicable"),
     fillmeta=True,
 )
 
 ACCOMPANIED_BY = Choices(
-    ("alone", "No one, I came alone", 1),
+    (ALONE, "No one, I came alone", 1),
     ("main_earner", "Main household earner"),
     ("adult", "Other family member/relatives/friends (adults)"),
     ("child", "Other family member/relatives/friends (children)"),
@@ -375,6 +381,7 @@ MONEY_SOURCES = Choices(
         "Sale of assets (property, livestock, jewellery, household goods, etc)",
     ),
     (OTHER, "Other (specify)"),
+    (NOT_APPLICABLE, "Not applicable"),
     fillmeta=True,
 )
 

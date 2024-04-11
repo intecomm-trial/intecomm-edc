@@ -6,7 +6,7 @@ import time_machine
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.test import TestCase, override_settings
+from django.test import TestCase, override_settings, tag
 from edc_appointment.constants import INCOMPLETE_APPT, ONTIME_APPT, SKIPPED_APPT
 from edc_appointment.models import Appointment, AppointmentType
 from edc_constants.constants import COMMUNITY, COMPLETE, HTN, NOT_APPLICABLE
@@ -87,6 +87,7 @@ class TestAppointmentCommunityArm(IntecommTestCaseMixin, TestCase):
             site=Site.objects.get(id=settings.SITE_ID),
         )
 
+    @tag("1")
     @time_machine.travel(dt.datetime(2019, 5, 11, 8, 00, tzinfo=utc_tz))
     def test_ok(self):
         self.update_appt_1000()
@@ -103,6 +104,7 @@ class TestAppointmentCommunityArm(IntecommTestCaseMixin, TestCase):
         form.is_valid()
         self.assertEqual({}, form._errors)
 
+    @tag("1")
     @time_machine.travel(dt.datetime(2019, 5, 11, 8, 00, tzinfo=utc_tz))
     def test_appt_may_not_be_skipped_in_community_arm(self):
         self.update_appt_1000()
@@ -191,6 +193,7 @@ class TestAppointmentFacilityArm(IntecommTestCaseMixin, TestCase):
             site=Site.objects.get(id=settings.SITE_ID),
         )
 
+    @tag("1")
     @time_machine.travel(dt.datetime(2019, 5, 11, 8, 00, tzinfo=utc_tz))
     def test_appt_may_not_be_in_community_for_facility_arm(self):
         self.update_appt_1000()

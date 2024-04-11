@@ -13,7 +13,7 @@ class Medications(CrfModelMixin, BaseUuidModel):
         choices=YES_NO_NA,
         default=NOT_APPLICABLE,
         help_text=(
-            "Select `not applicable` if subject has not "
+            "Select 'not applicable' if subject has not "
             "been diagnosed and prescribed medication for HIV infection."
         ),
     )
@@ -24,7 +24,7 @@ class Medications(CrfModelMixin, BaseUuidModel):
         choices=YES_NO_NA,
         default=NOT_APPLICABLE,
         help_text=(
-            "Select `not applicable` if subject has not "
+            "Select 'not applicable' if subject has not "
             "been diagnosed and prescribed medication for Diabetes."
         ),
     )
@@ -35,7 +35,7 @@ class Medications(CrfModelMixin, BaseUuidModel):
         choices=YES_NO_NA,
         default=NOT_APPLICABLE,
         help_text=(
-            "Select `not applicable` if subject has not "
+            "Select 'not applicable' if subject has not "
             "been diagnosed and prescribed medication for Hypertension."
         ),
     )

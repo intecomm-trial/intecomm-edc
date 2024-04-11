@@ -6,11 +6,13 @@ from .defaults import *  # noqa
 
 print(f"Settings file {__file__}")
 print(f"Version: {version('intecomm_edc')}")
+DJANGO_DEBUG_TOOLBAR_ENABLED = False
 
 SITE_ID = SiteID(default=1)
 EDC_SITES_UAT_DOMAIN = True
 EDC_CONSENT_BYPASS_CONSENT_DATETIME_VALIDATION = True
 ALLOWED_HOSTS = [
+    "localhost",
     "kasangati.uat.ug.intecomm.clinicedc.org",
     "kisugu.uat.ug.intecomm.clinicedc.org",
     "kiswa.uat.ug.intecomm.clinicedc.org",

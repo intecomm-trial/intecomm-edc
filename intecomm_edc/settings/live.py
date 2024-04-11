@@ -5,6 +5,7 @@ from .defaults import *  # noqa
 print(f"Settings file {__file__}")
 
 
+DJANGO_DEBUG_TOOLBAR_ENABLED = False
 SITE_ID = SiteID(default=1)
 EDC_SITES_UAT_DOMAIN = False
 ALLOWED_HOSTS = [

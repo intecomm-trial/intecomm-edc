@@ -10,7 +10,7 @@ from django.utils.html import format_html
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField
 from edc_consent.utils import get_remove_patient_names_from_countries
 from edc_constants.choices import GENDER, YES_NO_TBD
-from edc_constants.constants import TBD, UUID_PATTERN
+from edc_constants.constants import DM, HIV, HTN, TBD, UUID_PATTERN
 from edc_model.models import BaseUuidModel, HistoricalRecords, NameFieldsModelMixin
 from edc_model.validators.phone import phone_number
 from edc_model_fields.fields import InitialsField, OtherCharField
@@ -149,6 +149,7 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
 
     conditions = models.ManyToManyField(
         Conditions,
+        limit_choices_to={"name__in": [HIV, DM, HTN]},
         verbose_name="Diagnoses",
     )
 

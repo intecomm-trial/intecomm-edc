@@ -4,7 +4,8 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 from zoneinfo import ZoneInfo
 
-from edc_constants.constants import CLINIC, COMMUNITY
+from edc_constants.constants import CLINIC, COMMUNITY, DM
+from edc_dx import Diagnoses
 from edc_he.rule_groups import Predicates as BaseHealthEconomicsPredicates
 from edc_visit_schedule.constants import MONTH12
 from edc_visit_schedule.utils import is_baseline
@@ -20,8 +21,22 @@ if TYPE_CHECKING:
 
 
 class HealthEconomicsPredicates(BaseHealthEconomicsPredicates):
-    def is_required_by_date(self, visit) -> bool:
+    @staticmethod
+    def is_required_by_date(visit, **kwargs) -> bool:
         return visit.report_datetime >= datetime(2023, 6, 30, 23, 59, tzinfo=ZoneInfo("UTC"))
+
+    @staticmethod
+    def careseeking_required(visit, **kwargs) -> bool:
+        """Returns True if subject has DM or multimorbidity"""
+        if visit.visit_code == MONTH12:
+            diagnoses = Diagnoses(
+                subject_identifier=visit.subject_identifier,
+                report_datetime=visit.report_datetime,
+                lte=True,
+            )
+            dxs = [name for name in diagnoses.initial_reviews]
+            return DM in [name for name in diagnoses.initial_reviews] or len(dxs) > 1
+        return False
 
 
 class LocationUpdatePredicates:

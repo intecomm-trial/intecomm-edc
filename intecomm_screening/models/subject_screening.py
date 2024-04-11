@@ -36,7 +36,7 @@ class SubjectScreening(
 ):
     identifier_cls = ScreeningIdentifier
     eligibility_cls = ScreeningEligibility
-    consent_definition = cdef_tz_v1
+    consent_definitions = [cdef_tz_v1]
 
     # declare `site` explicitly as editable by user
     # (instead of using modelmixin)

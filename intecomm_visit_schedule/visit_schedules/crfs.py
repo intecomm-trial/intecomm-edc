@@ -12,6 +12,8 @@ crfs_prn = FormsCollection(
     Crf(show_order=365, model="intecomm_subject.concomitantmedication"),
     Crf(show_order=385, model="intecomm_subject.urinepregnancy"),
     Crf(show_order=406, model="intecomm_subject.glucose"),
+    Crf(show_order=452, model="intecomm_subject.careseekinga"),
+    Crf(show_order=463, model="intecomm_subject.careseekingb"),
     name="prn",
 )
 

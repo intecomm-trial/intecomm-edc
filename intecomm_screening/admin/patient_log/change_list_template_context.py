@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Type
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from edc_constants.constants import NO, TBD, UUID_PATTERN, YES
-from edc_dashboard import url_names
+from edc_dashboard.url_names import url_names
 
 from ...models import ConsentRefusal
 from ...utils import (

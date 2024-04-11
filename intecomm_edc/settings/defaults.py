@@ -16,7 +16,6 @@ env = environ.Env(
     CELERY_ENABLED=(bool, False),
     DATABASE_SQLITE_ENABLED=(bool, False),
     DJANGO_AUTO_CREATE_KEYS=(bool, False),
-    DJANGO_CRYPTO_FIELDS_TEMP_PATH=(bool, False),
     DJANGO_CSRF_COOKIE_SECURE=(bool, True),
     DJANGO_DEBUG=(bool, False),
     DJANGO_EDC_BOOTSTRAP=(int, 3),
@@ -34,8 +33,8 @@ env = environ.Env(
 )
 
 DEBUG = env("DJANGO_DEBUG")
-DJANGO_DEBUG_TOOLBAR_ENABLED = False  # env("DJANGO_DEBUG_TOOLBAR_ENABLED")
-
+# DJANGO_DEBUG_TOOLBAR_ENABLED = False  # env("DJANGO_DEBUG_TOOLBAR_ENABLED")
+DJANGO_DEBUG_TOOLBAR_ENABLED = False
 EDC_APP_NAME = "intecomm_edc"
 
 if LOGGING_ENABLED := env("DJANGO_LOGGING_ENABLED"):
@@ -84,10 +83,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "debug_toolbar",
-    "django.contrib.sites",
-    "defender",
-    "multisite",
     "fontawesomefree",
+    "defender",
+    "django.contrib.sites",
+    "multisite.apps.AppConfig",
     "django_crypto_fields.apps.AppConfig",
     "django_revision.apps.AppConfig",
     # "django_extensions",
@@ -180,8 +179,8 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "multisite.middleware.DynamicSiteMiddleware",
     "django.contrib.sites.middleware.CurrentSiteMiddleware",
+    "multisite.middleware.DynamicSiteMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "defender.middleware.FailedLoginMiddleware",
@@ -252,7 +251,7 @@ if env.str("DJANGO_CACHE") == "redis":
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
                 "PASSWORD": env.str("DJANGO_REDIS_PASSWORD"),
             },
-            "KEY_PREFIX": f"{APP_NAME}",
+            "KEY_PREFIX": env.str("DJANGO_REDIS_KEY_PREFIX", default=APP_NAME),
         }
     }
     SESSION_ENGINE = "django.contrib.sessions.backends.cache"
@@ -474,6 +473,9 @@ EXPORT_FOLDER = env.str("DJANGO_EXPORT_FOLDER") or os.path.expanduser("~/")
 
 # django_simple_history
 SIMPLE_HISTORY_ENFORCE_HISTORY_MODEL_PERMISSIONS = True
+
+# django_multisite2
+MULTISITE_REGISTER_POST_MIGRATE_SYNC_ALIAS = False
 
 FQDN = env.str("DJANGO_FQDN")  # ???
 INDEX_PAGE = env.str("DJANGO_INDEX_PAGE")

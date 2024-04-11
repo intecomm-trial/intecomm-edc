@@ -24,7 +24,7 @@ class ClinicalReview(
         verbose_name="Since last seen, has the patient had any complications",
         max_length=15,
         choices=YES_NO,
-        help_text="If Yes, complete the `Complications` CRF",
+        help_text="If Yes, complete the 'Complications' CRF",
     )
 
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
