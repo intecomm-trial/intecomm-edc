@@ -1,3 +1,4 @@
+import re
 from uuid import uuid4
 
 from django.conf import settings
@@ -89,8 +90,8 @@ class TestScreening(IntecommTestCaseMixin, WebTest):
         obj.conditions.add(Conditions.objects.get(name=HIV))
 
         obj.refresh_from_db()
-        self.assertRegexpMatches(str(obj.legal_name), UUID_PATTERN)
-        self.assertRegexpMatches(str(obj.familiar_name), UUID_PATTERN)
+        self.assertTrue(re.match(UUID_PATTERN, str(obj.legal_name)))
+        self.assertTrue(re.match(UUID_PATTERN, str(obj.familiar_name)))
 
         response = self.app.get(changelist_url, user=self.user)
         self.assertNotIn(str(obj.legal_name), response.text)

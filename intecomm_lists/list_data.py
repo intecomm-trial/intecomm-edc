@@ -100,6 +100,7 @@ list_data = {
         (HIV, "HIV"),
         (DM, "Diabetes"),
         (HTN, "Hypertension"),
+        (OTHER, "Other, please specify below ..."),
     ],
     "intecomm_lists.locationtypes": [
         ("school", "School"),

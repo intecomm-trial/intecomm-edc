@@ -10,7 +10,6 @@ style = color_style()
 
 def main():
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intecomm_edc.settings.debug")
-    print(f"DJANGO_SETTINGS_MODULE={os.environ.get('DJANGO_SETTINGS_MODULE')}")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

@@ -2,6 +2,7 @@
 
 import django.contrib.sites.managers
 from django.db import migrations
+
 import intecomm_consent.models.subject_consent
 
 
@@ -22,7 +23,7 @@ class Migration(migrations.Migration):
             bases=("intecomm_consent.subjectconsent",),
             managers=[
                 ("on_site", django.contrib.sites.managers.CurrentSiteManager()),
-                ("objects", intecomm_consent.models.subject_consent.SubjectConsentManager()),
+                ("objects", intecomm_consent.models.subject_consent.ConsentObjectsManager()),
             ],
         ),
     ]

@@ -11,7 +11,7 @@ class PatientLogIdentifier(SimpleUniqueIdentifier):
 
 class FilingIdentifier(Identifier):
     name = "filing_identifier"
-    identifier_pattern = "^[0-9]{3}-\d+$"  # noqa
+    identifier_pattern = r"^[0-9]{3}-\d+$"
     separator = "-"
     prefix = "F"
 

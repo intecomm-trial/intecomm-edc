@@ -180,3 +180,25 @@ class NextAppointmentRuleGroup(CrfRuleGroup):
         app_label = "intecomm_subject"
         source_model = "intecomm_subject.subjectvisit"
         predicates = NextAppointmentPredicates()
+
+
+@register()
+class CareseekingRuleGroup(CrfRuleGroup):
+    crfa = CrfRule(
+        predicate="careseeking_required",
+        consequence=REQUIRED,
+        alternative=NOT_REQUIRED,
+        target_models=["careseekinga"],
+    )
+
+    crfb = CrfRule(
+        predicate="careseeking_required",
+        consequence=REQUIRED,
+        alternative=NOT_REQUIRED,
+        target_models=["careseekingb"],
+    )
+
+    class Meta:
+        app_label = "intecomm_subject"
+        source_model = "intecomm_subject.subjectvisit"
+        predicates = HealthEconomicsPredicates()

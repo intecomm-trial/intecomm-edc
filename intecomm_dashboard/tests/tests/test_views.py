@@ -1,7 +1,7 @@
 from django.test import override_settings
 from django.urls import reverse
 from django_webtest import WebTest
-from edc_dashboard import url_names
+from edc_dashboard.url_names import url_names
 from edc_test_utils.get_user_for_tests import get_user_for_tests
 
 from intecomm_dashboard.views import (

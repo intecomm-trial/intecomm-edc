@@ -1,7 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import gettext as _
 from edc_constants.choices import YES_NO, YES_NO_DONT_KNOW_NA, YES_NO_NA
-from edc_constants.constants import NOT_APPLICABLE
+from edc_constants.constants import DM, HIV, HTN, NOT_APPLICABLE, OTHER
 from edc_model.models import BaseUuidModel
 from edc_model.validators import hm_validator
 from edc_model_fields.fields import (
@@ -41,7 +41,8 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
     seek_advice = CharField2(
         verbose_name=_("Did you seek advice or treatment?"),
         max_length=15,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
         help_text=_("from a public facility, local pharmacy, traditional doctor, etc"),
         metadata="FSEEK1",
     )
@@ -146,9 +147,11 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
 
     med_conditions = ManyToManyField2(
         Conditions,
+        limit_choices_to={"name__in": [HIV, DM, HTN, OTHER]},
         related_name="%(app_label)s_med_conditions_related",
         related_query_name="%(app_label)s_med_conditions_sources",
         verbose_name=_("What were the medicines were for?"),
+        blank=True,
         metadata="FOUTMEDCOND1",
     )
 
@@ -159,7 +162,8 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
             "Did you receive/collect these medicines (whether paid or received for free)?"
         ),
         max_length=25,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
         metadata="FOUTMEDCOLL1",
     )
 
@@ -175,6 +179,8 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
     med_cost_tot = IntegerField2(
         verbose_name=_("How much was spent on these medicines? "),
         validators=[MinValueValidator(0), MaxValueValidator(9999999)],
+        null=True,
+        blank=True,
         help_text=_("in local currency"),
         metadata="FOUTMEDCOST1",
     )
@@ -211,11 +217,13 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
     tests_cost = IntegerField2(
         verbose_name=_("How much did you spend on these tests?"),
         validators=[MinValueValidator(0), MaxValueValidator(9999999)],
+        null=True,
+        blank=True,
         help_text=_("in local currency"),
         metadata="FOUTTESTCOST1",
     )
 
-    visit_duration = CharField2(
+    care_visit_duration = CharField2(
         verbose_name=_(
             "Roughly how much time did you spend during your last/most recent visit?"
         ),
@@ -232,7 +240,9 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         metadata="FOUTACTIVITY1",
     )
 
-    visit_lost_income = IntegerField2(
+    missed_activities_other = OtherCharField(metadata="FMEDOTHER1")
+
+    care_visit_lost_income = IntegerField2(
         verbose_name=_("How much would you have made in cash or in-kind for a day’s work?"),
         validators=[MinValueValidator(0), MaxValueValidator(9999999999)],
         null=True,
@@ -271,8 +281,7 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         ),
         max_length=25,
         choices=FACILITY_VISIT_ALTERNATIVES(),
-        null=True,
-        blank=True,
+        default=NOT_APPLICABLE,
         metadata="FOUTACMPACT1",
     )
 
@@ -296,7 +305,7 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
             "excluding today’s visit, what were the source(s) of payment for all "
             "these expenses?  "
         ),
-        help_text="Select up to three sources. If ‘other’, please specify.",
+        help_text="Select up to three sources. If 'other', please specify.",
         metadata="FOUTSOURCE",
     )
 
@@ -315,6 +324,14 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         metadata="FOUTSOURCEMAIN1",
     )
 
+    inpatient = CharField2(
+        verbose_name="Were you admitted as a INPATIENT?",
+        max_length=15,
+        choices=YES_NO,
+        null=True,
+        blank=False,
+    )
+
     inpatient_days = IntegerField2(
         verbose_name=_("How many days in total were you admitted as an INPATIENT?"),
         validators=[MinValueValidator(1), MaxValueValidator(10)],
@@ -328,6 +345,7 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         related_name="%(app_label)s_inpatient_reasons_related",
         related_query_name="%(app_label)s_inpatient_reasons_sources",
         verbose_name=_("What was this INPATIENT care for?"),
+        blank=True,
         metadata="FINDAYSCOND1",
     )
 
@@ -339,6 +357,8 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
     inpatient_cost = IntegerField2(
         verbose_name=_("How much was spent in total on your hospital stay?"),
         validators=[MinValueValidator(0), MaxValueValidator(9999999)],
+        null=True,
+        blank=True,
         help_text=_("in local currency"),
         metadata="FINCOST1",
     )
@@ -366,6 +386,8 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
     inpatient_food_cost = IntegerField2(
         verbose_name=_("How much was spent on this food and drink?"),
         validators=[MinValueValidator(0), MaxValueValidator(9999999)],
+        null=True,
+        blank=True,
         help_text=_("in local currency"),
         metadata="FINFOODCOST1",
     )
@@ -373,10 +395,12 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
     inpatient_nowork_days = IntegerField2(
         verbose_name="When you were ill, how many days were you not able to go to work?",
         validators=[MinValueValidator(0), MaxValueValidator(90)],
+        null=True,
+        blank=True,
         metadata="FINWRKMISS1",
     )
 
-    inpatient_accompany_nowork = CharField2(
+    inpatient_household_nowork = CharField2(
         verbose_name=_(
             "Apart from the person that accompanied you, was there anyone "
             "else in your household who could not go to work because of your illness?"
@@ -387,9 +411,11 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         metadata="FINOWRKMISS1",
     )
 
-    inpatient_accompany_nowork_days = IntegerField2(
+    inpatient_household_nowork_days = IntegerField2(
         verbose_name="How many days did they not go to work?",
         validators=[MinValueValidator(0), MaxValueValidator(90)],
+        null=True,
+        blank=True,
         metadata="FINODAYSMISS1",
     )
 
@@ -400,7 +426,8 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         verbose_name=_(
             "What were the source(s) of payment for all these expenses for your hospital stay?"
         ),
-        help_text="Select up to three sources. If ‘other’, please specify.",
+        blank=True,
+        help_text="Select up to three sources. If 'other', please specify.",
         metadata="FINSOURCE",
     )
 
@@ -409,14 +436,14 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         metadata="FINSOURCEOTHER",
     )
 
-    inpatient_money_sources_main = ManyToManyField2(
-        MoneySources,
-        related_name="%(app_label)s_inpatient_money_sources_main_related",
-        related_query_name="%(app_label)s_inpatient_money_main_sources",
+    inpatient_money_sources_main = CharField2(
         verbose_name=_(
-            "Of the various sources that you have just mentioned, what was the "
-            "main source of payment?"
+            "Of the various sources that you have just mentioned, "
+            "what was the main source of payment?"
         ),
+        max_length=25,
+        choices=MONEY_SOURCES(),
+        default=NOT_APPLICABLE,
         metadata="FINSOURCEMAIN1",
     )
 

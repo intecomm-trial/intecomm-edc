@@ -33,8 +33,8 @@ class CareseekingAAdmin(
                     "travel_time",
                     "travel_cost",
                     "food_cost",
-                    "visit_reason",
-                    "visit_cost",
+                    "care_visit_reason",
+                    "care_visit_cost",
                 )
             },
         ),
@@ -72,11 +72,12 @@ class CareseekingAAdmin(
             _("A5: Time for today's visit"),
             {
                 "fields": (
-                    "visit_duration",
+                    "care_visit_duration",
                     "wait_duration",
                     "with_hcw_duration",
                     "missed_activities",
-                    "visit_lost_income",
+                    "missed_activities_other",
+                    "care_visit_lost_income",
                 )
             },
         ),
@@ -98,6 +99,7 @@ class CareseekingAAdmin(
                     "accompany_num",
                     "accompany_wait",
                     "accompany_alt",
+                    "accompany_alt_other",
                     "accompany_lost_income",
                 )
             },
@@ -119,7 +121,7 @@ class CareseekingAAdmin(
 
     filter_horizontal = [
         "travel_method",
-        "visit_reason",
+        "care_visit_reason",
         "med_conditions",
         "money_sources",
         "accompany",

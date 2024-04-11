@@ -2,6 +2,7 @@
 
 import django.contrib.sites.managers
 from django.db import migrations
+
 import intecomm_consent.models.subject_consent
 
 
@@ -14,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterModelManagers(
             name="subjectconsent",
             managers=[
-                ("objects", intecomm_consent.models.subject_consent.SubjectConsentManager()),
+                ("objects", intecomm_consent.models.subject_consent.ConsentObjectsManager()),
                 ("on_site", django.contrib.sites.managers.CurrentSiteManager()),
             ],
         ),

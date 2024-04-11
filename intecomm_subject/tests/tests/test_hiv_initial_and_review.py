@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 from django.test import TestCase, override_settings
 from edc_constants.constants import HIV, NOT_APPLICABLE, YES
 from edc_metadata import REQUIRED
-from edc_pdutils import SYSTEM_COLUMNS
+from edc_pdutils.constants import SYSTEM_COLUMNS
 from edc_utils import get_utcnow
 from model_bakery import baker
 

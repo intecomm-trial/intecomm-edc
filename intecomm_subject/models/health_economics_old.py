@@ -158,7 +158,7 @@ class HealthEconomics(CrfModelMixin, BaseUuidModel):
     )
 
     rx_dm_paid_month_other = OtherCharField(
-        verbose_name="If `other pay source`, please specify ... (DM)"
+        verbose_name="If 'other pay source', please specify ... (DM)"
     )
 
     rx_dm_cost_month = models.IntegerField(
@@ -188,7 +188,7 @@ class HealthEconomics(CrfModelMixin, BaseUuidModel):
     )
 
     rx_htn_paid_month_other = OtherCharField(
-        verbose_name="If `other pay source`, please specify ...(HTN)"
+        verbose_name="If 'other pay source', please specify ...(HTN)"
     )
 
     rx_htn_cost_month = models.IntegerField(
@@ -215,7 +215,7 @@ class HealthEconomics(CrfModelMixin, BaseUuidModel):
     )
 
     rx_hiv_paid_month_other = OtherCharField(
-        verbose_name="If `other pay source`, please specify ... (HIV)"
+        verbose_name="If 'other pay source', please specify ... (HIV)"
     )
 
     rx_hiv_cost_month = models.IntegerField(
@@ -241,7 +241,7 @@ class HealthEconomics(CrfModelMixin, BaseUuidModel):
     )
 
     rx_other_paid_month_other = OtherCharField(
-        verbose_name="If `other pay source`, please specify ..."
+        verbose_name="If 'other pay source', please specify ..."
     )
 
     rx_other_cost_month = models.IntegerField(
@@ -393,7 +393,7 @@ class HealthEconomics(CrfModelMixin, BaseUuidModel):
         blank=False,
     )
 
-    transport_other = OtherCharField(verbose_name="If `other reason`, please specify ...")
+    transport_other = OtherCharField(verbose_name="If 'other reason', please specify ...")
 
     transport_cost = models.IntegerField(
         verbose_name="How much did you spend on transport in total?",
@@ -437,7 +437,7 @@ class HealthEconomics(CrfModelMixin, BaseUuidModel):
     )
 
     rx_dm_paid_today_other = OtherCharField(
-        verbose_name="If `other pay source`, please specify ..."
+        verbose_name="If 'other pay source', please specify ..."
     )
 
     rx_dm_cost_today = models.IntegerField(
@@ -468,7 +468,7 @@ class HealthEconomics(CrfModelMixin, BaseUuidModel):
     )
 
     rx_htn_paid_today_other = OtherCharField(
-        verbose_name="If `other pay source`, please specify ..."
+        verbose_name="If 'other pay source', please specify ..."
     )
     rx_htn_cost_today = models.IntegerField(
         verbose_name=(
@@ -496,7 +496,7 @@ class HealthEconomics(CrfModelMixin, BaseUuidModel):
     )
 
     rx_hiv_paid_today_other = OtherCharField(
-        verbose_name="If `other pay source`, please specify ..."
+        verbose_name="If 'other pay source', please specify ..."
     )
 
     rx_hiv_cost_today = models.IntegerField(
@@ -522,7 +522,7 @@ class HealthEconomics(CrfModelMixin, BaseUuidModel):
     )
 
     rx_other_paid_today_other = OtherCharField(
-        verbose_name="If `other pay source`, please specify ..."
+        verbose_name="If 'other pay source', please specify ..."
     )
 
     rx_other_cost_today = models.IntegerField(

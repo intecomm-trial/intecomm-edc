@@ -10,7 +10,7 @@ from edc_consent.field_mixins import (
     SampleCollectionFieldsMixin,
     VulnerabilityFieldsMixin,
 )
-from edc_consent.managers import ConsentManager
+from edc_consent.managers import ConsentObjectsManager
 from edc_consent.model_mixins import ConsentModelMixin
 from edc_constants.choices import YES_NO
 from edc_constants.constants import BLACK, NO, NOT_APPLICABLE
@@ -22,7 +22,6 @@ from edc_screening.utils import (
     get_subject_screening_or_raise,
     validate_screening_identifier_format_or_raise,
 )
-from edc_search.model_mixins import SearchSlugManager
 from edc_sites.model_mixins import SiteModelMixin
 
 from intecomm_screening.utils import raise_if_consent_refusal_exists
@@ -33,13 +32,6 @@ from .model_mixins import SearchSlugModelMixin
 class SubjectIdentifier(BaseSubjectIdentifier):
     template = "{protocol_number}-{site_id}-{sequence}"
     padding = 4
-
-
-class SubjectConsentManager(SearchSlugManager, models.Manager):
-    use_in_migrations = True
-
-    def get_by_natural_key(self, subject_identifier, version):
-        return self.get(subject_identifier=subject_identifier, version=version)
 
 
 class SubjectConsent(
@@ -86,11 +78,9 @@ class SubjectConsent(
         max_length=10, default=NO, choices=YES_NO, editable=False
     )
 
-    objects = SubjectConsentManager()
+    objects = ConsentObjectsManager()
 
     on_site = CurrentSiteManager()
-
-    consent = ConsentManager()
 
     history = HistoricalRecords(inherit=True)
 

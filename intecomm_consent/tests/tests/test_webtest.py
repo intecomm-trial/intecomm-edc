@@ -3,7 +3,7 @@ from django.contrib.sites.models import Site
 from django.test import override_settings
 from django.urls import reverse
 from django_webtest import WebTest
-from edc_dashboard import url_names
+from edc_dashboard.url_names import url_names
 
 from intecomm_dashboard.views import SubjectDashboardView
 from intecomm_screening.tests.intecomm_test_case_mixin import IntecommTestCaseMixin

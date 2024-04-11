@@ -52,7 +52,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         verbose_name="How long did it take you to reach here?",
         max_length=5,
         validators=[hm_validator],
-        help_text="in hours and minutes (format HH:MM)",
+        help_text="something like 1h20m, 11h5m, etc",
         metadata="FTRATIME1",
     )
 
@@ -81,13 +81,13 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         metadata="FFOODCOST1",
     )
 
-    visit_reason = ManyToManyField2(
+    care_visit_reason = ManyToManyField2(
         VisitReasons,
         verbose_name=_("What was the reason for today’s visit?"),
         metadata="FMEDCOND1",
     )
 
-    visit_cost = IntegerField2(
+    care_visit_cost = IntegerField2(
         verbose_name=_(
             "How much money did you spend on healthworker and consultation "
             "fees during this visit?"
@@ -125,6 +125,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         verbose_name=_("Why were these medicines not received/collected?"),
         max_length=25,
         choices=NOT_COLLECTED_REASONS(),
+        default=NOT_APPLICABLE,
         metadata="FMED1",
     )
 
@@ -203,18 +204,20 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
     tests_cost = IntegerField2(
         verbose_name=_("How much did you spend on these tests?"),
         validators=[MinValueValidator(0), MaxValueValidator(9999999)],
+        null=True,
+        blank=True,
         help_text=_("in local currency"),
         metadata="FTESTCOST1",
     )
 
-    visit_duration = CharField2(
+    care_visit_duration = CharField2(
         verbose_name=_(
             "How much time did you spend during your visit today -- "
             "from arrival to this place until the end of your visit?"
         ),
         max_length=5,
         validators=[hm_validator],
-        help_text="in hours and minutes (format HH:MM)",
+        help_text="something like 1h20m, 11h5m, etc",
         metadata="FFACTIME1",
     )
 
@@ -222,7 +225,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         verbose_name=_("How much time did you spend waiting?"),
         max_length=5,
         validators=[hm_validator],
-        help_text="in hours and minutes (format HH:MM)",
+        help_text="something like 1h20m, 11h5m, etc",
         metadata="FWAITIME1",
     )
 
@@ -230,7 +233,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         verbose_name=_("How much time did you spend with the healthcare worker?"),
         max_length=5,
         validators=[hm_validator],
-        help_text="in hours and minutes (format HH:MM)",
+        help_text="something like 1h20m, 11h5m, etc",
         metadata="FWORKTIME1",
     )
 
@@ -243,7 +246,9 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         metadata="FACTIVITY1",
     )
 
-    visit_lost_income = IntegerField2(
+    missed_activities_other = OtherCharField(metadata="FMEDOTHER1")
+
+    care_visit_lost_income = IntegerField2(
         verbose_name=_("How much would you have made in cash or in-kind for a day’s work?"),
         validators=[MinValueValidator(0), MaxValueValidator(9999999999)],
         null=True,
@@ -267,6 +272,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         verbose_name=_("Is this for inpatient or outpatient care?"),
         max_length=25,
         choices=REFERRAL_TYPE(),
+        default=NOT_APPLICABLE,
         metadata="FREFTYPE1",
     )
 
@@ -274,6 +280,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         verbose_name=_("What type of facility have you been referred to?"),
         max_length=25,
         choices=REFERRAL_FACILITY(),
+        default=NOT_APPLICABLE,
         metadata="FREFAC1",
     )
 
@@ -302,10 +309,11 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         ),
         max_length=25,
         choices=FACILITY_VISIT_ALTERNATIVES(),
-        null=True,
-        blank=True,
+        default=NOT_APPLICABLE,
         metadata="FACMPACT1",
     )
+
+    accompany_alt_other = OtherCharField(metadata="FACMPACTOTHER")
 
     accompany_lost_income = IntegerField2(
         verbose_name=_("How much would they have made in cash or in-kind for a day’s work?"),
@@ -324,7 +332,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
             "Thinking about the expenses you have reported for today’s visit, what were "
             "the source(s) of payment for all these expenses?"
         ),
-        help_text="Select up to three sources. If ‘other’, please specify.",
+        help_text="Select up to three sources. If 'other', please specify.",
         metadata="FTODSOURCE",
     )
 
@@ -340,6 +348,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         ),
         max_length=25,
         choices=MONEY_SOURCES(),
+        default=NOT_APPLICABLE,
         metadata="FTODSOURCEMAIN1",
     )
 

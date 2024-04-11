@@ -4,7 +4,7 @@ from .subject_screening import SubjectScreening
 
 
 class SubjectScreeningTz(SubjectScreening):
-    consent_definition = cdef_tz_v1
+    consent_definitions = [cdef_tz_v1]
 
     class Meta:
         proxy = True

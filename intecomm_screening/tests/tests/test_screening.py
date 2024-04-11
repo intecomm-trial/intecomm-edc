@@ -1,3 +1,4 @@
+import re
 from decimal import Decimal
 from uuid import uuid4
 
@@ -45,7 +46,7 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
         self.assertEqual(obj.status, RECRUITING)
         self.assertIsNotNone(obj.name)
         self.assertIsNotNone(obj.group_identifier)
-        self.assertRegexpMatches(str(obj.group_identifier), UUID_PATTERN)
+        self.assertTrue(re.match(UUID_PATTERN, str(obj.group_identifier)))
         self.assertEqual(obj.ratio, Decimal("0"))
         self.assertEqual(obj.randomize_now, NO)
         self.assertFalse(obj.randomized)
