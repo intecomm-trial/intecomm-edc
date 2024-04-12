@@ -376,9 +376,12 @@ ACCOMPANIED_BY = Choices(
 
 MONEY_SOURCES = Choices(
     ("own_savings", "Own saving (e.g. “loose funds”, bank savings)", 1),
-    ("family_gift", "Loan from family members that does not need to be repaid"),
+    ("family_gift", "Money received from family members that does not need to be repaid"),
     ("family_loan", "Loan from family member that needs to be repaid"),
-    ("gift_relative", "Loan from relative/neighbour that does not need to be repaid"),
+    (
+        "gift_relative",
+        "Money received from relative/neighbour that does not need to be repaid",
+    ),
     ("loan_relative", "Loan from relative/neighbour that needs to be repaid"),
     ("loan_money_lender", "Loan from money lender"),
     ("loan_bank", "Loan from another source eg bank"),
