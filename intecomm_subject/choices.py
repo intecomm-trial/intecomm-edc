@@ -45,6 +45,7 @@ from .constants import (
     PAID_WORK,
     PROBLEMATIC,
     SITTING,
+    STUDY_VISIT,
     TOO_BUSY,
     UNAVAILABLE,
     UNIMPORTANT,
@@ -263,7 +264,7 @@ APPT_DATE_INFO_SOURCES = (
 TRAVEL_METHODS = Choices(
     ("walking", _("Walking"), 1),
     ("public_transport", _("Public Transport (government bus, etc)")),
-    ("hired_transport", _("Hired / shared transport (bus, taxi etc)")),
+    ("hired_transport", _("Hired / shared transport (bus, taxi, boda boda etc)")),
     (
         "own_transport",
         _(
@@ -287,7 +288,8 @@ VISIT_REASONS = Choices(
     ("tests", "Diagnostic tests"),
     ("refill", "Medicines pick-up/refill"),
     ("unwell", "Need treatment/care for illness"),
-    ("study_visit", "Only for study visit"),
+    (STUDY_VISIT, "Only for study visit"),
+    (OTHER, "Other, please specify ..."),
     fillmeta=True,
 )
 
@@ -297,6 +299,15 @@ MEDS = Choices(
     (HTN, "Hypertension"),
     (DM, "Diabetes"),
     (OTHER, "Other, please specify ..."),
+    fillmeta=True,
+)
+
+MED_COLLECTION_LOCATIONS = Choices(
+    ("public_pharmacy", "Public pharmacy"),
+    ("private_pharmacy", "Private pharmacy"),
+    ("club", "Club"),
+    (OTHER, "Other, please specify ..."),
+    (NOT_APPLICABLE, "Not applicable"),
     fillmeta=True,
 )
 

@@ -23,6 +23,7 @@ from intecomm_lists.models import (
 
 from ...choices import (
     FACILITY_VISIT_ALTERNATIVES,
+    MED_COLLECTION_LOCATIONS,
     MONEY_SOURCES,
     NOT_COLLECTED_REASONS,
     REFERRAL_FACILITY,
@@ -52,7 +53,11 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         verbose_name="How long did it take you to reach here?",
         max_length=5,
         validators=[hm_validator],
-        help_text="something like 1h20m, 11h5m, etc",
+        help_text=_(
+            "Invalid format. Please insert a numeric values followed by “h” for hours, "
+            "and a numeric values followed by “m” for minutes. For example, 1h2m, 0h35m, "
+            "and so on"
+        ),
         metadata="FTRATIME1",
     )
 
@@ -61,10 +66,10 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
             "Thinking about yourself and anyone that accompanied you, "
             "how much was spent on travel from your home to reach here?"
         ),
-        validators=[MinValueValidator(1), MaxValueValidator(9999999)],
+        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
         null=True,
-        blank=True,
-        help_text=_("in local currency"),
+        blank=False,
+        help_text=_("In local currency. If nothing spent on travel, enter `0`"),
         metadata="FTRAVCOST1",
     )
 
@@ -76,8 +81,11 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         ),
         validators=[MinValueValidator(0), MaxValueValidator(9999999)],
         null=True,
-        blank=True,
-        help_text=_("in local currency"),
+        blank=False,
+        help_text=_(
+            "In local currency. If nothing spent on food, drink or other "
+            "refreshments, enter `0`"
+        ),
         metadata="FFOODCOST1",
     )
 
@@ -87,18 +95,23 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         metadata="FMEDCOND1",
     )
 
+    care_visit_reason_other = OtherCharField(metadata="FMEDCONDOTHER1")
+
     care_visit_cost = IntegerField2(
         verbose_name=_(
             "How much money did you spend on healthworker and consultation "
-            "fees during this visit?"
+            "fees during today’s visit?"
         ),
         validators=[MinValueValidator(0), MaxValueValidator(9999999)],
-        help_text=_("in local currency"),
+        help_text=_(
+            "In local currency. If nothing spent on healthworker and "
+            "consultation fees, enter `0`"
+        ),
         metadata="FFEECOST1",
     )
 
     med_prescribed = CharField2(
-        verbose_name=_("Were you prescribed any medicines during this visit?"),
+        verbose_name=_("Were you prescribed any medicines during today’s visit?"),
         max_length=25,
         choices=YES_NO,
         metadata="FMED1",
@@ -107,6 +120,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
     med_conditions = ManyToManyField2(
         Conditions,
         verbose_name=_("What were the medicines were for?"),
+        blank=True,
         metadata="FMEDCOND1",
     )
 
@@ -117,7 +131,8 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
             "Did you receive/collect these medicines (whether paid or received for free)?"
         ),
         max_length=25,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
         metadata="FMEDCOLL1",
     )
 
@@ -134,7 +149,12 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
     med_cost_tot = IntegerField2(
         verbose_name=_("How much was spent on these medicines? "),
         validators=[MinValueValidator(0), MaxValueValidator(9999999)],
-        help_text=_("in local currency"),
+        null=True,
+        blank=True,
+        help_text=_(
+            "Leave blank if not applicable. In local currency. "
+            "If medicines were free enter `0`."
+        ),
         metadata="FMEDCOST1",
     )
 
@@ -143,7 +163,10 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         validators=[MinValueValidator(0), MaxValueValidator(9999999)],
         null=True,
         blank=True,
-        help_text=_("Leave blank if not applicable. In local currency"),
+        help_text=_(
+            "Leave blank if not applicable. In local currency. "
+            "If medicines were free enter `0`."
+        ),
         metadata="FMEDCOSTHIV1",
     )
 
@@ -152,7 +175,10 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         validators=[MinValueValidator(0), MaxValueValidator(9999999)],
         null=True,
         blank=True,
-        help_text=_("Leave blank if not applicable. In local currency"),
+        help_text=_(
+            "Leave blank if not applicable. In local currency. "
+            "If medicines were free enter `0`."
+        ),
         metadata="FMEDCOSTHTN1",
     )
 
@@ -161,7 +187,10 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         validators=[MinValueValidator(0), MaxValueValidator(9999999)],
         null=True,
         blank=True,
-        help_text=_("Leave blank if not applicable. In local currency"),
+        help_text=_(
+            "Leave blank if not applicable. In local currency. "
+            "If medicines were free enter `0`."
+        ),
         metadata="FMEDCOSTDM1",
     )
 
@@ -170,8 +199,23 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         validators=[MinValueValidator(0), MaxValueValidator(9999999)],
         null=True,
         blank=True,
-        help_text=_("Leave blank if not applicable. In local currency"),
+        help_text=_(
+            "Leave blank if not applicable. In local currency. "
+            "If medicines were free enter `0`."
+        ),
         metadata="FMEDCOSTOTHER1",
+    )
+
+    med_collected_location = CharField2(
+        verbose_name="Where did you collect the medicines from?",
+        max_length=25,
+        choices=MED_COLLECTION_LOCATIONS(),
+        default=NOT_APPLICABLE,
+        metadata="FMEDCOLLECTLOC1",
+    )
+
+    med_collected_location_other = OtherCharField(
+        metadata="FMEDCOLLECTLOCOTHER1",
     )
 
     tests_requested = CharField2(
@@ -217,7 +261,11 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         ),
         max_length=5,
         validators=[hm_validator],
-        help_text="something like 1h20m, 11h5m, etc",
+        help_text=_(
+            "Invalid format. Please insert a numeric values followed by “h” for hours, "
+            "and a numeric values followed by “m” for minutes. For example, 1h2m, 0h35m, "
+            "and so on"
+        ),
         metadata="FFACTIME1",
     )
 
@@ -225,7 +273,11 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         verbose_name=_("How much time did you spend waiting?"),
         max_length=5,
         validators=[hm_validator],
-        help_text="something like 1h20m, 11h5m, etc",
+        help_text=_(
+            "Invalid format. Please insert a numeric values followed by “h” for hours, "
+            "and a numeric values followed by “m” for minutes. For example, 1h2m, 0h35m, "
+            "and so on"
+        ),
         metadata="FWAITIME1",
     )
 
@@ -233,7 +285,11 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         verbose_name=_("How much time did you spend with the healthcare worker?"),
         max_length=5,
         validators=[hm_validator],
-        help_text="something like 1h20m, 11h5m, etc",
+        help_text=_(
+            "Invalid format. Please insert a numeric values followed by “h” for hours, "
+            "and a numeric values followed by “m” for minutes. For example, 1h2m, 0h35m, "
+            "and so on"
+        ),
         metadata="FWORKTIME1",
     )
 
@@ -291,7 +347,10 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
     )
 
     accompany_num = IntegerField2(
-        verbose_name=_("Number of people who accompanied you here today"), metadata="FACMP1"
+        verbose_name=_("Number of people who accompanied you here today"),
+        null=True,
+        blank=True,
+        metadata="FACMP1",
     )
 
     accompany_wait = CharField2(
