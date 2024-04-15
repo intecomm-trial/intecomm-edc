@@ -343,6 +343,17 @@ FACILITY_VISIT_ALTERNATIVES = Choices(
     ),
     (UNPAID_WORK, "Unpaid work (e.g. subsistence farming, housework etc.)"),
     (OTHER, "Other (specify)"),
+    fillmeta=True,
+)
+
+FACILITY_VISIT_ALTERNATIVES_NA = Choices(
+    (
+        PAID_WORK,
+        "Paid work (e.g. full-time employment, small business owners/traders, day jobs, etc.)",
+        1,
+    ),
+    (UNPAID_WORK, "Unpaid work (e.g. subsistence farming, housework etc.)"),
+    (OTHER, "Other (specify)"),
     (NOT_APPLICABLE, "Not applicable"),
     fillmeta=True,
 )

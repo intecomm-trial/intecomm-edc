@@ -1,5 +1,6 @@
 from django import forms
 from edc_constants.constants import DM, HIV, HTN, NO, OTHER, YES
+from edc_crf.crf_form_validator_mixins import CrfFormValidatorMixin
 from edc_crf.modelform_mixins import CrfSingletonModelFormMixin
 from edc_form_validators import INVALID_ERROR, FormValidator
 
@@ -8,8 +9,15 @@ from ...models import CareseekingA
 from ..mixins import CrfModelFormMixin
 
 
-class CareseekingAFormValidator(FormValidator):
+class CareseekingAFormValidator(CrfFormValidatorMixin, FormValidator):
     def clean(self) -> None:
+        care_seeking_a = CareseekingA.objects.filter(
+            subject_visit__subject_identifier=self.related_visit.subject_identifier
+        ).exclude(subject_visit_id=self.related_visit.id)
+        if care_seeking_a.count() > 0:
+            raise forms.ValidationError(
+                f"This form has already been submitted. See {care_seeking_a[0].subject_visit}."
+            )
         self.m2m_single_selection_if(STUDY_VISIT, m2m_field="care_visit_reason")
 
         self.m2m_other_specify(
@@ -110,13 +118,6 @@ class CareseekingAFormValidator(FormValidator):
         )
         self.validate_other_specify(
             field="accompany_alt", other_specify_field="accompany_alt_other"
-        )
-        self.required_if(
-            PAID_WORK,
-            OTHER,
-            field="accompany_alt",
-            field_required="accompany_lost_income",
-            field_required_evaluate_as_int=True,
         )
 
         self.m2m_other_specify(m2m_field="money_sources", field_other="money_sources_other")

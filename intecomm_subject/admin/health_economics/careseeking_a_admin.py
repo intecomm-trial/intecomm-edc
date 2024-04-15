@@ -103,7 +103,6 @@ class CareseekingAAdmin(
                     "accompany_wait",
                     "accompany_alt",
                     "accompany_alt_other",
-                    "accompany_lost_income",
                 )
             },
         ),
