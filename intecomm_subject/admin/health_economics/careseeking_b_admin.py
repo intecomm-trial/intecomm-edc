@@ -17,7 +17,7 @@ class CareseekingBAdmin(
     form = CareseekingBForm
 
     additional_instructions = render_to_string(
-        "intecomm_subject/careseeking_a_instructions.html", context={}
+        "intecomm_subject/careseeking_b_instructions.html", context={}
     )
 
     fieldsets = (
@@ -84,7 +84,6 @@ class CareseekingBAdmin(
                 "fields": (
                     "care_visit_duration",
                     "missed_activities",
-                    "care_visit_lost_income",
                 )
             },
         ),
@@ -96,7 +95,6 @@ class CareseekingBAdmin(
                     "accompany_num",
                     "accompany_wait",
                     "accompany_alt",
-                    "accompany_lost_income",
                 )
             },
         ),

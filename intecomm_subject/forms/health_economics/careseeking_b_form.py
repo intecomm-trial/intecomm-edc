@@ -1,16 +1,32 @@
 from django import forms
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext as _
-from edc_constants.constants import BOTH, NO, OTHER, OUTPATIENT, YES
+from edc_constants.constants import BOTH, NO, OUTPATIENT, YES
+from edc_crf.crf_form_validator_mixins import CrfFormValidatorMixin
 from edc_crf.modelform_mixins import CrfSingletonModelFormMixin
 from edc_form_validators import INVALID_ERROR, FormValidator
 
-from ...constants import ALONE, PAID_WORK
-from ...models import CareseekingB
+from ...constants import ALONE
+from ...models import CareseekingA, CareseekingB
 from ..mixins import CrfModelFormMixin
 
 
-class CareseekingBFormValidator(FormValidator):
+class CareseekingBFormValidator(CrfFormValidatorMixin, FormValidator):
     def clean(self) -> None:
+        try:
+            CareseekingA.objects.get(subject_visit__subject_identifier=self.subject_identifier)
+        except ObjectDoesNotExist:
+            raise forms.ValidationError(
+                f"Please complete form {CareseekingA._meta.verbose_name} first."
+            )
+        care_seeking_b = CareseekingB.objects.filter(
+            subject_visit__subject_identifier=self.related_visit.subject_identifier
+        ).exclude(subject_visit_id=self.related_visit.id)
+        if care_seeking_b.count() > 0:
+            raise forms.ValidationError(
+                f"This form has already been submitted. See {care_seeking_b[0].subject_visit}."
+            )
+
         self.applicable_if(YES, field="ill_month", field_applicable="seek_advice")
         self.applicable_if(NO, field="seek_advice", field_applicable="no_seek_advice")
         self.validate_other_specify(
@@ -58,21 +74,18 @@ class CareseekingBFormValidator(FormValidator):
             field_required_evaluate_as_int=True,
         )
 
+        self.required_if(YES, field="seek_advice", field_required="missed_activities")
+
         self.validate_other_specify(
             field="missed_activities", other_specify_field="missed_activities_other"
         )
-        self.required_if(
-            PAID_WORK,
-            OTHER,
-            field="missed_activities",
-            field_required="care_visit_lost_income",
-            field_required_evaluate_as_int=True,
-        )
 
         self.m2m_single_selection_if(ALONE, m2m_field="accompany")
+        accompany = [o.name for o in self.cleaned_data.get("accompany") or []]
         if (
             self.cleaned_data.get("accompany_num")
-            and ALONE in [o.name for o in self.cleaned_data.get("accompany")]
+            and accompany
+            and ALONE not in accompany
             and self.cleaned_data.get("accompany_num") != 0
         ):
             self.raise_validation_error(
@@ -80,7 +93,8 @@ class CareseekingBFormValidator(FormValidator):
             )
         elif (
             self.cleaned_data.get("accompany_num")
-            and ALONE not in [o.name for o in self.cleaned_data.get("accompany") or []]
+            and accompany
+            and ALONE not in accompany
             and self.cleaned_data.get("accompany_num") == 0
         ):
             self.raise_validation_error(
@@ -91,31 +105,24 @@ class CareseekingBFormValidator(FormValidator):
                 },
                 INVALID_ERROR,
             )
-
         self.applicable_if_true(
-            ALONE not in [o.name for o in self.cleaned_data.get("accompany") or []],
-            field_applicable="accompany_wait",
+            accompany and ALONE not in accompany, field_applicable="accompany_wait"
         )
         self.applicable_if_true(
-            ALONE not in [o.name for o in self.cleaned_data.get("accompany") or []],
-            field_applicable="accompany_alt",
+            accompany and ALONE not in accompany, field_applicable="accompany_alt"
         )
         self.validate_other_specify(
             field="accompany_alt", other_specify_field="accompany_alt_other"
         )
-        self.required_if(
-            PAID_WORK,
-            OTHER,
-            field="accompany_alt",
-            field_required="accompany_lost_income",
-            field_required_evaluate_as_int=True,
-        )
 
         self.m2m_other_specify(m2m_field="money_sources", field_other="money_sources_other")
 
-        if self.cleaned_data.get("money_source_main") and self.cleaned_data.get(
-            "money_source_main"
-        ) not in [o.name for o in self.cleaned_data.get("money_sources")]:
+        money_sources = [o.name for o in self.cleaned_data.get("money_sources")]
+        if (
+            self.cleaned_data.get("money_source_main")
+            and money_sources
+            and self.cleaned_data.get("money_source_main") not in money_sources
+        ):
             self.raise_validation_error(
                 {"money_source_main": _("Response not found among responses given above")},
                 INVALID_ERROR,
@@ -161,9 +168,13 @@ class CareseekingBFormValidator(FormValidator):
             m2m_field="inpatient_money_sources", field_other="inpatient_money_sources_other"
         )
 
-        if self.cleaned_data.get("inpatient_money_sources_main") and self.cleaned_data.get(
-            "inpatient_money_sources_main"
-        ) not in [o.name for o in self.cleaned_data.get("inpatient_money_sources")]:
+        inpatient_money_sources = [o.name for o in self.cleaned_data.get("money_sources")]
+        if (
+            self.cleaned_data.get("inpatient_money_sources_main")
+            and inpatient_money_sources
+            and self.cleaned_data.get("inpatient_money_sources_main")
+            not in [o.name for o in self.cleaned_data.get("inpatient_money_sources")]
+        ):
             self.raise_validation_error(
                 {
                     "inpatient_money_sources_main": _(

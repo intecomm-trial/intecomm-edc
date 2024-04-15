@@ -45,6 +45,7 @@ from .constants import (
     PAID_WORK,
     PROBLEMATIC,
     SITTING,
+    STUDY_VISIT,
     TOO_BUSY,
     UNAVAILABLE,
     UNIMPORTANT,
@@ -263,7 +264,7 @@ APPT_DATE_INFO_SOURCES = (
 TRAVEL_METHODS = Choices(
     ("walking", _("Walking"), 1),
     ("public_transport", _("Public Transport (government bus, etc)")),
-    ("hired_transport", _("Hired / shared transport (bus, taxi etc)")),
+    ("hired_transport", _("Hired / shared transport (bus, taxi, boda boda etc)")),
     (
         "own_transport",
         _(
@@ -287,7 +288,8 @@ VISIT_REASONS = Choices(
     ("tests", "Diagnostic tests"),
     ("refill", "Medicines pick-up/refill"),
     ("unwell", "Need treatment/care for illness"),
-    ("study_visit", "Only for study visit"),
+    (STUDY_VISIT, "Only for study visit"),
+    (OTHER, "Other, please specify ..."),
     fillmeta=True,
 )
 
@@ -297,6 +299,15 @@ MEDS = Choices(
     (HTN, "Hypertension"),
     (DM, "Diabetes"),
     (OTHER, "Other, please specify ..."),
+    fillmeta=True,
+)
+
+MED_COLLECTION_LOCATIONS = Choices(
+    ("public_pharmacy", "Public pharmacy"),
+    ("private_pharmacy", "Private pharmacy"),
+    ("club", "Club"),
+    (OTHER, "Other, please specify ..."),
+    (NOT_APPLICABLE, "Not applicable"),
     fillmeta=True,
 )
 
@@ -325,6 +336,17 @@ TESTS_NOT_DONE_REASONS = Choices(
 )
 
 FACILITY_VISIT_ALTERNATIVES = Choices(
+    (
+        PAID_WORK,
+        "Paid work (e.g. full-time employment, small business owners/traders, day jobs, etc.)",
+        1,
+    ),
+    (UNPAID_WORK, "Unpaid work (e.g. subsistence farming, housework etc.)"),
+    (OTHER, "Other (specify)"),
+    fillmeta=True,
+)
+
+FACILITY_VISIT_ALTERNATIVES_NA = Choices(
     (
         PAID_WORK,
         "Paid work (e.g. full-time employment, small business owners/traders, day jobs, etc.)",
@@ -365,9 +387,12 @@ ACCOMPANIED_BY = Choices(
 
 MONEY_SOURCES = Choices(
     ("own_savings", "Own saving (e.g. “loose funds”, bank savings)", 1),
-    ("family_gift", "Loan from family members that does not need to be repaid"),
+    ("family_gift", "Money received from family members that does not need to be repaid"),
     ("family_loan", "Loan from family member that needs to be repaid"),
-    ("gift_relative", "Loan from relative/neighbour that does not need to be repaid"),
+    (
+        "gift_relative",
+        "Money received from relative/neighbour that does not need to be repaid",
+    ),
     ("loan_relative", "Loan from relative/neighbour that needs to be repaid"),
     ("loan_money_lender", "Loan from money lender"),
     ("loan_bank", "Loan from another source eg bank"),

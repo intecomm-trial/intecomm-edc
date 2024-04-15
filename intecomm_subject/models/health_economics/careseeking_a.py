@@ -5,7 +5,6 @@ from django.utils.translation import gettext as _
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
 from edc_model.models import BaseUuidModel
-from edc_model.validators import hm_validator
 from edc_model_fields.fields import (
     CharField2,
     IntegerField2,
@@ -23,6 +22,8 @@ from intecomm_lists.models import (
 
 from ...choices import (
     FACILITY_VISIT_ALTERNATIVES,
+    FACILITY_VISIT_ALTERNATIVES_NA,
+    MED_COLLECTION_LOCATIONS,
     MONEY_SOURCES,
     NOT_COLLECTED_REASONS,
     REFERRAL_FACILITY,
@@ -30,6 +31,7 @@ from ...choices import (
     TESTS_NOT_DONE_REASONS,
 )
 from ...model_mixins import CrfModelMixin
+from ..fields import DurationField, ExpenseField, IncomeField
 
 
 def convert_to_choices(s: str) -> tuple:
@@ -48,11 +50,10 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         metadata="FTRA1",
     )
 
-    travel_time = CharField2(
+    travel_time = DurationField(
         verbose_name="How long did it take you to reach here?",
-        max_length=5,
-        validators=[hm_validator],
-        help_text="something like 1h20m, 11h5m, etc",
+        null=True,
+        blank=False,
         metadata="FTRATIME1",
     )
 
@@ -61,23 +62,21 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
             "Thinking about yourself and anyone that accompanied you, "
             "how much was spent on travel from your home to reach here?"
         ),
-        validators=[MinValueValidator(1), MaxValueValidator(9999999)],
+        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
         null=True,
-        blank=True,
-        help_text=_("in local currency"),
+        blank=False,
+        help_text=_("In local currency. If nothing spent on travel, enter `0`"),
         metadata="FTRAVCOST1",
     )
 
-    food_cost = IntegerField2(
+    food_cost = ExpenseField(
         verbose_name=_(
             "Thinking about yourself and anyone that accompanied you, how much did you "
             "have to pay for food, drink or other refreshments during your travel or "
             "during your visit? (e.g. food, drink, etc.)"
         ),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
         null=True,
-        blank=True,
-        help_text=_("in local currency"),
+        blank=False,
         metadata="FFOODCOST1",
     )
 
@@ -87,18 +86,20 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         metadata="FMEDCOND1",
     )
 
-    care_visit_cost = IntegerField2(
+    care_visit_reason_other = OtherCharField(metadata="FMEDCONDOTHER1")
+
+    care_visit_cost = ExpenseField(
         verbose_name=_(
             "How much money did you spend on healthworker and consultation "
-            "fees during this visit?"
+            "fees during today’s visit?"
         ),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
-        help_text=_("in local currency"),
+        null=False,
+        blank=False,
         metadata="FFEECOST1",
     )
 
     med_prescribed = CharField2(
-        verbose_name=_("Were you prescribed any medicines during this visit?"),
+        verbose_name=_("Were you prescribed any medicines during today’s visit?"),
         max_length=25,
         choices=YES_NO,
         metadata="FMED1",
@@ -107,6 +108,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
     med_conditions = ManyToManyField2(
         Conditions,
         verbose_name=_("What were the medicines were for?"),
+        blank=True,
         metadata="FMEDCOND1",
     )
 
@@ -117,7 +119,8 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
             "Did you receive/collect these medicines (whether paid or received for free)?"
         ),
         max_length=25,
-        choices=YES_NO,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
         metadata="FMEDCOLL1",
     )
 
@@ -131,47 +134,41 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
 
     med_not_collected_reason_other = OtherCharField(metadata="FMEDOTHER1")
 
-    med_cost_tot = IntegerField2(
+    med_cost_tot = ExpenseField(
         verbose_name=_("How much was spent on these medicines? "),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
-        help_text=_("in local currency"),
         metadata="FMEDCOST1",
     )
 
-    med_cost_hiv = IntegerField2(
+    med_cost_hiv = ExpenseField(
         verbose_name=_("How much was spent on HIV medicines? "),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
-        null=True,
-        blank=True,
-        help_text=_("Leave blank if not applicable. In local currency"),
         metadata="FMEDCOSTHIV1",
     )
 
-    med_cost_htn = IntegerField2(
+    med_cost_htn = ExpenseField(
         verbose_name=_("How much was spent on Hypertension medicines? "),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
-        null=True,
-        blank=True,
-        help_text=_("Leave blank if not applicable. In local currency"),
         metadata="FMEDCOSTHTN1",
     )
 
-    med_cost_dm = IntegerField2(
+    med_cost_dm = ExpenseField(
         verbose_name=_("How much was spent on Diabetes medicines? "),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
-        null=True,
-        blank=True,
-        help_text=_("Leave blank if not applicable. In local currency"),
         metadata="FMEDCOSTDM1",
     )
 
-    med_cost_other = IntegerField2(
+    med_cost_other = ExpenseField(
         verbose_name=_("How much was spent on OTHER medicines? "),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
-        null=True,
-        blank=True,
-        help_text=_("Leave blank if not applicable. In local currency"),
         metadata="FMEDCOSTOTHER1",
+    )
+
+    med_collected_location = CharField2(
+        verbose_name="Where did you collect the medicines from?",
+        max_length=25,
+        choices=MED_COLLECTION_LOCATIONS(),
+        default=NOT_APPLICABLE,
+        metadata="FMEDCOLLECTLOC1",
+    )
+
+    med_collected_location_other = OtherCharField(
+        metadata="FMEDCOLLECTLOCOTHER1",
     )
 
     tests_requested = CharField2(
@@ -201,39 +198,29 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
 
     tests_not_done_other = OtherCharField(metadata="FTESTNOOTHER1")
 
-    tests_cost = IntegerField2(
+    tests_cost = ExpenseField(
         verbose_name=_("How much did you spend on these tests?"),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
-        null=True,
-        blank=True,
-        help_text=_("in local currency"),
         metadata="FTESTCOST1",
     )
 
-    care_visit_duration = CharField2(
+    care_visit_duration = DurationField(
         verbose_name=_(
             "How much time did you spend during your visit today -- "
             "from arrival to this place until the end of your visit?"
         ),
-        max_length=5,
-        validators=[hm_validator],
-        help_text="something like 1h20m, 11h5m, etc",
         metadata="FFACTIME1",
     )
 
-    wait_duration = CharField2(
+    wait_duration = DurationField(
         verbose_name=_("How much time did you spend waiting?"),
-        max_length=5,
-        validators=[hm_validator],
-        help_text="something like 1h20m, 11h5m, etc",
         metadata="FWAITIME1",
     )
 
-    with_hcw_duration = CharField2(
-        verbose_name=_("How much time did you spend with the healthcare worker?"),
-        max_length=5,
-        validators=[hm_validator],
-        help_text="something like 1h20m, 11h5m, etc",
+    with_hcw_duration = DurationField(
+        verbose_name=_(
+            "How much time did you spend during the consultation "
+            "(i.e. time spent with the healthcareworker)?"
+        ),
         metadata="FWORKTIME1",
     )
 
@@ -248,14 +235,10 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
 
     missed_activities_other = OtherCharField(metadata="FMEDOTHER1")
 
-    care_visit_lost_income = IntegerField2(
+    care_visit_lost_income = IncomeField(
         verbose_name=_("How much would you have made in cash or in-kind for a day’s work?"),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999999)],
         null=True,
         blank=True,
-        help_text=_(
-            "In local currency. Ask for cash value or equivalent cash value for in-kind"
-        ),
         metadata="FPAID1",
     )
 
@@ -291,7 +274,11 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
     )
 
     accompany_num = IntegerField2(
-        verbose_name=_("Number of people who accompanied you here today"), metadata="FACMP1"
+        verbose_name=_("Number of people who accompanied you here today"),
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(15)],
+        metadata="FACMP1",
     )
 
     accompany_wait = CharField2(
@@ -308,23 +295,12 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
             "what would they have been doing?"
         ),
         max_length=25,
-        choices=FACILITY_VISIT_ALTERNATIVES(),
+        choices=FACILITY_VISIT_ALTERNATIVES_NA(),
         default=NOT_APPLICABLE,
         metadata="FACMPACT1",
     )
 
     accompany_alt_other = OtherCharField(metadata="FACMPACTOTHER")
-
-    accompany_lost_income = IntegerField2(
-        verbose_name=_("How much would they have made in cash or in-kind for a day’s work?"),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999999)],
-        null=True,
-        blank=True,
-        help_text=_(
-            "In local currency. Ask for cash value or equivalent cash value for in-kind"
-        ),
-        metadata="FACMP1",
-    )
 
     money_sources = ManyToManyField2(
         MoneySources,

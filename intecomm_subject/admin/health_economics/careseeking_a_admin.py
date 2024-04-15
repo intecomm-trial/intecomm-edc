@@ -34,6 +34,7 @@ class CareseekingAAdmin(
                     "travel_cost",
                     "food_cost",
                     "care_visit_reason",
+                    "care_visit_reason_other",
                     "care_visit_cost",
                 )
             },
@@ -53,6 +54,8 @@ class CareseekingAAdmin(
                     "med_cost_htn",
                     "med_cost_dm",
                     "med_cost_other",
+                    "med_collected_location",
+                    "med_collected_location_other",
                 )
             },
         ),
@@ -100,7 +103,6 @@ class CareseekingAAdmin(
                     "accompany_wait",
                     "accompany_alt",
                     "accompany_alt_other",
-                    "accompany_lost_income",
                 )
             },
         ),
@@ -142,4 +144,5 @@ class CareseekingAAdmin(
         "money_source_main": admin.VERTICAL,
         "accompany_wait": admin.VERTICAL,
         "accompany_alt": admin.VERTICAL,
+        "med_collected_location": admin.VERTICAL,
     }
