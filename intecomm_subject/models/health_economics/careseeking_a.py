@@ -57,15 +57,13 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         metadata="FTRATIME1",
     )
 
-    travel_cost = IntegerField2(
+    travel_cost = ExpenseField(
         verbose_name=_(
             "Thinking about yourself and anyone that accompanied you, "
             "how much was spent on travel from your home to reach here?"
         ),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
         null=True,
         blank=False,
-        help_text=_("In local currency. If nothing spent on travel, enter `0`"),
         metadata="FTRAVCOST1",
     )
 
