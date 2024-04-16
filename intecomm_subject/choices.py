@@ -36,11 +36,14 @@ from edc_reportable import (
 from edc_visit_tracking.constants import MISSED_VISIT, SCHEDULED, UNSCHEDULED
 
 from .constants import (
+    ADULT,
     ALONE,
+    CHILD,
     COMMUNITY_CLINIC,
     EXPENSIVE,
     GTE_3HRS,
     HOME_REMEDIES,
+    MAIN_EARNER,
     NURSE,
     PAID_WORK,
     PROBLEMATIC,
@@ -379,13 +382,13 @@ REFERRAL_FACILITY = Choices(
 
 ACCOMPANIED_BY = Choices(
     (ALONE, "No one, I came alone", 1),
-    ("main_earner", "Main household earner"),
-    ("adult", "Other family member/relatives/friends (adults)"),
-    ("child", "Other family member/relatives/friends (children)"),
+    (MAIN_EARNER, "Main household earner"),
+    (ADULT, "Other family member/relatives/friends (adults)"),
+    (CHILD, "Other family member/relatives/friends (children)"),
     fillmeta=True,
 )
 
-MONEY_SOURCES = Choices(
+_MONEY_SOURCES = (
     ("own_savings", "Own saving (e.g. “loose funds”, bank savings)", 1),
     ("family_gift", "Money received from family members that does not need to be repaid"),
     ("family_loan", "Loan from family member that needs to be repaid"),
@@ -405,8 +408,15 @@ MONEY_SOURCES = Choices(
         "asset_sale",
         "Sale of assets (property, livestock, jewellery, household goods, etc)",
     ),
-    (OTHER, "Other (specify)"),
+    (OTHER, "Other (specified above)"),
     (NOT_APPLICABLE, "Not applicable"),
+)
+MONEY_SOURCES_NA = Choices(
+    *_MONEY_SOURCES,
+    fillmeta=True,
+)
+MONEY_SOURCES = Choices(
+    *[t for t in _MONEY_SOURCES if t[0] != NOT_APPLICABLE],
     fillmeta=True,
 )
 

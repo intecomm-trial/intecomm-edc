@@ -15,7 +15,7 @@ from intecomm_lists.models import Accompanied, Conditions, MoneySources, TravelM
 from ...choices import (
     FACILITY_VISIT_ALTERNATIVES,
     FACILITY_VISIT_ALTERNATIVES_NA,
-    MONEY_SOURCES,
+    MONEY_SOURCES_NA,
     NO_SEEK_REASONS,
     NOT_COLLECTED_REASONS,
     SEEK_FACILITIES,
@@ -287,7 +287,7 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
             "what was the main source of payment?"
         ),
         max_length=25,
-        choices=MONEY_SOURCES(),
+        choices=MONEY_SOURCES_NA(),
         default=NOT_APPLICABLE,
         metadata="FOUTSOURCEMAIN1",
     )
@@ -401,7 +401,7 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
             "what was the main source of payment?"
         ),
         max_length=25,
-        choices=MONEY_SOURCES(),
+        choices=MONEY_SOURCES_NA(),
         default=NOT_APPLICABLE,
         metadata="FINSOURCEMAIN1",
     )
