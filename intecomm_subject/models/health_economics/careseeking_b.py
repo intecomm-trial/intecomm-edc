@@ -321,12 +321,8 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         metadata="FINDAYSCOND1",
     )
 
-    inpatient_cost = IntegerField2(
+    inpatient_cost = ExpenseField(
         verbose_name=_("How much was spent in total on your hospital stay?"),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
-        null=True,
-        blank=True,
-        help_text=_("in local currency"),
         metadata="FINCOST1",
     )
 
@@ -350,12 +346,8 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         metadata="FINFOOD1",
     )
 
-    inpatient_food_cost = IntegerField2(
+    inpatient_food_cost = ExpenseField(
         verbose_name=_("How much was spent on this food and drink?"),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
-        null=True,
-        blank=True,
-        help_text=_("in local currency"),
         metadata="FINFOODCOST1",
     )
 
