@@ -26,12 +26,15 @@ class CareseekingAFormValidator(CrfFormValidatorMixin, FormValidator):
         self.m2m_required_if(YES, field="med_prescribed", m2m_field="med_conditions")
         self.m2m_other_specify(m2m_field="med_conditions", field_other="med_conditions_other")
         self.applicable_if(YES, field="med_prescribed", field_applicable="med_collected")
+
         self.applicable_if(
             NO, field="med_collected", field_applicable="med_not_collected_reason"
         )
         self.validate_other_specify(
-            field="med_collected", other_specify_field="med_not_collected_reason_other"
+            field="med_not_collected_reason",
+            other_specify_field="med_not_collected_reason_other",
         )
+
         self.required_if(
             YES,
             field="med_collected",
