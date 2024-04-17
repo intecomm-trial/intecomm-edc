@@ -1,11 +1,13 @@
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext as _
-from edc_constants.constants import BOTH, NO, OUTPATIENT, YES
+from edc_constants.constants import BOTH, NO, NOT_APPLICABLE, OUTPATIENT, YES
 from edc_crf.crf_form_validator_mixins import CrfFormValidatorMixin
 from edc_crf.modelform_mixins import CrfSingletonModelFormMixin
+from edc_dx import Diagnoses, get_diagnosis_labels
 from edc_form_validators import INVALID_ERROR, FormValidator
 
+from ...choices import ACCOMPANIED_BY, TRAVEL_METHODS
 from ...constants import ALONE
 from ...models import CareseekingA, CareseekingB
 from ..mixins import CrfModelFormMixin
@@ -27,25 +29,80 @@ class CareseekingBFormValidator(CrfFormValidatorMixin, FormValidator):
                 f"This form has already been submitted. See {care_seeking_b[0].subject_visit}."
             )
 
-        self.applicable_if(YES, field="ill_month", field_applicable="seek_advice")
-        self.applicable_if(NO, field="seek_advice", field_applicable="no_seek_advice")
+        # B1:
+        self.applicable_if(YES, field="needed_care", field_applicable="accessed_care")
+        self.applicable_if(NO, field="accessed_care", field_applicable="no_accessed_care")
         self.validate_other_specify(
-            field="no_seek_advice", other_specify_field="no_seek_advice_other"
+            field="no_accessed_care", other_specify_field="no_accessed_care_other"
         )
-        self.applicable_if(YES, field="seek_advice", field_applicable="seek_facility")
+        self.applicable_if(YES, field="accessed_care", field_applicable="seek_facility")
         self.validate_other_specify(
-            field="seek_advice", other_specify_field="seek_advice_other"
+            field="accessed_care", other_specify_field="accessed_care_other"
         )
-        self.applicable_if(YES, field="seek_advice", field_applicable="seek_care_type")
+        self.applicable_if(YES, field="accessed_care", field_applicable="care_type")
         self.required_if(
             OUTPATIENT,
             BOTH,
-            field="seek_care_type",
+            field="care_type",
             field_required="outpatient_visits",
             field_required_evaluate_as_int=True,
         )
 
+        # B2: Travel and expenses at last/most recent visit
+        self.m2m_required_if(YES, field="accessed_care", m2m_field="travel_method")
+        self.required_if_m2m(
+            *[t[0] for t in TRAVEL_METHODS],
+            field="travel_method",
+            field_required="travel_duration",
+            field_other_evaluate_as_int=True,
+        )
+        self.required_if_m2m(
+            *[t[0] for t in TRAVEL_METHODS],
+            field="travel_method",
+            field_required="travel_costs",
+            field_other_evaluate_as_int=True,
+        )
+        self.required_if_m2m(
+            *[t[0] for t in TRAVEL_METHODS],
+            field="travel_method",
+            field_required="food_costs",
+            field_other_evaluate_as_int=True,
+        )
+        self.required_if(
+            YES,
+            field="accessed_care",
+            field_required="care_costs",
+            field_required_evaluate_as_int=True,
+        )
+
+        # B3: Medications at last/most recent visit
+        self.applicable_if(YES, field="accessed_care", field_applicable="med_prescribed")
         self.m2m_required_if(YES, field="med_prescribed", m2m_field="med_conditions")
+        med_conditions = self.cleaned_data.get("med_conditions")
+        diagnoses = Diagnoses(
+            subject_identifier=self.subject_identifier,
+            report_datetime=self.report_datetime,
+            lte=True,
+        )
+        if invalid_conditions := set([o.name.lower() for o in med_conditions or []]) - set(
+            diagnoses.initial_reviews
+        ):
+            if labels := ", ".join(
+                [
+                    get_diagnosis_labels().get(label)
+                    for label in invalid_conditions
+                    if label in get_diagnosis_labels()
+                ]
+            ):
+                self.raise_validation_error(
+                    {
+                        "med_conditions": (
+                            f"Subject has not been diagnosed with these conditions: {labels}"
+                        )
+                    },
+                    INVALID_ERROR,
+                )
+
         self.m2m_other_specify(m2m_field="med_conditions", field_other="med_conditions_other")
         self.applicable_if(YES, field="med_prescribed", field_applicable="med_collected")
         self.applicable_if(
@@ -62,6 +119,8 @@ class CareseekingBFormValidator(CrfFormValidatorMixin, FormValidator):
             field_required_evaluate_as_int=True,
         )
 
+        # B4: Tests at last/most recent visit
+        self.applicable_if(YES, field="accessed_care", field_applicable="tests_requested")
         self.applicable_if(YES, field="tests_requested", field_applicable="tests_done")
         self.required_if(NO, field="tests_done", field_required="tests_not_done_reason")
         self.validate_other_specify(
@@ -74,50 +133,43 @@ class CareseekingBFormValidator(CrfFormValidatorMixin, FormValidator):
             field_required_evaluate_as_int=True,
         )
 
-        self.required_if(YES, field="seek_advice", field_required="missed_activities")
-
+        # B5: Time and expenses at last/most recent visit
+        self.required_if(YES, field="accessed_care", field_required="care_visit_duration")
+        self.applicable_if(YES, field="accessed_care", field_applicable="missed_activities")
         self.validate_other_specify(
             field="missed_activities", other_specify_field="missed_activities_other"
         )
 
-        self.m2m_single_selection_if(ALONE, m2m_field="accompany")
-        accompany = [o.name for o in self.cleaned_data.get("accompany") or []]
-        if (
-            self.cleaned_data.get("accompany_num")
-            and accompany
-            and ALONE not in accompany
-            and self.cleaned_data.get("accompany_num") != 0
-        ):
-            self.raise_validation_error(
-                {"accompany_num": _("Expected 0 based on response above")}, INVALID_ERROR
-            )
-        elif (
-            self.cleaned_data.get("accompany_num")
-            and accompany
-            and ALONE not in accompany
-            and self.cleaned_data.get("accompany_num") == 0
-        ):
-            self.raise_validation_error(
-                {
-                    "accompany_num": _(
-                        "Expected a value greater than 0 based on response above"
-                    )
-                },
-                INVALID_ERROR,
-            )
-        self.applicable_if_true(
-            accompany and ALONE not in accompany, field_applicable="accompany_wait"
+        # B6: People who accompanied you to last/most recent visit
+        self.applicable_if(YES, field="accessed_care", field_applicable="accompany")
+        self.required_if(
+            *[t[0] for t in ACCOMPANIED_BY if t[0] not in [ALONE, NOT_APPLICABLE]],
+            field="accompany",
+            field_required="accompany_num",
         )
-        self.applicable_if_true(
-            accompany and ALONE not in accompany, field_applicable="accompany_alt"
+        self.applicable_if(
+            *[t[0] for t in ACCOMPANIED_BY if t[0] not in [ALONE, NOT_APPLICABLE]],
+            field="accompany",
+            field_applicable="accompany_wait",
+        )
+        self.applicable_if(
+            *[t[0] for t in ACCOMPANIED_BY if t[0] not in [ALONE, NOT_APPLICABLE]],
+            field="accompany",
+            field_applicable="accompany_alt",
         )
         self.validate_other_specify(
             field="accompany_alt", other_specify_field="accompany_alt_other"
         )
 
-        self.m2m_other_specify(m2m_field="money_sources", field_other="money_sources_other")
-
+        # B7: Your expenses in the past 3 months
+        self.m2m_required_if(YES, field="accessed_care", m2m_field="money_sources")
         money_sources = [o.name for o in self.cleaned_data.get("money_sources")]
+        if len(money_sources) > 3:
+            self.raise_validation_error(
+                {"money_sources": "Please limit to no more than 3 selections"}, INVALID_ERROR
+            )
+        self.m2m_other_specify(m2m_field="money_sources", field_other="money_sources_other")
+        self.applicable_if(YES, field="accessed_care", field_applicable="money_source_main")
         if (
             self.cleaned_data.get("money_source_main")
             and money_sources
@@ -127,15 +179,14 @@ class CareseekingBFormValidator(CrfFormValidatorMixin, FormValidator):
                 {"money_source_main": _("Response not found among responses given above")},
                 INVALID_ERROR,
             )
-        self.validate_other_specify(
-            field="money_source_main", other_specify_field="money_source_main_other"
-        )
-
+        # B8: About your inpatient visit
         self.required_if(YES, field="inpatient", field_required="inpatient_days")
         self.m2m_required_if(YES, field="inpatient", m2m_field="inpatient_reasons")
         self.m2m_other_specify(
             m2m_field="inpatient_reasons", field_other="inpatient_reasons_other"
         )
+
+        # B9: Inpatient visit: expenses
         self.required_if(
             YES,
             field="inpatient",
@@ -164,11 +215,22 @@ class CareseekingBFormValidator(CrfFormValidatorMixin, FormValidator):
             field_required_evaluate_as_int=True,
         )
 
+        # B10: Inpatient visit: sources of payment for expenses
+        self.m2m_required_if(YES, field="inpatient", m2m_field="inpatient_money_sources")
+        inpatient_money_sources = [
+            o.name for o in self.cleaned_data.get("inpatient_money_sources")
+        ]
+        if len(inpatient_money_sources) > 3:
+            self.raise_validation_error(
+                {"inpatient_money_sources": "Please limit to no more than 3 selections"},
+                INVALID_ERROR,
+            )
         self.m2m_other_specify(
             m2m_field="inpatient_money_sources", field_other="inpatient_money_sources_other"
         )
-
-        inpatient_money_sources = [o.name for o in self.cleaned_data.get("money_sources")]
+        self.applicable_if(
+            YES, field="inpatient", field_applicable="inpatient_money_sources_main"
+        )
         if (
             self.cleaned_data.get("inpatient_money_sources_main")
             and inpatient_money_sources

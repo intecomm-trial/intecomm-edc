@@ -39,6 +39,7 @@ def convert_to_choices(s: str) -> tuple:
 
 
 class CareseekingA(CrfModelMixin, BaseUuidModel):
+
     travel_method = ManyToManyField2(
         TravelMethods,
         verbose_name=_("How did you travel here?"),
@@ -202,12 +203,6 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
             "from arrival to this place until the end of your visit?"
         ),
         metadata="FFACTIME1",
-    )
-
-    # TODO: remove
-    wait_duration = DurationField(
-        verbose_name=_("How much time did you spend waiting?"),
-        metadata="FWAITIME1",
     )
 
     with_hcw_duration = DurationField(

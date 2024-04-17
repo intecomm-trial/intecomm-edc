@@ -76,7 +76,6 @@ class CareseekingAAdmin(
             {
                 "fields": (
                     "care_visit_duration",
-                    "wait_duration",
                     "with_hcw_duration",
                     "missed_activities",
                     "missed_activities_other",

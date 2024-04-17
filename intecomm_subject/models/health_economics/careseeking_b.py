@@ -10,10 +10,10 @@ from edc_model_fields.fields import (
     OtherCharField,
 )
 
-from intecomm_lists.models import Accompanied, Conditions, MoneySources, TravelMethods
+from intecomm_lists.models import Conditions, MoneySources, TravelMethods
 
 from ...choices import (
-    FACILITY_VISIT_ALTERNATIVES,
+    ACCOMPANIED_BY_NA,
     FACILITY_VISIT_ALTERNATIVES_NA,
     MONEY_SOURCES_NA,
     NO_SEEK_REASONS,
@@ -28,7 +28,7 @@ from ..fields import DurationField, ExpenseField
 
 class CareseekingB(CrfModelMixin, BaseUuidModel):
 
-    ill_month = CharField2(
+    needed_care = CharField2(
         verbose_name=_(
             "Other than today’s visit, and thinking about the past 3 months, "
             "did you need to make any routine visits or were you ill or in need of "
@@ -40,7 +40,7 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         metadata="FILLMONTH1",
     )
 
-    seek_advice = CharField2(
+    accessed_care = CharField2(
         verbose_name=_(
             "Did you make the visit, seek advice or treatment "
             "(public facility, local pharmacy, traditional doctor etc)?"
@@ -51,7 +51,7 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         metadata="FSEEK1",
     )
 
-    no_seek_advice = CharField2(
+    no_accessed_care = CharField2(
         verbose_name=_("If no, why did you not make the visit, seek advice or treatment?"),
         max_length=25,
         choices=NO_SEEK_REASONS(),
@@ -60,9 +60,9 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         metadata="FNOSEEK1",
     )
 
-    no_seek_advice_other = OtherCharField(verbose_name="If OTHER reason, please explain ...")
+    no_accessed_care_other = OtherCharField(verbose_name="If OTHER reason, please explain ...")
 
-    seek_facility = CharField2(
+    care_facility = CharField2(
         verbose_name=_("If yes, where did you make the visit, seek advice or treatment?"),
         max_length=25,
         choices=SEEK_FACILITIES(),
@@ -70,9 +70,9 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         metadata="FSEEKFAC1",
     )
 
-    seek_facility_other = OtherCharField(verbose_name="If OTHER place, please explain ...")
+    care_facility_other = OtherCharField(verbose_name="If OTHER place, please explain ...")
 
-    seek_care_type = CharField2(
+    care_type = CharField2(
         verbose_name=_("If yes, what type of care was this?"),
         max_length=25,
         choices=SEEKK_CARE_TYPES(),
@@ -81,7 +81,7 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
     )
 
     outpatient_visits = IntegerField2(
-        verbose_name=_("If yes and OUTPATIENT, how many visits in total?"),
+        verbose_name=_("If yes and OUTPATIENT or BOTH, how many outpatient visits in total?"),
         validators=[MinValueValidator(1), MaxValueValidator(10)],
         null=True,
         blank=True,
@@ -191,6 +191,7 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         max_length=25,
         choices=YES_NO_NA,
         default=NOT_APPLICABLE,
+        help_text=_("select YES even if done elsewhere / another facility"),
         metadata="FOUTTESTDONE1",
     )
 
@@ -220,22 +221,26 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         verbose_name=_("If you were not attending the visit, what would you have been doing?"),
         max_length=25,
         null=True,
-        blank=True,
-        choices=FACILITY_VISIT_ALTERNATIVES(),
+        blank=False,
+        default=NOT_APPLICABLE,
+        choices=FACILITY_VISIT_ALTERNATIVES_NA(),
         metadata="FOUTACTIVITY1",
     )
 
     missed_activities_other = OtherCharField(metadata="FMEDOTHER1")
 
-    accompany = ManyToManyField2(
-        Accompanied,
+    accompany = CharField2(
         verbose_name="Who accompanied you to your last/most recent visit?",
-        blank=True,
+        max_length=25,
+        choices=ACCOMPANIED_BY_NA(),
+        default=NOT_APPLICABLE,
+        null=True,
+        blank=False,
         metadata="FOUTACMP1",
     )
 
     accompany_num = IntegerField2(
-        verbose_name=_("Number of people who accompanied you here today"),
+        verbose_name=_("Number of people who accompanied you to your last/most recent visit"),
         null=True,
         blank=True,
         metadata="FOUTACMPNUM1",
@@ -261,6 +266,8 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         default=NOT_APPLICABLE,
         metadata="FOUTACMPACT1",
     )
+
+    accompany_alt_other = OtherCharField(metadata="FOUTACMPACTOTHER1")
 
     money_sources = ManyToManyField2(
         MoneySources,
@@ -297,6 +304,7 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         max_length=15,
         choices=YES_NO_NA,
         default=NOT_APPLICABLE,
+        help_text="If NO, STOP and SAVE.",
     )
 
     inpatient_days = IntegerField2(

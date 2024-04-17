@@ -329,7 +329,7 @@ NOT_COLLECTED_REASONS = Choices(
 
 
 TESTS_NOT_DONE_REASONS = Choices(
-    (UNAVAILABLE, "Tests were not available", 1),
+    (UNAVAILABLE, "Tests were not available and not done", 1),
     (EXPENSIVE, "Tests were too expensive"),
     (UNIMPORTANT, "Did not think it was important to do these tests "),
     (TOO_BUSY, "Did not have the time to do these tests"),
@@ -380,13 +380,16 @@ REFERRAL_FACILITY = Choices(
     fillmeta=True,
 )
 
-ACCOMPANIED_BY = Choices(
+_accompany = (
     (ALONE, "No one, I came alone", 1),
     (MAIN_EARNER, "Main household earner"),
     (ADULT, "Other family member/relatives/friends (adults)"),
     (CHILD, "Other family member/relatives/friends (children)"),
-    fillmeta=True,
+    (NOT_APPLICABLE, "Not applicable"),
 )
+ACCOMPANIED_BY = Choices(*[t for t in _accompany if t[0] != NOT_APPLICABLE], fillmeta=True)
+
+ACCOMPANIED_BY_NA = Choices(*_accompany, fillmeta=True)
 
 _MONEY_SOURCES = (
     ("own_savings", "Own saving (e.g. “loose funds”, bank savings)", 1),
@@ -455,7 +458,7 @@ SEEK_FACILITIES = Choices(
 
 SEEKK_CARE_TYPES = Choices(
     (OUTPATIENT, "Outpatient (includes laboratory testing)", 1),
-    (INPATIENT, "Inpatient"),
+    (INPATIENT, "Inpatient (stayed overnight for 1 or more nights)"),
     (BOTH, "Both"),
     (NOT_APPLICABLE, "Not applicable"),
     fillmeta=True,

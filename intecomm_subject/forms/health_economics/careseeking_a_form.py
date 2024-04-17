@@ -119,6 +119,11 @@ class CareseekingAFormValidator(CrfFormValidatorMixin, FormValidator):
         )
 
         # A8: Your expenses for today's visit / money_sources
+        money_sources = [o.name for o in self.cleaned_data.get("money_sources") or []]
+        if len(money_sources) > 3:
+            self.raise_validation_error(
+                {"money_sources": "Please limit to no more than 3 selections"}, INVALID_ERROR
+            )
         self.m2m_other_specify(m2m_field="money_sources", field_other="money_sources_other")
 
         if self.cleaned_data.get("money_source_main") and self.cleaned_data.get(
