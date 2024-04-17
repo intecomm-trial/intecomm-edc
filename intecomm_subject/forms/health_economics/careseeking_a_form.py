@@ -4,7 +4,7 @@ from edc_crf.crf_form_validator_mixins import CrfFormValidatorMixin
 from edc_crf.modelform_mixins import CrfSingletonModelFormMixin
 from edc_form_validators import INVALID_ERROR, FormValidator
 
-from ...constants import ALONE, PAID_WORK, STUDY_VISIT
+from ...constants import ADULT, CHILD, MAIN_EARNER, STUDY_VISIT
 from ...models import CareseekingA
 from ..mixins import CrfModelFormMixin
 
@@ -23,37 +23,49 @@ class CareseekingAFormValidator(CrfFormValidatorMixin, FormValidator):
         self.m2m_other_specify(
             m2m_field="care_visit_reason", field_other="care_visit_reason_other"
         )
+
+        # A3: Medication costs for today's visit
         self.m2m_required_if(YES, field="med_prescribed", m2m_field="med_conditions")
         self.m2m_other_specify(m2m_field="med_conditions", field_other="med_conditions_other")
         self.applicable_if(YES, field="med_prescribed", field_applicable="med_collected")
+
         self.applicable_if(
             NO, field="med_collected", field_applicable="med_not_collected_reason"
         )
         self.validate_other_specify(
-            field="med_collected", other_specify_field="med_not_collected_reason_other"
+            field="med_not_collected_reason",
+            other_specify_field="med_not_collected_reason_other",
         )
+
         self.required_if(
             YES,
             field="med_collected",
             field_required="med_cost_tot",
             field_required_evaluate_as_int=True,
         )
+
         med_conditions = [o.name for o in self.cleaned_data.get("med_conditions")]
         med_cost_tot = self.cleaned_data.get("med_cost_tot")
+        self.required_if(
+            YES,
+            field="med_collected",
+            field_required="med_cost_tot",
+            field_required_evaluate_as_int=True,
+        )
         self.required_if_true(
-            HIV in med_conditions and med_cost_tot and med_cost_tot > 0,
+            HIV in med_conditions and med_cost_tot is not None and med_cost_tot > 0,
             field_required="med_cost_hiv",
         )
         self.required_if_true(
-            HTN in med_conditions and med_cost_tot and med_cost_tot > 0,
+            HTN in med_conditions and med_cost_tot is not None and med_cost_tot > 0,
             field_required="med_cost_htn",
         )
         self.required_if_true(
-            DM in med_conditions and med_cost_tot and med_cost_tot > 0,
+            DM in med_conditions and med_cost_tot is not None and med_cost_tot > 0,
             field_required="med_cost_dm",
         )
         self.required_if_true(
-            OTHER in med_conditions and med_cost_tot and med_cost_tot > 0,
+            OTHER in med_conditions and med_cost_tot is not None and med_cost_tot > 0,
             field_required="med_cost_other",
         )
         self.applicable_if(
@@ -63,6 +75,7 @@ class CareseekingAFormValidator(CrfFormValidatorMixin, FormValidator):
             field="med_collected_location", other_specify_field="med_collected_location_other"
         )
 
+        # A4: Diagnostic costs for today's visit
         self.applicable_if(YES, field="tests_requested", field_applicable="tests_done")
         self.applicable_if(NO, field="tests_done", field_applicable="tests_not_done_reason")
         self.validate_other_specify(
@@ -78,48 +91,39 @@ class CareseekingAFormValidator(CrfFormValidatorMixin, FormValidator):
         self.validate_other_specify(
             field="missed_activities", other_specify_field="missed_activities_other"
         )
-        self.required_if(
-            PAID_WORK,
-            OTHER,
-            field="missed_activities",
-            field_required="care_visit_lost_income",
-            field_required_evaluate_as_int=True,
-        )
 
         self.applicable_if(YES, field="referral", field_applicable="referral_type")
         self.applicable_if(YES, field="referral", field_applicable="referral_facility")
 
-        self.m2m_single_selection_if(ALONE, m2m_field="accompany")
-        if (
-            self.cleaned_data.get("accompany_num")
-            and ALONE in [o.name for o in self.cleaned_data.get("accompany") or []]
-            and self.cleaned_data.get("accompany_num") != 0
-        ):
-            self.raise_validation_error(
-                {"accompany_num": "Expected 0 based on response above"}, INVALID_ERROR
-            )
-        elif (
-            self.cleaned_data.get("accompany_num")
-            and ALONE not in [o.name for o in self.cleaned_data.get("accompany") or []]
-            and self.cleaned_data.get("accompany_num") == 0
-        ):
-            self.raise_validation_error(
-                {"accompany_num": "Expected a value greater than 0 based on response above"},
-                INVALID_ERROR,
-            )
-
+        # accompany
+        self.required_if(
+            ADULT,
+            CHILD,
+            MAIN_EARNER,
+            field="accompany",
+            field_required="accompany_num",
+            field_required_evaluate_as_int=True,
+        )
         self.applicable_if_true(
-            ALONE not in [o.name for o in self.cleaned_data.get("accompany") or []],
+            self.cleaned_data.get("accompany_num")
+            and self.cleaned_data.get("accompany_num") > 0,
             field_applicable="accompany_wait",
         )
         self.applicable_if_true(
-            ALONE not in [o.name for o in self.cleaned_data.get("accompany") or []],
+            self.cleaned_data.get("accompany_num")
+            and self.cleaned_data.get("accompany_num") > 0,
             field_applicable="accompany_alt",
         )
         self.validate_other_specify(
             field="accompany_alt", other_specify_field="accompany_alt_other"
         )
 
+        # A8: Your expenses for today's visit / money_sources
+        money_sources = [o.name for o in self.cleaned_data.get("money_sources") or []]
+        if len(money_sources) > 3:
+            self.raise_validation_error(
+                {"money_sources": "Please limit to no more than 3 selections"}, INVALID_ERROR
+            )
         self.m2m_other_specify(m2m_field="money_sources", field_other="money_sources_other")
 
         if self.cleaned_data.get("money_source_main") and self.cleaned_data.get(
@@ -129,9 +133,6 @@ class CareseekingAFormValidator(CrfFormValidatorMixin, FormValidator):
                 {"money_source_main": "Response not found among responses given above"},
                 INVALID_ERROR,
             )
-        self.validate_other_specify(
-            field="money_source_main", other_specify_field="money_source_main_other"
-        )
 
 
 class CareseekingAForm(

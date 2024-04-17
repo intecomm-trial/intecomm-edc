@@ -36,11 +36,14 @@ from edc_reportable import (
 from edc_visit_tracking.constants import MISSED_VISIT, SCHEDULED, UNSCHEDULED
 
 from .constants import (
+    ADULT,
     ALONE,
+    CHILD,
     COMMUNITY_CLINIC,
     EXPENSIVE,
     GTE_3HRS,
     HOME_REMEDIES,
+    MAIN_EARNER,
     NURSE,
     PAID_WORK,
     PROBLEMATIC,
@@ -326,7 +329,7 @@ NOT_COLLECTED_REASONS = Choices(
 
 
 TESTS_NOT_DONE_REASONS = Choices(
-    (UNAVAILABLE, "Tests were not available", 1),
+    (UNAVAILABLE, "Tests were not available and not done", 1),
     (EXPENSIVE, "Tests were too expensive"),
     (UNIMPORTANT, "Did not think it was important to do these tests "),
     (TOO_BUSY, "Did not have the time to do these tests"),
@@ -377,15 +380,18 @@ REFERRAL_FACILITY = Choices(
     fillmeta=True,
 )
 
-ACCOMPANIED_BY = Choices(
+_accompany = (
     (ALONE, "No one, I came alone", 1),
-    ("main_earner", "Main household earner"),
-    ("adult", "Other family member/relatives/friends (adults)"),
-    ("child", "Other family member/relatives/friends (children)"),
-    fillmeta=True,
+    (MAIN_EARNER, "Main household earner"),
+    (ADULT, "Other family member/relatives/friends (adults)"),
+    (CHILD, "Other family member/relatives/friends (children)"),
+    (NOT_APPLICABLE, "Not applicable"),
 )
+ACCOMPANIED_BY = Choices(*[t for t in _accompany if t[0] != NOT_APPLICABLE], fillmeta=True)
 
-MONEY_SOURCES = Choices(
+ACCOMPANIED_BY_NA = Choices(*_accompany, fillmeta=True)
+
+_MONEY_SOURCES = (
     ("own_savings", "Own saving (e.g. “loose funds”, bank savings)", 1),
     ("family_gift", "Money received from family members that does not need to be repaid"),
     ("family_loan", "Loan from family member that needs to be repaid"),
@@ -405,8 +411,15 @@ MONEY_SOURCES = Choices(
         "asset_sale",
         "Sale of assets (property, livestock, jewellery, household goods, etc)",
     ),
-    (OTHER, "Other (specify)"),
+    (OTHER, "Other (specified above)"),
     (NOT_APPLICABLE, "Not applicable"),
+)
+MONEY_SOURCES_NA = Choices(
+    *_MONEY_SOURCES,
+    fillmeta=True,
+)
+MONEY_SOURCES = Choices(
+    *[t for t in _MONEY_SOURCES if t[0] != NOT_APPLICABLE],
     fillmeta=True,
 )
 
@@ -445,7 +458,7 @@ SEEK_FACILITIES = Choices(
 
 SEEKK_CARE_TYPES = Choices(
     (OUTPATIENT, "Outpatient (includes laboratory testing)", 1),
-    (INPATIENT, "Inpatient"),
+    (INPATIENT, "Inpatient (stayed overnight for 1 or more nights)"),
     (BOTH, "Both"),
     (NOT_APPLICABLE, "Not applicable"),
     fillmeta=True,

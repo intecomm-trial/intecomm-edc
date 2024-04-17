@@ -12,15 +12,10 @@ from edc_model_fields.fields import (
     OtherCharField,
 )
 
-from intecomm_lists.models import (
-    Accompanied,
-    Conditions,
-    MoneySources,
-    TravelMethods,
-    VisitReasons,
-)
+from intecomm_lists.models import Conditions, MoneySources, TravelMethods, VisitReasons
 
 from ...choices import (
+    ACCOMPANIED_BY,
     FACILITY_VISIT_ALTERNATIVES,
     FACILITY_VISIT_ALTERNATIVES_NA,
     MED_COLLECTION_LOCATIONS,
@@ -31,7 +26,7 @@ from ...choices import (
     TESTS_NOT_DONE_REASONS,
 )
 from ...model_mixins import CrfModelMixin
-from ..fields import DurationField, ExpenseField, IncomeField
+from ..fields import DurationField, ExpenseField
 
 
 def convert_to_choices(s: str) -> tuple:
@@ -44,6 +39,7 @@ def convert_to_choices(s: str) -> tuple:
 
 
 class CareseekingA(CrfModelMixin, BaseUuidModel):
+
     travel_method = ManyToManyField2(
         TravelMethods,
         verbose_name=_("How did you travel here?"),
@@ -57,15 +53,13 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         metadata="FTRATIME1",
     )
 
-    travel_cost = IntegerField2(
+    travel_cost = ExpenseField(
         verbose_name=_(
             "Thinking about yourself and anyone that accompanied you, "
             "how much was spent on travel from your home to reach here?"
         ),
-        validators=[MinValueValidator(0), MaxValueValidator(9999999)],
         null=True,
         blank=False,
-        help_text=_("In local currency. If nothing spent on travel, enter `0`"),
         metadata="FTRAVCOST1",
     )
 
@@ -211,11 +205,6 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         metadata="FFACTIME1",
     )
 
-    wait_duration = DurationField(
-        verbose_name=_("How much time did you spend waiting?"),
-        metadata="FWAITIME1",
-    )
-
     with_hcw_duration = DurationField(
         verbose_name=_(
             "How much time did you spend during the consultation "
@@ -234,13 +223,6 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
     )
 
     missed_activities_other = OtherCharField(metadata="FMEDOTHER1")
-
-    care_visit_lost_income = IncomeField(
-        verbose_name=_("How much would you have made in cash or in-kind for a day’s work?"),
-        null=True,
-        blank=True,
-        metadata="FPAID1",
-    )
 
     referral = CharField2(
         verbose_name=_(
@@ -267,9 +249,12 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         metadata="FREFAC1",
     )
 
-    accompany = ManyToManyField2(
-        Accompanied,
+    accompany = CharField2(
         verbose_name="Who accompanied you here today?",
+        max_length=25,
+        null=True,
+        blank=False,
+        choices=ACCOMPANIED_BY(),
         metadata="FACMP1",
     )
 
@@ -308,6 +293,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
             "Thinking about the expenses you have reported for today’s visit, what were "
             "the source(s) of payment for all these expenses?"
         ),
+        limit_choices_to={"name__in": [n[0] for n in MONEY_SOURCES if n[0] != NOT_APPLICABLE]},
         help_text="Select up to three sources. If 'other', please specify.",
         metadata="FTODSOURCE",
     )
@@ -326,10 +312,6 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         choices=MONEY_SOURCES(),
         default=NOT_APPLICABLE,
         metadata="FTODSOURCEMAIN1",
-    )
-
-    money_source_main_other = OtherCharField(
-        verbose_name=_("If other main 'source of payment', please specify ...")
     )
 
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):

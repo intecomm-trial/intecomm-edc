@@ -26,16 +26,16 @@ class CareseekingBAdmin(
             {"fields": ("subject_visit", "report_datetime")},
         ),
         (
-            _("B1:"),
+            _("B1: Health visits in the past 3 months"),
             {
                 "fields": (
-                    "ill_month",
-                    "seek_advice",
-                    "no_seek_advice",
-                    "no_seek_advice_other",
-                    "seek_facility",
-                    "seek_facility_other",
-                    "seek_care_type",
+                    "needed_care",
+                    "accessed_care",
+                    "no_accessed_care",
+                    "no_accessed_care_other",
+                    "care_facility",
+                    "care_facility_other",
+                    "care_type",
                     "outpatient_visits",
                 )
             },
@@ -84,6 +84,7 @@ class CareseekingBAdmin(
                 "fields": (
                     "care_visit_duration",
                     "missed_activities",
+                    "missed_activities_other",
                 )
             },
         ),
@@ -95,6 +96,7 @@ class CareseekingBAdmin(
                     "accompany_num",
                     "accompany_wait",
                     "accompany_alt",
+                    "accompany_alt_other",
                 )
             },
         ),
@@ -109,13 +111,24 @@ class CareseekingBAdmin(
             },
         ),
         (
-            _("B7: About your inpatient visit"),
+            _("B8: About your inpatient visit"),
             {
                 "fields": (
                     "inpatient",
                     "inpatient_days",
                     "inpatient_reasons",
                     "inpatient_reasons_other",
+                )
+            },
+        ),
+        (
+            _("B9: Inpatient visit: expenses"),
+            {
+                "description": _(
+                    "Continue with this section if you were admitted "
+                    "as an inpatient as indicated above"
+                ),
+                "fields": (
                     "inpatient_cost",
                     "inpatient_accompany",
                     "inpatient_food",
@@ -123,11 +136,22 @@ class CareseekingBAdmin(
                     "inpatient_nowork_days",
                     "inpatient_household_nowork",
                     "inpatient_household_nowork_days",
+                ),
+            },
+        ),
+        (
+            _("B10: Inpatient visit: sources of payment for expenses"),
+            {
+                "description": _(
+                    "Continue with this section if you were admitted "
+                    "as an inpatient as indicated above"
+                ),
+                "fields": (
                     "inpatient_money_sources",
                     "inpatient_money_sources_other",
                     "inpatient_money_sources_main",
                     "inpatient_money_sources_main_other",
-                )
+                ),
             },
         ),
         crf_status_fieldset_tuple,
@@ -137,17 +161,17 @@ class CareseekingBAdmin(
     filter_horizontal = [
         "travel_method",
         "med_conditions",
-        "accompany",
         "money_sources",
         "inpatient_reasons",
         "inpatient_money_sources",
     ]
 
     radio_fields = {
+        "accompany": admin.VERTICAL,
         "accompany_alt": admin.VERTICAL,
         "accompany_wait": admin.VERTICAL,
         "crf_status": admin.VERTICAL,
-        "ill_month": admin.VERTICAL,
+        "needed_care": admin.VERTICAL,
         "inpatient": admin.VERTICAL,
         "inpatient_accompany": admin.VERTICAL,
         "inpatient_food": admin.VERTICAL,
@@ -158,10 +182,10 @@ class CareseekingBAdmin(
         "med_prescribed": admin.VERTICAL,
         "missed_activities": admin.VERTICAL,
         "money_source_main": admin.VERTICAL,
-        "no_seek_advice": admin.VERTICAL,
-        "seek_advice": admin.VERTICAL,
-        "seek_care_type": admin.VERTICAL,
-        "seek_facility": admin.VERTICAL,
+        "no_accessed_care": admin.VERTICAL,
+        "accessed_care": admin.VERTICAL,
+        "care_type": admin.VERTICAL,
+        "care_facility": admin.VERTICAL,
         "tests_done": admin.VERTICAL,
         "tests_not_done_reason": admin.VERTICAL,
         "tests_requested": admin.VERTICAL,

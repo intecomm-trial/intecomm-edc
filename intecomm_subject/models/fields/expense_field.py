@@ -12,10 +12,13 @@ class ExpenseField(IntegerField2):
         if self.custom_blank is None:
             kwargs.update(blank=True)
         kwargs.update(validators=[MinValueValidator(0), MaxValueValidator(9999999)])
-        default_help_text = _(
-            "In local currency. If nothing spent enter `0` or leave blank "
-            "if a response is not required."
-        )
+        if kwargs.get("blank"):
+            default_help_text = _(
+                "In local currency. If nothing spent enter `0` or leave blank "
+                "if a response is not required."
+            )
+        else:
+            default_help_text = _("In local currency. If nothing spent enter `0`.")
         self.custom_help_text = kwargs.get("help_text")
         kwargs.update(help_text=self.custom_help_text or default_help_text)
         super().__init__(*args, **kwargs)

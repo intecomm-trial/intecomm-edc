@@ -76,11 +76,9 @@ class CareseekingAAdmin(
             {
                 "fields": (
                     "care_visit_duration",
-                    "wait_duration",
                     "with_hcw_duration",
                     "missed_activities",
                     "missed_activities_other",
-                    "care_visit_lost_income",
                 )
             },
         ),
@@ -113,7 +111,6 @@ class CareseekingAAdmin(
                     "money_sources",
                     "money_sources_other",
                     "money_source_main",
-                    "money_source_main_other",
                 )
             },
         ),
@@ -126,7 +123,6 @@ class CareseekingAAdmin(
         "care_visit_reason",
         "med_conditions",
         "money_sources",
-        "accompany",
     ]
 
     radio_fields = {
@@ -142,6 +138,7 @@ class CareseekingAAdmin(
         "referral_type": admin.VERTICAL,
         "referral_facility": admin.VERTICAL,
         "money_source_main": admin.VERTICAL,
+        "accompany": admin.VERTICAL,
         "accompany_wait": admin.VERTICAL,
         "accompany_alt": admin.VERTICAL,
         "med_collected_location": admin.VERTICAL,
