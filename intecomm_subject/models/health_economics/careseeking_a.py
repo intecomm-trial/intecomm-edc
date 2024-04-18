@@ -210,6 +210,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
             "How much time did you spend during your visit today -- "
             "from arrival to this place until the end of your visit?"
         ),
+        blank=False,
         metadata="FFACTIME1",
     )
 
@@ -224,6 +225,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
             "How much time did you spend during the consultation "
             "(i.e. time spent with the healthcareworker)?"
         ),
+        blank=False,
         metadata="FWORKTIME1",
     )
 
