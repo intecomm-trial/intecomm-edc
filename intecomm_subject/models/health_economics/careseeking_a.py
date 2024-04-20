@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models import DurationField as DjangoDurationField
 from django.utils.translation import gettext as _
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
@@ -27,6 +28,7 @@ from ...choices import (
 )
 from ...model_mixins import CrfModelMixin
 from ..fields import DurationField, ExpenseField
+from ..utils import Duration
 
 
 def convert_to_choices(s: str) -> tuple:
@@ -46,11 +48,17 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         metadata="FTRA1",
     )
 
-    travel_time = DurationField(
+    travel_duration = DurationField(
         verbose_name="How long did it take you to reach here?",
         null=True,
         blank=False,
         metadata="FTRATIME1",
+    )
+
+    travel_tdelta = DjangoDurationField(
+        null=True,
+        blank=True,
+        editable=False,
     )
 
     travel_cost = ExpenseField(
@@ -202,7 +210,14 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
             "How much time did you spend during your visit today -- "
             "from arrival to this place until the end of your visit?"
         ),
+        blank=False,
         metadata="FFACTIME1",
+    )
+
+    care_visit_tdelta = DjangoDurationField(
+        null=True,
+        blank=True,
+        editable=False,
     )
 
     with_hcw_duration = DurationField(
@@ -210,7 +225,14 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
             "How much time did you spend during the consultation "
             "(i.e. time spent with the healthcareworker)?"
         ),
+        blank=False,
         metadata="FWORKTIME1",
+    )
+
+    with_hcw_tdelta = DjangoDurationField(
+        null=True,
+        blank=True,
+        editable=False,
     )
 
     missed_activities = CharField2(
@@ -313,6 +335,15 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         default=NOT_APPLICABLE,
         metadata="FTODSOURCEMAIN1",
     )
+
+    def save(self, *args, **kwargs):
+        if self.travel_duration:
+            self.travel_tdelta = Duration(self.travel_duration).timedelta
+        if self.care_visit_duration:
+            self.care_visit_tdelta = Duration(self.care_visit_duration).timedelta
+        if self.with_hcw_duration:
+            self.with_hcw_tdelta = Duration(self.with_hcw_duration).timedelta
+        super().save(*args, **kwargs)
 
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Cost of Careseeking: Part A"

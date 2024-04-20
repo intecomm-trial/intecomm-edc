@@ -30,7 +30,7 @@ class CareseekingAAdmin(
             {
                 "fields": (
                     "travel_method",
-                    "travel_time",
+                    "travel_duration",
                     "travel_cost",
                     "food_cost",
                     "care_visit_reason",

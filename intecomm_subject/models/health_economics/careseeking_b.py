@@ -1,4 +1,5 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models import DurationField as DjangoDurationField
 from django.utils.translation import gettext as _
 from edc_constants.choices import YES_NO, YES_NO_DONT_KNOW_NA, YES_NO_NA
 from edc_constants.constants import DM, HIV, HTN, NOT_APPLICABLE, OTHER
@@ -24,6 +25,7 @@ from ...choices import (
 )
 from ...model_mixins import CrfModelMixin
 from ..fields import DurationField, ExpenseField
+from ..utils import Duration
 
 
 class CareseekingB(CrfModelMixin, BaseUuidModel):
@@ -100,6 +102,12 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
     travel_duration = DurationField(
         verbose_name=_("How long did it take you to get there?"),
         metadata="FOUTTRATIME1",
+    )
+
+    travel_tdelta = DjangoDurationField(
+        null=True,
+        blank=True,
+        editable=False,
     )
 
     travel_costs = ExpenseField(
@@ -215,6 +223,12 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
             "Roughly how much time did you spend during your last/most recent visit?"
         ),
         metadata="FOUTTIME1",
+    )
+
+    care_visit_tdelta = DjangoDurationField(
+        null=True,
+        blank=True,
+        editable=False,
     )
 
     missed_activities = CharField2(
@@ -418,6 +432,13 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         verbose_name=_("If other main 'source of payment', please specify ..."),
         metadata="FINSOURCEMAIN1OTHER",
     )
+
+    def save(self, *args, **kwargs):
+        if self.travel_duration:
+            self.travel_tdelta = Duration(self.travel_duration).timedelta
+        if self.care_visit_duration:
+            self.care_visit_tdelta = Duration(self.care_visit_duration).timedelta
+        super().save(*args, **kwargs)
 
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Cost of Careseeking: Part B"
