@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfo
 
 from edc_constants.constants import CLINIC, COMMUNITY, DM, HIV, HTN
 from edc_dx import Diagnoses
-from edc_dx.diagnoses import ClinicalReviewBaselineRequired
+from edc_dx.diagnoses import ClinicalReviewBaselineRequired, InitialReviewRequired
 from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS
 from edc_he.rule_groups import Predicates as BaseHealthEconomicsPredicates
 from edc_visit_schedule.constants import MONTH12
@@ -82,6 +82,7 @@ class NextAppointmentPredicates:
 class MedicationAdherencePredicates:
     @staticmethod
     def diagnoses(visit, **kwargs) -> list[str]:
+        dxs = []
         try:
             diagnoses = Diagnoses(
                 subject_identifier=visit.subject_identifier,
@@ -89,8 +90,13 @@ class MedicationAdherencePredicates:
                 lte=True,
             )
         except ClinicalReviewBaselineRequired:
-            return []
-        return [name for name in diagnoses.initial_reviews]
+            pass
+        else:
+            try:
+                dxs = [name for name in diagnoses.initial_reviews]
+            except InitialReviewRequired:
+                pass
+        return dxs
 
     @staticmethod
     def is_required_by_date(visit, **kwargs) -> bool:
