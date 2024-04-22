@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfo
 
 from edc_constants.constants import CLINIC, COMMUNITY, DM, HIV, HTN
 from edc_dx import Diagnoses
-from edc_dx.diagnoses import ClinicalReviewBaselineRequired
+from edc_dx.diagnoses import ClinicalReviewBaselineRequired, InitialReviewRequired
 from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS
 from edc_he.rule_groups import Predicates as BaseHealthEconomicsPredicates
 from edc_visit_schedule.constants import MONTH12
@@ -88,7 +88,7 @@ class MedicationAdherencePredicates:
                 report_datetime=visit.report_datetime,
                 lte=True,
             )
-        except ClinicalReviewBaselineRequired:
+        except (ClinicalReviewBaselineRequired, InitialReviewRequired):
             return []
         return [name for name in diagnoses.initial_reviews]
 
