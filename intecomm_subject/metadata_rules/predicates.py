@@ -82,15 +82,21 @@ class NextAppointmentPredicates:
 class MedicationAdherencePredicates:
     @staticmethod
     def diagnoses(visit, **kwargs) -> list[str]:
+        dxs = []
         try:
             diagnoses = Diagnoses(
                 subject_identifier=visit.subject_identifier,
                 report_datetime=visit.report_datetime,
                 lte=True,
             )
-        except (ClinicalReviewBaselineRequired, InitialReviewRequired):
-            return []
-        return [name for name in diagnoses.initial_reviews]
+        except ClinicalReviewBaselineRequired:
+            pass
+        else:
+            try:
+                dxs = [name for name in diagnoses.initial_reviews]
+            except InitialReviewRequired:
+                pass
+        return dxs
 
     @staticmethod
     def is_required_by_date(visit, **kwargs) -> bool:
