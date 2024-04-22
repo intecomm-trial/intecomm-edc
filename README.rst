@@ -20,14 +20,12 @@ Basic install
 -------------
 .. code-block:: bash
 
-    conda create -n edc python=3.11
+    conda create -n edc python=3.12
     conda activate edc
     git clone https://github.com/intecomm-trial/intecomm-edc.git ~/apps
     cd ~/apps
     pip install -U .
-    python manage.py migrate
-    # run migrate a second time for post-migrate signals
-    python manage.py migrate
+    python manage.py migrate --settings=intecomm_edc.settings.live  # or uat
 
 Randomization
 -------------
