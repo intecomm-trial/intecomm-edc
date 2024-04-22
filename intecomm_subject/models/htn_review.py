@@ -1,7 +1,9 @@
 from django.db import models
 from edc_constants.choices import YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
-from edc_model.models import BaseUuidModel
+from edc_model.models import BaseUuidModel, OtherCharField
+
+from intecomm_lists.models import HtnManagement
 
 from ..choices import HTN_MANAGEMENT
 from ..model_mixins import CrfModelMixin, FollowupReviewModelMixin
@@ -23,7 +25,14 @@ class HtnReview(FollowupReviewModelMixin, CrfModelMixin, BaseUuidModel):
         default=NOT_APPLICABLE,
     )
 
-    managed_by = models.CharField(
+    managed_by = models.ManyToManyField(
+        HtnManagement,
+        verbose_name="How will the patient's hypertension be managed going forward?",
+    )
+
+    managed_by_other = OtherCharField()
+
+    managed_by_old = models.CharField(
         verbose_name="How will the patient's hypertension be managed going forward?",
         max_length=25,
         choices=HTN_MANAGEMENT,

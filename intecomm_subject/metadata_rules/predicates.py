@@ -4,13 +4,17 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 from zoneinfo import ZoneInfo
 
-from edc_constants.constants import CLINIC, COMMUNITY, DM
+from edc_constants.constants import CLINIC, COMMUNITY, DM, HIV, HTN
 from edc_dx import Diagnoses
+from edc_dx.diagnoses import ClinicalReviewBaselineRequired
+from edc_dx_review.constants import DIET_LIFESTYLE, DRUGS
 from edc_he.rule_groups import Predicates as BaseHealthEconomicsPredicates
 from edc_visit_schedule.constants import MONTH12
 from edc_visit_schedule.utils import is_baseline
 from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 from intecomm_rando.utils import get_assignment_for_subject
+
+from intecomm_subject.models import HtnInitialReview, HtnReview
 
 if TYPE_CHECKING:
     from edc_metadata.model_mixins.creates import CreatesMetadataModelMixin
@@ -23,19 +27,26 @@ if TYPE_CHECKING:
 class HealthEconomicsPredicates(BaseHealthEconomicsPredicates):
     @staticmethod
     def is_required_by_date(visit, **kwargs) -> bool:
-        return visit.report_datetime >= datetime(2023, 6, 30, 23, 59, tzinfo=ZoneInfo("UTC"))
+        return visit.report_datetime >= datetime(2023, 7, 14, 1, 00, tzinfo=ZoneInfo("UTC"))
 
     @staticmethod
     def careseeking_required(visit, **kwargs) -> bool:
         """Returns True if subject has DM or multimorbidity"""
-        if visit.visit_code == MONTH12:
-            diagnoses = Diagnoses(
-                subject_identifier=visit.subject_identifier,
-                report_datetime=visit.report_datetime,
-                lte=True,
-            )
-            dxs = [name for name in diagnoses.initial_reviews]
-            return DM in [name for name in diagnoses.initial_reviews] or len(dxs) > 1
+        is_required_by_date = visit.report_datetime >= datetime(
+            2024, 4, 22, 1, 00, tzinfo=ZoneInfo("UTC")
+        )
+        if is_required_by_date and visit.visit_code == MONTH12:
+            try:
+                diagnoses = Diagnoses(
+                    subject_identifier=visit.subject_identifier,
+                    report_datetime=visit.report_datetime,
+                    lte=True,
+                )
+            except ClinicalReviewBaselineRequired:
+                dxs = []
+            else:
+                dxs = [name for name in diagnoses.initial_reviews]
+            return DM in dxs or len(dxs) > 1
         return False
 
 
@@ -66,3 +77,49 @@ class NextAppointmentPredicates:
             get_assignment_for_subject(visit.subject_identifier) == FACILITY_ARM
             and visit.visit_code != MONTH12
         )
+
+
+class MedicationAdherencePredicates:
+    @staticmethod
+    def diagnoses(visit, **kwargs) -> list[str]:
+        try:
+            diagnoses = Diagnoses(
+                subject_identifier=visit.subject_identifier,
+                report_datetime=visit.report_datetime,
+                lte=True,
+            )
+        except ClinicalReviewBaselineRequired:
+            return []
+        return [name for name in diagnoses.initial_reviews]
+
+    @staticmethod
+    def is_required_by_date(visit, **kwargs) -> bool:
+        return visit.report_datetime >= datetime(2023, 4, 19, 1, 00, tzinfo=ZoneInfo("UTC"))
+
+    @staticmethod
+    def is_required_by_date_hiv(visit, **kwargs) -> bool:
+        return visit.report_datetime >= datetime(2023, 3, 22, 1, 00, tzinfo=ZoneInfo("UTC"))
+
+    def hiv_adherence_required(self, visit, **kwargs) -> bool:
+
+        return self.is_required_by_date_hiv and HIV in self.diagnoses(visit, **kwargs)
+
+    def htn_adherence_required(self, visit, **kwargs) -> bool:
+        # TODO: not required if managed_by for diet and lifestyle
+        if (
+            HtnInitialReview.objects.filter(
+                subject_visit=visit, managed_by__name=DIET_LIFESTYLE
+            )
+            .exclude(managed_by__name=DRUGS)
+            .exists()
+            or HtnReview.objects.filter(subject_visit=visit, managed_by__name=DIET_LIFESTYLE)
+            .exclude(managed_by__name=DRUGS)
+            .exists()
+        ):
+            required = False
+        else:
+            required = self.is_required_by_date and HTN in self.diagnoses(visit, **kwargs)
+        return required
+
+    def dm_adherence_required(self, visit, **kwargs) -> bool:
+        return self.is_required_by_date and DM in self.diagnoses(visit, **kwargs)
