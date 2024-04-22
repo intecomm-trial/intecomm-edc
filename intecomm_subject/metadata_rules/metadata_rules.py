@@ -1,4 +1,4 @@
-from edc_constants.constants import NO, NOT_APPLICABLE, YES
+from edc_constants.constants import NOT_APPLICABLE, YES
 from edc_he.rule_groups import HealthEconomicsRuleGroup as BaseHealthEconomicsRuleGroup
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.metadata_rules import CrfRule, CrfRuleGroup, P, register
@@ -6,6 +6,7 @@ from edc_metadata.metadata_rules import CrfRule, CrfRuleGroup, P, register
 from .predicates import (
     HealthEconomicsPredicates,
     LocationUpdatePredicates,
+    MedicationAdherencePredicates,
     NextAppointmentPredicates,
 )
 
@@ -118,22 +119,21 @@ class MedicationsRuleGroup(CrfRuleGroup):
     )
 
     adherence_hiv = CrfRule(
-        predicate=P("refill_hiv", "in", [YES, NO]),
+        predicate="hiv_adherence_required",
         consequence=REQUIRED,
         alternative=NOT_REQUIRED,
         target_models=["hivmedicationadherence"],
     )
 
     adherence_dm = CrfRule(
-        predicate=P("refill_dm", "in", [YES, NO]),
+        predicate="dm_adherence_required",
         consequence=REQUIRED,
         alternative=NOT_REQUIRED,
         target_models=["dmmedicationadherence"],
     )
 
-    # TODO: not required if managed_by for diet and lifestyle
     adherence_htn = CrfRule(
-        predicate=P("refill_htn", "in", [YES, NO]),
+        predicate="htn_adherence_required",
         consequence=REQUIRED,
         alternative=NOT_REQUIRED,
         target_models=["htnmedicationadherence"],
@@ -142,6 +142,7 @@ class MedicationsRuleGroup(CrfRuleGroup):
     class Meta:
         app_label = "intecomm_subject"
         source_model = "intecomm_subject.medications"
+        predicates = MedicationAdherencePredicates()
 
 
 @register()

@@ -14,14 +14,25 @@ class HtnReviewAdmin(CrfModelAdmin):
 
     fieldsets = (
         (None, {"fields": ("subject_visit", "report_datetime")}),
-        ("Care", {"fields": ("managed_by", "care_delivery", "care_delivery_other")}),
+        (
+            "Care",
+            {
+                "fields": (
+                    "managed_by",
+                    "managed_by_other",
+                    "care_delivery",
+                    "care_delivery_other",
+                )
+            },
+        ),
         crf_status_fieldset_tuple,
         audit_fieldset_tuple,
     )
+
+    filter_horizontal = ["managed_by"]
 
     radio_fields = {
         "dx": admin.VERTICAL,
         "care_delivery": admin.VERTICAL,
         "crf_status": admin.VERTICAL,
-        "managed_by": admin.VERTICAL,
     }
