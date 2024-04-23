@@ -108,7 +108,7 @@ class MedicationAdherencePredicates:
 
     def hiv_adherence_required(self, visit, **kwargs) -> bool:
 
-        return self.is_required_by_date_hiv and HIV in self.diagnoses(visit, **kwargs)
+        return self.is_required_by_date_hiv and HIV.lower() in self.diagnoses(visit, **kwargs)
 
     def htn_adherence_required(self, visit, **kwargs) -> bool:
         # TODO: not required if managed_by for diet and lifestyle
@@ -124,8 +124,10 @@ class MedicationAdherencePredicates:
         ):
             required = False
         else:
-            required = self.is_required_by_date and HTN in self.diagnoses(visit, **kwargs)
+            required = self.is_required_by_date and HTN.lower() in self.diagnoses(
+                visit, **kwargs
+            )
         return required
 
     def dm_adherence_required(self, visit, **kwargs) -> bool:
-        return self.is_required_by_date and DM in self.diagnoses(visit, **kwargs)
+        return self.is_required_by_date and DM.lower() in self.diagnoses(visit, **kwargs)
