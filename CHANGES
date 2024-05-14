@@ -1,6 +1,10 @@
 Changes
 +++++++
 
+0.2.20 (unreleased)
+------
+- add 'Account Management' link to home page ListGroup
+
 0.1.92
 ------
 - fix setting.DJANGO_DEBUG_TOOLBAR_ENABLED
