@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
         ("edc_visit_schedule", "0010_alter_subjectschedulehistory_options_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("sites", "0002_alter_domain_unique"),
-        ("edc_next_appointment", "0001_initial"),
+        # ("edc_next_appointment", "0001_initial"),
         (
             "intecomm_subject",
             "0058_rename_external_remittance_currency_healtheconomicsincome_external_remit_currency_and_more",

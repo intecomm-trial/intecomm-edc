@@ -22,7 +22,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("edc_next_appointment", "0001_initial"),
+        # ("edc_next_appointment", "0001_initial"),
         ("sites", "0002_alter_domain_unique"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("intecomm_subject", "0059_historicalnextappointment_info_source_old_and_more"),
