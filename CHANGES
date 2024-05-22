@@ -1,6 +1,12 @@
 Changes
 +++++++
 
+0.2.20 (unreleased)
+------
+- updates to home page ListGroup
+    - add 'Account Management' link
+    - change Switch Sites and Logout items from get to post
+
 0.1.92
 ------
 - fix setting.DJANGO_DEBUG_TOOLBAR_ENABLED
