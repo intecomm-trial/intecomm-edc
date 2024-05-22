@@ -31,23 +31,11 @@ class HealthEconomicsPredicates(BaseHealthEconomicsPredicates):
 
     @staticmethod
     def careseeking_required(visit, **kwargs) -> bool:
-        """Returns True if subject has DM or multimorbidity"""
+        """Returns True if after start date and 12m"""
         is_required_by_date = visit.report_datetime >= datetime(
             2024, 4, 22, 1, 00, tzinfo=ZoneInfo("UTC")
         )
-        if is_required_by_date and visit.visit_code == MONTH12:
-            try:
-                diagnoses = Diagnoses(
-                    subject_identifier=visit.subject_identifier,
-                    report_datetime=visit.report_datetime,
-                    lte=True,
-                )
-            except ClinicalReviewBaselineRequired:
-                dxs = []
-            else:
-                dxs = [name for name in diagnoses.initial_reviews]
-            return DM in dxs or len(dxs) > 1
-        return False
+        return is_required_by_date and visit.visit_code == MONTH12
 
 
 class LocationUpdatePredicates:
