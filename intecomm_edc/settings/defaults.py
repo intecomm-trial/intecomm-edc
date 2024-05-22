@@ -89,7 +89,7 @@ INSTALLED_APPS = [
     "multisite.apps.AppConfig",
     "django_crypto_fields.apps.AppConfig",
     "django_revision.apps.AppConfig",
-    # "django_extensions",
+    "django_extensions",
     "logentry_admin",
     "simple_history",
     "storages",
