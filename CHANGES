@@ -1,6 +1,19 @@
 Changes
 +++++++
 
+0.2.20
+------
+- updates to home page ListGroup
+    - add 'Account Management' link
+    - change Switch Sites and Logout items from get to post
+- add generated table `CurrentConditions` to list initial
+  diagnoses for each patient
+- add utils to generate data for `CurrentConditions`
+- change CareSeeking metadatarule to return True after 14072023
+  regardless of condition(s)
+- migrations
+- bump edc==0.5.90
+
 0.1.92
 ------
 - fix setting.DJANGO_DEBUG_TOOLBAR_ENABLED
