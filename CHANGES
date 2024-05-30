@@ -1,6 +1,10 @@
 Changes
 +++++++
 
+0.2.21
+------
+- increase 12m visit upper bound to 6m (intecomm_visit_schedule)
+
 0.2.20
 ------
 - updates to home page ListGroup

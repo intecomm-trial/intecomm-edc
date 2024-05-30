@@ -13,17 +13,10 @@ jobs:
       matrix:
         codebase: ['Prod', 'Dev']
         django-version: ['4.2', '5.0', 'dev']
-        python-version: ['3.11', '3.12']
+        python-version: ['3.12']
         exclude:
           - codebase: 'Prod'
             django-version: 'dev'
-          - python-version: '3.11'
-            django-version: '5.0'
-          - python-version: '3.11'
-            django-version: 'dev'
-          - python-version: '3.12'
-            django-version: '4.2'
-
 
     services:
       mysql:
