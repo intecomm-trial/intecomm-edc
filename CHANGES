@@ -1,6 +1,11 @@
 Changes
 +++++++
 
+0.2.23
+------
+- fix bug in 0.2.22 release data migrations where no match is found
+  (#810, #812)
+
 0.2.22
 ------
 - data-fix release to correct incorrect gender entered in Patient Log,
