@@ -4,7 +4,7 @@ Changes
 0.2.22 (unreleased)
 ------
 - data-fix release to correct incorrect gender entered in Patient Log,
-  Subject Screening and Subject Consent for a participant (#810)
+  Subject Screening and Subject Consent for participants (#810, #812)
 
 0.2.21
 ------
