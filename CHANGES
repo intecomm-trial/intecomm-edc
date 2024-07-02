@@ -1,6 +1,14 @@
 Changes
 +++++++
 
+0.2.24
+------
+- add qareports
+    * vl and vl summary
+    * subject transfers
+- recalc duration fields
+- bump edc=0.5.94
+
 0.2.23
 ------
 - fix bug in 0.2.22 release data migrations where no match is found
