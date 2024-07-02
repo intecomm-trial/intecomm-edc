@@ -12,7 +12,7 @@ create view intecomm_reports_vl_view as (
         from intecomm_subject_hivreview as crf
         left join intecomm_subject_subjectvisit as v on v.id=crf.subject_visit_id
         ) as A
-        left join intecomm_reports_diagnoses as dx on dx.subject_identifier = a.subject_identifier
+        left join intecomm_reports_diagnoses as dx on dx.subject_identifier=A.subject_identifier
         where vl_value is not null
         order by subject_identifier, vl_date
 )
