@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from django.template.loader import render_to_string
 from django.urls import reverse
 from edc_model_admin.dashboard import ModelAdminDashboardMixin
@@ -59,4 +59,5 @@ class VlSummaryAdmin(
 
     def get_queryset(self, request) -> QuerySet:
         vl_summary_to_table()
-        return super().get_queryset(request)
+        qs = super().get_queryset(request)
+        return qs.filter(Q(baseline_vl__isnull=True) | Q(endline_vl__isnull=True))
