@@ -66,11 +66,11 @@ class Data:
 def get_vl_columns(review_obj: HivInitialReview | HivReview, baseline_date: date) -> Vl:
     drawn_date = review_obj.drawn_date or review_obj.report_datetime.date()
     baseline_vl = (
-        review_obj.vl if drawn_date <= baseline_date + relativedelta(months=3) else np.NaN
+        review_obj.vl if drawn_date <= baseline_date + relativedelta(months=3) else np.nan
     )
     baseline_vl_date = drawn_date if drawn_date <= baseline_date else pd.NaT
     endline_vl = (
-        review_obj.vl if drawn_date >= baseline_date + relativedelta(months=6) else np.NaN
+        review_obj.vl if drawn_date >= baseline_date + relativedelta(months=6) else np.nan
     )
     endline_vl_date = (
         drawn_date if drawn_date >= baseline_date + relativedelta(months=6) else pd.NaT
@@ -216,7 +216,7 @@ def get_review_model_as_df(model_cls):
         inplace=True,
     )
     # vl column, replace nulls with NaN
-    df.loc[df["vl"].isnull(), "vl"] = np.NaN
+    df.loc[df["vl"].isnull(), "vl"] = np.nan
 
     # report date
     df["report_date"] = pd.to_datetime(df["report_datetime"]).dt.date
