@@ -1,6 +1,16 @@
 Changes
 +++++++
 
+0.2.26
+------
+- rename list filter to "Endline VL"
+- filter admin qs to only show those with missing baseline vl
+  or missing endline vl
+
+0.2.25
+------
+- change np.NaN to np.nan in preparation of VL dataframe
+
 0.2.24
 ------
 - add qareports

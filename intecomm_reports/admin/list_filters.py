@@ -30,7 +30,7 @@ class BaselineVlListFilter(VlListFilter):
 
 
 class EndlineVlListFilter(VlListFilter):
-    title = "Baseline VL"
+    title = "Endline VL"
     parameter_name = "endline_vl"
 
 
