@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 from edc_constants.choices import YES_NO, YES_NO_DONT_KNOW_NA, YES_NO_NA
 from edc_constants.constants import DM, HIV, HTN, NOT_APPLICABLE, OTHER
 from edc_model.models import BaseUuidModel
+from edc_model.utils import duration_hm_to_timedelta
 from edc_model_fields.fields import (
     CharField2,
     IntegerField2,
@@ -24,8 +25,7 @@ from ...choices import (
     TESTS_NOT_DONE_REASONS,
 )
 from ...model_mixins import CrfModelMixin
-from ..fields import DurationField, ExpenseField
-from ..utils import Duration
+from ..fields import DurationAsStringField, ExpenseField
 
 
 class CareseekingB(CrfModelMixin, BaseUuidModel):
@@ -99,7 +99,7 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         metadata="FOUTTRA1",
     )
 
-    travel_duration = DurationField(
+    travel_duration = DurationAsStringField(
         verbose_name=_("How long did it take you to get there?"),
         metadata="FOUTTRATIME1",
     )
@@ -218,7 +218,7 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
         metadata="FOUTTESTCOST1",
     )
 
-    care_visit_duration = DurationField(
+    care_visit_duration = DurationAsStringField(
         verbose_name=_(
             "Roughly how much time did you spend during your last/most recent visit?"
         ),
@@ -435,9 +435,9 @@ class CareseekingB(CrfModelMixin, BaseUuidModel):
 
     def save(self, *args, **kwargs):
         if self.travel_duration:
-            self.travel_tdelta = Duration(self.travel_duration).timedelta
+            self.travel_tdelta = duration_hm_to_timedelta(self.travel_duration)
         if self.care_visit_duration:
-            self.care_visit_tdelta = Duration(self.care_visit_duration).timedelta
+            self.care_visit_tdelta = duration_hm_to_timedelta(self.care_visit_duration)
         super().save(*args, **kwargs)
 
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):

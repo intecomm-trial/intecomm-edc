@@ -15,7 +15,6 @@ from .clinical_review_baseline import ClinicalReviewBaseline
 from .complications_baseline import ComplicationsBaseline
 from .complications_followup import ComplicationsFollowup
 from .concomitant_medication import ConcomitantMedication
-from .data_management import CurrentConditions
 from .dm_initial_review import DmInitialReview
 from .dm_medication_adherence import DmMedicationAdherence
 from .dm_review import DmReview

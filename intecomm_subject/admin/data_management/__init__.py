@@ -1,1 +1,0 @@
-from .current_conditions_admin import CurrentConditionsAdmin

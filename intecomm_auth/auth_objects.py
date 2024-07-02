@@ -1,5 +1,8 @@
 from edc_auth.get_app_codenames import get_app_codenames
 
+INTECOMM_REPORTS = "INTECOMM_REPORTS"
+INTECOMM_REPORTS_AUDIT = "INTECOMM_REPORTS_AUDIT"
+
 clinic_codenames = get_app_codenames(
     "intecomm_prn",
     "intecomm_group",
@@ -36,3 +39,5 @@ screening_codenames = [
 ]
 
 screening_codenames.sort()
+
+reports_codenames = [c for c in get_app_codenames("intecomm_reports")]

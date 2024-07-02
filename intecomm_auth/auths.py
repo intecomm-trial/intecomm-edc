@@ -19,11 +19,21 @@ from edc_facility.auth_objects import (
     EDC_FACILITY_VIEW,
 )
 from edc_he.auths import EDC_HEALTH_ECONOMICS_VIEW
+from edc_qareports.auth_objects import QA_REPORTS_AUDIT_ROLE, QA_REPORTS_ROLE
 from edc_screening.auth_objects import SCREENING, SCREENING_SUPER, SCREENING_VIEW
 from edc_subject_dashboard.auths import SUBJECT_VIEW
 from edc_unblinding.auth_objects import UNBLINDING_REQUESTORS
 
-from .auth_objects import clinic_codenames, screening_codenames
+from .auth_objects import (
+    INTECOMM_REPORTS,
+    INTECOMM_REPORTS_AUDIT,
+    clinic_codenames,
+    reports_codenames,
+    screening_codenames,
+)
+
+site_auths.add_group(*reports_codenames, name=INTECOMM_REPORTS)
+site_auths.add_group(*reports_codenames, name=INTECOMM_REPORTS_AUDIT, view_only=True)
 
 site_auths.add_pii_model("intecomm_prn.subjectlocator")
 
@@ -65,3 +75,6 @@ site_auths.update_role(SUBJECT_VIEW, SCREENING_VIEW, name=DATA_MANAGER_ROLE)
 site_auths.update_role(
     SUBJECT_VIEW, SCREENING_VIEW, ACTION_ITEM, UNBLINDING_REQUESTORS, name=TMG_ROLE
 )
+
+site_auths.update_role(INTECOMM_REPORTS, name=QA_REPORTS_ROLE)
+site_auths.update_role(INTECOMM_REPORTS_AUDIT, name=QA_REPORTS_AUDIT_ROLE)

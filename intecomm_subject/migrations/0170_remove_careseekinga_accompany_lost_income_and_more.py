@@ -2,10 +2,11 @@
 
 import django.core.validators
 import edc_model_fields.fields.custom_django_fields
+from django.db import migrations
+
 import intecomm_subject.models.fields.duration_field
 import intecomm_subject.models.fields.expense_field
 import intecomm_subject.models.fields.income_field
-from django.db import migrations
 
 
 class Migration(migrations.Migration):
@@ -65,7 +66,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="careseekinga",
             name="care_visit_duration",
-            field=intecomm_subject.models.fields.duration_field.DurationField(
+            field=intecomm_subject.models.fields.duration_field.DurationAsStringField(
                 metadata="FFACTIME1",
                 verbose_name="How much time did you spend during your visit today -- from arrival to this place until the end of your visit?",
             ),
@@ -154,21 +155,21 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="careseekinga",
             name="travel_time",
-            field=intecomm_subject.models.fields.duration_field.DurationField(
+            field=intecomm_subject.models.fields.duration_field.DurationAsStringField(
                 metadata="FTRATIME1", verbose_name="How long did it take you to reach here?"
             ),
         ),
         migrations.AlterField(
             model_name="careseekinga",
             name="wait_duration",
-            field=intecomm_subject.models.fields.duration_field.DurationField(
+            field=intecomm_subject.models.fields.duration_field.DurationAsStringField(
                 metadata="FWAITIME1", verbose_name="How much time did you spend waiting?"
             ),
         ),
         migrations.AlterField(
             model_name="careseekinga",
             name="with_hcw_duration",
-            field=intecomm_subject.models.fields.duration_field.DurationField(
+            field=intecomm_subject.models.fields.duration_field.DurationAsStringField(
                 metadata="FWORKTIME1",
                 verbose_name="How much time did you spend during the consultation (i.e. time spent with the healthcareworker)?",
             ),
@@ -204,7 +205,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="careseekingb",
             name="care_visit_duration",
-            field=intecomm_subject.models.fields.duration_field.DurationField(
+            field=intecomm_subject.models.fields.duration_field.DurationAsStringField(
                 metadata="FOUTTIME1",
                 verbose_name="Roughly how much time did you spend during your last/most recent visit?",
             ),
@@ -440,7 +441,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="careseekingb",
             name="travel_duration",
-            field=intecomm_subject.models.fields.duration_field.DurationField(
+            field=intecomm_subject.models.fields.duration_field.DurationAsStringField(
                 metadata="FOUTTRATIME1", verbose_name="How long did it take you to get there?"
             ),
         ),
@@ -479,7 +480,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="historicalcareseekinga",
             name="care_visit_duration",
-            field=intecomm_subject.models.fields.duration_field.DurationField(
+            field=intecomm_subject.models.fields.duration_field.DurationAsStringField(
                 metadata="FFACTIME1",
                 verbose_name="How much time did you spend during your visit today -- from arrival to this place until the end of your visit?",
             ),
@@ -568,21 +569,21 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="historicalcareseekinga",
             name="travel_time",
-            field=intecomm_subject.models.fields.duration_field.DurationField(
+            field=intecomm_subject.models.fields.duration_field.DurationAsStringField(
                 metadata="FTRATIME1", verbose_name="How long did it take you to reach here?"
             ),
         ),
         migrations.AlterField(
             model_name="historicalcareseekinga",
             name="wait_duration",
-            field=intecomm_subject.models.fields.duration_field.DurationField(
+            field=intecomm_subject.models.fields.duration_field.DurationAsStringField(
                 metadata="FWAITIME1", verbose_name="How much time did you spend waiting?"
             ),
         ),
         migrations.AlterField(
             model_name="historicalcareseekinga",
             name="with_hcw_duration",
-            field=intecomm_subject.models.fields.duration_field.DurationField(
+            field=intecomm_subject.models.fields.duration_field.DurationAsStringField(
                 metadata="FWORKTIME1",
                 verbose_name="How much time did you spend during the consultation (i.e. time spent with the healthcareworker)?",
             ),
@@ -608,7 +609,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="historicalcareseekingb",
             name="care_visit_duration",
-            field=intecomm_subject.models.fields.duration_field.DurationField(
+            field=intecomm_subject.models.fields.duration_field.DurationAsStringField(
                 metadata="FOUTTIME1",
                 verbose_name="Roughly how much time did you spend during your last/most recent visit?",
             ),
@@ -831,7 +832,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="historicalcareseekingb",
             name="travel_duration",
-            field=intecomm_subject.models.fields.duration_field.DurationField(
+            field=intecomm_subject.models.fields.duration_field.DurationAsStringField(
                 metadata="FOUTTRATIME1", verbose_name="How long did it take you to get there?"
             ),
         ),
