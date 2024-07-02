@@ -5,8 +5,10 @@ from edc_dx_review.model_mixins.factory import (
     dx_initial_review_model_mixin_factory,
     rx_initial_review_model_mixin_factory,
 )
-from edc_glucose.model_mixins import fasting_model_mixin_factory
-from edc_glucose.model_mixins.glucose_model_mixin import glucose_model_mixin_factory
+from edc_glucose.model_mixins import (
+    fasting_model_mixin_factory,
+    glucose_model_mixin_factory,
+)
 from edc_model.models import BaseUuidModel
 from edc_model_fields.fields import OtherCharField
 

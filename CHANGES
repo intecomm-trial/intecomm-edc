@@ -1,6 +1,24 @@
 Changes
 +++++++
 
+0.2.24
+------
+- add qareports
+    * vl and vl summary
+    * subject transfers
+- recalc duration fields
+- bump edc=0.5.94
+
+0.2.23
+------
+- fix bug in 0.2.22 release data migrations where no match is found
+  (#810, #812)
+
+0.2.22
+------
+- data-fix release to correct incorrect gender entered in Patient Log,
+  Subject Screening and Subject Consent for participants (#810, #812)
+
 0.2.21
 ------
 - increase 12m visit upper bound to 6m (intecomm_visit_schedule)

@@ -16,7 +16,6 @@ from .clinical_review_baseline_admin import ClinicalReviewBaselineAdmin
 from .complications_baseline_admin import ComplicationsBaselineAdmin
 from .complications_followup_admin import ComplicationsFollowupAdmin
 from .concomitant_medication_admin import ConcomitantMedicationAdmin
-from .data_management import CurrentConditionsAdmin
 from .dm_initial_review_admin import DmInitialReviewAdmin
 from .dm_medication_adherence_admin import DmMedicationAdherenceAdmin
 from .dm_review_admin import DmReviewAdmin

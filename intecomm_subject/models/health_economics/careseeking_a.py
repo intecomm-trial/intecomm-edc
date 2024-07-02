@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
 from edc_model.models import BaseUuidModel
+from edc_model.utils import duration_hm_to_timedelta
 from edc_model_fields.fields import (
     CharField2,
     IntegerField2,
@@ -27,8 +28,7 @@ from ...choices import (
     TESTS_NOT_DONE_REASONS,
 )
 from ...model_mixins import CrfModelMixin
-from ..fields import DurationField, ExpenseField
-from ..utils import Duration
+from ..fields import DurationAsStringField, ExpenseField
 
 
 def convert_to_choices(s: str) -> tuple:
@@ -48,7 +48,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         metadata="FTRA1",
     )
 
-    travel_duration = DurationField(
+    travel_duration = DurationAsStringField(
         verbose_name="How long did it take you to reach here?",
         null=True,
         blank=False,
@@ -205,7 +205,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         metadata="FTESTCOST1",
     )
 
-    care_visit_duration = DurationField(
+    care_visit_duration = DurationAsStringField(
         verbose_name=_(
             "How much time did you spend during your visit today -- "
             "from arrival to this place until the end of your visit?"
@@ -220,7 +220,7 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
         editable=False,
     )
 
-    with_hcw_duration = DurationField(
+    with_hcw_duration = DurationAsStringField(
         verbose_name=_(
             "How much time did you spend during the consultation "
             "(i.e. time spent with the healthcareworker)?"
@@ -338,11 +338,11 @@ class CareseekingA(CrfModelMixin, BaseUuidModel):
 
     def save(self, *args, **kwargs):
         if self.travel_duration:
-            self.travel_tdelta = Duration(self.travel_duration).timedelta
+            self.travel_tdelta = duration_hm_to_timedelta(self.travel_duration)
         if self.care_visit_duration:
-            self.care_visit_tdelta = Duration(self.care_visit_duration).timedelta
+            self.care_visit_tdelta = duration_hm_to_timedelta(self.care_visit_duration)
         if self.with_hcw_duration:
-            self.with_hcw_tdelta = Duration(self.with_hcw_duration).timedelta
+            self.with_hcw_tdelta = duration_hm_to_timedelta(self.with_hcw_duration)
         super().save(*args, **kwargs)
 
     class Meta(CrfModelMixin.Meta, BaseUuidModel.Meta):

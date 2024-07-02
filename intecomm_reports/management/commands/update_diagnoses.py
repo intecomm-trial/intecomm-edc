@@ -1,6 +1,6 @@
 from django.core.management import BaseCommand
 
-from intecomm_subject.utils import update_current_conditions
+from intecomm_reports.utils import update_diagnoses_model
 
 
 class Command(BaseCommand):
@@ -9,4 +9,4 @@ class Command(BaseCommand):
         super().__init__(**kwargs)
 
     def handle(self, *args, **options):
-        update_current_conditions(delete_all=True)
+        update_diagnoses_model(delete_all=True)

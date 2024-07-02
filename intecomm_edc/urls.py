@@ -42,6 +42,7 @@ urlpatterns = [
     *paths_for_urlpatterns("edc_pharmacy"),
     *paths_for_urlpatterns("edc_protocol"),
     *paths_for_urlpatterns("edc_protocol_incident"),
+    *paths_for_urlpatterns("edc_qareports"),
     *paths_for_urlpatterns("edc_qol"),
     *paths_for_urlpatterns("edc_randomization"),
     *paths_for_urlpatterns("edc_refusal"),
@@ -58,6 +59,7 @@ urlpatterns = [
     *paths_for_urlpatterns("intecomm_lists"),
     *paths_for_urlpatterns("intecomm_prn"),
     *paths_for_urlpatterns("intecomm_group"),
+    *paths_for_urlpatterns("intecomm_reports"),
     *paths_for_urlpatterns("intecomm_screening"),
     *paths_for_urlpatterns("intecomm_subject"),
 ]
