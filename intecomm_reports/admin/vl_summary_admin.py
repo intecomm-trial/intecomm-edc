@@ -7,17 +7,21 @@ from edc_model_admin.mixins import TemplatesModelAdminMixin
 from edc_qareports.admin import QaReportWithNoteModelAdminMixin
 from edc_sites.admin import SiteModelAdminMixin
 
-from intecomm_reports.admin.list_filters import (
+from ..admin_site import intecomm_reports_admin
+from ..models import VlSummary as VlSummaryModel
+from ..vl_summary import VlSummary
+from .list_filters import (
+    BaselineVlDateListFilter,
     BaselineVlListFilter,
+    EndlineVlDateListFilter,
     EndlineVlListFilter,
+    LastVlDateListFilter,
+    NextVlDateListFilter,
     ScheduleStatusListFilter,
 )
-from intecomm_reports.admin_site import intecomm_reports_admin
-from intecomm_reports.models import VlSummary
-from intecomm_reports.utils import vl_summary_to_table
 
 
-@admin.register(VlSummary, site=intecomm_reports_admin)
+@admin.register(VlSummaryModel, site=intecomm_reports_admin)
 class VlSummaryAdmin(
     QaReportWithNoteModelAdminMixin,
     SiteModelAdminMixin,
@@ -30,21 +34,30 @@ class VlSummaryAdmin(
     list_display = [
         "dashboard",
         "subject",
-        "baseline_date",
         "baseline_vl",
-        "baseline_vl_date",
         "endline_vl",
+        "expected",
+        "baseline_date",
+        "baseline_vl_date",
         "endline_vl_date",
+        "last_vl_date",
+        "next_vl_date",
+        "offschedule_date",
+        "offset",
         "created",
     ]
 
     list_filter = [
+        "expected",
         BaselineVlListFilter,
         EndlineVlListFilter,
         ScheduleStatusListFilter,
         "baseline_date",
-        "baseline_vl_date",
-        "endline_vl_date",
+        BaselineVlDateListFilter,
+        EndlineVlDateListFilter,
+        LastVlDateListFilter,
+        NextVlDateListFilter,
+        "offset",
     ]
 
     search_fields = ["subject_identifier"]
@@ -58,6 +71,7 @@ class VlSummaryAdmin(
         )
 
     def get_queryset(self, request) -> QuerySet:
-        vl_summary_to_table()
+        vl_summary = VlSummary(endline_months=9, skip_update_dx=True)
+        vl_summary.to_model(model="intecomm_reports.vlsummary")
         qs = super().get_queryset(request)
-        return qs.filter(Q(baseline_vl__isnull=True) | Q(endline_vl__isnull=True))
+        return qs.filter((Q(baseline_vl__isnull=True) | Q(endline_vl__isnull=True)))
