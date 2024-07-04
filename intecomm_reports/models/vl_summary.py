@@ -6,7 +6,7 @@ from edc_sites.model_mixins import SiteModelMixin
 from edc_utils import get_utcnow
 
 
-class VlSummary(
+class BaseVlSummary(
     UniqueSubjectIdentifierFieldMixin, QaReportModelMixin, SiteModelMixin, models.Model
 ):
     """A data management table with details of each HIV participant's
@@ -28,8 +28,29 @@ class VlSummary(
 
     endline_vl = models.IntegerField(null=True)
 
+    offschedule_date = models.DateField(null=True)
+
+    last_vl_date = models.DateField(null=True)
+
+    next_vl_date = models.DateField(null=True)
+
+    expected = models.BooleanField(null=True)
+
+    offset = models.IntegerField(null=True)
+
     objects = DataFrameManager()
 
     class Meta:
-        verbose_name = "Viral load summary"
-        verbose_name_plural = "Viral load summary"
+        abstract = True
+
+
+class VlSummary(BaseVlSummary):
+    class Meta:
+        verbose_name = "Viral load summary (endline >= 9m)"
+        verbose_name_plural = "Viral load summary (endline >= 9m)"
+
+
+class VlSummary2(BaseVlSummary):
+    class Meta:
+        verbose_name = "Viral load summary (endline >= 6m)"
+        verbose_name_plural = "Viral load summary (endline >= 6m)"

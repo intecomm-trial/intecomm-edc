@@ -8,7 +8,7 @@ from edc_sites.admin import SiteModelAdminMixin
 
 from ...admin_site import intecomm_reports_admin
 from ...models import Vl
-from ..list_filters import ScheduleStatusListFilter, VlListFilter
+from ..list_filters import ScheduleStatusListFilter, VlDateListFilter, VlListFilter
 
 
 @admin.register(Vl, site=intecomm_reports_admin)
@@ -32,7 +32,7 @@ class VlAdmin(
         "created",
     ]
 
-    list_filter = [VlListFilter, "vl_date", ScheduleStatusListFilter]
+    list_filter = [VlListFilter, VlDateListFilter, ScheduleStatusListFilter]
 
     search_fields = ["id", "subject_identifier", "vl_value"]
 
