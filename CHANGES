@@ -1,10 +1,12 @@
 Changes
 +++++++
 
-unreleased
+0.2.28
 ------
 - add QA_REPORTS(_AUDIT) and INTECOMM_REPORTS(_AUDIT) groups to
   AUDITOR, CLINICIAN(_SUPER), and DATA_MANAGER roles
+- fix issue where auditor accounts do not have 'QA Reports' link
+  on home page
 - bump edc=0.5.95
 
 0.2.27
