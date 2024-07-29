@@ -1,6 +1,11 @@
 Changes
 +++++++
 
+0.2.29
+------
+- add missing vl draw dates report
+- bump edc==0.5.96
+
 0.2.28
 ------
 - add QA_REPORTS(_AUDIT) and INTECOMM_REPORTS(_AUDIT) groups to
