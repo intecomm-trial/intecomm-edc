@@ -3,7 +3,7 @@ from django.db.models import Q, QuerySet
 
 from ..admin_site import intecomm_reports_admin
 from ..models import VlSummary2
-from ..vl_summary import VlSummary
+from ..vl import VlSummary
 from .vl_summary_admin import VlSummaryAdmin
 
 

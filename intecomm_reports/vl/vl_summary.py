@@ -5,10 +5,8 @@ from django_pandas.io import read_frame
 from edc_utils import get_utcnow
 from edc_visit_schedule.models import SubjectScheduleHistory
 
-from intecomm_subject.models import HivInitialReview, HivReview
-
-from .models import Diagnoses as DiagnosesModel
-from .utils import update_diagnoses_model
+from ..models import Diagnoses as DiagnosesModel
+from ..utils import update_diagnoses_model
 
 
 class VlSummary:
@@ -151,7 +149,10 @@ class VlSummary:
             dfoff["offschedule_date"] = dfoff["offschedule_datetime"].dt.date
             dfoff["offschedule_date"] = dfoff["offschedule_date"].astype("datetime64[ns]")
             dfoff.drop(columns=["offschedule_datetime"], inplace=True)
-            self._dfdx = pd.merge(dfdx, dfoff, on="subject_identifier")
+            dfdx = pd.merge(dfdx, dfoff, on="subject_identifier")
+            dfdx = dfdx.sort_values(by=["subject_identifier"])
+            dfdx = dfdx.reset_index(drop=True)
+            self._dfdx = dfdx
         return self._dfdx
 
     @property
@@ -161,11 +162,14 @@ class VlSummary:
         append empty cols to be populated
         """
         if self._df_initial_review.empty:
-            df = self.get_review_model_as_df(HivInitialReview)
+            model_cls = django_apps.get_model("intecomm_subject.hivinitialreview")
+            df = self.get_review_model_as_df(model_cls)
             df["baseline_vl"] = np.nan
             df["baseline_vl_date"] = pd.NaT
             df["endline_vl"] = np.nan
             df["endline_vl_date"] = pd.NaT
+            df = df.sort_values(by=["subject_identifier", "drawn_date"])
+            df.reset_index(drop=True)
             self._df_initial_review = df
         return self._df_initial_review
 
@@ -173,7 +177,10 @@ class VlSummary:
     def df_review(self) -> pd.DataFrame:
         """HivReview (df1)"""
         if self._df_review.empty:
-            df = self.get_review_model_as_df(HivReview)
+            model_cls = django_apps.get_model("intecomm_subject.hivreview")
+            df = self.get_review_model_as_df(model_cls)
+            df = df.sort_values(by=["subject_identifier", "drawn_date"])
+            df.reset_index(drop=True)
             self._df_review = self.pivot_first_last_vl(df)
         return self._df_review
 
@@ -211,7 +218,9 @@ class VlSummary:
         df = df.drop("report_datetime", axis=1)
 
         # replace baseline drawn date with report date if drawn date is None
-        df.loc[df["drawn_date"].isnull(), "drawn_date"] = df["report_date"]
+        df.loc[(df["drawn_date"].isnull()) & (df["vl"].notna()), "drawn_date"] = df[
+            "report_date"
+        ]
         df["drawn_date"] = df["drawn_date"].astype("datetime64[ns]")
         return df
 

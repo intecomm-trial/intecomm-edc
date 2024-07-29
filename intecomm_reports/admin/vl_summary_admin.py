@@ -9,7 +9,7 @@ from edc_sites.admin import SiteModelAdminMixin
 
 from ..admin_site import intecomm_reports_admin
 from ..models import VlSummary as VlSummaryModel
-from ..vl_summary import VlSummary
+from ..vl import VlSummary
 from .list_filters import (
     BaselineVlDateListFilter,
     BaselineVlListFilter,
