@@ -19,7 +19,12 @@ from edc_facility.auth_objects import (
     EDC_FACILITY_VIEW,
 )
 from edc_he.auths import EDC_HEALTH_ECONOMICS_VIEW
-from edc_qareports.auth_objects import QA_REPORTS_AUDIT_ROLE, QA_REPORTS_ROLE
+from edc_qareports.auth_objects import (
+    QA_REPORTS,
+    QA_REPORTS_AUDIT,
+    QA_REPORTS_AUDIT_ROLE,
+    QA_REPORTS_ROLE,
+)
 from edc_screening.auth_objects import SCREENING, SCREENING_SUPER, SCREENING_VIEW
 from edc_subject_dashboard.auths import SUBJECT_VIEW
 from edc_unblinding.auth_objects import UNBLINDING_REQUESTORS
@@ -51,18 +56,24 @@ site_auths.update_group(*screening_codenames, name=SCREENING_VIEW, view_only=Tru
 site_auths.update_role(
     EDC_HEALTH_ECONOMICS_VIEW,
     EDC_FACILITY_VIEW,
+    INTECOMM_REPORTS_AUDIT,
+    QA_REPORTS_AUDIT,
     name=AUDITOR_ROLE,
 )
 site_auths.update_role(
     UNBLINDING_REQUESTORS,
     EDC_HEALTH_ECONOMICS_VIEW,
     EDC_FACILITY,
+    INTECOMM_REPORTS,
+    QA_REPORTS,
     name=CLINICIAN_ROLE,
 )
 site_auths.update_role(
     UNBLINDING_REQUESTORS,
     EDC_HEALTH_ECONOMICS_VIEW,
     EDC_FACILITY_SUPER,
+    INTECOMM_REPORTS,
+    QA_REPORTS,
     name=CLINICIAN_SUPER_ROLE,
 )
 site_auths.update_role(
@@ -71,7 +82,13 @@ site_auths.update_role(
     DATA_MANAGER_EXPORT,
     name=DATA_EXPORTER_ROLE,
 )
-site_auths.update_role(SUBJECT_VIEW, SCREENING_VIEW, name=DATA_MANAGER_ROLE)
+site_auths.update_role(
+    SUBJECT_VIEW,
+    SCREENING_VIEW,
+    INTECOMM_REPORTS,
+    QA_REPORTS,
+    name=DATA_MANAGER_ROLE,
+)
 site_auths.update_role(
     SUBJECT_VIEW, SCREENING_VIEW, ACTION_ITEM, UNBLINDING_REQUESTORS, name=TMG_ROLE
 )
