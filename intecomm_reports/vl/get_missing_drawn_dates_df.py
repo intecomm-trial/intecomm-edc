@@ -4,9 +4,8 @@ from edc_constants.constants import YES
 from edc_pdutils.dataframes import get_crf
 
 
-def get_missing_drawn_dates_df(model: int | None = None):
+def get_missing_drawn_dates_df(model: str | None = None):
     # "intecomm_reports.missingvldrawdates"
-    model_cls = django_apps.get_model(model)
     df_review = get_crf(
         "intecomm_subject.hivreview", subject_visit_model="intecomm_subject.subjectvisit"
     )
@@ -60,6 +59,7 @@ def get_missing_drawn_dates_df(model: int | None = None):
     df.reset_index(drop=True)
 
     # refresh model class
+    model_cls = django_apps.get_model(model)
     model_cls.objects.all().delete()
     model_cls.objects.bulk_create(
         model_cls(

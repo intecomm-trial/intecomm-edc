@@ -19,8 +19,9 @@ class MissingVlDrawDates(QaReportModelMixin, SiteModelMixin, models.Model):
 
     vl = models.IntegerField(null=True)
 
+    objects = models.Manager()
+
     class Meta:
-        managed = False
         db_table = "intecomm_reports_missingvldrawdates"
         verbose_name = "Viral load: Missing draw date"
         verbose_name_plural = "Viral load: Missing draw dates"

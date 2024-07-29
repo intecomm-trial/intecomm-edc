@@ -5,10 +5,10 @@ from edc_model_admin.mixins import TemplatesModelAdminMixin
 from edc_qareports.admin import QaReportWithNoteModelAdminMixin
 from edc_sites.admin import SiteModelAdminMixin
 
-from ...admin_site import intecomm_reports_admin
-from ...models.unmanaged import MissingVlDrawDates
-from ...vl import get_missing_drawn_dates_df
-from ..list_filters import ScheduleStatusListFilter
+from ..admin_site import intecomm_reports_admin
+from ..models import MissingVlDrawDates
+from ..vl import get_missing_drawn_dates_df
+from .list_filters import ScheduleStatusListFilter
 
 
 @admin.register(MissingVlDrawDates, site=intecomm_reports_admin)

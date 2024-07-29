@@ -5,8 +5,8 @@ from django_pandas.io import read_frame
 from edc_utils import get_utcnow
 from edc_visit_schedule.models import SubjectScheduleHistory
 
-from .models import Diagnoses as DiagnosesModel
-from .utils import update_diagnoses_model
+from ..models import Diagnoses as DiagnosesModel
+from ..utils import update_diagnoses_model
 
 
 class VlSummary:
