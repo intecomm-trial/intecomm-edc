@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from edc_model_admin.dashboard import ModelAdminDashboardMixin
 from edc_model_admin.mixins import TemplatesModelAdminMixin
-from edc_qareports.admin import QaReportWithNoteModelAdminMixin
+from edc_qareports.modeladmin_mixins import QaReportModelAdminMixin
 from edc_sites.admin import SiteModelAdminMixin
 
 from ...admin_site import intecomm_reports_admin
@@ -13,7 +13,7 @@ from ..list_filters import ScheduleStatusListFilter, VlDateListFilter, VlListFil
 
 @admin.register(Vl, site=intecomm_reports_admin)
 class VlAdmin(
-    QaReportWithNoteModelAdminMixin,
+    QaReportModelAdminMixin,
     SiteModelAdminMixin,
     ModelAdminDashboardMixin,
     TemplatesModelAdminMixin,

@@ -1,5 +1,5 @@
 from django.db import models
-from edc_qareports.models import QaReportModelMixin
+from edc_qareports.model_mixins import QaReportModelMixin
 from edc_sites.model_mixins import SiteModelMixin
 from edc_utils import get_utcnow
 

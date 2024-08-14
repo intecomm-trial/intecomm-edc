@@ -1,7 +1,7 @@
 from django.db import models
 from django_pandas.managers import DataFrameManager
 from edc_identifier.model_mixins import UniqueSubjectIdentifierFieldMixin
-from edc_qareports.models import QaReportModelMixin
+from edc_qareports.model_mixins import QaReportModelMixin
 from edc_sites.model_mixins import SiteModelMixin
 from edc_utils import get_utcnow
 
