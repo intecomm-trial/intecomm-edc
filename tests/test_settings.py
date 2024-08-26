@@ -9,12 +9,19 @@ from edc_constants.internationalization import EXTRA_LANG_INFO
 from edc_test_settings.default_test_settings import DefaultTestSettings
 from multisite import SiteID
 
-LANG_INFO = dict(locale.LANG_INFO, **EXTRA_LANG_INFO)
-locale.LANG_INFO = LANG_INFO
-LANGUAGE_LIST = ["sw", "en-gb", "en", "mas", "ry", "lg", "rny"]
+lang_info = dict(locale.LANG_INFO, **EXTRA_LANG_INFO)
+locale.LANG_INFO = dict(locale.LANG_INFO, **EXTRA_LANG_INFO)
 
 app_name = "intecomm_edc"
 base_dir = Path(__file__).absolute().parent.parent
+
+
+def get_languages():
+    return [
+        (code, lang_info[code]["name"])
+        for code in ["sw", "en-gb", "en", "mas", "ry", "lg", "rny"]
+    ]
+
 
 project_settings = DefaultTestSettings(
     calling_file=__file__,
@@ -33,7 +40,7 @@ project_settings = DefaultTestSettings(
     SENTRY_ENABLED=False,
     INDEX_PAGE="localhost:8000",
     LANGUAGE_CODE="en",
-    LANGUAGES=[(code, LANG_INFO[code]["name"]) for code in LANGUAGE_LIST],
+    LANGUAGES=get_languages(),
     EXPORT_FOLDER=str(base_dir / "tests" / "export"),
     SUBJECT_APP_LABEL="intecomm_subject",
     SUBJECT_SCREENING_MODEL="intecomm_screening.subjectscreening",

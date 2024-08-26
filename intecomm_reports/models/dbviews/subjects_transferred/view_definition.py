@@ -1,13 +1,22 @@
-create view subjects_transferred_view as
-(
-    select *, uuid() as 'id', now() as created, 'intecomm_reports.subjectstransferred' as report_model
-    from (
+from edc_qareports.sql_generator import SqlViewGenerator
+
+
+def get_view_definition() -> dict:
+    with_stmt = """
         with visits as (
-            select subject_identifier, report_datetime, visit_code, visit_code_sequence
-            from intecomm_subject_subjectvisit
-            group by subject_identifier, report_datetime, visit_code, visit_code_sequence
-            order by subject_identifier, report_datetime, visit_code, visit_code_sequence
-        )
+                select subject_identifier, report_datetime, visit_code, visit_code_sequence
+                from intecomm_subject_subjectvisit
+                group by subject_identifier, report_datetime, visit_code, visit_code_sequence
+                order by subject_identifier, report_datetime, visit_code, visit_code_sequence
+            )
+    """
+    sql_view = SqlViewGenerator(
+        report_model="intecomm_reports.subjectstransferred_view",
+        ordering=["site_id", "subject_identifier"],
+        with_stmt=with_stmt,
+    )
+
+    subquery = """
         select prn.subject_identifier,
                prn.site_id,
                consent_datetime                                     as consented,
@@ -27,5 +36,10 @@ create view subjects_transferred_view as
                 from visits WINDOW w as (PARTITION BY `subject_identifier`)
             ) v on prn.subject_identifier = v.subject_identifier
         order by datediff(prn.report_datetime, consent_datetime) / 30 desc, subject_identifier
-    ) as A
-);
+        """  # noqa
+
+    return {
+        "django.db.backends.mysql": sql_view.as_mysql(subquery),
+        "django.db.backends.postgresql": sql_view.as_postgres(subquery),
+        "django.db.backends.sqlite3": sql_view.as_sqlite(subquery),
+    }

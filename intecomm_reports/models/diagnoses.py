@@ -3,14 +3,16 @@ from django.db import models
 from django_pandas.managers import DataFrameManager
 from edc_identifier.model_mixins import UniqueSubjectIdentifierFieldMixin
 from edc_model.models import BaseUuidModel
-from edc_sites.model_mixins import SiteModelMixin
+from edc_qareports.model_mixins import QaReportModelMixin
 
 
-class Diagnoses(UniqueSubjectIdentifierFieldMixin, SiteModelMixin, BaseUuidModel):
+class Diagnoses(UniqueSubjectIdentifierFieldMixin, QaReportModelMixin, BaseUuidModel):
     """A read-only table with details of each participant's diagnoses.
 
     Run `python manage.py update_conditions` to populate.
     """
+
+    report_model = models.CharField(max_length=50, default="meta_reports.diagnoses")
 
     baseline_date = models.DateField(null=True)
 
@@ -53,9 +55,6 @@ class Diagnoses(UniqueSubjectIdentifierFieldMixin, SiteModelMixin, BaseUuidModel
     comment = models.TextField(null=True)
 
     objects = DataFrameManager()
-
-    def update_site_on_save(self, *args, **kwargs):
-        pass
 
     def save(self, *args, **kwargs):
         self.baseline_6m = 0
