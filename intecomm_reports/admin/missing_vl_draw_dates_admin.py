@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db.models import QuerySet
 from edc_model_admin.dashboard import ModelAdminDashboardMixin
 from edc_model_admin.mixins import TemplatesModelAdminMixin
-from edc_qareports.admin import QaReportWithNoteModelAdminMixin
+from edc_qareports.modeladmin_mixins import QaReportModelAdminMixin
 from edc_sites.admin import SiteModelAdminMixin
 
 from ..admin_site import intecomm_reports_admin
@@ -13,7 +13,7 @@ from .list_filters import ScheduleStatusListFilter
 
 @admin.register(MissingVlDrawDates, site=intecomm_reports_admin)
 class MissingVlDrawDatesAdmin(
-    QaReportWithNoteModelAdminMixin,
+    QaReportModelAdminMixin,
     SiteModelAdminMixin,
     ModelAdminDashboardMixin,
     TemplatesModelAdminMixin,

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from edc_model_admin.dashboard import ModelAdminDashboardMixin
 from edc_model_admin.mixins import TemplatesModelAdminMixin
-from edc_qareports.admin import QaReportWithNoteModelAdminMixin
+from edc_qareports.modeladmin_mixins import QaReportModelAdminMixin
 from edc_sites.admin import SiteModelAdminMixin
 from edc_visit_schedule.admin import ScheduleStatusListFilter
 
@@ -11,7 +11,7 @@ from ...models import SubjectsTransferred
 
 @admin.register(SubjectsTransferred, site=intecomm_reports_admin)
 class SubjectsTransferredAdmin(
-    QaReportWithNoteModelAdminMixin,
+    QaReportModelAdminMixin,
     SiteModelAdminMixin,
     ModelAdminDashboardMixin,
     TemplatesModelAdminMixin,

@@ -1,13 +1,14 @@
 from django.db import models
-from edc_qareports.models import QaReportModelMixin
-from edc_sites.model_mixins import SiteModelMixin
+from django_db_views.db_view import DBView
+from edc_qareports.model_mixins import QaReportModelMixin
 from edc_utils import get_utcnow
 
+from .view_definition import get_view_definition
 
-class Vl(QaReportModelMixin, SiteModelMixin, models.Model):
+
+class Vl(QaReportModelMixin, DBView):
     """A data management table with details of each HIV participant's
     viral load.
-
     """
 
     report_model = models.CharField(max_length=50, default="intecomm_reports.vl")
@@ -21,6 +22,8 @@ class Vl(QaReportModelMixin, SiteModelMixin, models.Model):
     vl_date = models.DateField(null=True)
 
     m = models.IntegerField(verbose_name="months", null=True)
+
+    view_definition = get_view_definition()
 
     class Meta:
         managed = False

@@ -4,11 +4,9 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from edc_model_admin.dashboard import ModelAdminDashboardMixin
 from edc_model_admin.mixins import TemplatesModelAdminMixin
-from edc_qareports.admin import QaReportWithNoteModelAdminMixin
+from edc_qareports.modeladmin_mixins import QaReportModelAdminMixin
 from edc_sites.admin import SiteModelAdminMixin
 
-from ..admin_site import intecomm_reports_admin
-from ..models import VlSummary as VlSummaryModel
 from ..vl import VlSummary
 from .list_filters import (
     BaselineVlDateListFilter,
@@ -21,14 +19,15 @@ from .list_filters import (
 )
 
 
-@admin.register(VlSummaryModel, site=intecomm_reports_admin)
-class VlSummaryAdmin(
-    QaReportWithNoteModelAdminMixin,
+class VlSummaryModelAdminMixin(
+    QaReportModelAdminMixin,
     SiteModelAdminMixin,
     ModelAdminDashboardMixin,
     TemplatesModelAdminMixin,
-    admin.ModelAdmin,
 ):
+    report_model: str = None
+    endline_months: int = None
+
     qa_report_list_display_insert_pos = 2
     ordering = ["site", "subject_identifier"]
     list_display = [
@@ -71,7 +70,7 @@ class VlSummaryAdmin(
         )
 
     def get_queryset(self, request) -> QuerySet:
-        vl_summary = VlSummary(endline_months=9, skip_update_dx=True)
-        vl_summary.to_model(model="intecomm_reports.vlsummary")
+        vl_summary = VlSummary(endline_months=self.endline_months, skip_update_dx=True)
+        vl_summary.to_model(model=self.report_model)
         qs = super().get_queryset(request)
         return qs.filter((Q(baseline_vl__isnull=True) | Q(endline_vl__isnull=True)))

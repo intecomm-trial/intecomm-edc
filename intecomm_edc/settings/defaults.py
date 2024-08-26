@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "fontawesomefree",
     "defender",
+    "django_db_views",
     "django.contrib.sites",
     "multisite.apps.AppConfig",
     "django_crypto_fields.apps.AppConfig",
