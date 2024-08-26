@@ -2,6 +2,7 @@ import os
 import sys
 from importlib.metadata import version
 from pathlib import Path
+from urllib.parse import quote
 
 import django.conf.locale
 import environ
@@ -530,20 +531,28 @@ if env("AWS_ENABLED"):
     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
     AWS_LOCATION = env.str("AWS_LOCATION")
     AWS_IS_GZIPPED = True
-    STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    STORAGES = {"staticfiles": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"}}
     STATIC_URL = f"{os.path.join(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)}/"
     STATIC_ROOT = ""
 elif DEBUG:
-    STATIC_URL = "static/"  # env.str("DJANGO_STATIC_URL")
-    STATIC_ROOT = env.str("DJANGO_STATIC_ROOT") or os.path.expanduser(
-        "~/source/edc_source/intecomm-edc/static/"
-    )
+    STATIC_URL = env.str("DJANGO_STATIC_URL")
+    STATIC_ROOT = os.path.expanduser("~/source/edc_source/intecomm-edc/static/")
 else:
     # run collectstatic, check nginx LOCATION
     STATIC_URL = env.str("DJANGO_STATIC_URL")
     STATIC_ROOT = env.str("DJANGO_STATIC_ROOT")
 
 # CELERY
+CELERY_ENABLED = env("CELERY_ENABLED")
+if CELERY_ENABLED:
+    CELERY_CACHE_BACKEND = "default"
+    if env.str("DJANGO_REDIS_PASSWORD"):
+        CELERY_BROKER_URL = (
+            f"redis://:{quote(env.str('DJANGO_REDIS_PASSWORD'), safe='')}@127.0.0.1:6379/0"
+        )
+    else:
+        CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+    # CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers.DatabaseScheduler"
 
 if "test" in sys.argv:
 
