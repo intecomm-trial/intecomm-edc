@@ -1,6 +1,6 @@
 from django.db import models
 from django_db_views.db_view import DBView
-from edc_qareports.model_mixins import QaReportModelMixin
+from edc_qareports.model_mixins import QaReportModelMixin, qa_reports_permissions
 from edc_utils import get_utcnow
 
 from .view_definition import get_view_definition
@@ -30,3 +30,4 @@ class Vl(QaReportModelMixin, DBView):
         db_table = "intecomm_reports_vl_view"
         verbose_name = "Viral loads"
         verbose_name_plural = "Viral loads"
+        default_permissions = qa_reports_permissions

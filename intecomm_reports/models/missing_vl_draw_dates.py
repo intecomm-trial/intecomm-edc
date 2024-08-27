@@ -1,5 +1,5 @@
 from django.db import models
-from edc_qareports.model_mixins import QaReportModelMixin
+from edc_qareports.model_mixins import QaReportModelMixin, qa_reports_permissions
 from edc_utils import get_utcnow
 
 
@@ -24,3 +24,4 @@ class MissingVlDrawDates(QaReportModelMixin, models.Model):
         db_table = "intecomm_reports_missingvldrawdates"
         verbose_name = "Viral load: Missing draw date"
         verbose_name_plural = "Viral load: Missing draw dates"
+        default_permissions = qa_reports_permissions

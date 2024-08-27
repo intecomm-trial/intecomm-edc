@@ -1,4 +1,5 @@
 from django.db import models
+from edc_qareports.model_mixins import qa_reports_permissions
 
 from .model_mixins import BaseVlSummaryModelMixin
 
@@ -18,6 +19,7 @@ class VlSummary9m(BaseVlSummaryModelMixin):
     class Meta:
         verbose_name = "Viral load summary (endline >= 9m)"
         verbose_name_plural = "Viral load summary (endline >= 9m)"
+        default_permissions = qa_reports_permissions
 
 
 class VlSummary6m(BaseVlSummaryModelMixin):
@@ -35,3 +37,4 @@ class VlSummary6m(BaseVlSummaryModelMixin):
     class Meta:
         verbose_name = "Viral load summary (endline >= 6m)"
         verbose_name_plural = "Viral load summary (endline >= 6m)"
+        default_permissions = qa_reports_permissions
