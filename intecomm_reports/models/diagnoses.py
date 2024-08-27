@@ -3,7 +3,7 @@ from django.db import models
 from django_pandas.managers import DataFrameManager
 from edc_identifier.model_mixins import UniqueSubjectIdentifierFieldMixin
 from edc_model.models import BaseUuidModel
-from edc_qareports.model_mixins import QaReportModelMixin
+from edc_qareports.model_mixins import QaReportModelMixin, qa_reports_permissions
 
 
 class Diagnoses(UniqueSubjectIdentifierFieldMixin, QaReportModelMixin, BaseUuidModel):
@@ -74,3 +74,4 @@ class Diagnoses(UniqueSubjectIdentifierFieldMixin, QaReportModelMixin, BaseUuidM
     class Meta(UniqueSubjectIdentifierFieldMixin.Meta, BaseUuidModel.Meta):
         verbose_name = "Current Conditions"
         verbose_name_plural = "Current Conditions"
+        default_permissions = qa_reports_permissions
