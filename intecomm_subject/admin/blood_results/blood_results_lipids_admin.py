@@ -4,17 +4,17 @@ from edc_lab_results.admin import BloodResultsModelAdminMixin
 from edc_lab_results.fieldsets import BloodResultFieldset
 
 from ...admin_site import intecomm_subject_admin
-from ...forms import BloodResultsLipidForm
-from ...models import BloodResultsLipid
+from ...forms import BloodResultsLipidsForm
+from ...models import BloodResultsLipids
 from ..modeladmin_mixins import CrfModelAdmin
 
 
-@admin.register(BloodResultsLipid, site=intecomm_subject_admin)
-class BloodResultsLipidAdmin(BloodResultsModelAdminMixin, CrfModelAdmin):
-    form = BloodResultsLipidForm
+@admin.register(BloodResultsLipids, site=intecomm_subject_admin)
+class BloodResultsLipidsAdmin(BloodResultsModelAdminMixin, CrfModelAdmin):
+    form = BloodResultsLipidsForm
     fieldsets = BloodResultFieldset(
-        BloodResultsLipid.lab_panel,
-        model_cls=BloodResultsLipid,
+        BloodResultsLipids.lab_panel,
+        model_cls=BloodResultsLipids,
         extra_fieldsets=[
             (-1, action_fieldset_tuple),
         ],

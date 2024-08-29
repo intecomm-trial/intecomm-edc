@@ -12,9 +12,9 @@ http://www.isrctn.com/ISRCTN15319595
 
 See also https://github.com/clinicedc/edc
 
-* Django 4.2 / python 3.11
-* EDC (see setup.cfg for version)
-* We run live and UAT on Ubuntu with nginx/gunicorn/mysql 8.1
+* Django 5.1 / python 3.12
+* ClinicEDC (see setup.cfg for version)
+* We run LIVE and UAT on Ubuntu with nginx/gunicorn/mysql 8.1
 
 Basic install
 -------------

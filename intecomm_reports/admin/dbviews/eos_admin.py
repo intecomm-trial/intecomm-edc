@@ -28,7 +28,6 @@ class EosAdmin(
         "offstudy_reason",
         "m",
         "schedule_status",
-        "site",
         "created",
     ]
 
