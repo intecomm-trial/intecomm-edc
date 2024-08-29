@@ -1,8 +1,14 @@
 Changes
 +++++++
 
-0.2.29
+0.2.34
 ------
+- fix SQL join error in META Reports: EOS Report
+- rename bloodresultslipid to bloodresultslipids
+- bump edc 0.6.10
+
+0.2.29 - 0.2.33
+---------------
 - add missing vl draw dates report
 - bump edc==0.5.96
 

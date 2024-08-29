@@ -5,7 +5,7 @@ from .blood_results import (
     BloodResultsHba1cForm,
     BloodResultsInsForm,
     BloodResultsLftForm,
-    BloodResultsLipidForm,
+    BloodResultsLipidsForm,
     BloodResultsRftForm,
 )
 from .cd4_result_form import Cd4ResultForm

@@ -3,5 +3,5 @@ from .blood_results_glu_form import BloodResultsGluForm
 from .blood_results_hba1c_form import BloodResultsHba1cForm
 from .blood_results_ins_form import BloodResultsInsForm
 from .blood_results_lft_form import BloodResultsLftForm
-from .blood_results_lipid_form import BloodResultsLipidForm
+from .blood_results_lipids_form import BloodResultsLipidsForm
 from .blood_results_rft_form import BloodResultsRftForm

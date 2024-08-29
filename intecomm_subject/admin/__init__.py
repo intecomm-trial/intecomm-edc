@@ -6,7 +6,7 @@ from .blood_results import (
     BloodResultsHba1cAdmin,
     BloodResultsInsAdmin,
     BloodResultsLftAdmin,
-    BloodResultsLipidAdmin,
+    BloodResultsLipidsAdmin,
     BloodResultsRftAdmin,
 )
 from .cd4_result_admin import Cd4ResultAdmin
