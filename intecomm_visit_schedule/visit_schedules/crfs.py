@@ -6,7 +6,7 @@ crfs_prn = FormsCollection(
     Crf(show_order=235, model="intecomm_subject.bloodresultshba1c"),
     Crf(show_order=245, model="intecomm_subject.bloodresultsrft"),
     Crf(show_order=255, model="intecomm_subject.bloodresultslft"),
-    Crf(show_order=265, model="intecomm_subject.bloodresultslipid"),
+    Crf(show_order=265, model="intecomm_subject.bloodresultslipids"),
     Crf(show_order=285, model="intecomm_subject.malariatest"),
     Crf(show_order=295, model="intecomm_subject.urinedipsticktest"),
     Crf(show_order=365, model="intecomm_subject.concomitantmedication"),
