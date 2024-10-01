@@ -83,7 +83,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "debug_toolbar",
+    # "debug_toolbar",
     "fontawesomefree",
     "defender",
     "django_db_views",
@@ -173,12 +173,12 @@ INSTALLED_APPS = [
 if not DEFENDER_ENABLED:
     INSTALLED_APPS.pop(INSTALLED_APPS.index("defender"))
 
-if not DJANGO_DEBUG_TOOLBAR_ENABLED:
-    INSTALLED_APPS.pop(INSTALLED_APPS.index("debug_toolbar"))
+# if not DJANGO_DEBUG_TOOLBAR_ENABLED:
+#     INSTALLED_APPS.pop(INSTALLED_APPS.index("debug_toolbar"))
 
 
 MIDDLEWARE = [
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -187,6 +187,7 @@ MIDDLEWARE = [
     "django.contrib.sites.middleware.CurrentSiteMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",
     "defender.middleware.FailedLoginMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -195,8 +196,8 @@ MIDDLEWARE = [
 if not DEFENDER_ENABLED:
     MIDDLEWARE.pop(MIDDLEWARE.index("defender.middleware.FailedLoginMiddleware"))
 
-if not DJANGO_DEBUG_TOOLBAR_ENABLED:
-    MIDDLEWARE.pop(MIDDLEWARE.index("debug_toolbar.middleware.DebugToolbarMiddleware"))
+# if not DJANGO_DEBUG_TOOLBAR_ENABLED:
+#     MIDDLEWARE.pop(MIDDLEWARE.index("debug_toolbar.middleware.DebugToolbarMiddleware"))
 
 MIDDLEWARE.extend(
     [

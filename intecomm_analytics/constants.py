@@ -1,0 +1,7 @@
+HIV_ONLY = "hiv_only"
+HTN_ONLY = "htn_only"
+DM_ONLY = "dm_only"
+HIV_DM = "hiv_dm"
+HIV_HTN = "hiv_htn"
+HIV_DM_HTN = "hiv_dm_htn"
+DM_HTN = "dm_htn"
