@@ -39,7 +39,7 @@ def get_diagnoses_df() -> pd.DataFrame:
         on=["subject_identifier", "site_id"],
     )
 
-    df_eof = read_frame(
+    df_eos = read_frame(
         EndOfStudy.objects.values(
             "subject_identifier",
             "offstudy_datetime",
@@ -48,10 +48,10 @@ def get_diagnoses_df() -> pd.DataFrame:
             "site",
         ).all()
     )
-    df_eof["site_id"] = df_eof["site"].map({obj.domain: obj.id for obj in Site.objects.all()})
+    df_eos["site_id"] = df_eos["site"].map({obj.domain: obj.id for obj in Site.objects.all()})
     offstudy_reasons = {k: v for k, v in list_data.get("intecomm_lists.offstudyreasons")}
 
-    df_eof["offstudy_reason"] = df_eof.apply(
+    df_eos["offstudy_reason"] = df_eos.apply(
         lambda row: (
             row["other_offstudy_reason"]
             if row["offstudy_reason"] == offstudy_reasons.get(OTHER)
@@ -63,7 +63,7 @@ def get_diagnoses_df() -> pd.DataFrame:
     # recode out of catchment as transferred
     # ???
 
-    df_eof = df_eof.drop(columns=["site"])
+    df_eof = df_eos.drop(columns=["site"])
     df_eof = df_eof.reset_index(drop=True)
     df = df.merge(
         df_eof[

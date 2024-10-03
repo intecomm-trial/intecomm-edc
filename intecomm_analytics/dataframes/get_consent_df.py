@@ -37,9 +37,6 @@ def get_consent_df(df: pd.DataFrame | None = None) -> pd.DataFrame:
         qs_consent = SubjectConsent.objects.values(*fldnames).all()
         df = read_frame(qs_consent)
 
-    # df["gender"] = df["gender"].apply(lambda x: "F" if x == "Female" else x)
-    # df["gender"] = df["gender"].apply(lambda x: "M" if x == "Male" else x)
-
     sites = {obj.domain: obj.id for obj in Site.objects.all()}
     df["site_id"] = df["site"].map(sites)
 
@@ -49,34 +46,9 @@ def get_consent_df(df: pd.DataFrame | None = None) -> pd.DataFrame:
     df = df.replace({True: 1})
     df = df.replace({False: 0})
 
-    # convert all to float
-    # cols = [
-    #     "age_in_years",
-    #     "dia_blood_pressure_avg",
-    #     "dia_blood_pressure_one",
-    #     "dia_blood_pressure_two",
-    #     "sys_blood_pressure_avg",
-    #     "sys_blood_pressure_one",
-    #     "sys_blood_pressure_two",
-    # ]
-    # df[cols] = df[cols].apply(pd.to_numeric)
-
     # convert to datetime
     cols = ["report_datetime", "created"]
     df[cols] = df[cols].apply(pd.to_datetime)
-
-    # df_patientlog = read_frame(qs_patientlog)
-    # df = df.merge(df_patientlog, on="screening_identifier", how="left", suffixes=("", "_y"))
-
-    # attended baseline visit
-    # qs_subjectvisit = SubjectVisit.objects.values(
-    #     "appointment__subject_identifier", "report_datetime"
-    # ).filter(visit_code="1000", visit_code_sequence=0)
-    # df_subjectvisit = read_frame(qs_subjectvisit)
-    # df_subjectvisit = df_subjectvisit.rename(
-    #     columns={"appointment__subject_identifier": "subject_identifier"}
-    # )
-    # df = df.merge(df_subjectvisit, on="subject_identifier", how="left", suffixes=("", "_y"))
 
     # convert datetimes to date
     date_cols = list(df.select_dtypes(include=["datetime64", "datetime64[ns, UTC]"]).columns)
