@@ -1,5 +1,10 @@
 Changes
 +++++++
+unreleased
+------
+- fix End of Study server error if reason is transferred (#814)
+- bump to edc 0.6.15
+- bump to intecomm-form-validators 0.1.55
 
 0.2.34
 ------
