@@ -5,6 +5,9 @@ unreleased
 - fix End of Study server error if reason is transferred (#814)
 - bump to edc 0.6.15
 - bump to intecomm-form-validators 0.1.55
+- bump to intecomm-eligibility 0.1.11 (minor, maintenance)
+- bump to intecomm-rando 0.1.26 (minor, maintenance)
+- bump to edc_microscopy 0.1.7 (minor, maintenance)
 
 0.2.34
 ------
