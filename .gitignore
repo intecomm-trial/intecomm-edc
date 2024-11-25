@@ -1,3 +1,5 @@
+*.dta
+*.csv
 *.png
 *.dot
 *.ipynb
