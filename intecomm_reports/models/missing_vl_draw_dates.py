@@ -1,9 +1,11 @@
 from django.db import models
+from edc_model.models import BaseUuidModel
 from edc_qareports.model_mixins import QaReportModelMixin, qa_reports_permissions
 from edc_utils import get_utcnow
 
 
-class MissingVlDrawDates(QaReportModelMixin, models.Model):
+class MissingVlDrawDates(QaReportModelMixin, BaseUuidModel):
+
     report_model = models.CharField(
         max_length=50, default="intecomm_reports.missingvldrawdates"
     )
@@ -20,7 +22,7 @@ class MissingVlDrawDates(QaReportModelMixin, models.Model):
 
     objects = models.Manager()
 
-    class Meta:
+    class Meta(BaseUuidModel.Meta):
         db_table = "intecomm_reports_missingvldrawdates"
         verbose_name = "Viral load: Missing draw date"
         verbose_name_plural = "Viral load: Missing draw dates"

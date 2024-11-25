@@ -1,7 +1,6 @@
 import pandas as pd
 from django.contrib.sites.models import Site
 from django_pandas.io import read_frame
-from edc_analytics.utils import normalize_date_columns
 from edc_model import duration_to_date
 
 from intecomm_screening.models import PatientLog, SubjectScreening
@@ -100,5 +99,6 @@ def get_screening_df(df: pd.DataFrame | None = None) -> pd.DataFrame:
 
     # convert datetimes to date
     date_cols = list(df.select_dtypes(include=["datetime64", "datetime64[ns, UTC]"]).columns)
-    df = normalize_date_columns(df, cols=date_cols)
+    for col in date_cols:
+        df[col] = df[col].dt.normalize()
     return df

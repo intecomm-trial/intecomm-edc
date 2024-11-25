@@ -4,7 +4,7 @@ from edc_qareports.sql_generator import SqlViewGenerator
 def get_view_definition() -> dict:
     subquery = """
         select B1.* from (
-        select hivreview.*, dx.baseliexitne_date, TIMESTAMPDIFF(MONTH, baseline_date, vl_date) as m
+        select hivreview.*, dx.baseline_date, TIMESTAMPDIFF(MONTH, baseline_date, vl_date) as m
         from (
         select subject_identifier, crf.site_id, vl as vl_value,
         case when drawn_date is null then cast(crf.report_datetime as DATE) else drawn_date end as vl_date
@@ -22,7 +22,7 @@ def get_view_definition() -> dict:
         """  # noqa
 
     sql_view = SqlViewGenerator(
-        report_model="intecomm_reports.vl_view",
+        report_model="intecomm_reports.vl",
         ordering=["site_id", "subject_identifier"],
     )
     return {

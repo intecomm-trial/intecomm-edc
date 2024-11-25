@@ -88,6 +88,7 @@ INSTALLED_APPS = [
     "defender",
     "django_db_views",
     "django.contrib.sites",
+    "django_pylabels.apps.AppConfig",
     "multisite.apps.AppConfig",
     "django_crypto_fields.apps.AppConfig",
     "django_revision.apps.AppConfig",
@@ -131,7 +132,7 @@ INSTALLED_APPS = [
     "edc_next_appointment.apps.AppConfig",  # keep for migrate
     "edc_notification.apps.AppConfig",
     "edc_offstudy.apps.AppConfig",
-    "edc_pharmacy.apps.AppConfig",
+    # "edc_pharmacy.apps.AppConfig", # removed 20241106
     "edc_pdutils.apps.AppConfig",
     "edc_protocol.apps.AppConfig",
     "edc_protocol_incident.apps.AppConfig",
