@@ -1,7 +1,9 @@
 Changes
 +++++++
+
 unreleased
 ------
+- increase 12m visit upper bound to 12m (intecomm_visit_schedule) (#828)
 - fix End of Study server error if reason is transferred (#814)
 - bump to edc 0.6.15
 - bump to intecomm-form-validators 0.1.55
