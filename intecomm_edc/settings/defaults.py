@@ -132,7 +132,7 @@ INSTALLED_APPS = [
     "edc_next_appointment.apps.AppConfig",  # keep for migrate
     "edc_notification.apps.AppConfig",
     "edc_offstudy.apps.AppConfig",
-    # "edc_pharmacy.apps.AppConfig", # removed 20241106
+    "edc_pharmacy.apps.AppConfig",
     "edc_pdutils.apps.AppConfig",
     "edc_protocol.apps.AppConfig",
     "edc_protocol_incident.apps.AppConfig",
@@ -206,7 +206,7 @@ MIDDLEWARE.extend(
         "edc_dashboard.middleware.DashboardMiddleware",
         "edc_subject_dashboard.middleware.DashboardMiddleware",
         "edc_lab_dashboard.middleware.DashboardMiddleware",
-        "edc_adverse_event.middleware.DashboardMiddleware",
+        # "edc_adverse_event.middleware.DashboardMiddleware",
         "edc_listboard.middleware.DashboardMiddleware",
         "edc_review_dashboard.middleware.DashboardMiddleware",
     ]
