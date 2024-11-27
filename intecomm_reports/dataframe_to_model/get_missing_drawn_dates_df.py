@@ -9,7 +9,7 @@ def get_missing_drawn_dates_df(model: str | None = None):
 
     keep_cols = [
         "subject_identifier",
-        "site",
+        "site_id",
         "baseline_date",
         "visit_date",
         "visit_code",
