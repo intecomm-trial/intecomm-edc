@@ -1,18 +1,16 @@
 from django.db import models
 from django_pandas.managers import DataFrameManager
 from edc_identifier.model_mixins import UniqueSubjectIdentifierFieldMixin
+from edc_model.models import BaseUuidModel
 from edc_qareports.model_mixins import QaReportModelMixin
-from edc_utils import get_utcnow
 
 
 class BaseVlSummaryModelMixin(
-    UniqueSubjectIdentifierFieldMixin, QaReportModelMixin, models.Model
+    UniqueSubjectIdentifierFieldMixin, QaReportModelMixin, BaseUuidModel
 ):
     """A modelmixin for VL data management tables with details of each
     HIV participant's viral load value and status.
     """
-
-    created = models.DateTimeField(default=get_utcnow)
 
     baseline_date = models.DateField(null=True)
 
@@ -36,5 +34,5 @@ class BaseVlSummaryModelMixin(
 
     objects = DataFrameManager()
 
-    class Meta:
+    class Meta(BaseUuidModel.Meta):
         abstract = True

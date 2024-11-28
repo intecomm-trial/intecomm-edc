@@ -42,6 +42,7 @@ urlpatterns = [
     *paths_for_urlpatterns("edc_pharmacy"),
     *paths_for_urlpatterns("edc_protocol"),
     *paths_for_urlpatterns("edc_protocol_incident"),
+    *paths_for_urlpatterns("edc_pylabels"),
     *paths_for_urlpatterns("edc_qareports"),
     *paths_for_urlpatterns("edc_qol"),
     *paths_for_urlpatterns("edc_randomization"),

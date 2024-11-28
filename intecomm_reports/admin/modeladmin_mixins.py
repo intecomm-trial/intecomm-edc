@@ -7,7 +7,7 @@ from edc_model_admin.mixins import TemplatesModelAdminMixin
 from edc_qareports.modeladmin_mixins import QaReportModelAdminMixin
 from edc_sites.admin import SiteModelAdminMixin
 
-from ..vl import VlSummary
+from ..dataframe_to_model import VlSummary
 from .list_filters import (
     BaselineVlDateListFilter,
     BaselineVlListFilter,

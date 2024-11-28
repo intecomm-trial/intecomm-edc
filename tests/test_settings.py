@@ -25,6 +25,7 @@ def get_languages():
 
 project_settings = DefaultTestSettings(
     calling_file=__file__,
+    SILENCED_SYSTEM_CHECKS=["sites.E101", "edc_navbar.E002", "edc_navbar.E003"],
     EDC_EGFR_DROP_NOTIFICATION_MODEL="intecomm_subject.egfrdropnotification",
     EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER=False,
     ROOT_URLCONF="intecomm_edc.urls",
@@ -108,6 +109,7 @@ project_settings = DefaultTestSettings(
         "django.contrib.staticfiles",
         "django.contrib.sites",
         "django_crypto_fields.apps.AppConfig",
+        "django_pylabels.apps.AppConfig",
         "django_revision.apps.AppConfig",
         # "debug_toolbar",
         "django_extensions",
@@ -156,6 +158,7 @@ project_settings = DefaultTestSettings(
         "edc_protocol.apps.AppConfig",
         "edc_protocol_incident.apps.AppConfig",
         "edc_prn.apps.AppConfig",
+        "edc_pylabels.apps.AppConfig",
         "edc_qol.apps.AppConfig",
         "edc_randomization.apps.AppConfig",
         "edc_refusal.apps.AppConfig",
