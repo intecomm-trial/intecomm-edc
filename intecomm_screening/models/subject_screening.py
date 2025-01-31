@@ -1,7 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import UniqueConstraint
-from django.utils.html import format_html
 from django_crypto_fields.fields import EncryptedCharField
 from edc_constants.choices import PREG_YES_NO_NA, SELECTION_METHOD, YES_NO, YES_NO_NA
 from edc_constants.constants import NO, NOT_APPLICABLE, PURPOSIVELY_SELECTED, TBD
@@ -122,7 +121,7 @@ class SubjectScreening(
     )
 
     art_unchanged_3m = models.CharField(
-        verbose_name=format_html(
+        verbose_name=(
             "Has the patient been on the same anti-retroviral therapy for at least 3 months"
         ),
         max_length=15,

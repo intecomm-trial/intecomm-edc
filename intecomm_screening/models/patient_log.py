@@ -34,14 +34,19 @@ class PatientLogManager(models.Manager):
 
 
 class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
+
+    # see edc_model_to_dataframe
+    m2m_related_field = "patient_log_identifier"
+
     filing_identifier = models.CharField(
         verbose_name="Filing number",
         max_length=36,
         blank=True,
         unique=True,
         help_text=format_html(
+            "{}",
             "Auto-populated when form is saved. <BR>"
-            "This is a sequential-like identifier to label this patient's paper file"
+            "This is a sequential-like identifier to label this patient's paper file",
         ),
     )
     patient_log_identifier = models.CharField(
@@ -50,10 +55,11 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
         unique=True,
         blank=True,
         help_text=format_html(
+            "{}",
             "Auto-populated when form is saved. <BR>"
             "You may prefer to use the FILING NUMBER. <BR>"
             "This identifier is replaced by the 'screening identifier' if the patient screens "
-            "for the INTECOMM trial"
+            "for the INTECOMM trial",
         ),
     )
 
@@ -251,8 +257,9 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
                 f"{self.age_in_years}{self.gender} ({self.site.id}){g}"
             )
         return format_html(
+            "{}",
             f"{self.legal_name.upper()}-{self.contact_number[-4:]} {self.initials} "
-            f"{self.age_in_years}{self.gender} ({self.site.id}){g}"
+            f"{self.age_in_years}{self.gender} ({self.site.id}){g}",
         )
 
     def save(self, *args, **kwargs):

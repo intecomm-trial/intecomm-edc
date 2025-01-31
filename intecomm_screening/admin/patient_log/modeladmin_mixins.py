@@ -55,8 +55,9 @@ class PatientLogModelAdminMixin(
     extra_pii_attrs = ["first_column"]
 
     change_list_note = format_html(
+        "{}",
         "In addition to other values, you may search for patients on the last 4-digits of "
-        "either their mobile number or hospital identifier."
+        "either their mobile number or hospital identifier.",
     )
     change_list_help = (
         "Searches on encrypted data work on exact uppercase matches only. When "
@@ -64,10 +65,11 @@ class PatientLogModelAdminMixin(
     )
 
     additional_instructions = format_html(
+        "{}",
         "Only include patients that are known to have a qualifying "
         "condition and are stable in-care.<BR>"
         '<h3 style="color:orange;">Note:</h3> Log calls and call attempts at the bottom '
-        "of this form."
+        "of this form.",
     )
 
     list_display = (
@@ -169,10 +171,11 @@ class PatientLogModelAdminMixin(
                 context.pop("legal_name")
                 break
         return format_html(
+            "{}",
             render_to_string(
                 "intecomm_screening/change_list_patient_log_first_column.html",
                 context=context,
-            )
+            ),
         )
 
     @admin.display(description="Date logged", ordering="report_datetime")
@@ -191,9 +194,10 @@ class PatientLogModelAdminMixin(
     def filing_id(self, obj=None):
         context = dict(filing_identifier=obj.filing_identifier)
         return format_html(
+            "{}",
             render_to_string(
                 "intecomm_screening/change_list_filing_identifier.html", context=context
-            )
+            ),
         )
 
     @admin.display(description="Screening ID", ordering="screening_identifier")
@@ -216,7 +220,7 @@ class PatientLogModelAdminMixin(
             diagnoses=[c.name.upper() for c in obj.conditions.all().order_by("name")]
         )
         return format_html(
-            render_to_string("intecomm_screening/change_list_dx.html", context=context)
+            "{}", render_to_string("intecomm_screening/change_list_dx.html", context=context)
         )
 
     @admin.display(description="Appts", ordering="next_appt_date")
@@ -226,7 +230,8 @@ class PatientLogModelAdminMixin(
             next_appt=obj.next_appt_date or "-",
         )
         return format_html(
-            render_to_string("intecomm_screening/change_list_appts.html", context=context)
+            "{}",
+            render_to_string("intecomm_screening/change_list_appts.html", context=context),
         )
 
     @admin.display(description="Contacts", ordering="contact_number")
@@ -247,7 +252,8 @@ class PatientLogModelAdminMixin(
             call_attempts=obj.call_attempts,
         )
         return format_html(
-            render_to_string("intecomm_screening/change_list_contacts.html", context=context)
+            "{}",
+            render_to_string("intecomm_screening/change_list_contacts.html", context=context),
         )
 
     @admin.display(description="Talks")
@@ -257,7 +263,8 @@ class PatientLogModelAdminMixin(
             ht2=obj.second_health_talk,
         )
         return format_html(
-            render_to_string("intecomm_screening/change_list_talks.html", context=context)
+            "{}",
+            render_to_string("intecomm_screening/change_list_talks.html", context=context),
         )
 
     @admin.display(description="Site", ordering="site")
@@ -271,19 +278,21 @@ class PatientLogModelAdminMixin(
     @admin.display(description="Log/Scr/Consent", ordering="screening_datetime")
     def screened(self, obj=None):
         return format_html(
+            "{}",
             render_to_string(
                 "intecomm_screening/change_list_screen_and_consent.html",
                 context=self.get_screen_and_consent_template_context(obj),
-            )
+            ),
         )
 
     @admin.display(description="Log/Scr/Consent", ordering="screening_datetime")
     def screened_no_links(self, obj=None):
         return format_html(
+            "{}",
             render_to_string(
                 "intecomm_screening/change_list_screen_and_consent.html",
                 context=self.get_screen_and_consent_template_context(obj),
-            )
+            ),
         )
 
     @admin.display(description="Consented", ordering="consent_datetime")
@@ -310,14 +319,15 @@ class PatientLogModelAdminMixin(
                 subject_dashboard_url=self.get_subject_dashboard_url(obj),
             )
         return format_html(
-            render_to_string("intecomm_screening/change_list_group.html", context=context)
+            "{}",
+            render_to_string("intecomm_screening/change_list_group.html", context=context),
         )
 
     @admin.display(description="Calls", ordering="contact_attempts")
     def calls(self, obj):
         url = reverse("intecomm_screening_admin:intecomm_screening_patientcall_changelist")
         url = f"{url}?q={obj.patientcall.id}"
-        return format_html(f'<A href="{url}">{obj.contact_attempts}</a>')
+        return format_html("{}", f'<A href="{url}">{obj.contact_attempts}</a>')
 
     def get_search_results(self, request, queryset, search_term):
         """Union initial search queryset (qs1) with
@@ -363,10 +373,11 @@ class PatientLogModelAdminMixin(
 
     def report(self, obj=None):
         return format_html(
+            "{}",
             render_to_string(
                 "intecomm_screening/change_list_screen_and_consent.html",
                 context=self.get_screen_and_consent_template_context(obj),
-            )
+            ),
         )
 
     def formfield_for_choice_field(self, db_field, request, **kwargs):

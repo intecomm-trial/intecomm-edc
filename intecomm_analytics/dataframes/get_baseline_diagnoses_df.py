@@ -11,7 +11,7 @@ from intecomm_reports.models import Diagnoses
 from intecomm_screening.models import PatientLog
 
 
-def get_diagnoses_df() -> pd.DataFrame:
+def get_baseline_diagnoses_df() -> pd.DataFrame:
 
     df = read_frame(Diagnoses.objects.all())
     df["site_id"] = df["site"].map({obj.domain: obj.id for obj in Site.objects.all()})

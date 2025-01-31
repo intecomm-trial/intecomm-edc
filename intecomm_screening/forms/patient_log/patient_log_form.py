@@ -18,8 +18,9 @@ class PatientLogFormMixin:
             if qs.count() > 0:
                 raise forms.ValidationError(
                     format_html(
+                        "{}",
                         "Changes not allowed. Patient is already in group <A href="
-                        f"{qs[0].get_absolute_url()}>{qs[0].name}</A>."
+                        f"{qs[0].get_absolute_url()}>{qs[0].name}</A>.",
                     )
                 )
         return super().clean()

@@ -75,4 +75,4 @@ class AppointmentLocationQaAdmin(
         label = _(f"Change {Appointment._meta.verbose_name}")
 
         context = dict(title=title, url=dashboard_url, label=label)
-        return render_to_string("dashboard_button.html", context=context)
+        return render_to_string("edc_subject_dashboard/dashboard_button.html", context=context)

@@ -69,35 +69,40 @@ class SubjectScreeningModelFormMixin:
         if self.patient_log.willing_to_screen:
             if self.patient_log.willing_to_screen == NO:
                 errmsg = format_html(
-                    f"Invalid. Patient is unwilling to screen. See {self.patient_log_link}."
+                    "{}",
+                    f"Invalid. Patient is unwilling to screen. See {self.patient_log_link}.",
                 )
                 raise forms.ValidationError(errmsg, code=INVALID_ERROR)
             elif self.patient_log.willing_to_screen == TBD:
                 errmsg = format_html(
+                    "{}",
                     "Invalid. Patient has not yet agreed to screen. "
-                    f"See {self.patient_log_link}."
+                    f"See {self.patient_log_link}.",
                 )
                 raise forms.ValidationError(errmsg, code=INVALID_ERROR)
 
     def validate_stable_in_care_on_patient_log(self) -> None:
         if self.patient_log.stable != YES:
             errmsg = format_html(
+                "{}",
                 "Invalid. Patient is NOT known to be stable and in-care. "
-                f"See {self.patient_log_link}."
+                f"See {self.patient_log_link}.",
             )
             raise forms.ValidationError(errmsg, code=INVALID_ERROR)
 
     def validate_health_talks_on_patient_log(self) -> None:
         if self.patient_log.first_health_talk not in [YES, NO]:
             errmsg = format_html(
+                "{}",
                 "Invalid. Has patient attended the first health talk? "
-                f"See {self.patient_log_link}."
+                f"See {self.patient_log_link}.",
             )
             raise forms.ValidationError(errmsg, code=INVALID_ERROR)
         elif self.patient_log.second_health_talk not in [YES, NO]:
             errmsg = format_html(
+                "{}",
                 "Invalid. Has patient attended the second health talk? "
-                f"See {self.patient_log_link}."
+                f"See {self.patient_log_link}.",
             )
             raise forms.ValidationError(errmsg, code=INVALID_ERROR)
 
@@ -106,8 +111,9 @@ class SubjectScreeningModelFormMixin:
             raise forms.ValidationError(
                 {
                     "gender": format_html(
+                        "{}",
                         f"Invalid. Expected {self.patient_log.get_gender_display()}. "
-                        f"See {self.patient_log_link}."
+                        f"See {self.patient_log_link}.",
                     )
                 },
                 code=INVALID_ERROR,
@@ -118,8 +124,9 @@ class SubjectScreeningModelFormMixin:
             raise forms.ValidationError(
                 {
                     "age_in_years": format_html(
+                        "{}",
                         f"Invalid. Expected {self.patient_log.age_in_years}. "
-                        f"See {self.patient_log_link}."
+                        f"See {self.patient_log_link}.",
                     )
                 },
                 code=INVALID_ERROR,
@@ -130,8 +137,9 @@ class SubjectScreeningModelFormMixin:
             raise forms.ValidationError(
                 {
                     "initials": format_html(
+                        "{}",
                         f"Invalid. Expected {self.patient_log.initials}. "
-                        f"See {self.patient_log_link}."
+                        f"See {self.patient_log_link}.",
                     )
                 },
                 code=INVALID_ERROR,
@@ -145,8 +153,9 @@ class SubjectScreeningModelFormMixin:
             raise forms.ValidationError(
                 {
                     "hospital_identifier": format_html(
+                        "{}",
                         f"Invalid. Expected {self.patient_log.hospital_identifier}. "
-                        f"See {self.patient_log_link}."
+                        f"See {self.patient_log_link}.",
                     )
                 },
                 code=INVALID_ERROR,
@@ -156,8 +165,9 @@ class SubjectScreeningModelFormMixin:
         if self.patient_log.conditions.count() == 0:
             raise forms.ValidationError(
                 format_html(
+                    "{}",
                     "No conditions (HIV/DM/HTN) have been indicated for this patient. "
-                    f"See {self.patient_log_link}."
+                    f"See {self.patient_log_link}.",
                 ),
                 code=INVALID_ERROR,
             )
@@ -169,9 +179,10 @@ class SubjectScreeningModelFormMixin:
                 raise forms.ValidationError(
                     {
                         field: format_html(
+                            "{}",
                             "Invalid. Condition not indicated "
                             f"on the Patient Log. Got {name.upper()}. "
-                            f"See {self.patient_log_link}."
+                            f"See {self.patient_log_link}.",
                         ),
                     },
                     code=INVALID_ERROR,
@@ -183,9 +194,10 @@ class SubjectScreeningModelFormMixin:
                 raise forms.ValidationError(
                     {
                         field: format_html(
+                            "{}",
                             f"Invalid. {name.upper()} was indicated "
                             "as a condition on the Patient Log. "
-                            f"See {self.patient_log_link}."
+                            f"See {self.patient_log_link}.",
                         ),
                     },
                     code=INVALID_ERROR,

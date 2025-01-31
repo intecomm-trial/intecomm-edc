@@ -4,6 +4,8 @@ from django_pandas.io import read_frame
 
 from intecomm_screening.models import PatientLog
 
+__all__ = ["get_patientlog_df"]
+
 
 def get_patientlog_df() -> pd.DataFrame:
 
@@ -36,6 +38,7 @@ def get_patientlog_df() -> pd.DataFrame:
         "willing_to_screen",
         "screening_refusal_reason",
         "screening_refusal_reason_other",
+        "consent_datetime",
     ]
     qs_patientlog = PatientLog.objects.values(*columns).all()
     df = read_frame(qs_patientlog)

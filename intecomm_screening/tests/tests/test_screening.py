@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.db import IntegrityError
-from django.test import TestCase, override_settings, tag
+from django.test import TestCase, override_settings
 from edc_constants.constants import (
     DM,
     FEMALE,
@@ -324,7 +324,6 @@ class TestScreening(IntecommTestCaseMixin, TestCase):
         form.is_valid()
         self.assertNotIn("initials", form._errors)
 
-    @tag("1")
     @override_settings(SITE_ID=101)
     def test_conditions_matching_patient_log(self):
         patient_log = self.get_patient_log(

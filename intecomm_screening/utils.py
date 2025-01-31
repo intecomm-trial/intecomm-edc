@@ -122,6 +122,7 @@ def raise_if_consent_refusal_exists(
                 screening_identifier=screening_identifier
             )
             msg = format_html(
+                "{}",
                 "Not allowed. Patient has already refused consent. "
                 'See subject <A href="{}">{}</A>',
                 mark_safe(consent_refusal_url),  # nosec B308 B703

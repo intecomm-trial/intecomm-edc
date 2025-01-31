@@ -5,47 +5,52 @@ from django_pandas.io import read_frame
 from edc_utils import get_utcnow
 from edc_visit_schedule.models import SubjectScheduleHistory
 
-from ..models import Diagnoses as DiagnosesModel
-from ..utils import update_diagnoses_model
-from ..utils.update_diagnoses_model import get_review_model_as_df
+from intecomm_analytics.dataframes import get_baseline_diagnoses_df
+from intecomm_reports.utils import update_diagnoses_model
+
+__all__ = ["VlSummary", "VlSummary2", "get_vl_summary_df"]
 
 
 class VlSummary:
 
     def __init__(
         self,
-        baseline_months: int | None = None,
-        endline_months: int | None = None,
+        baseline_upper: int | None = None,
+        endline_upper: int | None = None,
+        offset_by: str | None = None,
         skip_update_dx: bool | None = None,
     ):
+        self.offset_by = offset_by or "months"
         if not skip_update_dx:
             update_diagnoses_model(delete_all=True)
         self._dfdx: pd.DataFrame = pd.DataFrame()
         self._df_initial_review: pd.DataFrame = pd.DataFrame()
         self._df_review: pd.DataFrame = pd.DataFrame()
-        self.baseline_months = baseline_months or 1
-        self.endline_months = endline_months or 6
+        self.baseline_upper = baseline_upper or 2
+        self.endline_upper = endline_upper or 6
 
     def to_dataframe(self) -> pd.DataFrame:
         """Prepare and return final df"""
         # merge dxdf with df1 (from hiv initial review)
         df = pd.merge(self.dfdx, self.df_initial_review, on="subject_identifier", how="left")
-        # consider as baseline vl if Xm or earlier
+        # consider as baseline vl if 0m or earlier
         df["baseline_vl"] = df[
-            df["baseline_date"] + pd.DateOffset(months=self.baseline_months)
-            >= df["drawn_date"]
+            df["drawn_date"]
+            <= df["baseline_date"] + pd.DateOffset(**{self.offset_by: self.baseline_upper})
         ]["vl"]
         df["baseline_vl_date"] = df[
-            df["baseline_date"] + pd.DateOffset(months=self.baseline_months)
-            >= df["drawn_date"]
+            df["drawn_date"]
+            <= df["baseline_date"] + pd.DateOffset(**{self.offset_by: self.baseline_upper})
         ]["drawn_date"]
 
         # consider as endline vl if 6m or later
         df["endline_vl"] = df[
-            df["drawn_date"] >= df["baseline_date"] + pd.DateOffset(months=self.endline_months)
+            df["drawn_date"]
+            >= df["baseline_date"] + pd.DateOffset(**{self.offset_by: self.endline_upper})
         ]["vl"]
         df["endline_vl_date"] = df[
-            df["drawn_date"] >= df["baseline_date"] + pd.DateOffset(months=self.endline_months)
+            df["drawn_date"]
+            >= df["baseline_date"] + pd.DateOffset(**{self.offset_by: self.endline_upper})
         ]["drawn_date"]
 
         # merge df with vls from hiv review
@@ -58,13 +63,13 @@ class VlSummary:
 
         # fill any missing baseline
         df[["baseline_vl", "baseline_vl_date"]] = df.apply(
-            lambda row: self.get_best_baseline_vl_and_date(row, months=self.baseline_months),
+            lambda row: self.get_best_baseline_vl_and_date(row, offset=self.baseline_upper),
             axis=1,
         ).to_list()
 
         # fill missing endlines
         df[["endline_vl", "endline_vl_date"]] = df.apply(
-            lambda row: self.get_best_endline_vl_and_date(row, months=self.endline_months),
+            lambda row: self.get_best_endline_vl_and_date(row, offset=self.endline_upper),
             axis=1,
         ).to_list()
 
@@ -128,22 +133,10 @@ class VlSummary:
         (update this model first!)
         """
         if self._dfdx.empty:
-            qs = (
-                DiagnosesModel.objects.values(
-                    "subject_identifier",
-                    "site__id",
-                    "hiv",
-                    "hiv_dx_date",
-                    "hiv_dx_days",
-                    "baseline_date",
-                )
-                .filter(hiv=1)
-                .order_by("subject_identifier")
-            )
-            dfdx = read_frame(qs)
-            dfdx.rename(columns={"site__id": "site_id"}, inplace=True)
-            dfdx["baseline_date"] = dfdx["baseline_date"].astype("datetime64[ns]")
-            dfdx["hiv_dx_date"] = dfdx["hiv_dx_date"].astype("datetime64[ns]")
+            dfdx = get_baseline_diagnoses_df()
+            # dfdx.rename(columns={"site__id": "site_id"}, inplace=True)
+            # dfdx["baseline_date"] = dfdx["baseline_date"].astype("datetime64[ns]")
+            # dfdx["hiv_dx_date"] = dfdx["hiv_dx_date"].astype("datetime64[ns]")
             # merge in offschedule
             qs = SubjectScheduleHistory.objects.all()
             dfoff = read_frame(qs, fieldnames=["subject_identifier", "offschedule_datetime"])
@@ -164,7 +157,7 @@ class VlSummary:
         """
         if self._df_initial_review.empty:
             model_cls = django_apps.get_model("intecomm_subject.hivinitialreview")
-            df = get_review_model_as_df(model_cls)
+            df = self.get_review_model_as_df(model_cls)
             df["baseline_vl"] = np.nan
             df["baseline_vl_date"] = pd.NaT
             df["endline_vl"] = np.nan
@@ -179,11 +172,51 @@ class VlSummary:
         """HivReview (df1)"""
         if self._df_review.empty:
             model_cls = django_apps.get_model("intecomm_subject.hivreview")
-            df = get_review_model_as_df(model_cls)
+            df = self.get_review_model_as_df(model_cls)
             df = df.sort_values(by=["subject_identifier", "drawn_date"])
             df.reset_index(drop=True)
             self._df_review = self.pivot_first_last_vl(df)
         return self._df_review
+
+    @staticmethod
+    def get_review_model_as_df(model_cls):
+        qs = model_cls.objects.values(
+            "subject_visit__subject_identifier",
+            "has_vl",
+            "vl",
+            "drawn_date",
+            "report_datetime",
+        ).all()
+        df = read_frame(
+            qs,
+            fieldnames=[
+                "subject_visit__subject_identifier",
+                "vl",
+                "drawn_date",
+                "report_datetime",
+            ],
+        )
+        df.rename(
+            columns={
+                "subject_visit__subject_identifier": "subject_identifier",
+                "site__id": "site_id",
+            },
+            inplace=True,
+        )
+        # vl column, replace nulls with NaN
+        df.loc[df["vl"].isnull(), "vl"] = np.nan
+
+        # report date
+        df["report_date"] = pd.to_datetime(df["report_datetime"]).dt.date
+        df["report_date"] = df["report_date"].astype("datetime64[ns]")
+        df = df.drop("report_datetime", axis=1)
+
+        # replace baseline drawn date with report date if drawn date is None
+        df.loc[(df["drawn_date"].isnull()) & (df["vl"].notna()), "drawn_date"] = df[
+            "report_date"
+        ]
+        df["drawn_date"] = df["drawn_date"].astype("datetime64[ns]")
+        return df
 
     @staticmethod
     def pivot_first_last_vl(df: pd.DataFrame) -> pd.DataFrame:
@@ -220,40 +253,75 @@ class VlSummary:
             value = row["next_vl_date"].date() <= get_utcnow().date()
         return value
 
-    @staticmethod
-    def get_best_baseline_vl_and_date(row, months: int = None) -> tuple[pd.Series, pd.Series]:
+    def get_best_baseline_vl_and_date(
+        self, row, offset: int = None
+    ) -> tuple[pd.Series, pd.Series]:
         values = row["baseline_vl"], row["baseline_vl_date"]
         if pd.isna(row["baseline_vl"]):
             if pd.notna(row["vl1"]) & pd.notna(row["vl2"]):
                 if (
                     row["vl2_date"] < row["vl1_date"]
-                    and row["baseline_date"] + pd.DateOffset(months=months) >= row["vl2_date"]
+                    and row["baseline_date"] + pd.DateOffset(**{self.offset_by: offset})
+                    >= row["vl2_date"]
                 ):
                     values = row["vl2"], row["vl2_date"]
-                elif row["baseline_date"] + pd.DateOffset(months=months) >= row["vl1_date"]:
+                elif (
+                    row["baseline_date"] + pd.DateOffset(**{self.offset_by: offset})
+                    >= row["vl1_date"]
+                ):
                     values = row["vl1"], row["vl1_date"]
             elif (
                 pd.notna(row["vl1"])
-                and row["baseline_date"] + pd.DateOffset(months=months) >= row["vl1_date"]
+                and row["baseline_date"] + pd.DateOffset(**{self.offset_by: offset})
+                >= row["vl1_date"]
             ):
                 values = row["vl1"], row["vl1_date"]
         return values
 
-    @staticmethod
-    def get_best_endline_vl_and_date(row, months: int = None) -> tuple[pd.Series, pd.Series]:
+    def get_best_endline_vl_and_date(
+        self, row, offset: int = None
+    ) -> tuple[pd.Series, pd.Series]:
         values = row["endline_vl"], row["endline_vl_date"]
         if pd.isna(row["endline_vl"]):
             if pd.notna(row["vl1"]) & pd.notna(row["vl2"]):
                 if (
                     row["vl2_date"] > row["vl1_date"]
-                    and row["baseline_date"] + pd.DateOffset(months=months) < row["vl2_date"]
+                    and row["baseline_date"] + pd.DateOffset(**{self.offset_by: offset})
+                    < row["vl2_date"]
                 ):
                     values = row["vl2"], row["vl2_date"]
-                elif row["baseline_date"] + pd.DateOffset(months=months) < row["vl1_date"]:
+                elif (
+                    row["baseline_date"] + pd.DateOffset(**{self.offset_by: offset})
+                    < row["vl1_date"]
+                ):
                     values = row["vl1"], row["vl1_date"]
             elif (
                 pd.notna(row["vl1"])
-                and row["baseline_date"] + pd.DateOffset(months=months) < row["vl1_date"]
+                and row["baseline_date"] + pd.DateOffset(**{self.offset_by: offset})
+                < row["vl1_date"]
             ):
                 values = row["vl1"], row["vl1_date"]
         return values
+
+
+def get_vl_summary_df(**kwargs):
+    return VlSummary(**kwargs).to_dataframe()
+
+
+class VlSummary2(VlSummary):
+    def __init__(
+        self,
+        offset_by: str | None = None,
+        baseline_upper: int | None = None,
+        endline_upper: int | None = None,
+        skip_update_dx: bool | None = None,
+    ):
+        offset_by = offset_by or "days"
+        baseline_upper = baseline_upper or 61
+        endline_upper = endline_upper or 183
+        super().__init__(
+            offset_by=offset_by,
+            baseline_upper=baseline_upper,
+            endline_upper=endline_upper,
+            skip_update_dx=skip_update_dx,
+        )

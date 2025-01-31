@@ -101,7 +101,7 @@ class PatientGroupAdmin(
 
     @admin.display(description="Status", ordering="status")
     def group_status(self, obj):
-        return format_html(f'<span class="nowrap">{obj.get_status_display()}</span>')
+        return format_html("{}", f'<span class="nowrap">{obj.get_status_display()}</span>')
 
     @admin.display(description="Group identifier", ordering="group_identifier")
     def group_id(self, obj):
@@ -125,7 +125,7 @@ class PatientGroupAdmin(
             )
             url = f"{url}?q={obj.name}"
             link = format_html(
-                f'<a title="Back to ALL patient groups" href="{url}">{arm_as_str}</a>'
+                "{}", f'<a title="Back to ALL patient groups" href="{url}">{arm_as_str}</a>'
             )
         return link
 
@@ -143,7 +143,7 @@ class PatientGroupAdmin(
                     "intecomm_group_admin:intecomm_group_patientgroupmeeting_changelist"
                 )
                 url = f"{url}?q={name}"
-                url = format_html(f'<a href="{url}">Meetings</a>')
+                url = format_html("{}", f'<a href="{url}">Meetings</a>')
         return url
 
     @admin.display(description="Dashboards")
@@ -152,8 +152,9 @@ class PatientGroupAdmin(
         url = get_group_subject_dashboards_url(obj)
         title = _("Go to subject dashboards")
         return format_html(
+            "{}",
             f'<a title="{title}" href="{url}">'
-            f'<span class="nowrap">{cnt}&nbsp;{p.plural("subject", cnt)}</span></a>'
+            f'<span class="nowrap">{cnt}&nbsp;{p.plural("subject", cnt)}</span></a>',
         )
 
     def get_queryset(self, request):

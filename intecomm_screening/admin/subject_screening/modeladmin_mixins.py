@@ -100,7 +100,9 @@ class SubjectScreeningModelAdminMixin(
     @staticmethod
     @admin.display(description="Eligibile", ordering="eligible")
     def eligibility_status(obj=None):
-        return format_html('<span style="color:green;">YES</span>' if obj.eligible else "NO")
+        return format_html(
+            "{}", '<span style="color:green;">YES</span>' if obj.eligible else "NO"
+        )
 
     @staticmethod
     def demographics(obj=None):
@@ -110,7 +112,7 @@ class SubjectScreeningModelAdminMixin(
             f"Hospital ID: {obj.hospital_identifier}",
             f"Patient log: {obj.patient_log_identifier}",
         ]
-        return format_html("<BR>".join(data))
+        return format_html("{}", "<BR>".join(data))
 
     def reasons(self, obj=None):
         if not obj.reasons_ineligible:

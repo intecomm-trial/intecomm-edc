@@ -36,9 +36,10 @@ class PatientGroupRandoAdmin(SiteModelAdminMixin, BaseModelAdminMixin):
             "Randomize",
             {
                 "description": format_html(
+                    "{}",
                     "Complete this section when the group is COMPLETE and READY to "
                     "RANDOMIZE. <BR>"
-                    "<B>Important: THIS STEP CANNOT BE UNDONE</B>"
+                    "<B>Important: THIS STEP CANNOT BE UNDONE</B>",
                 ),
                 "fields": ("randomize_now", "confirm_randomize_now"),
             },
@@ -104,13 +105,14 @@ class PatientGroupRandoAdmin(SiteModelAdminMixin, BaseModelAdminMixin):
             )
             url = f"{url}?q={obj.name}"
             link = format_html(
-                f'<a title="Go to patient group" href="{url}">Edit Patient group</a>'
+                "{}", f'<a title="Go to patient group" href="{url}">Edit Patient group</a>'
             )
         else:
             url = reverse("intecomm_group_admin:intecomm_group_patientgroup_changelist")
             url = f"{url}?q={obj.name}"
             link = format_html(
-                f'<a title="Go to patient groups in followup" href="{url}">{arm_as_str}</a>'
+                "{}",
+                f'<a title="Go to patient groups in followup" href="{url}">{arm_as_str}</a>',
             )
         return link
 
