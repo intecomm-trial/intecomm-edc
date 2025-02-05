@@ -5,7 +5,7 @@ from typing import Dict
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.db import IntegrityError
-from django.test import TestCase, override_settings
+from django.test import TestCase, override_settings, tag
 from edc_consent.constants import HOSPITAL_NUMBER
 from edc_constants.constants import NO, NOT_APPLICABLE, YES
 
@@ -150,6 +150,7 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
             consent_form_two.save()
         self.assertEqual(SubjectConsentTz.objects.all().count(), 1)
 
+    @tag("1")
     @override_settings(SITE_ID=201)
     def test_consent_after_already_refused_raises(self):
         subject_screening = self.get_subject_screening()

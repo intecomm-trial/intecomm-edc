@@ -253,8 +253,9 @@ class PatientLog(SiteModelMixin, NameFieldsModelMixin, BaseUuidModel):
                 break
         if remove_patient_names or re.match(UUID_PATTERN, str(self.legal_name)):
             return format_html(
+                "{}",
                 f"{self.filing_identifier} {self.initials} "
-                f"{self.age_in_years}{self.gender} ({self.site.id}){g}"
+                f"{self.age_in_years}{self.gender} ({self.site.id}){g}",
             )
         return format_html(
             "{}",
