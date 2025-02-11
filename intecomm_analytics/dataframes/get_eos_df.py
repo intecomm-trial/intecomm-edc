@@ -17,7 +17,7 @@ def get_eos_df() -> pd.DataFrame:
     df_visit = get_subject_visit("intecomm_subject.subjectvisit")
     df_last_visit = (
         df_visit.groupby("subject_identifier")
-        .agg({"last_visit_code": "max", "last_visit_datetime": "max"})
+        .agg({"endline_visit_code": "max", "endline_visit_datetime": "max"})
         .reset_index()
     )
 

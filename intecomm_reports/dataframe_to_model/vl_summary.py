@@ -129,7 +129,8 @@ class VlSummary:
         """
         if self._dfdx.empty:
             qs = (
-                DiagnosesModel.objects.values(
+                DiagnosesModel.objects.filter(hiv=1)
+                .values(
                     "subject_identifier",
                     "site__id",
                     "hiv",
@@ -137,7 +138,6 @@ class VlSummary:
                     "hiv_dx_days",
                     "baseline_date",
                 )
-                .filter(hiv=1)
                 .order_by("subject_identifier")
             )
             dfdx = read_frame(qs)
