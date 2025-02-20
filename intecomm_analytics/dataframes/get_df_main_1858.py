@@ -4,10 +4,11 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from django_pandas.io import read_frame
-from edc_constants.constants import OTHER
+from edc_constants.constants import NO, OTHER, YES
 from edc_model import duration_to_date
 from edc_model_to_dataframe import read_frame_edc
 from edc_pdutils.dataframes import get_crf, get_subject_visit
+from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 from intecomm_rando.models import RandomizationList
 
 from intecomm_prn.models import EndOfStudy
@@ -15,7 +16,23 @@ from intecomm_prn.models import EndOfStudy
 from .get_patientlog_df import get_patientlog_df
 from .get_vl_summary import VlSummary2
 
-__all__ = ["get_df_main_1858"]
+__all__ = ["get_df_main_1858", "treatment_arm_labels"]
+
+from ..notebooks.primary.glucose import (
+    get_all_glucose_results,
+    get_glucose_first,
+    get_glucose_last,
+)
+
+treatment_arm_labels = {COMMUNITY_ARM: "Community", FACILITY_ARM: "Facility"}
+
+
+def glucose_controlled(value):
+    if value < 7.00:
+        return YES
+    elif value >= 7.00:
+        return NO
+    return "Missing"
 
 
 def get_ncd(s):
@@ -49,6 +66,14 @@ def get_dx_date(s):
     return s["dx_date"]
 
 
+def get_country(s):
+    if s["site_id"] < 200:
+        return "UG"
+    elif s["site_id"] >= 200:
+        return "TZ"
+    return "ERROR"
+
+
 def get_df_main_1858(export_folder: Path | None) -> pd.DataFrame:
     """Trial population"""
     # export_folder = export_folder or Path(
@@ -61,23 +86,27 @@ def get_df_main_1858(export_folder: Path | None) -> pd.DataFrame:
 
     # start with patient log
     df_main = get_patientlog_df()
+
     # exlude thos not in a group
     df_main = df_main[(df_main.group_identifier.notna())]
+
+    # rename conditions to distinguis as reported at screen
+    df_main.rename(columns={"hiv": "hiv_scr", "htn": "htn_scr", "dm": "dm_scr"}, inplace=True)
 
     # merge with df_visit
     df_main = merge_in_visit(df_main)
 
     # 1858 subjects
 
+    df_main = merge_in_rando(df_main)
+
+    df_main = merge_in_baseline_conditions(df_main)
+
     # create ncd column and hiv_only column
     df_main["ncd"] = df_main.apply(get_ncd, axis=1)
     df_main["hiv_only"] = df_main.apply(get_hiv_only, axis=1)
     df_main["htn_only"] = df_main.apply(get_htn_only, axis=1)
     df_main["dm_only"] = df_main.apply(get_dm_only, axis=1)
-
-    df_main = merge_in_rando(df_main)
-
-    df_main = merge_in_baseline_conditions(df_main)
 
     df_main = merge_in_vl(df_main)
 
@@ -89,7 +118,7 @@ def get_df_main_1858(export_folder: Path | None) -> pd.DataFrame:
 
     df_main = merge_in_glucose(df_main)
 
-    df_main.reset_index(drop=True, inplace=True)
+    df_main["country"] = df_main.apply(get_country, axis=1)
 
     if export_folder:
         df_main.to_csv(
@@ -165,7 +194,8 @@ def merge_in_visit(df_main: pd.DataFrame) -> pd.DataFrame:
         on="subject_identifier",
         how="left",
     )
-    return df_main.reset_index(drop=True)
+    df_main.reset_index(drop=True, inplace=True)
+    return df_main
 
 
 def merge_in_rando(df_main: pd.DataFrame) -> pd.DataFrame:
@@ -199,7 +229,8 @@ def merge_in_rando(df_main: pd.DataFrame) -> pd.DataFrame:
         on="group_identifier",
         how="left",
     )
-    return df_main.reset_index(drop=True)
+    df_main.reset_index(drop=True, inplace=True)
+    return df_main
 
 
 def merge_in_eos(df_main: pd.DataFrame) -> pd.DataFrame:
@@ -223,7 +254,8 @@ def merge_in_eos(df_main: pd.DataFrame) -> pd.DataFrame:
         on="subject_identifier",
         how="left",
     )
-    return df_main.reset_index(drop=True)
+    df_main.reset_index(drop=True, inplace=True)
+    return df_main
 
 
 def merge_in_vl(df_main: pd.DataFrame) -> pd.DataFrame:
@@ -244,7 +276,8 @@ def merge_in_vl(df_main: pd.DataFrame) -> pd.DataFrame:
         on="subject_identifier",
         how="left",
     )
-    return df_main.reset_index(drop=True)
+    df_main.reset_index(drop=True, inplace=True)
+    return df_main
 
 
 def merge_in_baseline_conditions(df_main: pd.DataFrame) -> pd.DataFrame:
@@ -262,38 +295,69 @@ def merge_in_baseline_conditions(df_main: pd.DataFrame) -> pd.DataFrame:
     df_dm_initial = get_crf(model="intecomm_subject.dminitialreview", **opts)
 
     # recalculate dx_date if from dx_ago
-    df_hiv_initial["dx_date"] = df_hiv_initial.apply(get_dx_date, axis=1)
-    df_htn_initial["dx_date"] = df_htn_initial.apply(get_dx_date, axis=1)
-    df_dm_initial["dx_date"] = df_dm_initial.apply(get_dx_date, axis=1)
+    df_hiv_initial["hiv_dx_date"] = df_hiv_initial.apply(get_dx_date, axis=1)
+    df_htn_initial["htn_dx_date"] = df_htn_initial.apply(get_dx_date, axis=1)
+    df_dm_initial["dm_dx_date"] = df_dm_initial.apply(get_dx_date, axis=1)
 
     df_hiv_initial["hiv_timedelta_dx"] = pd.to_datetime(
         df_hiv_initial["visit_datetime"]
-    ) - pd.to_datetime(df_hiv_initial["dx_date"])
+    ) - pd.to_datetime(df_hiv_initial["hiv_dx_date"])
     df_htn_initial["htn_timedelta_dx"] = pd.to_datetime(
         df_htn_initial["visit_datetime"]
-    ) - pd.to_datetime(df_htn_initial["dx_date"])
+    ) - pd.to_datetime(df_htn_initial["htn_dx_date"])
     df_dm_initial["dm_timedelta_dx"] = pd.to_datetime(
         df_dm_initial["visit_datetime"]
-    ) - pd.to_datetime(df_dm_initial["dx_date"])
+    ) - pd.to_datetime(df_dm_initial["dm_dx_date"])
 
     df_hiv_initial["hiv_years_since_dx"] = df_hiv_initial["hiv_timedelta_dx"].dt.days / 365
+    df_hiv_initial["hiv"] = 1
     df_htn_initial["htn_years_since_dx"] = df_htn_initial["htn_timedelta_dx"].dt.days / 365
+    df_htn_initial["htn"] = 1
     df_dm_initial["dm_years_since_dx"] = df_dm_initial["dm_timedelta_dx"].dt.days / 365
+    df_dm_initial["dm"] = 1
 
     df_delta = pd.merge(
-        df_hiv_initial[["subject_identifier", "hiv_years_since_dx", "hiv_timedelta_dx"]],
-        df_htn_initial[["subject_identifier", "htn_years_since_dx", "htn_timedelta_dx"]],
+        df_hiv_initial[
+            [
+                "subject_identifier",
+                "hiv",
+                "hiv_dx_date",
+                "hiv_years_since_dx",
+                "hiv_timedelta_dx",
+            ]
+        ],
+        df_htn_initial[
+            [
+                "subject_identifier",
+                "htn",
+                "htn_dx_date",
+                "htn_years_since_dx",
+                "htn_timedelta_dx",
+            ]
+        ],
         on="subject_identifier",
         how="outer",
     )
     df_delta = df_delta.merge(
-        df_dm_initial[["subject_identifier", "dm_years_since_dx", "dm_timedelta_dx"]],
+        df_dm_initial[
+            [
+                "subject_identifier",
+                "dm",
+                "dm_dx_date",
+                "dm_years_since_dx",
+                "dm_timedelta_dx",
+            ]
+        ],
         on="subject_identifier",
         how="outer",
     )
 
+    df_delta["hiv"] = df_delta["hiv"].fillna(0.0)
+    df_delta["htn"] = df_delta["htn"].fillna(0.0)
+    df_delta["dm"] = df_delta["dm"].fillna(0.0)
     df_main = df_main.merge(df_delta, on="subject_identifier", how="left")
-    return df_main.reset_index(drop=True)
+    df_main.reset_index(drop=True, inplace=True)
+    return df_main
 
 
 def get_diastolic(s):
@@ -326,7 +390,7 @@ def get_bp_controlled_baseline(s):
         return np.nan
     elif s["bp_sys_baseline"] >= 140 or s["bp_dia_baseline"] >= 90:
         return 0
-    elif s["bp_sys_baseline"] < 140 or s["bp_dia_baseline"] < 90:
+    elif s["bp_sys_baseline"] < 140 and s["bp_dia_baseline"] < 90:
         return 1
     return np.nan
 
@@ -336,7 +400,7 @@ def get_bp_controlled_endline(s):
         return np.nan
     elif s["bp_sys_endline"] >= 140 or s["bp_dia_endline"] >= 90:
         return 0
-    elif s["bp_sys_endline"] < 140 or s["bp_dia_endline"] < 90:
+    elif s["bp_sys_endline"] < 140 and s["bp_dia_endline"] < 90:
         return 1
     return np.nan
 
@@ -469,8 +533,86 @@ def merge_in_bp(df_main: pd.DataFrame) -> pd.DataFrame:
     df_main["bp_controlled_endline"] = df_main.apply(get_bp_controlled_endline, axis=1)
     df_main["bp_severe_htn_baseline"] = df_main.apply(get_bp_severe_htn_baseline, axis=1)
     df_main["bp_severe_htn_endline"] = df_main.apply(get_bp_severe_htn_endline, axis=1)
-    return df_main.reset_index(drop=True)
+    df_main.reset_index(drop=True, inplace=True)
+    return df_main
 
 
 def merge_in_glucose(df_main: pd.DataFrame) -> pd.DataFrame:
+    df_glucose = get_all_glucose_results(df_main)
+    df_first = get_glucose_first(df_glucose)
+    df_last = get_glucose_last(df_glucose)
+
+    df_first.rename(
+        columns={
+            "glucose_date_first": "glucose_date_baseline",
+            "glucose_value_first": "glucose_value_baseline",
+            "glucose_units_first": "glucose_units_baseline",
+            "glucose_fasting_duration_delta_first": "glucose_fasting_duration_delta_baseline",
+            "glucose_fasting_duration_hours_first": "glucose_fasting_duration_hours_baseline",
+            "glucose_date_delta_first": "glucose_date_delta_baseline",
+        },
+        inplace=True,
+    )
+    df_last.rename(
+        columns={
+            "glucose_date_last": "glucose_date_endline",
+            "glucose_value_last": "glucose_value_endline",
+            "glucose_units_last": "glucose_units_endline",
+            "glucose_fasting_duration_delta_last": "glucose_fasting_duration_delta_endline",
+            "glucose_fasting_duration_hours_last": "glucose_fasting_duration_hours_endline",
+            "glucose_date_delta_last": "glucose_date_delta_endline",
+        },
+        inplace=True,
+    )
+    df_first_and_last = pd.merge(
+        df_first, df_last, on=["subject_identifier", "baseline_datetime"], how="outer"
+    )
+    df_first_and_last.reset_index(drop=True, inplace=True)
+    df_main = df_main.merge(
+        df_first_and_last[
+            [
+                "subject_identifier",
+                "glucose_date_baseline",
+                "glucose_value_baseline",
+                "glucose_units_baseline",
+                "glucose_fasting_duration_delta_baseline",
+                "glucose_fasting_duration_hours_baseline",
+                "glucose_date_delta_baseline",
+                "glucose_date_endline",
+                "glucose_value_endline",
+                "glucose_units_endline",
+                "glucose_fasting_duration_delta_endline",
+                "glucose_fasting_duration_hours_endline",
+                "glucose_date_delta_endline",
+            ]
+        ],
+        on=["subject_identifier"],
+        how="left",
+    )
+    df_main.reset_index(drop=True, inplace=True)
+    df_main["glucose_measured_days_endline"] = (
+        df_main["glucose_date_endline"] - df_main["baseline_datetime"]
+    ).dt.days
+    df_main["glucose_measured_days_baseline"] = (
+        df_main["glucose_date_baseline"] - df_main["baseline_datetime"]
+    ).dt.days
+    df_main["glucose_first_to_last_days"] = (
+        df_main["glucose_date_endline"] - df_main["glucose_date_baseline"]
+    ).dt.days
+
+    # Glucose controlled
+    df_main["glucose_controlled_baseline"] = df_main["glucose_value_baseline"].apply(
+        lambda x: glucose_controlled(x)
+    )
+    df_main["glucose_controlled_endline"] = df_main["glucose_value_endline"].apply(
+        lambda x: glucose_controlled(x)
+    )
+    df_main["glucose_resulted_baseline"] = df_main["glucose_value_baseline"].apply(
+        lambda x: NO if pd.isna(x) else YES
+    )
+    df_main["glucose_resulted_endline"] = df_main["glucose_value_endline"].apply(
+        lambda x: NO if pd.isna(x) else YES
+    )
+
+    df_main.reset_index(drop=True, inplace=True)
     return df_main
