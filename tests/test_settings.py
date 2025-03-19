@@ -156,6 +156,7 @@ project_settings = DefaultTestSettings(
         "edc_protocol_incident.apps.AppConfig",
         "edc_prn.apps.AppConfig",
         "edc_pylabels.apps.AppConfig",
+        "edc_qareports.apps.AppConfig",
         "edc_qol.apps.AppConfig",
         "edc_randomization.apps.AppConfig",
         "edc_refusal.apps.AppConfig",
