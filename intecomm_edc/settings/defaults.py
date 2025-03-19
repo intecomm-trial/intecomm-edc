@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     "fontawesomefree",
     "defender",
     "django_db_views",
+    "rangefilter",
     "django.contrib.sites",
     "django_pylabels.apps.AppConfig",
     "multisite.apps.AppConfig",
@@ -206,7 +207,7 @@ MIDDLEWARE.extend(
         "edc_dashboard.middleware.DashboardMiddleware",
         "edc_subject_dashboard.middleware.DashboardMiddleware",
         "edc_lab_dashboard.middleware.DashboardMiddleware",
-        # "edc_adverse_event.middleware.DashboardMiddleware",
+        "edc_adverse_event.middleware.DashboardMiddleware",
         "edc_listboard.middleware.DashboardMiddleware",
         "edc_review_dashboard.middleware.DashboardMiddleware",
     ]
