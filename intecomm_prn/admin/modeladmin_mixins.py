@@ -19,9 +19,10 @@ class OffScheduleAdmin(
     form = None
 
     additional_instructions = format_html(
+        "{}",
         '<span style="color:orange;font-weight:bold">Note:</span> Detailed '
         "information about study termination will be asked for on the "
-        f"<b>{EndOfStudy._meta.verbose_name}</b> form"
+        f"<b>{EndOfStudy._meta.verbose_name}</b> form",
     )
 
     fieldsets = (

@@ -1,0 +1,65 @@
+{% extends 'intecomm_edc/base.html' %}
+{% load static edc_dashboard_extras %}
+
+{% block main %}
+
+<style>
+a { cursor: pointer; }
+.bg-1 {
+    background-color: #428bca; /* dark blue */
+    color: #ffffff;
+}
+.bg-2 {
+    background-color: #5bc0de; /* light Blue */
+    color: #ffffff;
+}
+.bg-3 {
+    background-color: #f9f9f9; /* White */
+    color: #555555;
+}
+
+</style>
+
+{{ block.super }}
+<form id="switch_sites_form" method="post" action="{% url 'switch_sites_url' %}">{% csrf_token %}</form>
+<form id="logout_form" method="post" action="{% url 'edc_auth_admin:logout' %}">{% csrf_token %}</form>
+
+<div class="row">
+
+  <div class="col-sm-4">&nbsp;</div>
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">{{ protocol_name |default:project_name }} {{ site_title|default:request.site.name|title }}</div>
+      <div class="list-group">
+        <a href="#" class="list-group-item disabled">Screening and Grouping</a>
+        <a id="logs_list_group_home" href="{% url 'screen_group_url' %}" class="list-group-item"><i class="fas fa-users fa-lg fa-fw" aria-hidden="true"></i> Patient Logs / Patient Groups</a>
+        <a href="#" class="list-group-item disabled">Follow-up</a>
+        <a id="followup_list_group_home" href="{% url 'subjects_home_url' %}" class="list-group-item"><i class="fas fa-user-circle fa-lg fa-fw" aria-hidden="true"></i> Subjects</a>
+        <a href="#" class="list-group-item disabled">General</a>
+        {% if perms.edc_action_item.nav_action_item_section %}
+          <a href="{% url 'edc_action_item:home_url' %}" class="list-group-item"><i class="fas fa-bolt fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Action items</a>
+        {% endif %}
+        {% if perms.edc_data_manager.nav_data_manager_section %}
+          <a href="{% url 'edc_data_manager:home_url' %}" class="list-group-item"><i class="fas fa-database fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Data Management</a>
+        {% endif %}
+        {% if perms.edc_export %}
+          <a href="{% url 'edc_export:home_url' %}" class="list-group-item"><i class="fas fa-file-export fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Export data</a>
+        {% endif %}
+        {% if perms.intecomm_reports %}
+          <a href="{% url 'intecomm_reports:home_url' %}" class="list-group-item"><i class="fa-solid fa-stroopwafel fa-lg fa-fw"></i></i>&nbsp;&nbsp;&nbsp;QA Reports</a>
+        {% endif %}
+        {% if perms.edc_auth.change_userprofile %}
+          <a href="{% url 'edc_auth:home_url' %}" class="list-group-item"><i class="fas fa-users fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Account Management</a>
+        {% endif %}
+          <a onclick="document.getElementById('switch_sites_form').submit();" class="list-group-item" title="{% url 'switch_sites_url' %}"><i class="fas fa-arrows-alt fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Switch sites</a>
+          <a onclick="document.getElementById('logout_form').submit();" class="list-group-item" title="{% url 'edc_auth_admin:logout' %}"><i class="fas fa-sign-out-alt fa-lg fa-fw"></i>&nbsp;&nbsp;&nbsp;Log out</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">&nbsp;
+  </div>
+</div>
+
+
+
+{% endblock main %}

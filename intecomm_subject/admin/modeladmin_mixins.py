@@ -40,7 +40,7 @@ class MedicationAdherenceAdminMixin:
         (
             "Visual Score",
             {
-                "description": format_html(medication_adherence_description),
+                "description": format_html("{}", medication_adherence_description),
                 "fields": ("visual_score_slider", "visual_score_confirmed"),
             },
         ),

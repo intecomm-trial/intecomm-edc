@@ -25,6 +25,7 @@ def get_languages():
 
 project_settings = DefaultTestSettings(
     calling_file=__file__,
+    SILENCED_SYSTEM_CHECKS=["sites.E101", "edc_navbar.E002", "edc_navbar.E003"],
     EDC_EGFR_DROP_NOTIFICATION_MODEL="intecomm_subject.egfrdropnotification",
     EDC_RANDOMIZATION_REGISTER_DEFAULT_RANDOMIZER=False,
     ROOT_URLCONF="intecomm_edc.urls",
@@ -77,14 +78,11 @@ project_settings = DefaultTestSettings(
         listboard_base_template="intecomm_edc/base.html",
         dashboard_base_template="intecomm_edc/base.html",
         screening_listboard_template="intecomm_dashboard/screening/listboard.html",
-        subject_listboard_template=(
-            "intecomm_dashboard/bootstrap3/subject/subject_listboard.html"
-        ),
+        subject_listboard_template=("intecomm_dashboard/subject/subject_listboard.html"),
         subject_dashboard_template="intecomm_dashboard/subject/dashboard.html",
         subject_review_listboard_template="edc_review_dashboard/subject_review_listboard.html",
     ),
     ETC_DIR=base_dir / "tests" / "etc",
-    EDC_BOOTSTRAP=3,
     EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
     EMAIL_CONTACTS={
         "data_request": "someone@example.com",
@@ -93,9 +91,9 @@ project_settings = DefaultTestSettings(
         "ae_reports": "aereports@example.com",
     },
     EMAIL_ENABLED=True,
-    HOLIDAY_FILE=str(base_dir / "intecomm_edc" / "tests" / "holidays.csv"),
+    HOLIDAY_FILE=str(base_dir / "tests" / "holidays.csv"),
     LIVE_SYSTEM=False,
-    EDC_RANDOMIZATION_LIST_PATH=str(base_dir / "intecomm_edc" / "tests" / "etc"),
+    EDC_RANDOMIZATION_LIST_PATH=str(base_dir / "tests" / "etc"),
     EDC_SITES_MODULE_NAME="intecomm_sites",
     EDC_AUTH_SKIP_SITE_AUTHS=True,
     EDC_AUTH_SKIP_AUTH_UPDATER=True,
@@ -108,6 +106,7 @@ project_settings = DefaultTestSettings(
         "django.contrib.staticfiles",
         "django.contrib.sites",
         "django_crypto_fields.apps.AppConfig",
+        "django_pylabels.apps.AppConfig",
         "django_revision.apps.AppConfig",
         # "debug_toolbar",
         "django_extensions",
@@ -156,6 +155,8 @@ project_settings = DefaultTestSettings(
         "edc_protocol.apps.AppConfig",
         "edc_protocol_incident.apps.AppConfig",
         "edc_prn.apps.AppConfig",
+        "edc_pylabels.apps.AppConfig",
+        "edc_qareports.apps.AppConfig",
         "edc_qol.apps.AppConfig",
         "edc_randomization.apps.AppConfig",
         "edc_refusal.apps.AppConfig",

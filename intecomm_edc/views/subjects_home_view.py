@@ -7,7 +7,7 @@ from edc_navbar import NavbarViewMixin
 
 
 class SubjectsHomeView(EdcViewMixin, NavbarViewMixin, TemplateView):
-    template_name = f"intecomm_edc/bootstrap{settings.EDC_BOOTSTRAP}/subjects_home.html"
+    template_name = "intecomm_edc/subjects_home.html"
     navbar_name = settings.APP_NAME
     navbar_selected_item = "subjects"
 

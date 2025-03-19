@@ -5,17 +5,24 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: ${{ matrix.codebase }} / Dj ${{ matrix.django-version }} / Py ${{ matrix.python-version }}
+    name: >
+      ${{ matrix.codebase }} /
+      py${{ matrix.python-version }} /
+      dj${{ matrix.django-version }} /
+      ${{ matrix.database-engine }}
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
         codebase: ['Prod', 'Dev']
-        django-version: ['4.2', '5.0', 'dev']
-        python-version: ['3.12']
+        python-version: ['3.12', '3.13']
+        django-version: ['5.1', 'dev']
+        database-engine: ["mysql", "postgres"]
         exclude:
           - codebase: 'Prod'
+            django-version: 'dev'
+          - python-version: '3.12'
             django-version: 'dev'
 
     services:
@@ -27,6 +34,17 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
 
     steps:
       - name: Install pycups and words dependency
@@ -59,7 +77,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/tox.txt
-
 
       - name: Tox tests
         run: |

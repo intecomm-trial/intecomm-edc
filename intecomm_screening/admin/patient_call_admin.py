@@ -156,7 +156,7 @@ class PatientCallAdmin(
         else:
             url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
         url = f"{url}?q={obj.patient_log.id}"
-        return format_html(f'<A href="{url}">{obj.patient_log}</a>')
+        return format_html("{}", f'<A href="{url}">{obj.patient_log}</a>')
 
     @property
     def patient_log_model_cls(self):

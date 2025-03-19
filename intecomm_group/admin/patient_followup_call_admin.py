@@ -113,7 +113,7 @@ class PatientFollowupCallAdmin(
     def patient_log_link(self, obj=None):
         url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
         url = f"{url}?q={obj.patient_log.id}"
-        return format_html(f'<A href="{url}">{obj.patient_log}</a>')
+        return format_html("{}", f'<A href="{url}">{obj.patient_log}</a>')
 
     @property
     def patient_log_model_cls(self):
@@ -189,8 +189,9 @@ class PatientFollowupCallAdmin(
         if obj.last_appt_date:
             date_format = convert_php_dateformat(settings.SHORT_DATE_FORMAT)
             return format_html(
+                "{}",
                 f'<span style="white-space:nowrap;">'
-                f"{obj.last_appt_date.strftime(date_format)}</span>"
+                f"{obj.last_appt_date.strftime(date_format)}</span>",
             )
         return None
 

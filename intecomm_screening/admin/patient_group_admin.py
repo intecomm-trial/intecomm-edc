@@ -102,9 +102,10 @@ class PatientGroupAdmin(
             "Size, Ratio",
             {
                 "description": format_html(
+                    "{}",
                     "Please consult with your study coordinator before you "
                     "choose to override the minimum group size and/or the ratio of "
-                    "NCD to HIV patients."
+                    "NCD to HIV patients.",
                 ),
                 "fields": (
                     "bypass_group_size_min",
@@ -116,6 +117,7 @@ class PatientGroupAdmin(
             "Status",
             {
                 "description": format_html(
+                    "{}",
                     "<P>Patients may be selected if <B>status</B> is "
                     "set to <U>Recruiting</U>. Once patient selections are final, "
                     "set <B>status</B> to <U>Complete</U>."
@@ -123,7 +125,7 @@ class PatientGroupAdmin(
                     "to <U>Complete</U>:"
                     "<BR>-set the <B>status</B> back to <U>Recruiting</U>;"
                     "<BR>-save this form;"
-                    "<BR>-reopen this form and make your changes.</P>"
+                    "<BR>-reopen this form and make your changes.</P>",
                 ),
                 "fields": ("status",),
             },
@@ -243,7 +245,10 @@ class PatientGroupAdmin(
 
     @admin.display(description="Status", ordering="status")
     def group_status(self, obj):
-        return format_html(f'<span class="nowrap">{obj.get_status_display()}</span>')
+        return format_html(
+            "{}",
+            f'<span class="nowrap">{obj.get_status_display()}</span>',
+        )
 
     @admin.display(description="Patient Logs")
     def to_patients(self, obj=None):
@@ -256,8 +261,9 @@ class PatientGroupAdmin(
             url = reverse("intecomm_screening_admin:intecomm_screening_patientlog_changelist")
         url = f"{url}?{urlencode({'q': obj.name})}"
         return format_html(
+            "{}",
             f'<a title="Go to patient log" href="{url}">'
-            f'<span class="nowrap">{cnt}&nbsp;{p.plural("patient", cnt)}</span></a>'
+            f'<span class="nowrap">{cnt}&nbsp;{p.plural("patient", cnt)}</span></a>',
         )
 
     @admin.display(description="Randomization")
@@ -272,7 +278,9 @@ class PatientGroupAdmin(
                 )
                 url = f"{url}?name={obj.name}"
                 link = format_html(
-                    f'<a title="Go to Patient group rando" href="{url}">Ready to randomize</a>'
+                    "{}",
+                    f'<a title="Go to Patient group rando" '
+                    f'href="{url}">Ready to randomize</a>',
                 )
             else:
                 link = None
@@ -280,7 +288,9 @@ class PatientGroupAdmin(
             url = reverse("intecomm_dashboard:subject_listboard_url")
             url = f"{url}?q={obj.group_identifier}"
             link = format_html(
-                f'<a title="Go to patient groups in followup" href="{url}">{arm_as_str}</a>'
+                "{}",
+                f'<a title="Go to patient groups in followup" '
+                f'href="{url}">{arm_as_str}</a>',
             )
         return link
 

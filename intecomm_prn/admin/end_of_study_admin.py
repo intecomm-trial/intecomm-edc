@@ -26,6 +26,7 @@ class EndOfStudyAdmin(
     SimpleHistoryAdmin,
 ):
     additional_instructions = format_html(
+        "{}",
         "Note: if the patient is <i>deceased</i>, complete form "
         "`{}` before completing this form. "
         "<BR>If the patient is </i>lost to follow up</i>, complete form "

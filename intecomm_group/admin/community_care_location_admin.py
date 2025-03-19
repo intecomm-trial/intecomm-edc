@@ -79,8 +79,9 @@ class CommunityCareLocationAdmin(
     def map(self, obj=None):
         if obj.latitude and obj.longitude:
             return format_html(
+                "{}",
                 f'<A href="https://www.google.com/maps/@{obj.latitude},{obj.longitude},15z">'
-                '<i class="fas fa-location-dot"></i>'
+                '<i class="fas fa-location-dot"></i>',
             )
         return None
 

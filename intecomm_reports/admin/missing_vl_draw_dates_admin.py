@@ -6,8 +6,8 @@ from edc_qareports.modeladmin_mixins import QaReportModelAdminMixin
 from edc_sites.admin import SiteModelAdminMixin
 
 from ..admin_site import intecomm_reports_admin
+from ..dataframe_to_model import get_missing_drawn_dates_df
 from ..models import MissingVlDrawDates
-from ..vl import get_missing_drawn_dates_df
 from .list_filters import ScheduleStatusListFilter
 
 

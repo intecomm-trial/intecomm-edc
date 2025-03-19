@@ -22,7 +22,7 @@ def get_view_definition() -> dict:
         """  # noqa
 
     sql_view = SqlViewGenerator(
-        report_model="intecomm_reports.vl_view",
+        report_model="intecomm_reports.vl",
         ordering=["site_id", "subject_identifier"],
     )
     return {

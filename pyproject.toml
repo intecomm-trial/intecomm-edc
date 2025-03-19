@@ -1,8 +1,9 @@
 [build-system]
 requires = ["setuptools>=60", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-version_file="_version.py"
+version_file = "_version.py"
 
 [tool.black]
 line-length = 95
@@ -12,7 +13,7 @@ extend-exclude = '''^(.*\/)*\b(migrations)\b($|\/.*$)'''
 [tool.isort]
 profile = "black"
 py_version = "312"
-skip = [".tox", ".eggs", "migrations"]
+skip = [".tox", ".eggs", "migrations", "_version.py"]
 
 [tool.coverage.run]
 parallel = false
@@ -35,47 +36,58 @@ exclude_lines = [
 legacy_tox_ini = """
 [tox]
 envlist =
-    py{312}-dj{50}-edc{prod},
-    py{312}-dj{50,dev}-edc{dev},
+    py{312,313}-dj{51}-edc{prod,dev},
+    py{313}-dj{dev}-edc{dev},
     lint
+    pre-commit
 
 isolated_build = true
 
 [gh-actions]
 python =
-    3.12: py312, lint
+    3.12: py312, lint, pre-commit
+    3.13: py313
 
 [gh-actions:env]
 DJANGO =
-    4.2: dj42
-    5.0: dj50, lint
+    5.1: dj51, lint, pre-commit
     dev: djdev
 EDC_CODEBASE =
-    Prod: edcprod, lint
+    Prod: edcprod, lint, pre-commit
     Dev: edcdev
 
 [testenv]
 deps =
     -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/tox.txt
     -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/test_utils.txt
-    -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/third_party_dev.txt
-    dj42: Django>=4.2,<5.0
-    dj50: Django>=5.0,<6.0
+    dj51: Django>=5.1,<5.2
     djdev: https://github.com/django/django/tarball/main
 
 commands =
     pip install -U pip
+    python --version
     pip --version
     edcdev: pip install -U -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/edc.txt
     edcdev: pip install -U git+https://github.com/intecomm-trial/intecomm-form-validators.git@develop
     pip freeze
-    coverage run runtests.py
+    coverage run -a runtests.py
     coverage report
 
 [testenv:lint]
 deps = -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/lint.txt
 commands =
+    python --version
+    pip --version
+    pip freeze
     isort --profile=black --check --diff .
     black --check --diff .
     flake8 .
+
+[testenv:pre-commit]
+deps = pre-commit
+commands =
+    python --version
+    pip --version
+    pip freeze
+    pre-commit run --all-files
 """

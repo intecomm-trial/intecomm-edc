@@ -68,7 +68,7 @@ visit12 = Visit(
     requisitions_prn=requisitions_prn,
     requisitions_unscheduled=requisitions_unscheduled,
     rlower=relativedelta(days=13),
-    rupper=relativedelta(months=6),
+    rupper=relativedelta(months=12),
     timepoint=12,
 )
 

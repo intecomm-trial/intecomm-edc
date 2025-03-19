@@ -1,3 +1,7 @@
+*.dta
+*.csv
+*.png
+*.dot
 *.ipynb
 jupyter/*
 docs/.~lock*

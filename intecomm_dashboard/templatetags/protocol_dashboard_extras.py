@@ -8,7 +8,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from edc_constants.constants import NO, TBD, YES
 from edc_dashboard.url_names import url_names
-from edc_dashboard.utils import get_bootstrap_version
 from edc_screening.constants import ELIGIBLE, NOT_ELIGIBLE
 from edc_sites.site import sites
 from intecomm_rando.constants import UGANDA
@@ -24,7 +23,7 @@ register = template.Library()
 
 
 @register.inclusion_tag(
-    f"intecomm_dashboard/bootstrap{get_bootstrap_version()}/" f"buttons/screening_button.html",
+    "intecomm_dashboard/buttons/screening_button.html",
     takes_context=True,
 )
 def screening_button(context, model_wrapper):
@@ -52,10 +51,7 @@ def screening_button(context, model_wrapper):
     )
 
 
-@register.inclusion_tag(
-    f"intecomm_dashboard/bootstrap{get_bootstrap_version()}/"
-    f"buttons/eligibility_button.html"
-)
+@register.inclusion_tag("intecomm_dashboard/buttons/eligibility_button.html")
 def eligibility_button(subject_screening_model_wrapper):
     comment = []
     obj = subject_screening_model_wrapper.object
@@ -77,7 +73,7 @@ def eligibility_button(subject_screening_model_wrapper):
 
 
 @register.inclusion_tag(
-    f"intecomm_dashboard/bootstrap{get_bootstrap_version()}/buttons/add_consent_button.html",
+    "intecomm_dashboard/buttons/add_consent_button.html",
     takes_context=True,
 )
 def add_consent_button(context, model_wrapper):
@@ -100,8 +96,7 @@ def add_consent_button(context, model_wrapper):
 
 
 @register.inclusion_tag(
-    f"intecomm_dashboard/bootstrap{get_bootstrap_version()}/"
-    f"buttons/patient_log_button.html",
+    "intecomm_dashboard/buttons/patient_log_button.html",
     takes_context=True,
 )
 def patient_log_button(context, model_wrapper):
@@ -131,8 +126,7 @@ def patient_log_button(context, model_wrapper):
 
 
 @register.inclusion_tag(
-    f"intecomm_dashboard/bootstrap{get_bootstrap_version()}/"
-    f"buttons/patient_group_button.html",
+    "intecomm_dashboard/buttons/patient_group_button.html",
     takes_context=True,
 )
 def patient_group_button(context, model_wrapper):
@@ -159,7 +153,7 @@ def patient_group_button(context, model_wrapper):
 
 
 @register.inclusion_tag(
-    f"intecomm_dashboard/bootstrap{get_bootstrap_version()}/" f"buttons/refusal_button.html",
+    "intecomm_dashboard/buttons/refusal_button.html",
     takes_context=True,
 )
 def refusal_button(context, model_wrapper):
@@ -174,9 +168,7 @@ def refusal_button(context, model_wrapper):
     )
 
 
-@register.inclusion_tag(
-    f"intecomm_dashboard/bootstrap{get_bootstrap_version()}/buttons/dashboard_button.html"
-)
+@register.inclusion_tag("intecomm_dashboard/buttons/dashboard_button.html")
 def dashboard_button(model_wrapper):
     subject_dashboard_url = url_names.get("subject_dashboard_url")
     subject_dashboard_href = reverse(
@@ -191,7 +183,7 @@ def dashboard_button(model_wrapper):
 
 
 @register.inclusion_tag(
-    f"intecomm_dashboard/bootstrap{get_bootstrap_version()}/changelist_topbar.html",
+    "intecomm_dashboard/changelist_topbar.html",
     takes_context=True,
 )
 def intecomm_changelist_topbar(context, selected: str):

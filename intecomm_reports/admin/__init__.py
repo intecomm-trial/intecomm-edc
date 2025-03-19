@@ -1,3 +1,4 @@
+from .appointment_location_qa_admin import AppointmentLocationQaAdmin
 from .dbviews import EosAdmin, SubjectsTransferredAdmin, VlAdmin
 from .diagnoses_admin import DiagnosesAdmin
 from .missing_vl_draw_dates_admin import MissingVlDrawDatesAdmin

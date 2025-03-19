@@ -1,0 +1,25 @@
+{% extends 'edc_subject_dashboard/dashboard.html' %}
+
+{% load static %}
+
+{% block locator_information %}{% endblock locator_information %}
+
+{% block top_bar %}
+
+    {% include "intecomm_dashboard/subject/dashboard/top_bar.html" %}
+
+{% endblock top_bar %}
+
+{% block extra_demographic_title %}
+  <span class="badge"><i class="fas fa-users-between-lines fa-fw"></i> {{ group_name }} {{ patient_log.group_identifier }}</span><span class="badge"><i class="fas fa-file fa-fw"></i> {{ patient_log.filing_identifier }}</span>
+{% endblock extra_demographic_title %}
+
+{% block side_bar %}
+  {{ block.super }}
+  <a class="list-group-item"><i class="fas fa-file fa-fw"></i>{{ patient_log.filing_identifier }}</a>
+
+{% endblock side_bar %}
+
+{% block top_bar_buttons_extra %}
+  <a href="{{group_subject_dashboards_url}}" role="button" class="btn btn-sm btn-primary" data-toggle="tooltip" title="Go to patient group"><i class="fa-solid fa-reply fa-1x fa-fw" aria-hidden="true"></i> Group</a>
+{% endblock top_bar_buttons_extra %}

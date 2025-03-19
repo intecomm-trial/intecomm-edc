@@ -19,7 +19,6 @@ env = environ.Env(
     DJANGO_AUTO_CREATE_KEYS=(bool, False),
     DJANGO_CSRF_COOKIE_SECURE=(bool, True),
     DJANGO_DEBUG=(bool, False),
-    DJANGO_EDC_BOOTSTRAP=(int, 3),
     DJANGO_EMAIL_ENABLED=(bool, False),
     DJANGO_EMAIL_USE_TLS=(bool, True),
     DJANGO_LIVE_SYSTEM=(bool, False),
@@ -83,11 +82,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "debug_toolbar",
+    # "debug_toolbar",
     "fontawesomefree",
     "defender",
     "django_db_views",
+    "rangefilter",
     "django.contrib.sites",
+    "django_pylabels.apps.AppConfig",
     "multisite.apps.AppConfig",
     "django_crypto_fields.apps.AppConfig",
     "django_revision.apps.AppConfig",
@@ -136,6 +137,7 @@ INSTALLED_APPS = [
     "edc_protocol.apps.AppConfig",
     "edc_protocol_incident.apps.AppConfig",
     "edc_prn.apps.AppConfig",
+    "edc_pylabels.apps.AppConfig",
     "edc_qol.apps.AppConfig",
     "edc_randomization.apps.AppConfig",
     "edc_refusal.apps.AppConfig",
@@ -173,12 +175,12 @@ INSTALLED_APPS = [
 if not DEFENDER_ENABLED:
     INSTALLED_APPS.pop(INSTALLED_APPS.index("defender"))
 
-if not DJANGO_DEBUG_TOOLBAR_ENABLED:
-    INSTALLED_APPS.pop(INSTALLED_APPS.index("debug_toolbar"))
+# if not DJANGO_DEBUG_TOOLBAR_ENABLED:
+#     INSTALLED_APPS.pop(INSTALLED_APPS.index("debug_toolbar"))
 
 
 MIDDLEWARE = [
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -187,6 +189,7 @@ MIDDLEWARE = [
     "django.contrib.sites.middleware.CurrentSiteMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",
     "defender.middleware.FailedLoginMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -195,8 +198,8 @@ MIDDLEWARE = [
 if not DEFENDER_ENABLED:
     MIDDLEWARE.pop(MIDDLEWARE.index("defender.middleware.FailedLoginMiddleware"))
 
-if not DJANGO_DEBUG_TOOLBAR_ENABLED:
-    MIDDLEWARE.pop(MIDDLEWARE.index("debug_toolbar.middleware.DebugToolbarMiddleware"))
+# if not DJANGO_DEBUG_TOOLBAR_ENABLED:
+#     MIDDLEWARE.pop(MIDDLEWARE.index("debug_toolbar.middleware.DebugToolbarMiddleware"))
 
 MIDDLEWARE.extend(
     [
@@ -399,7 +402,6 @@ EDC_BLOOD_RESULTS_MODEL_APP_LABEL = "intecomm_subject"
 EDC_NAVBAR_DEFAULT = env("EDC_NAVBAR_DEFAULT")
 
 # dashboards
-EDC_BOOTSTRAP = env("DJANGO_EDC_BOOTSTRAP")
 DASHBOARD_URL_NAMES = env.dict("DJANGO_DASHBOARD_URL_NAMES")
 DASHBOARD_BASE_TEMPLATES = env.dict("DJANGO_DASHBOARD_BASE_TEMPLATES")
 LAB_DASHBOARD_BASE_TEMPLATES = env.dict("DJANGO_LAB_DASHBOARD_BASE_TEMPLATES")
@@ -449,7 +451,7 @@ MULTISITE_REGISTER_POST_MIGRATE_SYNC_ALIAS = False
 # and that redis server is running
 DEFENDER_REDIS_NAME = "default"
 DEFENDER_LOCK_OUT_BY_IP_AND_USERNAME = True
-DEFENDER_LOCKOUT_TEMPLATE = "edc_auth/bootstrap3/login.html"
+DEFENDER_LOCKOUT_TEMPLATE = "edc_auth/login.html"
 DEFENDER_LOGIN_FAILURE_LIMIT = 5
 
 # edc_crf

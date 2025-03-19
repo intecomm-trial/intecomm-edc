@@ -1,12 +1,15 @@
 from datetime import date
 
+import numpy as np
+import pandas as pd
 from django.db.models import Count, Min
+from django_pandas.io import read_frame
 from edc_dx.diagnoses import (
     ClinicalReviewBaselineRequired,
     Diagnoses,
     InitialReviewRequired,
 )
-from edc_pdutils.model_to_dataframe import ModelToDataframe
+from edc_model_to_dataframe import ModelToDataframe
 from edc_utils import get_utcnow
 from tqdm import tqdm
 
@@ -143,3 +146,41 @@ def update_diagnoses_instance(
 
     obj.save()
     return errors
+
+
+def get_review_model_as_df(model_cls):
+    qs = model_cls.objects.values(
+        "subject_visit__subject_identifier",
+        "has_vl",
+        "vl",
+        "drawn_date",
+        "report_datetime",
+    ).all()
+    df = read_frame(
+        qs,
+        fieldnames=[
+            "subject_visit__subject_identifier",
+            "vl",
+            "drawn_date",
+            "report_datetime",
+        ],
+    )
+    df.rename(
+        columns={
+            "subject_visit__subject_identifier": "subject_identifier",
+            "site__id": "site_id",
+        },
+        inplace=True,
+    )
+    # vl column, replace nulls with NaN
+    df.loc[df["vl"].isnull(), "vl"] = np.nan
+
+    # report date
+    df["report_date"] = pd.to_datetime(df["report_datetime"]).dt.date
+    df["report_date"] = df["report_date"].astype("datetime64[ns]")
+    df = df.drop("report_datetime", axis=1)
+
+    # replace baseline drawn date with report date if drawn date is None
+    df.loc[(df["drawn_date"].isnull()) & (df["vl"].notna()), "drawn_date"] = df["report_date"]
+    df["drawn_date"] = df["drawn_date"].astype("datetime64[ns]")
+    return df

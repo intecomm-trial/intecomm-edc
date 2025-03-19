@@ -121,7 +121,6 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
         consent_form.save()
         self.assertEqual(SubjectConsentUg.objects.all().count(), 1)
 
-    @tag("1")
     @override_settings(SITE_ID=201)
     def test_consent_after_already_consented_raises(self):
         subject_screening = self.get_subject_screening()
@@ -151,6 +150,7 @@ class TestSubjectConsentForm(IntecommTestCaseMixin, TestCase):
             consent_form_two.save()
         self.assertEqual(SubjectConsentTz.objects.all().count(), 1)
 
+    @tag("1")
     @override_settings(SITE_ID=201)
     def test_consent_after_already_refused_raises(self):
         subject_screening = self.get_subject_screening()

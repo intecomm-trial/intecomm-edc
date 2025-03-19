@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.admin import AdminSite as DjangoAdminSite
 from django.utils.translation import gettext_lazy
 
@@ -7,8 +6,8 @@ from .apps import AppConfig
 
 class AdminSite(DjangoAdminSite):
     app_index_template = "edc_model_admin/admin/app_index.html"
-    login_template = f"edc_auth/bootstrap{settings.EDC_BOOTSTRAP}/login.html"
-    logout_template = f"edc_auth/bootstrap{settings.EDC_BOOTSTRAP}/login.html"
+    login_template = "edc_auth/login.html"
+    logout_template = "edc_auth/login.html"
     enable_nav_sidebar = False  # DJ 3.1
     final_catch_all_view = True  # DJ 3.2
     site_title = gettext_lazy(AppConfig.verbose_name)

@@ -39,6 +39,7 @@ class HealthEconomicsHouseholdHeadForm(
         fields = "__all__"
         help_texts = {
             "hoh_employment_type": format_html(
+                "{}",
                 '<div class="form-row"><OL><LI><b>Chief executives, managers, senior '
                 "officials and legislators</b> </li>"
                 "<LI><b>Professionals, technicians and associate professionals</b>  (e.g. "
@@ -59,6 +60,6 @@ class HealthEconomicsHouseholdHeadForm(
                 "train drivers, etc.) </li>"
                 "<LI><b>Elementary occupations</b> (e.g. cleaners, farm pickers/labourers, "
                 "rickshaw drivers, builder assistants, hawkers, shoe shiners, street car "
-                "cleaners, garbage collectors, street sweepers, etc.) </li></ol></div>"
+                "cleaners, garbage collectors, street sweepers, etc.) </li></ol></div>",
             )
         }

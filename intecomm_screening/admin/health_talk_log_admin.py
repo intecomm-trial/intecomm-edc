@@ -81,9 +81,10 @@ class HealthTalkLogAdmin(
     def map(self, obj=None):
         if obj.health_facility.latitude and obj.health_facility.longitude:
             return format_html(
+                "{}",
                 f'<A href="https://www.google.com/maps/@{obj.health_facility.latitude},"'
                 f'"{obj.health_facility.longitude},15z">'
-                '<i class="fas fa-location-dot"></i>'
+                '<i class="fas fa-location-dot"></i>',
             )
         return None
 

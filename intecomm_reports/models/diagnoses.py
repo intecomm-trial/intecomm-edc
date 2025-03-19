@@ -9,7 +9,7 @@ from edc_qareports.model_mixins import QaReportModelMixin, qa_reports_permission
 class Diagnoses(UniqueSubjectIdentifierFieldMixin, QaReportModelMixin, BaseUuidModel):
     """A read-only table with details of each participant's diagnoses.
 
-    Run `python manage.py update_conditions` to populate.
+    Run `python manage.py update_diagnoses` to populate.
     """
 
     report_model = models.CharField(max_length=50, default="meta_reports.diagnoses")
