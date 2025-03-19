@@ -132,7 +132,9 @@ def get_formatted_rows_yes_no(
 def get_formatted_rows_by_country(
     df, col_baseline: str | None = None, col_endline: str | None = None
 ):
-    """Returns 5 columns"""
+    """Returns 5 columns
+    Baseline and endline format
+    """
 
     df_base = df.copy()
     df_ug_base = df[(df.country == "UG")].copy()
@@ -202,3 +204,110 @@ def get_formatted_rows_by_country(
             *get_cells_for_continuous_var(endline_all),
         ],
     }
+
+
+def get_formatted_rows_by_country_single(
+    df, col_baseline: str | None = None, col_endline: str | None = None
+):
+    """Returns 5 columns"""
+
+    df_base = df.copy()
+    df_ug_base = df[(df.country == "UG")].copy()
+    df_tz_base = df[(df.country == "TZ")].copy()
+
+    baseline_ug_a = df_ug_base[(df_ug_base["assignment"] == COMMUNITY_ARM)][
+        col_baseline
+    ].describe()
+    baseline_tz_a = df_tz_base[(df_tz_base["assignment"] == COMMUNITY_ARM)][
+        col_baseline
+    ].describe()
+    baseline_a = df_base[df_base["assignment"] == COMMUNITY_ARM][col_baseline].describe()
+
+    baseline_ug_b = df_ug_base[(df_ug_base["assignment"] == FACILITY_ARM)][
+        col_baseline
+    ].describe()
+    baseline_tz_b = df_tz_base[(df_tz_base["assignment"] == FACILITY_ARM)][
+        col_baseline
+    ].describe()
+    baseline_b = df_base[df_base["assignment"] == FACILITY_ARM][col_baseline].describe()
+
+    baseline_all = df_base[col_baseline].describe()
+
+    return {
+        "Timepoint": ["Baseline", "", ""],
+        "Statistics": ["n", "Mean(sd)", "Median(min-max)"],
+        f"{treatment_arm[COMMUNITY_ARM]} UG": [
+            *get_cells_for_continuous_var(baseline_ug_a),
+        ],
+        f"{treatment_arm[COMMUNITY_ARM]} TZ": [
+            *get_cells_for_continuous_var(baseline_tz_a),
+        ],
+        f"{treatment_arm[COMMUNITY_ARM]} BOTH": [
+            *get_cells_for_continuous_var(baseline_a),
+        ],
+        f"{treatment_arm[FACILITY_ARM]} UG": [
+            *get_cells_for_continuous_var(baseline_ug_b),
+        ],
+        f"{treatment_arm[FACILITY_ARM]} TZ": [
+            *get_cells_for_continuous_var(baseline_tz_b),
+        ],
+        f"{treatment_arm[FACILITY_ARM]} BOTH": [
+            *get_cells_for_continuous_var(baseline_b),
+        ],
+        "All": [
+            *get_cells_for_continuous_var(baseline_all),
+        ],
+    }
+
+
+# def get_formatted_rows_tstat(dfa, dfb, col: str | None = None):
+#
+#     t_stat, p_value = ttest_ind(dfa[col], dfb[col])
+#
+#     df_base = df.copy()
+#     df_ug_base = df[(df.country == "UG")].copy()
+#     df_tz_base = df[(df.country == "TZ")].copy()
+#
+#     baseline_ug_a = df_ug_base[(df_ug_base["assignment"] == COMMUNITY_ARM)][
+#         col_baseline
+#     ].describe()
+#     baseline_tz_a = df_tz_base[(df_tz_base["assignment"] == COMMUNITY_ARM)][
+#         col_baseline
+#     ].describe()
+#     baseline_a = df_base[df_base["assignment"] == COMMUNITY_ARM][col_baseline].describe()
+#
+#     baseline_ug_b = df_ug_base[(df_ug_base["assignment"] == FACILITY_ARM)][
+#         col_baseline
+#     ].describe()
+#     baseline_tz_b = df_tz_base[(df_tz_base["assignment"] == FACILITY_ARM)][
+#         col_baseline
+#     ].describe()
+#     baseline_b = df_base[df_base["assignment"] == FACILITY_ARM][col_baseline].describe()
+#
+#     baseline_all = df_base[col_baseline].describe()
+#
+#     return {
+#         "Timepoint": ["Baseline", "", ""],
+#         "Statistics": ["n", "Mean(sd)", "Median(min-max)"],
+#         f"{treatment_arm[COMMUNITY_ARM]} UG": [
+#             *get_cells_for_continuous_var(baseline_ug_a),
+#         ],
+#         f"{treatment_arm[COMMUNITY_ARM]} TZ": [
+#             *get_cells_for_continuous_var(baseline_tz_a),
+#         ],
+#         f"{treatment_arm[COMMUNITY_ARM]} BOTH": [
+#             *get_cells_for_continuous_var(baseline_a),
+#         ],
+#         f"{treatment_arm[FACILITY_ARM]} UG": [
+#             *get_cells_for_continuous_var(baseline_ug_b),
+#         ],
+#         f"{treatment_arm[FACILITY_ARM]} TZ": [
+#             *get_cells_for_continuous_var(baseline_tz_b),
+#         ],
+#         f"{treatment_arm[FACILITY_ARM]} BOTH": [
+#             *get_cells_for_continuous_var(baseline_b),
+#         ],
+#         "All": [
+#             *get_cells_for_continuous_var(baseline_all),
+#         ],
+#     }
