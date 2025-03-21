@@ -118,6 +118,9 @@ def to_stata(df_main, path, filename: str = None):
     For example:
         df_main = get_df_main_1858(None)
         to_stata(df_main, my_path)
+
+    Once created, open the DTA in STATA and run the commands from the
+    printed output of this func.
     """
     df_main["randomization_list_id"] = df_main["randomization_list_id"].astype(str)
     df_main["vl_baseline"] = df_main["vl_baseline"].astype("Int64")
