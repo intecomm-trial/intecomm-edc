@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from django_pandas.io import read_frame
-from edc_constants.constants import NO, OTHER, YES
+from edc_constants.constants import NEVER, NO, OTHER, YES
 from edc_model import duration_to_date
 from edc_model_to_dataframe import read_frame_edc
 from edc_pdutils.dataframes import get_crf, get_subject_visit
@@ -13,6 +13,14 @@ from intecomm_rando.models import RandomizationList
 
 from intecomm_prn.models import EndOfStudy
 
+from ..constants import (
+    DM_ALONE,
+    HIV_ALONE,
+    HTN_ALONE,
+    HTN_DM,
+    UNDEFINED,
+    primary_cohort_mapping,
+)
 from ..notebooks.primary.glucose import (
     get_all_glucose_results,
     get_glucose_first,
@@ -27,23 +35,43 @@ treatment_arm_labels = {COMMUNITY_ARM: "Community", FACILITY_ARM: "Facility"}
 
 
 def get_df_main_1858(export_folder: Path | None) -> pd.DataFrame:
-    """Trial population"""
+    """Returns a dataframe of the population for the primary analysis."""
 
     # start with patient log
+    # using patient_log is one way to link group_identifier and subject_identifier
     df_main = get_patientlog_df()
 
-    # exlude thos not in a group
+    # exclude those in patient_log that were not added to a group
     df_main = df_main[(df_main.group_identifier.notna())]
 
-    # rename conditions to distinguis as reported at screen
+    # exclude those added to a group but never consented
+    df_main = df_main[(df_main.consent_datetime.notna())]
+
+    assert len(df_main) == 1864  # nosec B101
+
+    # rename conditions reported at screening to distinguish from those
+    # confirmed later at baseline
     df_main.rename(columns={"hiv": "hiv_scr", "htn": "htn_scr", "dm": "dm_scr"}, inplace=True)
 
     # merge with df_visit
+    # this merge leaves us with only the subjects who presented for the
+    # rando / baseline visit
     df_main = merge_in_visit(df_main)
+
+    assert len(df_main) == 1858  # nosec B101
 
     # 1858 subjects
     df_main = merge_in_rando(df_main)
 
+    assert len(df_main[df_main.assignment == "a"]) == 932  # nosec B101
+    assert len(df_main[df_main.assignment == "b"]) == 926  # nosec B101
+    assert len(df_main[df_main.allocation == "1"]) == 932  # nosec B101
+    assert len(df_main[df_main.allocation == "2"]) == 926  # nosec B101
+
+    # merge in baseline conditions. Conditions (hiv, dm, htn) are confirmed at baseline.
+    # There is a slight difference in that reported at screening (hiv_scr, dm_scr, htn_scr)
+    # from what was confirmed at baseline.
+    # also note, for a condition must be diagnosed more than 6m ago
     df_main = merge_in_baseline_conditions(df_main)
 
     # create ncd column and hiv_only column
@@ -52,6 +80,13 @@ def get_df_main_1858(export_folder: Path | None) -> pd.DataFrame:
     df_main["htn_only"] = df_main.apply(get_htn_only, axis=1)
     df_main["dm_only"] = df_main.apply(get_dm_only, axis=1)
     df_main["htn_and_dm"] = df_main.apply(get_htn_and_dm, axis=1)
+    df_main["hiv_and_htn_and_dm"] = df_main.apply(get_hiv_htn_and_dm, axis=1)
+
+    df_main = merge_in_vitals(df_main)
+
+    df_main = merge_in_other_baseline_data(df_main)
+
+    df_main = merge_in_complications(df_main)
 
     df_main = merge_in_vl(df_main)
 
@@ -64,6 +99,10 @@ def get_df_main_1858(export_folder: Path | None) -> pd.DataFrame:
     df_main = merge_in_glucose(df_main)
 
     df_main["country"] = df_main.apply(get_country, axis=1)
+
+    df_main = merge_in_primary_cohort_vars(df_main)
+
+    assert len(df_main) == 1858  # nosec B101
 
     if export_folder:
         df_main.to_csv(
@@ -85,6 +124,7 @@ def to_stata(df_main, path, filename: str = None):
     df_main["vl_endline"] = df_main["vl_endline"].astype("Int64")
     df_main["vl_baseline_log10"] = df_main["vl_baseline_log10"].astype("float64")
     df_main["vl_endline_log10"] = df_main["vl_endline_log10"].astype("float64")
+    df_main["primary_vl_endline"] = df_main["primary_vl_endline"].astype("Int64")
     df_main = df_main.rename(
         columns={
             "glucose_fasting_duration_hours_baseline": "glucose_fasting_hours_baseline",
@@ -170,10 +210,10 @@ def to_stata(df_main, path, filename: str = None):
 
 def glucose_controlled(value):
     if value < 7.00:
-        return YES
+        return 1
     elif value >= 7.00:
-        return NO
-    return "Missing"
+        return 0
+    return np.nan
 
 
 def get_ncd(s):
@@ -204,6 +244,48 @@ def get_htn_and_dm(s):
     if s["htn"] == 1 and s["dm"] == 1 and s["hiv"] == 0:
         return 1
     return 0
+
+
+def get_hiv_htn_and_dm(s):
+    if s["htn"] == 1 and s["dm"] == 1 and s["hiv"] == 1:
+        return 1
+    return 0
+
+
+def get_primary_cohort(s) -> None | int:
+    """Derived column for `primary` cohorts"""
+    if s["htn"] == 0 and s["dm"] == 1 and s["hiv"] == 0:
+        return DM_ALONE
+    elif s["htn"] == 1 and s["dm"] == 0 and s["hiv"] == 0:
+        return HTN_ALONE
+    elif s["htn"] == 1 and s["dm"] == 1 and s["hiv"] == 0:
+        return HTN_DM
+    elif s["htn"] == 0 and s["dm"] == 0 and s["hiv"] == 1:
+        return HIV_ALONE
+    return UNDEFINED
+
+
+def get_primary_cohort_as_str(s) -> None | str:
+    """Derived column for `primary` cohorts"""
+    if s["primary_cohort"] in primary_cohort_mapping:
+        return primary_cohort_mapping[s["primary_cohort"]]
+    return None
+
+
+def primary_controlled(s):
+    """Derived column that only has value if in the primary cohorts."""
+    if s.primary_cohort_str == "HTN_ALONE":
+        return s.bp_controlled_endline
+    elif s.primary_cohort_str == "DM_ALONE":
+        return s.glucose_controlled_endline
+    elif s.primary_cohort_str == "HTN_DM":
+        if s.bp_controlled_endline == 1 and s.glucose_controlled_endline == 1:
+            return 1
+        else:
+            return 0
+    elif s.primary_cohort_str == "HIV_ALONE":
+        return s.vl_endline_suppressed
+    return np.nan
 
 
 def get_dx_date(s):
@@ -578,6 +660,88 @@ def get_bp_dia_endline(s):
     return np.nan
 
 
+def merge_in_vitals(df_main: pd.DataFrame) -> pd.DataFrame:
+
+    df_vitals = get_crf(
+        model="intecomm_subject.vitals", subject_visit_model="intecomm_subject.subjectvisit"
+    )
+    df_weight = df_vitals.sort_values(by=["subject_identifier", "visit_datetime"])
+    df_weight = (
+        df_weight[(df_weight.weight.notna())][["subject_identifier", "weight"]]
+        .groupby("subject_identifier")
+        .agg(["first"])
+        .reset_index()
+    )
+    df_weight.columns = ["subject_identifier", "weight"]
+    df_main = df_main.merge(df_weight, on="subject_identifier", how="left")
+    df_main.reset_index(drop=True, inplace=True)
+
+    df_height = df_vitals.sort_values(by=["subject_identifier", "visit_datetime"])
+    df_height = (
+        df_height[(df_height.height.notna())][["subject_identifier", "height"]]
+        .groupby("subject_identifier")
+        .agg(["first"])
+        .reset_index()
+    )
+    df_height.columns = ["subject_identifier", "height"]
+    df_main = df_main.merge(df_height, on="subject_identifier", how="left")
+    df_main.reset_index(drop=True, inplace=True)
+
+    return df_main
+
+
+def merge_in_complications(df_main: pd.DataFrame) -> pd.DataFrame:
+    df = get_crf(
+        "intecomm_subject.complicationsbaseline",
+        subject_visit_model="intecomm_subject.subjectvisit",
+        read_verbose=False,
+    )
+    df_main = df_main.merge(
+        df[
+            [
+                "subject_identifier",
+                "stroke",
+                "heart_attack",
+                "renal_disease",
+                "vision",
+                "numbness",
+                "foot_ulcers",
+            ]
+        ],
+        on="subject_identifier",
+        how="left",
+    )
+    df_main.reset_index(drop=True, inplace=True)
+    return df_main
+
+
+def merge_in_other_baseline_data(df_main: pd.DataFrame) -> pd.DataFrame:
+    df = get_crf(
+        "intecomm_subject.otherbaselinedata",
+        subject_visit_model="intecomm_subject.subjectvisit",
+        read_verbose=False,
+    )
+    df["alcohol_consumption"] = df["alcohol_consumption"].apply(
+        lambda x: NEVER if x == "Not applicable" else x
+    )
+    df_main = df_main.merge(
+        df[
+            [
+                "subject_identifier",
+                "employment_status",
+                "education",
+                "marital_status",
+                "smoking_status",
+                "alcohol_consumption",
+            ]
+        ],
+        on="subject_identifier",
+        how="left",
+    )
+    df_main.reset_index(drop=True, inplace=True)
+    return df_main
+
+
 def merge_in_bp(df_main: pd.DataFrame) -> pd.DataFrame:
     """Need to consider duration between measurements!"""
     # TODO: Need to consider duration between measurements! what qualifies as first and last
@@ -631,21 +795,6 @@ def merge_in_bp(df_main: pd.DataFrame) -> pd.DataFrame:
         ]
     ]
     df_vitals_first_last.reset_index(drop=True, inplace=True)
-
-    # df_vitals_first_last.rename(
-    #     columns={
-    #         # "bp_systolic_first": "bp_sys_baseline",
-    #         # "bp_systolic_last": "bp_sys_endline",
-    #         # "bp_diastolic_first": "bp_dia_baseline",
-    #         # "bp_diastolic_last": "bp_dia_endline",
-    #         "bp_datetime_first": "bp_datetime_baseline",
-    #         "bp_datetime_last": "bp_datetime_endline",
-    #         "bp_visit_code_first": "bp_visit_code_baseline",
-    #         "bp_visit_code_last": "bp_visit_code_endline",
-    #     },
-    #     inplace=True,
-    # )
-
     df_main = df_main.merge(df_vitals_first_last, on="subject_identifier", how="left")
     df_main.reset_index(drop=True)
     df_main["bp_sys_baseline"] = df_main.apply(get_bp_sys_baseline, axis=1)
@@ -741,6 +890,28 @@ def merge_in_glucose(df_main: pd.DataFrame) -> pd.DataFrame:
     return df_main
 
 
+def merge_in_primary_cohort_vars(df_main) -> pd.DataFrame:
+    df_main["primary_cohort"] = df_main.apply(get_primary_cohort, axis=1).astype("Int64")
+    df_main["primary_cohort_str"] = df_main.apply(get_primary_cohort_as_str, axis=1)
+
+    df_main["primary_gl_endline"] = df_main[
+        (df_main.primary_cohort.isin([DM_ALONE, HTN_DM]))
+        & (df_main.glucose_fasting_duration_hours_endline >= 8.0)
+    ]["glucose_value_endline"]
+    df_main["primary_bp_sys_endline"] = df_main[
+        df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])
+    ]["bp_sys_endline"]
+    df_main["primary_bp_dia_endline"] = df_main[
+        df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])
+    ]["bp_dia_endline"]
+    df_main["primary_vl_endline"] = df_main[df_main.primary_cohort.isin([HIV_ALONE])][
+        "vl_endline"
+    ]
+    df_main["primary_controlled"] = df_main.apply(primary_controlled, axis=1).astype("Int64")
+    df_main.reset_index(drop=True, inplace=True)
+    return df_main
+
+
 def variable_labels() -> dict:
     return {
         "age_in_years": "age in years",
@@ -802,6 +973,7 @@ def variable_labels() -> dict:
         "glucose_value_baseline": "Baseline glucose measurement value",
         "glucose_value_endline": "Endline glucose measurement value",
         "group_identifier": "unique group identifier",
+        "height": "Height in meters",
         "hiv": "HIV confirmed at baseline",
         "hiv_dx_date": "HIV diagnosis date",
         "hiv_only": "HIV only confirmed at baseline",
@@ -810,6 +982,7 @@ def variable_labels() -> dict:
         "hiv_years_since_dx": "years since HIV diagnosis",
         "htn": "hypertension confirmed at baseline",
         "htn_and_dm": "Hypertension and diabetes confirmed at baseline",
+        "hiv_and_htn_and_dm": "HIV and hypertension and diabetes confirmed at baseline",
         "htn_dx_date": "Hypertension diagnosis date",
         "htn_only": "Hypertension diagnosis only",
         "htn_scr": "reported hypertension at screening",
@@ -840,4 +1013,62 @@ def variable_labels() -> dict:
         "vl_endline_log10": "Endline viral load (log10)",
         "vl_endline_suppressed": "VL supressed at endline <1000",
         "willing_to_screen": "willing to screen",
+        "primary_cohort": "1=DM_ALONE,2=HTN_ALONE,3=DM+HTN,4=HIV_ALONE,-1=UNDEFINED",
+        "primary_cohort_str": "primary_cohort string representation",
+        "primary_gl_endline": "Endline glucose for cohort 1 and DM in cohort 3",
+        "primary_bp_dia_endline": "Endline BP dia for cohort 2 and HTN in cohort 3",
+        "primary_bp_sys_endline": "Endline BP sys for cohort 2 and HTN in cohort 3",
+        "primary_vl_endline": "Endline VL sys for cohort 4",
+        "primary_controlled": (
+            "Controlled VL/BP+GL composite. See SAP primary endpoint criteria"
+        ),
+        "employment_status": "Employment status (See otherbaselinedata)",
+        "education": (
+            "How much formal education does the patient have? (See otherbaselinedata)"
+        ),
+        "marital_status": "Personal/marital status? (See otherbaselinedata)",
+        "smoking_status": "Which of these options describes you? (See otherbaselinedata)",
+        "alcohol_consumption": "Do you drink alcohol? How often? (See otherbaselinedata)",
+        "stroke": "Stroke (See complicationsbaseline)",
+        "heart_attack": "Heart attack / heart failure (See complicationsbaseline)",
+        "renal_disease": "Renal (kidney) disease (See complicationsbaseline)",
+        "vision": "Vision problems (e.g. blurred vision) (See complicationsbaseline)",
+        "numbness": "Numbness / burning sensation (See complicationsbaseline)",
+        "foot_ulcers": "Foot ulcers (See complicationsbaseline)",
+        "weight": "Weight in kg",
     }
+
+
+def categorical_columns():
+    return [
+        ("hiv", {1: YES, 0: NO}),
+        ("dm", {1: YES, 0: NO}),
+        ("htn", {1: YES, 0: NO}),
+        ("hiv_only", {1: YES, 0: NO}),
+        ("dm_only", {1: YES, 0: NO}),
+        ("htn_only", {1: YES, 0: NO}),
+        ("htn_and_dm", {1: YES, 0: NO}),
+        ("ncd", {1: YES, 0: NO}),
+        "site",
+        "gender",
+        "stable",
+        "willing_to_screen",
+        "screening_refusal_reason",
+        "assignment",
+        "allocation",
+        "stable",
+        "willing_to_screen",
+        "screening_refusal_reason",
+        # "bp_measured",
+        "employment_status",
+        "education",
+        "marital_status",
+        "smoking_status",
+        "alcohol_consumption",
+        "stroke",
+        "heart_attack",
+        "renal_disease",
+        "vision",
+        "numbness",
+        "foot_ulcers",
+    ]

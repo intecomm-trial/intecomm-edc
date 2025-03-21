@@ -40,6 +40,26 @@ def get_cells_for_yes_no(df: pd.DataFrame, col: str, arm: str | None = None) -> 
     ]
 
 
+def get_cells_for_categorical(df: pd.DataFrame, col: str, arm: str | None = None) -> list[str]:
+    if arm:
+        n = len(df[(df["assignment"] == arm) & (df[col].notna())])
+        counts = df[(df["assignment"] == arm) & (df[col].notna())][col].value_counts()
+        percentages = (
+            df[(df["assignment"] == arm) & (df[col].notna())][col].value_counts(normalize=True)
+            * 100
+        )
+    else:
+        n = len(df[(df[col].notna())])
+        counts = df[(df[col].notna())][col].value_counts()
+        percentages = df[(df[col].notna())][col].value_counts(normalize=True) * 100
+
+    cells = [
+        f"{counts.get(category, 0)} ({percentages.get(category, 0):.1f}%)"
+        for category in df[df[col].notna()][col].unique().tolist()
+    ]
+    return [n, *cells]
+
+
 def get_cells_for_yes_no_missing(
     df: pd.DataFrame, col: str, arm: str | None = None
 ) -> list[str]:
@@ -124,6 +144,49 @@ def get_formatted_rows_yes_no(
                 *func(df_base, baseline_col),
                 *func(df_end, endline_col),
             ],
+        }
+    )
+    return rows
+
+
+def get_formatted_rows_categorical_by_country(
+    df: pd.DataFrame, col: str, mapping: dict | None = None
+):
+    """Returns 5 columns"""
+    rows = {}
+    if mapping:
+        df = df.copy()
+        df[col] = df[col].apply(lambda x: mapping[x] if pd.notna(x) else x)
+    func = get_cells_for_categorical
+
+    categories = df[df[col].notna()][col].unique().tolist()
+
+    rows.update(
+        {
+            "Statistics": ["n", *categories],
+        }
+    )
+    rows.update(
+        {
+            f"{treatment_arm[COMMUNITY_ARM]} UG": [
+                *func(df[df.country == "UG"], col, arm="a"),
+            ],
+            f"{treatment_arm[COMMUNITY_ARM]} TZ": [
+                *func(df[df.country == "TZ"], col, arm="a"),
+            ],
+            f"{treatment_arm[COMMUNITY_ARM]} BOTH": [
+                *func(df, col, arm="a"),
+            ],
+            f"{treatment_arm[FACILITY_ARM]} UG": [
+                *func(df[df.country == "UG"], col, arm="b"),
+            ],
+            f"{treatment_arm[FACILITY_ARM]} TZ": [
+                *func(df[df.country == "TZ"], col, arm="b"),
+            ],
+            f"{treatment_arm[FACILITY_ARM]} BOTH": [
+                *func(df, col, arm="b"),
+            ],
+            "All": [*func(df, col)],
         }
     )
     return rows
