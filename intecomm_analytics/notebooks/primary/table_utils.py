@@ -13,6 +13,35 @@ __all__ = [
 ]
 
 
+def get_primary_cohorts_by_categorical_column(df: pd.DataFrame, col: str):
+    """Returns 5 columns by primary cohorts of NCDS, HIV alone.
+
+    Statistics, Comm NCD, Facility NCD, Comm HIV alone, Facility HIV alone.
+    """
+    cohorts = {"ncd": "Ncd", "hiv_only": "Hiv only"}
+
+    func = get_cells_for_categorical
+
+    col_categories = df[df[col].notna()][col].unique().tolist()
+    rows = {}
+    rows.update({"Statistics": ["n", *col_categories]})
+    for cohort_col, name in cohorts.items():
+        for _arm in [COMMUNITY_ARM, FACILITY_ARM]:
+            rows.update(
+                {
+                    f"{treatment_arm[_arm]} {name}": [
+                        *func(
+                            df[getattr(df, cohort_col) == 1],
+                            col,
+                            arm=_arm,
+                            categories=col_categories,
+                        )
+                    ]
+                }
+            )
+    return rows
+
+
 def get_cells_for_continuous_var(df) -> list[str]:
     return [
         f"{int(df['count'])}",
@@ -40,22 +69,30 @@ def get_cells_for_yes_no(df: pd.DataFrame, col: str, arm: str | None = None) -> 
     ]
 
 
-def get_cells_for_categorical(df: pd.DataFrame, col: str, arm: str | None = None) -> list[str]:
+def get_cells_for_categorical(
+    df: pd.DataFrame, col: str, arm: str | None = None, categories: list | None = None
+) -> list[str]:
     if arm:
         n = len(df[(df["assignment"] == arm) & (df[col].notna())])
-        counts = df[(df["assignment"] == arm) & (df[col].notna())][col].value_counts()
+        counts = df[(df["assignment"] == arm) & (df[col].notna())][col].value_counts(
+            dropna=False
+        )
         percentages = (
-            df[(df["assignment"] == arm) & (df[col].notna())][col].value_counts(normalize=True)
+            df[(df["assignment"] == arm) & (df[col].notna())][col].value_counts(
+                normalize=True, dropna=False
+            )
             * 100
         )
     else:
         n = len(df[(df[col].notna())])
-        counts = df[(df[col].notna())][col].value_counts()
-        percentages = df[(df[col].notna())][col].value_counts(normalize=True) * 100
+        counts = df[(df[col].notna())][col].value_counts(dropna=False)
+        percentages = (
+            df[(df[col].notna())][col].value_counts(normalize=True, dropna=False) * 100
+        )
 
     cells = [
         f"{counts.get(category, 0)} ({percentages.get(category, 0):.1f}%)"
-        for category in df[df[col].notna()][col].unique().tolist()
+        for category in (categories or df[df[col].notna()][col].unique().tolist())
     ]
     return [n, *cells]
 
@@ -193,7 +230,9 @@ def get_formatted_rows_categorical_by_country(
 
 
 def get_formatted_rows_by_country(
-    df, col_baseline: str | None = None, col_endline: str | None = None
+    df,
+    col_baseline: str | None = None,
+    col_endline: str | None = None,
 ):
     """Returns 5 columns
     Baseline and endline format

@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import numpy as np
@@ -10,7 +10,9 @@ from edc_model_to_dataframe import read_frame_edc
 from edc_pdutils.dataframes import get_crf, get_subject_visit
 from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 from intecomm_rando.models import RandomizationList
+from pandas._libs.tslibs.nattype import NaTType
 
+from intecomm_ae.models import DeathReport
 from intecomm_prn.models import EndOfStudy
 
 from ..constants import (
@@ -32,10 +34,14 @@ from .get_vl_summary import VlSummary2
 __all__ = ["get_df_main_1858", "treatment_arm_labels"]
 
 treatment_arm_labels = {COMMUNITY_ARM: "Community", FACILITY_ARM: "Facility"}
+BASELINE_VISIT_CODE = 1000.0
 
 
 def get_df_main_1858(export_folder: Path | None) -> pd.DataFrame:
-    """Returns a dataframe of the population for the primary analysis."""
+    """Returns a dataframe of the population for the primary analysis.
+
+    Removes 107-208-0014-2 (who was incorrectly registered).
+    """
 
     # start with patient log
     # using patient_log is one way to link group_identifier and subject_identifier
@@ -92,6 +98,8 @@ def get_df_main_1858(export_folder: Path | None) -> pd.DataFrame:
 
     df_main = merge_in_eos(df_main)
 
+    df_main = merge_death_report(df_main)
+
     df_main["onstudy_days"] = (df_main.endline_datetime - df_main.baseline_datetime).dt.days
 
     df_main = merge_in_bp(df_main)
@@ -99,6 +107,8 @@ def get_df_main_1858(export_folder: Path | None) -> pd.DataFrame:
     df_main = merge_in_glucose(df_main)
 
     df_main["country"] = df_main.apply(get_country, axis=1)
+
+    df_main = merge_in_pp_using_location_update_crf(df_main)
 
     df_main = merge_in_primary_cohort_vars(df_main)
 
@@ -144,37 +154,52 @@ def to_stata(df_main, path, filename: str = None):
     df_main.reset_index(drop=True, inplace=True)
 
     # convert date to formatted str
-    df_main["consent_datetime"] = df_main["consent_datetime"].dt.tz_convert(None)
-    df_main["consent_datetime"] = df_main["consent_datetime"].dt.strftime("%Y-%m-%d %H:%M:%S")
-    df_main["allocated_datetime"] = df_main["allocated_datetime"].dt.tz_convert(None)
-    df_main["allocated_datetime"] = df_main["allocated_datetime"].dt.strftime(
-        "%Y-%m-%d %H:%M:%S"
+    df_main["consent_datetime"] = (
+        df_main["consent_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
+    )
+    df_main["allocated_datetime"] = (
+        df_main["allocated_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
     )
 
-    df_main["baseline_datetime"] = df_main["baseline_datetime"].dt.strftime(
-        "%Y-%m-%d %H:%M:%S"
+    df_main["baseline_datetime"] = (
+        df_main["baseline_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
     )
-    df_main["endline_visit_datetime"] = df_main["endline_visit_datetime"].dt.strftime(
-        "%Y-%m-%d %H:%M:%S"
+
+    df_main["endline_visit_datetime"] = (
+        df_main["endline_visit_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
     )
-    df_main["htn_dx_date"] = df_main["htn_dx_date"].dt.strftime("%Y-%m-%d %H:%M:%S")
-    df_main["vl_baseline_date"] = df_main["vl_baseline_date"].dt.strftime("%Y-%m-%d %H:%M:%S")
-    df_main["dm_dx_date"] = df_main["dm_dx_date"].dt.strftime("%Y-%m-%d %H:%M:%S")
-    df_main["vl_endline_date"] = df_main["vl_endline_date"].dt.strftime("%Y-%m-%d %H:%M:%S")
-    df_main["offstudy_datetime"] = df_main["offstudy_datetime"].dt.strftime(
-        "%Y-%m-%d %H:%M:%S"
+
+    df_main["htn_dx_date"] = (
+        df_main["htn_dx_date"].dt.tz_localize(None).astype("datetime64[ns]")
     )
-    df_main["endline_datetime"] = df_main["endline_datetime"].dt.strftime("%Y-%m-%d %H:%M:%S")
-    df_main["bp_datetime_first"] = df_main["bp_datetime_first"].dt.strftime(
-        "%Y-%m-%d %H:%M:%S"
+    df_main["vl_baseline_date"] = (
+        df_main["vl_baseline_date"].dt.tz_localize(None).astype("datetime64[ns]")
     )
-    df_main["bp_datetime_last"] = df_main["bp_datetime_last"].dt.strftime("%Y-%m-%d %H:%M:%S")
-    df_main["glucose_date_baseline"] = df_main["glucose_date_baseline"].dt.strftime(
-        "%Y-%m-%d %H:%M:%S"
+    df_main["dm_dx_date"] = df_main["dm_dx_date"].dt.tz_localize(None).astype("datetime64[ns]")
+    df_main["vl_endline_date"] = (
+        df_main["vl_endline_date"].dt.tz_localize(None).astype("datetime64[ns]")
     )
-    df_main["hiv_dx_date"] = df_main["hiv_dx_date"].dt.strftime("%Y-%m-%d %H:%M:%S")
-    df_main["glucose_date_endline"] = df_main["glucose_date_endline"].dt.strftime(
-        "%Y-%m-%d %H:%M:%S"
+
+    df_main["offstudy_datetime"] = (
+        df_main["offstudy_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
+    )
+    df_main["endline_datetime"] = (
+        df_main["endline_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
+    )
+    df_main["bp_datetime_first"] = (
+        df_main["bp_datetime_first"].dt.tz_localize(None).astype("datetime64[ns]")
+    )
+    df_main["bp_datetime_last"] = (
+        df_main["bp_datetime_last"].dt.tz_localize(None).astype("datetime64[ns]")
+    )
+    df_main["glucose_date_baseline"] = (
+        df_main["glucose_date_baseline"].dt.tz_localize(None).astype("datetime64[ns]")
+    )
+    df_main["hiv_dx_date"] = (
+        df_main["hiv_dx_date"].dt.tz_localize(None).astype("datetime64[ns]")
+    )
+    df_main["glucose_date_endline"] = (
+        df_main["glucose_date_endline"].dt.tz_localize(None).astype("datetime64[ns]")
     )
 
     # convert timedeltas to seconds
@@ -190,25 +215,11 @@ def to_stata(df_main, path, filename: str = None):
     ].dt.total_seconds()
 
     df_main.to_stata(
-        path=path / "df_main_1858_for_stata.dta",
+        path=path / "df_main_1858.dta",
         variable_labels=variable_labels(),
         version=118,
         write_index=False,
     )
-
-    date_columns = [col for col in df_main.columns if "date" in col and "delta" not in col]
-    commands = []
-    for col in date_columns:
-        commands.append(f"local {col}_label : variable label {col}")
-        commands.append(f"rename {col} {col}_old")
-        commands.append(f'generate {col} = clock({col}, "YMDhms")')
-        commands.append(f"format {col} %tc")
-        commands.append(f'''label variable {col} "`{col}_label'"''')
-        commands.append(f"drop {col}_old")
-
-    print("* load the STATA file in STATA and run these commands in STATA")
-    print("\n".join(commands))
-    print("* load the STATA file in STATA and run the above commands in STATA")
 
 
 def glucose_controlled(value):
@@ -360,7 +371,8 @@ def merge_in_visit(df_main: pd.DataFrame) -> pd.DataFrame:
 
     df_visit = get_subject_visit("intecomm_subject.subjectvisit")
     df_visit = df_visit[
-        (df_visit.visit_code == 1000.0) & ~(df_visit.subject_identifier == "107-208-0014-2")
+        (df_visit.visit_code == BASELINE_VISIT_CODE)
+        & ~(df_visit.subject_identifier == "107-208-0014-2")
     ]
     df_main = pd.merge(
         df_visit[
@@ -414,12 +426,36 @@ def merge_in_rando(df_main: pd.DataFrame) -> pd.DataFrame:
     return df_main
 
 
+def merge_death_report(df_main: pd.DataFrame) -> pd.DataFrame:
+    df = read_frame_edc(DeathReport.objects.all(), read_frame_verbose=False)
+    df.rename(
+        columns={"death_datetime": "death_date_from_crf", "cause_of_death": "death_cause"},
+        inplace=True,
+    )
+    df["death_date_from_crf"] = df["death_date_from_crf"].astype("datetime64[ns]")
+    df_main = df_main.merge(
+        df[["subject_identifier", "death_cause", "death_date_from_crf"]],
+        on="subject_identifier",
+        how="left",
+    )
+    df_main.reset_index(drop=True, inplace=True)
+    return df_main
+
+
 def merge_in_eos(df_main: pd.DataFrame) -> pd.DataFrame:
     """Merge in eos / offstudy"""
     df_eos = read_frame_edc(EndOfStudy.objects.all(), read_frame_verbose=False)
     df_eos["offstudy_reason"] = df_eos.apply(get_offstudy_reason, axis=1)
     df_eos.drop(columns=["offstudy_reason_name"], inplace=True)
     df_eos["endline_datetime"] = df_eos["offstudy_datetime"]
+    for col in [
+        "offstudy_datetime",
+        "endline_datetime",
+        "death_date",
+        "transfer_date",
+        "ltfu_date",
+    ]:
+        df_eos[col] = df_eos[col].astype("datetime64[ns]")
     df_main = df_main.merge(
         df_eos[
             [
@@ -568,7 +604,10 @@ def merge_in_baseline_conditions(df_main: pd.DataFrame) -> pd.DataFrame:
     return df_main
 
 
-def get_diastolic(s):
+def get_diastolic(s) -> int | float:
+    """Returns avg of measurement one and two. If only have
+    measurement one, use that.
+    """
     if pd.notna(get_systolic(s)):
         if pd.notna(s["dia_blood_pressure_one"]) and pd.notna(s["dia_blood_pressure_two"]):
             return s["dia_blood_pressure_avg"]
@@ -577,7 +616,10 @@ def get_diastolic(s):
     return np.nan
 
 
-def get_systolic(s):
+def get_systolic(s) -> int | float:
+    """Returns avg of measurement one and two. If only have
+    measurement one, use that.
+    """
     if pd.notna(s["sys_blood_pressure_one"]) and pd.notna(s["sys_blood_pressure_two"]):
         return s["sys_blood_pressure_avg"]
     elif pd.notna(s["sys_blood_pressure_one"]) and pd.isna(s["sys_blood_pressure_two"]):
@@ -585,7 +627,8 @@ def get_systolic(s):
     return np.nan
 
 
-def get_bp_measured(s):
+def get_bp_measured(s) -> int:
+    """2=two readings, 1=one reading, 0=no readings"""
     if pd.notna(s["sys_blood_pressure_one"]) and pd.notna(s["sys_blood_pressure_two"]):
         return 2
     elif pd.notna(s["sys_blood_pressure_one"]) and pd.isna(s["sys_blood_pressure_two"]):
@@ -593,7 +636,8 @@ def get_bp_measured(s):
     return 0
 
 
-def get_bp_controlled_baseline(s):
+def get_bp_controlled_baseline(s) -> int | float:
+    """1=Controlled, 0=uncontrolled"""
     if pd.isna(s["bp_sys_baseline"]) or pd.isna(s["bp_dia_baseline"]):
         return np.nan
     elif s["bp_sys_baseline"] >= 140 or s["bp_dia_baseline"] >= 90:
@@ -603,7 +647,8 @@ def get_bp_controlled_baseline(s):
     return np.nan
 
 
-def get_bp_controlled_endline(s):
+def get_bp_controlled_endline(s) -> int | float:
+    """1 = Controlled, 0 = uncontrolled"""
     if pd.isna(s["bp_sys_endline"]) or pd.isna(s["bp_dia_endline"]):
         return np.nan
     elif s["bp_sys_endline"] >= 140 or s["bp_dia_endline"] >= 90:
@@ -613,7 +658,8 @@ def get_bp_controlled_endline(s):
     return np.nan
 
 
-def get_bp_severe_htn_baseline(s):
+def get_bp_severe_htn_baseline(s) -> int | float:
+    """1=Severe HTN, 0=not severe"""
     if pd.isna(s["bp_sys_baseline"]) or pd.isna(s["bp_dia_baseline"]):
         return np.nan
     elif s["bp_sys_baseline"] >= 180 or s["bp_dia_baseline"] >= 120:
@@ -621,7 +667,8 @@ def get_bp_severe_htn_baseline(s):
     return 0
 
 
-def get_bp_severe_htn_endline(s):
+def get_bp_severe_htn_endline(s) -> int | float:
+    """1=Severe HTN, 0=not severe"""
     if pd.isna(s["bp_sys_endline"]) or pd.isna(s["bp_dia_endline"]):
         return np.nan
     elif s["bp_sys_endline"] >= 180 or s["bp_dia_endline"] >= 120:
@@ -629,19 +676,19 @@ def get_bp_severe_htn_endline(s):
     return 0
 
 
-def get_bp_measured_interval(s):
+def get_bp_measured_interval(s) -> datetime | NaTType:
     if pd.notna(s["bp_datetime_first"]) or pd.notna(s["bp_datetime_last"]):
         return s["bp_datetime_last"] - s["bp_datetime_first"]
     return pd.NaT
 
 
-def get_bp_sys_baseline(s):
-    if pd.notna(s["bp_visit_code_first"]) and s["bp_visit_code_first"] == 1000.0:
+def get_bp_sys_baseline(s) -> int | float:
+    if pd.notna(s["bp_visit_code_first"]) and s["bp_visit_code_first"] == BASELINE_VISIT_CODE:
         return s["bp_systolic_first"]
     return np.nan
 
 
-def get_bp_sys_endline(s):
+def get_bp_sys_endline(s) -> int | float:
     if pd.notna(s["bp_datetime_last"]) and (
         s["bp_datetime_last"] - s["baseline_datetime"]
     ) >= timedelta(days=182):
@@ -649,13 +696,13 @@ def get_bp_sys_endline(s):
     return np.nan
 
 
-def get_bp_dia_baseline(s):
-    if pd.notna(s["bp_visit_code_first"]) and s["bp_visit_code_first"] == 1000.0:
+def get_bp_dia_baseline(s) -> int | float:
+    if pd.notna(s["bp_visit_code_first"]) and s["bp_visit_code_first"] == BASELINE_VISIT_CODE:
         return s["bp_diastolic_first"]
     return np.nan
 
 
-def get_bp_dia_endline(s):
+def get_bp_dia_endline(s) -> int | float:
     if pd.notna(s["bp_datetime_last"]) and (
         s["bp_datetime_last"] - s["baseline_datetime"]
     ) >= timedelta(days=182):
@@ -699,16 +746,26 @@ def merge_in_complications(df_main: pd.DataFrame) -> pd.DataFrame:
         subject_visit_model="intecomm_subject.subjectvisit",
         read_verbose=False,
     )
+    df = df.rename(
+        columns={
+            "stroke": "complication_stroke",
+            "heart_attack": "complication_heart_attack",
+            "renal_disease": "complication_renal_disease",
+            "vision": "complication_vision",
+            "numbness": "complication_numbness",
+            "foot_ulcers": "complication_foot_ulcers",
+        }
+    )
     df_main = df_main.merge(
         df[
             [
                 "subject_identifier",
-                "stroke",
-                "heart_attack",
-                "renal_disease",
-                "vision",
-                "numbness",
-                "foot_ulcers",
+                "complication_stroke",
+                "complication_heart_attack",
+                "complication_renal_disease",
+                "complication_vision",
+                "complication_numbness",
+                "complication_foot_ulcers",
             ]
         ],
         on="subject_identifier",
@@ -893,6 +950,118 @@ def merge_in_glucose(df_main: pd.DataFrame) -> pd.DataFrame:
     return df_main
 
 
+def get_location_update(df_main: pd.DataFrame) -> pd.DataFrame:
+    """Model LocationUpdate was required when appointment.appt_type
+    (community or facility) conflicted with the randomization
+    assignment (a=comm, b=facility).
+
+    The CRF validates appt_type. Initially the CRF was always required
+    and later only of values conflicted. You will see 'direction' as
+    a->a, b->b -- in these cases the CRF did not need to be completed.
+
+    You will also see a few b->a which is not possible. These are
+    data entry errors.
+
+    The case of interest is a->b.
+    """
+
+    def get_direction(s):
+        if s.location == OTHER:
+            return OTHER
+        return f"{s.assignment}->{s.location}"
+
+    def is_before_6m(s):
+        if (s.report_datetime - s.baseline_datetime).days < 182:
+            return 1
+        return 0
+
+    # location update CRF was completed when appt_type did not match assignment
+    df_location_update = get_crf(
+        "intecomm_subject.locationupdate",
+        subject_visit_model="intecomm_subject.subjectvisit",
+        read_verbose=False,
+    )
+    # map location to assignment
+    df_location_update["location"] = df_location_update["location"].map(
+        {"community": COMMUNITY_ARM, "clinic": FACILITY_ARM, OTHER: OTHER}
+    )
+    # was subject expected to return to community. Even though often replied
+    # NO, subject still returned. Can ignore this column
+    df_location_update.rename(columns={"next_location": "returning"}, inplace=True)
+    # merge in vars from df_main
+    df_location_update = df_location_update.merge(
+        df_main[["subject_identifier", "assignment", "hiv", "dm", "htn", "country"]],
+        how="left",
+        on="subject_identifier",
+    )
+    # create new column 'direction' a->a, b->b or a->b
+    df_location_update["direction"] = df_location_update.apply(get_direction, axis=1)
+    # was the location update CRF submitted on or before 6m
+    df_location_update["<182"] = df_location_update.apply(is_before_6m, axis=1)
+    # get rid of "a->a", "b->b", "OTHER", CRF should not have been completed
+    df_location_update = df_location_update[
+        ~df_location_update.direction.isin(["a->a", "b->b", "OTHER"])
+    ].copy()
+    # baseline and endline visit are at facility regardless of assignment
+    # remove them
+    df_location_update = df_location_update[
+        (df_location_update.visit_code > 1000.0) & (df_location_update.visit_code < 1120.0)
+    ].copy()
+
+    df_location_update.sort_values(
+        by=["subject_identifier", "visit_code"], ascending=[True, True], inplace=True
+    )
+    df_location_update.reset_index(drop=True, inplace=True)
+    return df_location_update
+
+
+def merge_in_pp_using_location_update_crf(df_main) -> pd.DataFrame:
+    """Per protocol column, a/b"""
+
+    df_location_update = get_location_update(df_main)
+
+    df_main["pp"] = df_main["assignment"]
+
+    # filter for all visits if any 6m changes from a->b
+    df = df_location_update[
+        (
+            df_location_update.subject_identifier.isin(
+                df_location_update[
+                    (df_location_update.direction == "a->b")
+                    & (df_location_update.visit_code == 1060.0)
+                ].subject_identifier
+            )
+        )
+        & (df_location_update.visit_code >= 1060.0)
+    ].copy()
+    df.sort_values(
+        by=["subject_identifier", "visit_code"], ascending=[True, True], inplace=True
+    )
+    df.reset_index(drop=True, inplace=True)
+
+    # of those, is there more than one visit beyond 6m?
+    df = df.groupby(by=["subject_identifier"]).filter(lambda x: len(x) > 1)
+    df.sort_values(
+        by=["subject_identifier", "visit_code"], ascending=[True, True], inplace=True
+    )
+    df.reset_index(drop=True, inplace=True)
+    df_main.loc[df_main.subject_identifier.isin(df.subject_identifier), "pp"] = "b"
+
+    # now look before 6m, and update any with all 5 visits are a->b
+    df = (
+        df_location_update[df_location_update["<182"] == 1]
+        .groupby(by=["subject_identifier"])
+        .nunique()[["visit_code"]]
+        .reset_index()
+    )
+    df_main.loc[
+        df_main.subject_identifier.isin(df[df.visit_code >= 5].subject_identifier), "pp"
+    ] = "b"
+
+    df_main.reset_index(drop=True, inplace=True)
+    return df_main
+
+
 def merge_in_primary_cohort_vars(df_main) -> pd.DataFrame:
     df_main["primary_cohort"] = df_main.apply(get_primary_cohort, axis=1).astype("Int64")
     df_main["primary_cohort_str"] = df_main.apply(get_primary_cohort_as_str, axis=1)
@@ -920,7 +1089,7 @@ def variable_labels() -> dict:
         "age_in_years": "age in years",
         "allocated_datetime": "randomization list allocation/assignment datetime",
         "allocation": "randomization list allocation (integer)",
-        "assignment": "a=comm, b=facility",
+        "assignment": "Intention-to-treat a=comm, b=facility",
         "baseline_datetime": "baseline datetime (first visit date)",
         "bp_controlled_baseline": "BP controlled at baseline",
         "bp_controlled_endline": "BP controlled at endline",
@@ -939,9 +1108,21 @@ def variable_labels() -> dict:
         "bp_systolic_last": "Last BP systolic measurement",
         "bp_visit_code_first": "Visit code for first BP measurement",
         "bp_visit_code_last": "Visit code for last BP measurement",
+        "complication_stroke": "Stroke (See complicationsbaseline)",
+        "complication_heart_attack": (
+            "Heart attack / heart failure (See complicationsbaseline)"
+        ),
+        "complication_renal_disease": "Renal (kidney) disease (See complicationsbaseline)",
+        "complication_vision": (
+            "Vision problems (e.g. blurred vision) (See complicationsbaseline)"
+        ),
+        "complication_numbness": "Numbness / burning sensation (See complicationsbaseline)",
+        "complication_foot_ulcers": "Foot ulcers (See complicationsbaseline)",
         "consent_datetime": "consent datetime",
         "country": "Country",
-        "death_date": "Date of death",
+        "death_date": "Date of death from EoS report",
+        "death_cause": "Cause of death from death report",
+        "death_date_from_crf": "Date of death from death report",
         "dm": "diabetes confirmed at baseline",
         "dm_dx_date": "Diabetes diagnosis date",
         "dm_only": "Diabetes diagnosis only",
@@ -997,6 +1178,7 @@ def variable_labels() -> dict:
         "offstudy_reason": "Off study reason",
         "onstudy_days": "Number of days on study",
         "patient_log_identifier": "screening log unique subject identifier",
+        "pp": "Per protocol assignment a=comm, b=facility",
         "randomization_list_id": "randomization list id/pk (group)",
         "screening_identifier": "subject screening unique identifier",
         "screening_refusal_reason": "screening refusal reason",
@@ -1032,12 +1214,6 @@ def variable_labels() -> dict:
         "marital_status": "Personal/marital status? (See otherbaselinedata)",
         "smoking_status": "Which of these options describes you? (See otherbaselinedata)",
         "alcohol_consumption": "Do you drink alcohol? How often? (See otherbaselinedata)",
-        "stroke": "Stroke (See complicationsbaseline)",
-        "heart_attack": "Heart attack / heart failure (See complicationsbaseline)",
-        "renal_disease": "Renal (kidney) disease (See complicationsbaseline)",
-        "vision": "Vision problems (e.g. blurred vision) (See complicationsbaseline)",
-        "numbness": "Numbness / burning sensation (See complicationsbaseline)",
-        "foot_ulcers": "Foot ulcers (See complicationsbaseline)",
         "weight": "Weight in kg",
     }
 
