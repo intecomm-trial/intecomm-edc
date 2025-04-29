@@ -24,6 +24,7 @@ from ..constants import (
     primary_cohort_mapping,
 )
 from ..notebooks.primary.glucose import (
+    default_fasting_hours,
     get_all_glucose_results,
     get_glucose_first,
     get_glucose_last,
@@ -37,7 +38,9 @@ treatment_arm_labels = {COMMUNITY_ARM: "Community", FACILITY_ARM: "Facility"}
 BASELINE_VISIT_CODE = 1000.0
 
 
-def get_df_main_1858(export_folder: Path | None) -> pd.DataFrame:
+def get_df_main_1858(
+    export_folder: Path | None, fasting_hours: float | None = None
+) -> pd.DataFrame:
     """Returns a dataframe of the population for the primary analysis.
 
     Removes 107-208-0014-2 (who was incorrectly registered).
@@ -104,13 +107,29 @@ def get_df_main_1858(export_folder: Path | None) -> pd.DataFrame:
 
     df_main = merge_in_bp(df_main)
 
-    df_main = merge_in_glucose(df_main)
+    df_main = merge_in_glucose(df_main, fasting_hours=fasting_hours)
 
     df_main["country"] = df_main.apply(get_country, axis=1)
 
     df_main = merge_in_pp_using_location_update_crf(df_main)
 
     df_main = merge_in_primary_cohort_vars(df_main)
+
+    df_main["years_since_dx"] = df_main.apply(get_years_since_dx, axis=1)
+
+    # flag rows for endline analysis
+    df_main["endline"] = 0
+    df_main.loc[
+        (df_main.offstudy_reason == "completed_followup")
+        & (df_main.primary_cohort != UNDEFINED),
+        "endline",
+    ] = 1
+
+    # for simplicity, clear out endline cols values where endline==0
+    datecols = df_main.dtypes[df_main.dtypes == "datetime64[ns]"].index.tolist()
+    cols = df_main.dtypes[df_main.dtypes != "datetime64[ns]"].index.tolist()
+    df_main.loc[df_main.endline == 0, [col for col in datecols if "endline" in col]] = pd.NaT
+    df_main.loc[df_main.endline == 0, [col for col in cols if "endline" in col]] = pd.NA
 
     assert len(df_main) == 1858  # nosec B101
 
@@ -298,7 +317,7 @@ def primary_controlled(s):
         else:
             return 0
     elif s.primary_cohort_str == "HIV_ALONE":
-        return s.vl_endline_suppressed
+        return s.vl_controlled_endline
     return np.nan
 
 
@@ -318,7 +337,6 @@ def get_country(s):
 
 
 def validate_df_main(df: pd.DataFrame):
-
     assert df[df.hiv_only == 1].hiv_only.count() == 526  # nosec B101
     assert df[df.ncd == 1].ncd.count() == 1223  # nosec B101
     assert len(df[(df.hiv_only == 0) & (df.ncd == 0)]) == 109  # nosec B101
@@ -359,6 +377,45 @@ def get_offstudy_reason(s):
     if s["offstudy_reason_name"] == OTHER:
         return s["other_offstudy_reason"]
     return s["offstudy_reason_name"]
+
+
+def categorize_offstudy_reason_freetext(df_main: pd.DataFrame) -> pd.DataFrame:
+    """Categorize offstudy_reason free text."""
+    df_main["offstudy_reason_raw"] = df_main["offstudy_reason"]
+    reasons = (
+        df_main[
+            ~(
+                df_main.offstudy_reason.isin(
+                    [
+                        "completed_followup",
+                        "LTFU",
+                        "transferred",
+                        "consent_withdrawal",
+                        "dead",
+                        "clinical_withdrawal",
+                    ]
+                )
+            )
+        ]
+        .offstudy_reason.value_counts()
+        .to_frame()
+        .index.tolist()
+    )
+    pregnant_reason = reasons.pop(
+        reasons.index(
+            "Patient  is pregnant Reffered to Pmtct clinic on 14/03/2024 for further "
+            "maternal and child care."
+        )
+    )
+    df_main.loc[
+        df_main.offstudy_reason_raw.str.startswith(pregnant_reason), "offstudy_reason"
+    ] = "pregnant"
+    for reason in reasons:
+        df_main.loc[df_main.offstudy_reason_raw.str.startswith(reason), "offstudy_reason"] = (
+            "transferred"
+        )
+    df_main.reset_index(drop=True, inplace=True)
+    return df_main
 
 
 def merge_in_visit(df_main: pd.DataFrame) -> pd.DataFrame:
@@ -438,6 +495,9 @@ def merge_death_report(df_main: pd.DataFrame) -> pd.DataFrame:
         on="subject_identifier",
         how="left",
     )
+    df_main["death_days_to_event"] = (
+        df_main.death_date_from_crf - df_main.baseline_datetime
+    ).dt.days
     df_main.reset_index(drop=True, inplace=True)
     return df_main
 
@@ -471,6 +531,13 @@ def merge_in_eos(df_main: pd.DataFrame) -> pd.DataFrame:
         on="subject_identifier",
         how="left",
     )
+    df_main = categorize_offstudy_reason_freetext(df_main)
+    df_main.loc[df_main.offstudy_reason == "transferred", "transferred_days_to_event"] = (
+        df_main.transfer_date - df_main.baseline_datetime
+    ).dt.days
+    df_main.loc[df_main.offstudy_reason == "LTFU", "ltfu_days_to_event"] = (
+        df_main.ltfu_date - df_main.baseline_datetime
+    ).dt.days
     df_main.reset_index(drop=True, inplace=True)
     return df_main
 
@@ -515,10 +582,17 @@ def merge_in_vl(df_main: pd.DataFrame) -> pd.DataFrame:
     df_main["vl_baseline_suppressed"] = df_main.vl_baseline.apply(
         lambda x: 1 if x < 1000 else 0
     )
-    df_main["vl_endline_suppressed"] = df_main.vl_endline.apply(lambda x: 1 if x < 1000 else 0)
-
+    df_main["vl_controlled_endline"] = df_main.vl_endline.apply(lambda x: 1 if x < 1000 else 0)
+    df_main["vl_controlled_endline_400"] = df_main.vl_endline.apply(
+        lambda x: 1 if x < 400 else 0
+    )
+    df_main["vl_controlled_endline_50"] = df_main.vl_endline.apply(
+        lambda x: 1 if x < 50 else 0
+    )
     df_main["vl_baseline_log10"] = df_main.vl_endline.apply(lambda x: np.log10(x))
     df_main["vl_endline_log10"] = df_main.vl_endline.apply(lambda x: np.log10(x))
+
+    df_main["vl_days_to_event"] = (df_main.vl_endline_date - df_main.baseline_datetime).dt.days
 
     df_main.reset_index(drop=True, inplace=True)
     return df_main
@@ -553,11 +627,17 @@ def merge_in_baseline_conditions(df_main: pd.DataFrame) -> pd.DataFrame:
         df_dm_initial["visit_datetime"]
     ) - pd.to_datetime(df_dm_initial["dm_dx_date"])
 
-    df_hiv_initial["hiv_years_since_dx"] = df_hiv_initial["hiv_timedelta_dx"].dt.days / 365
+    df_hiv_initial["hiv_years_since_dx"] = df_hiv_initial[
+        "hiv_timedelta_dx"
+    ].dt.total_seconds() / (365.25 * 24 * 3600)
     df_hiv_initial["hiv"] = 1
-    df_htn_initial["htn_years_since_dx"] = df_htn_initial["htn_timedelta_dx"].dt.days / 365
+    df_htn_initial["htn_years_since_dx"] = df_htn_initial[
+        "htn_timedelta_dx"
+    ].dt.total_seconds() / (365.25 * 24 * 3600)
     df_htn_initial["htn"] = 1
-    df_dm_initial["dm_years_since_dx"] = df_dm_initial["dm_timedelta_dx"].dt.days / 365
+    df_dm_initial["dm_years_since_dx"] = df_dm_initial[
+        "dm_timedelta_dx"
+    ].dt.total_seconds() / (365.25 * 24 * 3600)
     df_dm_initial["dm"] = 1
 
     df_delta = pd.merge(
@@ -602,6 +682,19 @@ def merge_in_baseline_conditions(df_main: pd.DataFrame) -> pd.DataFrame:
     df_main = df_main.merge(df_delta, on="subject_identifier", how="left")
     df_main.reset_index(drop=True, inplace=True)
     return df_main
+
+
+def get_years_since_dx(r) -> pd.DataFrame:
+    if r.primary_cohort == HIV_ALONE:
+        return r.hiv_years_since_dx
+    elif r.primary_cohort == DM_ALONE:
+        return r.dm_years_since_dx
+    elif r.primary_cohort == HTN_ALONE:
+        return r.htn_years_since_dx
+    elif r.primary_cohort == HTN_DM:
+        return max(r.htn_years_since_dx, r.dm_years_since_dx)
+    else:
+        return max(r.hiv_years_since_dx, r.htn_years_since_dx, r.dm_years_since_dx)
 
 
 def get_diastolic(s) -> int | float:
@@ -688,6 +781,14 @@ def get_bp_sys_baseline(s) -> int | float:
     return np.nan
 
 
+# def get_bp_sys_baseline(s) -> int | float:
+#     if pd.notna(s["bp_datetime_first"]) and (
+#         s["bp_datetime_first"] - s["baseline_datetime"]
+#     ) < timedelta(days=182):
+#         return s["bp_systolic_first"]
+#     return np.nan
+
+
 def get_bp_sys_endline(s) -> int | float:
     if pd.notna(s["bp_datetime_last"]) and (
         s["bp_datetime_last"] - s["baseline_datetime"]
@@ -700,6 +801,14 @@ def get_bp_dia_baseline(s) -> int | float:
     if pd.notna(s["bp_visit_code_first"]) and s["bp_visit_code_first"] == BASELINE_VISIT_CODE:
         return s["bp_diastolic_first"]
     return np.nan
+
+
+# def get_bp_dia_baseline(s) -> int | float:
+#     if pd.notna(s["bp_datetime_first"]) and (
+#         s["bp_datetime_first"] - s["baseline_datetime"]
+#     ) < timedelta(days=182):
+#         return s["bp_systolic_last"]
+#     return np.nan
 
 
 def get_bp_dia_endline(s) -> int | float:
@@ -735,6 +844,7 @@ def merge_in_vitals(df_main: pd.DataFrame) -> pd.DataFrame:
     )
     df_height.columns = ["subject_identifier", "height"]
     df_main = df_main.merge(df_height, on="subject_identifier", how="left")
+    df_main["bmi"] = (df_main["weight"]) / ((df_main["height"] / 100) ** 2)
     df_main.reset_index(drop=True, inplace=True)
 
     return df_main
@@ -865,14 +975,35 @@ def merge_in_bp(df_main: pd.DataFrame) -> pd.DataFrame:
     df_main["bp_controlled_endline"] = df_main.apply(get_bp_controlled_endline, axis=1)
     df_main["bp_severe_htn_baseline"] = df_main.apply(get_bp_severe_htn_baseline, axis=1)
     df_main["bp_severe_htn_endline"] = df_main.apply(get_bp_severe_htn_endline, axis=1)
+
+    df_main["bp_days_to_event"] = (
+        df_main.bp_datetime_last - df_main.baseline_datetime
+    ).dt.days
+
+    cond = (df_main.bp_datetime_last - df_main.baseline_datetime).dt.days < 182
+    df_main.loc[cond, "bp_sys_endline"] = np.nan
+    df_main.loc[cond, "bp_dia_endline"] = np.nan
+    df_main.loc[cond, "bp_controlled_endline"] = np.nan
+    df_main.loc[cond, "bp_severe_htn_endline"] = np.nan
+    df_main.loc[cond, "bp_days_to_event"] = np.nan
+
     df_main.reset_index(drop=True, inplace=True)
     return df_main
 
 
-def merge_in_glucose(df_main: pd.DataFrame) -> pd.DataFrame:
-    df_glucose = get_all_glucose_results(df_main)
-    df_first = get_glucose_first(df_glucose)
-    df_last = get_glucose_last(df_glucose)
+def merge_in_glucose(
+    df_main: pd.DataFrame,
+    fasting_hours: float | None = None,
+) -> pd.DataFrame:
+    fasting_hours = default_fasting_hours if fasting_hours is None else fasting_hours
+    df_glucose = get_all_glucose_results(df_main, fasting_hours=fasting_hours)
+
+    df_first = get_glucose_first(
+        df_glucose,
+        # baseline_lower_bound=-182,
+        # baseline_upper_bound=182,
+    )
+    df_last = get_glucose_last(df_glucose, endline_lower_bound=182)
 
     df_first.rename(
         columns={
@@ -945,6 +1076,10 @@ def merge_in_glucose(df_main: pd.DataFrame) -> pd.DataFrame:
     df_main["glucose_resulted_endline"] = df_main["glucose_value_endline"].apply(
         lambda x: NO if pd.isna(x) else YES
     )
+
+    df_main["glucose_days_to_event"] = (
+        df_main.glucose_date_endline - df_main.baseline_datetime
+    ).dt.days
 
     df_main.reset_index(drop=True, inplace=True)
     return df_main
@@ -1091,6 +1226,7 @@ def variable_labels() -> dict:
         "allocation": "randomization list allocation (integer)",
         "assignment": "Intention-to-treat a=comm, b=facility",
         "baseline_datetime": "baseline datetime (first visit date)",
+        "bmi": "Body mass index at baseline",
         "bp_controlled_baseline": "BP controlled at baseline",
         "bp_controlled_endline": "BP controlled at endline",
         "bp_datetime_first": "Date for first BP measurement",
@@ -1123,6 +1259,7 @@ def variable_labels() -> dict:
         "death_date": "Date of death from EoS report",
         "death_cause": "Cause of death from death report",
         "death_date_from_crf": "Date of death from death report",
+        "death_days_to_event": "Days to death from baseline",
         "dm": "diabetes confirmed at baseline",
         "dm_dx_date": "Diabetes diagnosis date",
         "dm_only": "Diabetes diagnosis only",
@@ -1157,7 +1294,7 @@ def variable_labels() -> dict:
         "glucose_value_baseline": "Baseline glucose measurement value",
         "glucose_value_endline": "Endline glucose measurement value",
         "group_identifier": "unique group identifier",
-        "height": "Height in meters",
+        "height": "Height in centimeters",
         "hiv": "HIV confirmed at baseline",
         "hiv_dx_date": "HIV diagnosis date",
         "hiv_only": "HIV only confirmed at baseline",
@@ -1177,7 +1314,9 @@ def variable_labels() -> dict:
         "offstudy_datetime": "Off study datetime",
         "offstudy_reason": "Off study reason",
         "onstudy_days": "Number of days on study",
-        "patient_log_identifier": "screening log unique subject identifier",
+        "patient_log_identifier": (
+            "screening log unique subject/potential participant identifier"
+        ),
         "pp": "Per protocol assignment a=comm, b=facility",
         "randomization_list_id": "randomization list id/pk (group)",
         "screening_identifier": "subject screening unique identifier",
@@ -1196,14 +1335,23 @@ def variable_labels() -> dict:
         "vl_endline": "Endline viral load (copies/ml)",
         "vl_endline_date": "Endline viral load date",
         "vl_endline_log10": "Endline viral load (log10)",
-        "vl_endline_suppressed": "VL supressed at endline <1000",
+        "vl_controlled_endline": "VL supressed at endline <1000",
+        "vl_controlled_endline_400": "VL supressed at endline <400",
+        "vl_controlled_endline_50": "VL supressed at endline <50",
         "willing_to_screen": "willing to screen",
         "primary_cohort": "1=DM_ALONE,2=HTN_ALONE,3=DM+HTN,4=HIV_ALONE,-1=UNDEFINED",
+        "endline": "1/0 where 1=Included in endline calculations (See EoS)",
         "primary_cohort_str": "primary_cohort string representation",
-        "primary_gl_endline": "Endline glucose for cohort 1 and DM in cohort 3",
-        "primary_bp_dia_endline": "Endline BP dia for cohort 2 and HTN in cohort 3",
-        "primary_bp_sys_endline": "Endline BP sys for cohort 2 and HTN in cohort 3",
-        "primary_vl_endline": "Endline VL sys for cohort 4",
+        "primary_gl_endline": (
+            "Endline glucose for cohort DM_ALONE (1) and DM in cohort HTN_DM (3)"
+        ),
+        "primary_bp_dia_endline": (
+            "Endline BP dia for cohort HTN_ALONE (2) and HTN in cohort HTN_DM (3)"
+        ),
+        "primary_bp_sys_endline": (
+            "Endline BP sys for cohort HTN_ALONE (2) and HTN in cohort HTN_DM (3)"
+        ),
+        "primary_vl_endline": "Endline VL sys for cohort HIV_ALONE (4)",
         "primary_controlled": (
             "Controlled VL/BP+GL composite. See SAP primary endpoint criteria"
         ),

@@ -3,6 +3,7 @@ from django.contrib.sites.models import Site
 from django_pandas.io import read_frame
 from edc_model import duration_to_date
 
+from intecomm_analytics.notebooks.primary.table_utils import get_ineligible_reason
 from intecomm_screening.models import PatientLog, SubjectScreening
 from intecomm_subject.models import SubjectVisit
 
@@ -44,8 +45,12 @@ def get_screening_df(df: pd.DataFrame | None = None) -> pd.DataFrame:
     # replace
     df = df.replace({"Not Applicable: e.g. male or post-menopausal": "N/A"})
     df = df.replace({"Not applicable": "N/A"})
-    df = df.replace({True: 1})
-    df = df.replace({False: 0})
+    df = df.replace({True: 1}).infer_objects(copy=False)
+    df = df.replace({False: 0}).infer_objects(copy=False)
+
+    # recode reasons ineligible
+    df["reasons_ineligible_raw"] = df["reasons_ineligible"]
+    df["reasons_ineligible"] = df.apply(get_ineligible_reason, axis=1)
 
     # convert all to float
     cols = [

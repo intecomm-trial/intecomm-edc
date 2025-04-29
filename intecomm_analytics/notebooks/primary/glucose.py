@@ -6,7 +6,7 @@ from edc_pdutils.dataframes import get_crf
 
 # boudaries for first measurement
 default_baseline_lower_bound = -180
-default_baseline_upper_bound = 31
+default_baseline_upper_bound = 60
 
 # boudaries for last measurement
 default_endline_lower_bound = 182
@@ -15,7 +15,7 @@ default_endline_lower_bound = 182
 default_days_since_dx = 180
 
 # boundaries for fasting
-default_fasting_hours = 8
+default_fasting_hours = 8.0
 
 
 def dx_duration_to_date(s):
@@ -31,13 +31,14 @@ def rx_init_duration_to_date(s):
 
 
 def get_all_glucose_results(
-    df_main: pd.DataFrame, fasting_hours: int = None, days_since_dx: int | None = None
+    df_main: pd.DataFrame,
+    fasting_hours: int | None = None,
+    days_since_dx: int | None = None,
 ) -> pd.DataFrame:
     """Merge all sources of glucose results for subjects that have a
     DM diagnosis and have fasted for at least 8hrs.
     """
-    fasting_hours = fasting_hours or default_fasting_hours
-    days_since_dx = days_since_dx or default_days_since_dx
+    fasting_hours = default_fasting_hours if fasting_hours is None else fasting_hours
     columns = [
         "subject_identifier",
         "subject_visit_id",
@@ -136,18 +137,23 @@ def get_all_glucose_results(
     df = df[df.subject_identifier.isin(df_dminitialreview.subject_identifier)].copy()
     df.reset_index(drop=True, inplace=True)
 
-    # only keep fasted for 8hrs or more
-    df = df[df.glucose_fasting_duration_delta >= timedelta(hours=fasting_hours)]
-    df.reset_index(drop=True, inplace=True)
-    # keep those measured less than 180 days before baseline and hiv(-)
+    # only keep fasted for 8hrs (fasting_hours) or more
+    if fasting_hours > 0.0:
+        df = df[df.glucose_fasting_duration_delta >= timedelta(hours=fasting_hours)]
+        df.reset_index(drop=True, inplace=True)
+
+    # keep those measured less than 180 days (days_since_dx) before baseline and hiv(-)
+    # if days_since_dx is specified, otherwise include all
     df = df.merge(
         df_main[["subject_identifier", "baseline_datetime", "hiv"]],
         on="subject_identifier",
         how="left",
     )
     df["glucose_date_delta"] = df.glucose_date - df.baseline_datetime
-    # df = df[(df.glucose_date_delta >= timedelta(days=-1 * days_since_dx)) & (df.hiv == 0)]
+    if days_since_dx and days_since_dx > 0:
+        df = df[(df.glucose_date_delta >= timedelta(days=-1 * days_since_dx)) & (df.hiv == 0)]
     df.drop(columns=["hiv"], inplace=True)
+
     df.reset_index(drop=True, inplace=True)
     return df
 
@@ -158,17 +164,19 @@ def get_glucose_first(
     baseline_upper_bound: int = None,
     path: str | None = None,
 ) -> pd.DataFrame:
-    baseline_lower_bound = baseline_lower_bound or default_baseline_lower_bound
-    baseline_upper_bound = baseline_upper_bound or default_baseline_upper_bound
+    # baseline_lower_bound = baseline_lower_bound or default_baseline_lower_bound
     # df of first measurement
-    cond_lower = (df.glucose_date - df.baseline_datetime) >= timedelta(
-        days=baseline_lower_bound
-    )
-    cond_upper = (df.glucose_date - df.baseline_datetime) <= timedelta(
+    # cond_lower = (df.glucose_date - df.baseline_datetime) >= timedelta(
+    #     days=baseline_lower_bound
+    # )
+
+    baseline_upper_bound = baseline_upper_bound or default_baseline_upper_bound
+    cond_upper = (df.glucose_date - df.baseline_datetime) < timedelta(
         days=baseline_upper_bound
     )
 
-    df_first = df[cond_lower & cond_upper].copy()
+    # df_first = df[cond_lower & cond_upper].copy()
+    df_first = df[cond_upper].copy()
 
     df_first.sort_values(
         by=["subject_identifier", "glucose_date"], ascending=True, inplace=True
