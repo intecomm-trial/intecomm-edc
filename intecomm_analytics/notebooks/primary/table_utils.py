@@ -543,15 +543,17 @@ def get_vl(df1, col, cond, label):
     return dftbl
 
 
-def _get_labels_for_days_to_event(bins):
-    labels = []
-    for i in range(len(bins) - 1):
-        if i == 0:
-            labels.append(f"<{bins[i + 1] + 1}")
-        elif i == len(bins) - 2:
-            labels.append(f">={bins[i] + 1}")
-        else:
-            labels.append(f"{bins[i] + 1} to <{bins[i + 1] + 1}")
+def _get_bin_labels_for_days_to_event(labels, bins):
+    if not labels:
+        labels = []
+        for i in range(len(bins) - 1):
+            if i == 0:
+                labels.append(f"<{bins[i + 1] + 1}")
+            elif i == len(bins) - 2:
+                labels.append(f">={bins[i] + 1}")
+            else:
+                labels.append(f"{bins[i] + 1} to <{bins[i + 1] + 1}")
+    return labels
 
 
 def get_columns_for_days_to_event(
@@ -565,8 +567,11 @@ def get_columns_for_days_to_event(
 
     set_zero_to_na = set_zero_to_na or []
     bins = bins or [0, 181, 269, 364, 539, 1000]
-    labels = labels or _get_labels_for_days_to_event(bins)
-    df1["days_to_event_bins"] = pd.cut(df1[col], bins, labels=labels)
+    df1["days_to_event_bins"] = pd.cut(
+        df1[col],
+        bins,
+        labels=_get_bin_labels_for_days_to_event(labels, bins),
+    )
     tbl_dct = get_primary_cohorts_by_categorical_column(df1, "days_to_event_bins")
     dftbl = pd.DataFrame(tbl_dct)
     data = ["Median, (min-max)"]
