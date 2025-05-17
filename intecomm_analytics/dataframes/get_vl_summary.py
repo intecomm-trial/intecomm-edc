@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 from django.apps import apps as django_apps
 from django_pandas.io import read_frame
@@ -58,8 +57,8 @@ class VlSummary:
         df = pd.merge(df, self.df_review, on="subject_identifier", how="left")
 
         # null out vl1 and vl2 if same date as baseline_vl date
-        df.loc[df.baseline_vl_date == df.vl1_date, ["vl1", "vl1_date"]] = [np.nan, pd.NaT]
-        df.loc[df.baseline_vl_date == df.vl2_date, ["vl2", "vl2_date"]] = [np.nan, pd.NaT]
+        df.loc[df.baseline_vl_date == df.vl1_date, ["vl1", "vl1_date"]] = [pd.NA, pd.NaT]
+        df.loc[df.baseline_vl_date == df.vl2_date, ["vl2", "vl2_date"]] = [pd.NA, pd.NaT]
 
         # fill any missing baseline
         df[["baseline_vl", "baseline_vl_date"]] = df.apply(
@@ -88,7 +87,7 @@ class VlSummary:
         df["offset"] = df["next_vl_date"].dt.to_period("M") - df[
             "offschedule_date"
         ].dt.to_period("M")
-        df["offset"] = df["offset"].apply(lambda x: x.n if pd.notna(x) else np.nan)
+        df["offset"] = df["offset"].apply(lambda x: x.n if pd.notna(x) else pd.NA)
         return df
 
     def to_model(self, model: str | None = None):
@@ -158,9 +157,9 @@ class VlSummary:
         if self._df_initial_review.empty:
             model_cls = django_apps.get_model("intecomm_subject.hivinitialreview")
             df = self.get_review_model_as_df(model_cls)
-            df["baseline_vl"] = np.nan
+            df["baseline_vl"] = pd.NA
             df["baseline_vl_date"] = pd.NaT
-            df["endline_vl"] = np.nan
+            df["endline_vl"] = pd.NA
             df["endline_vl_date"] = pd.NaT
             df = df.sort_values(by=["subject_identifier", "drawn_date"])
             df.reset_index(drop=True)
@@ -204,7 +203,7 @@ class VlSummary:
             inplace=True,
         )
         # vl column, replace nulls with NaN
-        df.loc[df["vl"].isnull(), "vl"] = np.nan
+        df.loc[df["vl"].isnull(), "vl"] = pd.NA
 
         # report date
         df["report_date"] = pd.to_datetime(df["report_datetime"]).dt.date
@@ -239,7 +238,7 @@ class VlSummary:
         df_last["last_vl_date"] = df_last["vl2_date"]
         # null out vl2 if same date as vl1
         df = pd.merge(df_first, df_last, on="subject_identifier", how="left")
-        df.loc[df.vl1_date == df.vl2_date, ["vl2", "vl2_date"]] = [np.nan, pd.NaT]
+        df.loc[df.vl1_date == df.vl2_date, ["vl2", "vl2_date"]] = [pd.NA, pd.NaT]
         return df
 
     @staticmethod

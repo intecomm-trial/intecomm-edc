@@ -8,8 +8,10 @@ from edc_constants.constants import NEVER, NO, OTHER, YES
 from edc_model import duration_to_date
 from edc_model_to_dataframe import read_frame_edc
 from edc_pdutils.dataframes import get_crf, get_subject_visit
+from edc_pdutils.utils import convert_numbers_to_nullable_dtype
 from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 from intecomm_rando.models import RandomizationList
+from pandas._libs.missing import NAType
 from pandas._libs.tslibs.nattype import NaTType
 
 from intecomm_ae.models import DeathReport
@@ -24,7 +26,6 @@ from ..constants import (
     primary_cohort_mapping,
 )
 from ..notebooks.primary.glucose import (
-    default_fasting_hours,
     get_all_glucose_results,
     get_glucose_first,
     get_glucose_last,
@@ -46,7 +47,7 @@ def get_df_main_1858(
     Removes 107-208-0014-2 (who was incorrectly registered).
     """
 
-    # start with patient log
+    # start with `patient log`
     # using patient_log is one way to link group_identifier and subject_identifier
     df_main = get_patientlog_df()
 
@@ -113,7 +114,7 @@ def get_df_main_1858(
 
     df_main = merge_in_pp_using_location_update_crf(df_main)
 
-    df_main = merge_in_primary_cohort_vars(df_main)
+    df_main = merge_in_primary_cohort_vars(df_main, fasting_hours=fasting_hours)
 
     df_main["years_since_dx"] = df_main.apply(get_years_since_dx, axis=1)
 
@@ -141,112 +142,13 @@ def get_df_main_1858(
     return df_main
 
 
-def to_stata(df_main, path, filename: str = None):
-    """Export to STATA.
-
-    For example:
-        df_main = get_df_main_1858(None)
-        to_stata(df_main, my_path)
-
-    Once created, open the DTA in STATA and run the commands from the
-    printed output of this func.
-    """
-    df_main["randomization_list_id"] = df_main["randomization_list_id"].astype(str)
-    df_main["vl_baseline"] = df_main["vl_baseline"].astype("Int64")
-    df_main["vl_endline"] = df_main["vl_endline"].astype("Int64")
-    df_main["vl_baseline_log10"] = df_main["vl_baseline_log10"].astype("float64")
-    df_main["vl_endline_log10"] = df_main["vl_endline_log10"].astype("float64")
-    df_main["primary_vl_endline"] = df_main["primary_vl_endline"].astype("Int64")
-    df_main = df_main.rename(
-        columns={
-            "glucose_fasting_duration_hours_baseline": "glucose_fasting_hours_baseline",
-            "glucose_fasting_duration_hours_endline": "glucose_fasting_hours_endline",
-        }
-    )
-    df_main = df_main.drop(
-        columns=[
-            "screening_refusal_reason_other",
-            "glucose_fasting_duration_delta_baseline",
-            "glucose_fasting_duration_delta_endline",
-        ]
-    )
-    df_main.reset_index(drop=True, inplace=True)
-
-    # convert date to formatted str
-    df_main["consent_datetime"] = (
-        df_main["consent_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["allocated_datetime"] = (
-        df_main["allocated_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-
-    df_main["baseline_datetime"] = (
-        df_main["baseline_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-
-    df_main["endline_visit_datetime"] = (
-        df_main["endline_visit_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-
-    df_main["htn_dx_date"] = (
-        df_main["htn_dx_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["vl_baseline_date"] = (
-        df_main["vl_baseline_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["dm_dx_date"] = df_main["dm_dx_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    df_main["vl_endline_date"] = (
-        df_main["vl_endline_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-
-    df_main["offstudy_datetime"] = (
-        df_main["offstudy_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["endline_datetime"] = (
-        df_main["endline_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["bp_datetime_first"] = (
-        df_main["bp_datetime_first"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["bp_datetime_last"] = (
-        df_main["bp_datetime_last"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["glucose_date_baseline"] = (
-        df_main["glucose_date_baseline"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["hiv_dx_date"] = (
-        df_main["hiv_dx_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["glucose_date_endline"] = (
-        df_main["glucose_date_endline"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-
-    # convert timedeltas to seconds
-    df_main["hiv_timedelta_dx"] = df_main["hiv_timedelta_dx"].dt.total_seconds()
-    df_main["htn_timedelta_dx"] = df_main["htn_timedelta_dx"].dt.total_seconds()
-    df_main["dm_timedelta_dx"] = df_main["dm_timedelta_dx"].dt.total_seconds()
-    df_main["bp_measured_delta"] = df_main["bp_measured_delta"].dt.total_seconds()
-    df_main["glucose_date_delta_baseline"] = df_main[
-        "glucose_date_delta_baseline"
-    ].dt.total_seconds()
-    df_main["glucose_date_delta_endline"] = df_main[
-        "glucose_date_delta_endline"
-    ].dt.total_seconds()
-
-    df_main.to_stata(
-        path=path / "df_main_1858.dta",
-        variable_labels=variable_labels(),
-        version=118,
-        write_index=False,
-    )
-
-
 def glucose_controlled(value):
-    if value < 7.00:
-        return 1
-    elif value >= 7.00:
-        return 0
-    return np.nan
+    if pd.notna(value):
+        if value < 7.00:
+            return 1
+        elif value >= 7.00:
+            return 0
+    return pd.NA
 
 
 def get_ncd(s):
@@ -305,20 +207,88 @@ def get_primary_cohort_as_str(s) -> None | str:
     return None
 
 
-def primary_controlled(s):
-    """Derived column that only has value if in the primary cohorts."""
-    if s.primary_cohort_str == "HTN_ALONE":
-        return s.bp_controlled_endline
-    elif s.primary_cohort_str == "DM_ALONE":
-        return s.glucose_controlled_endline
-    elif s.primary_cohort_str == "HTN_DM":
-        if s.bp_controlled_endline == 1 and s.glucose_controlled_endline == 1:
-            return 1
-        else:
-            return 0
-    elif s.primary_cohort_str == "HIV_ALONE":
-        return s.vl_controlled_endline
-    return np.nan
+def _controlled(s, timepoint):
+    """Same as controlled() but differs from SAP to accept control
+    in one condition as controlled
+    """
+    value = pd.NA
+    if pd.notna(s["primary_cohort_str"]):
+        if s.primary_cohort_str == "HTN_ALONE":
+            return getattr(s, f"bp_controlled_{timepoint}")
+        elif s.primary_cohort_str == "DM_ALONE":
+            return getattr(s, f"glucose_controlled_{timepoint}")
+        elif s.primary_cohort_str == "HTN_DM":
+            if pd.isna(getattr(s, f"bp_controlled_{timepoint}")) and pd.isna(
+                getattr(s, f"glucose_controlled_{timepoint}")
+            ):
+                value = pd.NA
+            else:
+                s64 = pd.Series(s, dtype="Int64")
+                bp = getattr(s64, f"bp_controlled_{timepoint}")
+                gl = getattr(s64, f"glucose_controlled_{timepoint}")
+                bp = 0 if pd.isna(bp) else bp
+                gl = 0 if pd.isna(gl) else gl
+                value = bp + gl
+                # must be controlled in both to be controlled
+                value = 1 if value == 2 else 0
+        elif s.primary_cohort_str == "HIV_ALONE":
+            value = getattr(s, f"vl_controlled_{timepoint}")
+    return value
+
+
+def _controlled_alt(s, timepoint):
+    """Same as controlled() but differs from SAP to accept control
+    in one condition as controlled
+    """
+    value = pd.NA
+    if pd.notna(s["primary_cohort_str"]):
+        if s.primary_cohort_str == "HTN_ALONE":
+            return getattr(s, f"bp_controlled_{timepoint}")
+        elif s.primary_cohort_str == "DM_ALONE":
+            return getattr(s, f"glucose_controlled_{timepoint}")
+        elif s.primary_cohort_str == "HTN_DM":
+            if pd.isna(getattr(s, f"bp_controlled_{timepoint}")) and pd.isna(
+                getattr(s, f"glucose_controlled_{timepoint}")
+            ):
+                value = pd.NA
+            else:
+                s64 = pd.Series(s, dtype="Int64")
+                bp = getattr(s64, f"bp_controlled_{timepoint}")
+                gl = getattr(s64, f"glucose_controlled_{timepoint}")
+                bp = 0 if pd.isna(bp) else bp
+                gl = 0 if pd.isna(gl) else gl
+                value = bp + gl
+                # different from _controlled! Only need control in one.
+                value = 1 if value in [1, 2] else 0
+        elif s.primary_cohort_str == "HIV_ALONE":
+            value = getattr(s, f"vl_controlled_{timepoint}")
+    return value
+
+
+def controlled_baseline(s):
+    return _controlled(s, timepoint="baseline")
+
+
+def controlled_endline(s):
+    return _controlled(s, timepoint="endline")
+
+
+def controlled_baseline_alt(s):
+    """Same as controlled_baseline but differs from SAP to accept control
+    in one condition as controlled
+
+    Cases are written out explicitly
+    """
+    return _controlled_alt(s, timepoint="baseline")
+
+
+def controlled_endline_alt(s):
+    """Same as controlled_baseline but differs from SAP to accept control
+    in one condition as controlled
+
+    Cases are written out explicitly
+    """
+    return _controlled_alt(s, timepoint="endline")
 
 
 def get_dx_date(s):
@@ -547,6 +517,9 @@ def merge_in_vl(df_main: pd.DataFrame) -> pd.DataFrame:
         offset_by="days", baseline_upper=61, endline_upper=182, skip_update_dx=True
     )
     df_vl = vl.to_dataframe()
+
+    df_vl = convert_numbers_to_nullable_dtype(df_vl)
+
     df_vl.drop(
         columns=[
             "vl_baseline_value",
@@ -579,21 +552,21 @@ def merge_in_vl(df_main: pd.DataFrame) -> pd.DataFrame:
         on="subject_identifier",
         how="left",
     )
-    df_main["vl_baseline_suppressed"] = df_main.vl_baseline.apply(
-        lambda x: 1 if x < 1000 else 0
-    )
-    df_main["vl_controlled_endline"] = df_main.vl_endline.apply(lambda x: 1 if x < 1000 else 0)
-    df_main["vl_controlled_endline_400"] = df_main.vl_endline.apply(
-        lambda x: 1 if x < 400 else 0
-    )
-    df_main["vl_controlled_endline_50"] = df_main.vl_endline.apply(
-        lambda x: 1 if x < 50 else 0
-    )
-    df_main["vl_baseline_log10"] = df_main.vl_endline.apply(lambda x: np.log10(x))
-    df_main["vl_endline_log10"] = df_main.vl_endline.apply(lambda x: np.log10(x))
+    for timepoint in ["baseline", "endline"]:
+        df_main[f"vl_controlled_{timepoint}"] = getattr(df_main, f"vl_{timepoint}").apply(
+            lambda x: 1 if x < 1000 else 0
+        )
+        df_main[f"vl_controlled_{timepoint}_400"] = getattr(df_main, f"vl_{timepoint}").apply(
+            lambda x: 1 if x < 400 else 0
+        )
+        df_main[f"vl_controlled_{timepoint}_50"] = getattr(df_main, f"vl_{timepoint}").apply(
+            lambda x: 1 if x < 50 else 0
+        )
+        df_main[f"vl_{timepoint}_log10"] = getattr(df_main, f"vl_{timepoint}").apply(
+            lambda x: np.log10(x)
+        )
 
     df_main["vl_days_to_event"] = (df_main.vl_endline_date - df_main.baseline_datetime).dt.days
-
     df_main.reset_index(drop=True, inplace=True)
     return df_main
 
@@ -694,10 +667,14 @@ def get_years_since_dx(r) -> pd.DataFrame:
     elif r.primary_cohort == HTN_DM:
         return max(r.htn_years_since_dx, r.dm_years_since_dx)
     else:
-        return max(r.hiv_years_since_dx, r.htn_years_since_dx, r.dm_years_since_dx)
+        return max(
+            val
+            for val in [r.hiv_years_since_dx, r.htn_years_since_dx, r.dm_years_since_dx]
+            if pd.notna(val)
+        )
 
 
-def get_diastolic(s) -> int | float:
+def get_diastolic(s) -> int | float | NAType:
     """Returns avg of measurement one and two. If only have
     measurement one, use that.
     """
@@ -706,10 +683,10 @@ def get_diastolic(s) -> int | float:
             return s["dia_blood_pressure_avg"]
         elif pd.notna(s["dia_blood_pressure_one"]) and pd.isna(s["dia_blood_pressure_two"]):
             return s["dia_blood_pressure_one"]
-    return np.nan
+    return pd.NA
 
 
-def get_systolic(s) -> int | float:
+def get_systolic(s) -> int | float | NAType:
     """Returns avg of measurement one and two. If only have
     measurement one, use that.
     """
@@ -717,7 +694,7 @@ def get_systolic(s) -> int | float:
         return s["sys_blood_pressure_avg"]
     elif pd.notna(s["sys_blood_pressure_one"]) and pd.isna(s["sys_blood_pressure_two"]):
         return s["sys_blood_pressure_one"]
-    return np.nan
+    return pd.NA
 
 
 def get_bp_measured(s) -> int:
@@ -729,41 +706,41 @@ def get_bp_measured(s) -> int:
     return 0
 
 
-def get_bp_controlled_baseline(s) -> int | float:
+def get_bp_controlled_baseline(s) -> int | float | NAType:
     """1=Controlled, 0=uncontrolled"""
     if pd.isna(s["bp_sys_baseline"]) or pd.isna(s["bp_dia_baseline"]):
-        return np.nan
+        return pd.NA
     elif s["bp_sys_baseline"] >= 140 or s["bp_dia_baseline"] >= 90:
         return 0
     elif s["bp_sys_baseline"] < 140 and s["bp_dia_baseline"] < 90:
         return 1
-    return np.nan
+    return pd.NA
 
 
-def get_bp_controlled_endline(s) -> int | float:
+def get_bp_controlled_endline(s) -> int | float | NAType:
     """1 = Controlled, 0 = uncontrolled"""
     if pd.isna(s["bp_sys_endline"]) or pd.isna(s["bp_dia_endline"]):
-        return np.nan
+        return pd.NA
     elif s["bp_sys_endline"] >= 140 or s["bp_dia_endline"] >= 90:
         return 0
     elif s["bp_sys_endline"] < 140 and s["bp_dia_endline"] < 90:
         return 1
-    return np.nan
+    return pd.NA
 
 
-def get_bp_severe_htn_baseline(s) -> int | float:
+def get_bp_severe_htn_baseline(s) -> int | float | NAType:
     """1=Severe HTN, 0=not severe"""
     if pd.isna(s["bp_sys_baseline"]) or pd.isna(s["bp_dia_baseline"]):
-        return np.nan
+        return pd.NA
     elif s["bp_sys_baseline"] >= 180 or s["bp_dia_baseline"] >= 120:
         return 1
     return 0
 
 
-def get_bp_severe_htn_endline(s) -> int | float:
+def get_bp_severe_htn_endline(s) -> int | float | NAType:
     """1=Severe HTN, 0=not severe"""
     if pd.isna(s["bp_sys_endline"]) or pd.isna(s["bp_dia_endline"]):
-        return np.nan
+        return pd.NA
     elif s["bp_sys_endline"] >= 180 or s["bp_dia_endline"] >= 120:
         return 1
     return 0
@@ -775,48 +752,32 @@ def get_bp_measured_interval(s) -> datetime | NaTType:
     return pd.NaT
 
 
-def get_bp_sys_baseline(s) -> int | float:
+def get_bp_sys_baseline(s) -> int | float | NAType:
     if pd.notna(s["bp_visit_code_first"]) and s["bp_visit_code_first"] == BASELINE_VISIT_CODE:
         return s["bp_systolic_first"]
-    return np.nan
+    return pd.NA
 
 
-# def get_bp_sys_baseline(s) -> int | float:
-#     if pd.notna(s["bp_datetime_first"]) and (
-#         s["bp_datetime_first"] - s["baseline_datetime"]
-#     ) < timedelta(days=182):
-#         return s["bp_systolic_first"]
-#     return np.nan
-
-
-def get_bp_sys_endline(s) -> int | float:
+def get_bp_sys_endline(s) -> int | float | NAType:
     if pd.notna(s["bp_datetime_last"]) and (
         s["bp_datetime_last"] - s["baseline_datetime"]
     ) >= timedelta(days=182):
         return s["bp_systolic_last"]
-    return np.nan
+    return pd.NA
 
 
-def get_bp_dia_baseline(s) -> int | float:
+def get_bp_dia_baseline(s) -> int | float | NAType:
     if pd.notna(s["bp_visit_code_first"]) and s["bp_visit_code_first"] == BASELINE_VISIT_CODE:
         return s["bp_diastolic_first"]
-    return np.nan
+    return pd.NA
 
 
-# def get_bp_dia_baseline(s) -> int | float:
-#     if pd.notna(s["bp_datetime_first"]) and (
-#         s["bp_datetime_first"] - s["baseline_datetime"]
-#     ) < timedelta(days=182):
-#         return s["bp_systolic_last"]
-#     return np.nan
-
-
-def get_bp_dia_endline(s) -> int | float:
+def get_bp_dia_endline(s) -> int | float | NAType:
     if pd.notna(s["bp_datetime_last"]) and (
         s["bp_datetime_last"] - s["baseline_datetime"]
     ) >= timedelta(days=182):
         return s["bp_diastolic_last"]
-    return np.nan
+    return pd.NA
 
 
 def merge_in_vitals(df_main: pd.DataFrame) -> pd.DataFrame:
@@ -824,6 +785,7 @@ def merge_in_vitals(df_main: pd.DataFrame) -> pd.DataFrame:
     df_vitals = get_crf(
         model="intecomm_subject.vitals", subject_visit_model="intecomm_subject.subjectvisit"
     )
+    df_vitals = convert_numbers_to_nullable_dtype(df_vitals)
     df_weight = df_vitals.sort_values(by=["subject_identifier", "visit_datetime"])
     df_weight = (
         df_weight[(df_weight.weight.notna())][["subject_identifier", "weight"]]
@@ -856,6 +818,7 @@ def merge_in_complications(df_main: pd.DataFrame) -> pd.DataFrame:
         subject_visit_model="intecomm_subject.subjectvisit",
         read_verbose=False,
     )
+    df = convert_numbers_to_nullable_dtype(df)
     df = df.rename(
         columns={
             "stroke": "complication_stroke",
@@ -891,6 +854,7 @@ def merge_in_other_baseline_data(df_main: pd.DataFrame) -> pd.DataFrame:
         subject_visit_model="intecomm_subject.subjectvisit",
         read_verbose=False,
     )
+    df = convert_numbers_to_nullable_dtype(df)
     df["alcohol_consumption"] = df["alcohol_consumption"].apply(
         lambda x: NEVER if x == "Not applicable" else x
     )
@@ -919,9 +883,10 @@ def merge_in_bp(df_main: pd.DataFrame) -> pd.DataFrame:
     df_vitals = get_crf(
         model="intecomm_subject.vitals", subject_visit_model="intecomm_subject.subjectvisit"
     )
-    df_vitals["bp_systolic"] = df_vitals.apply(get_systolic, axis=1)
-    df_vitals["bp_measured"] = df_vitals.apply(get_bp_measured, axis=1)
-    df_vitals["bp_diastolic"] = df_vitals.apply(get_diastolic, axis=1)
+    df_vitals = convert_numbers_to_nullable_dtype(df_vitals)
+    df_vitals["bp_systolic"] = df_vitals.apply(get_systolic, axis=1).astype("Float64")
+    df_vitals["bp_measured"] = df_vitals.apply(get_bp_measured, axis=1).astype("Float64")
+    df_vitals["bp_diastolic"] = df_vitals.apply(get_diastolic, axis=1).astype("Float64")
     df_vitals = df_vitals.sort_values(by=["subject_identifier", "visit_datetime"])
     df_vitals.rename(
         columns={"visit_datetime": "bp_datetime", "visit_code": "bp_visit_code"},
@@ -952,7 +917,6 @@ def merge_in_bp(df_main: pd.DataFrame) -> pd.DataFrame:
     df_vitals_first_last = df_vitals_first_last[
         [
             "subject_identifier",
-            # "bp_measured",
             "bp_measured_delta",
             "bp_visit_code_first",
             "bp_visit_code_last",
@@ -967,25 +931,33 @@ def merge_in_bp(df_main: pd.DataFrame) -> pd.DataFrame:
     df_vitals_first_last.reset_index(drop=True, inplace=True)
     df_main = df_main.merge(df_vitals_first_last, on="subject_identifier", how="left")
     df_main.reset_index(drop=True)
-    df_main["bp_sys_baseline"] = df_main.apply(get_bp_sys_baseline, axis=1)
-    df_main["bp_dia_baseline"] = df_main.apply(get_bp_dia_baseline, axis=1)
-    df_main["bp_sys_endline"] = df_main.apply(get_bp_sys_endline, axis=1)
-    df_main["bp_dia_endline"] = df_main.apply(get_bp_dia_endline, axis=1)
-    df_main["bp_controlled_baseline"] = df_main.apply(get_bp_controlled_baseline, axis=1)
-    df_main["bp_controlled_endline"] = df_main.apply(get_bp_controlled_endline, axis=1)
-    df_main["bp_severe_htn_baseline"] = df_main.apply(get_bp_severe_htn_baseline, axis=1)
-    df_main["bp_severe_htn_endline"] = df_main.apply(get_bp_severe_htn_endline, axis=1)
+    df_main["bp_sys_baseline"] = df_main.apply(get_bp_sys_baseline, axis=1).astype("Float64")
+    df_main["bp_dia_baseline"] = df_main.apply(get_bp_dia_baseline, axis=1).astype("Float64")
+    df_main["bp_sys_endline"] = df_main.apply(get_bp_sys_endline, axis=1).astype("Float64")
+    df_main["bp_dia_endline"] = df_main.apply(get_bp_dia_endline, axis=1).astype("Float64")
+    df_main["bp_controlled_baseline"] = df_main.apply(
+        get_bp_controlled_baseline, axis=1
+    ).astype("Int64")
+    df_main["bp_controlled_endline"] = df_main.apply(get_bp_controlled_endline, axis=1).astype(
+        "Int64"
+    )
+    df_main["bp_severe_htn_baseline"] = df_main.apply(
+        get_bp_severe_htn_baseline, axis=1
+    ).astype("Int64")
+    df_main["bp_severe_htn_endline"] = df_main.apply(get_bp_severe_htn_endline, axis=1).astype(
+        "Int64"
+    )
 
     df_main["bp_days_to_event"] = (
         df_main.bp_datetime_last - df_main.baseline_datetime
     ).dt.days
 
     cond = (df_main.bp_datetime_last - df_main.baseline_datetime).dt.days < 182
-    df_main.loc[cond, "bp_sys_endline"] = np.nan
-    df_main.loc[cond, "bp_dia_endline"] = np.nan
-    df_main.loc[cond, "bp_controlled_endline"] = np.nan
-    df_main.loc[cond, "bp_severe_htn_endline"] = np.nan
-    df_main.loc[cond, "bp_days_to_event"] = np.nan
+    df_main.loc[cond, "bp_sys_endline"] = pd.NA
+    df_main.loc[cond, "bp_dia_endline"] = pd.NA
+    df_main.loc[cond, "bp_controlled_endline"] = pd.NA
+    df_main.loc[cond, "bp_severe_htn_endline"] = pd.NA
+    df_main.loc[cond, "bp_days_to_event"] = pd.NA
 
     df_main.reset_index(drop=True, inplace=True)
     return df_main
@@ -995,8 +967,9 @@ def merge_in_glucose(
     df_main: pd.DataFrame,
     fasting_hours: float | None = None,
 ) -> pd.DataFrame:
-    fasting_hours = default_fasting_hours if fasting_hours is None else fasting_hours
+    # fasting_hours = default_fasting_hours if fasting_hours is None else fasting_hours
     df_glucose = get_all_glucose_results(df_main, fasting_hours=fasting_hours)
+    df_glucose = convert_numbers_to_nullable_dtype(df_glucose)
 
     df_first = get_glucose_first(
         df_glucose,
@@ -1053,6 +1026,9 @@ def merge_in_glucose(
         how="left",
     )
     df_main.reset_index(drop=True, inplace=True)
+
+    df_main = convert_numbers_to_nullable_dtype(df_main)
+
     df_main["glucose_measured_days_endline"] = (
         df_main["glucose_date_endline"] - df_main["baseline_datetime"]
     ).dt.days
@@ -1064,22 +1040,28 @@ def merge_in_glucose(
     ).dt.days
 
     # Glucose controlled
-    df_main["glucose_controlled_baseline"] = df_main["glucose_value_baseline"].apply(
-        lambda x: glucose_controlled(x)
+    df_main["glucose_controlled_baseline"] = (
+        df_main["glucose_value_baseline"]
+        .apply(lambda x: glucose_controlled(x))
+        .astype("Int64")
     )
-    df_main["glucose_controlled_endline"] = df_main["glucose_value_endline"].apply(
-        lambda x: glucose_controlled(x)
+    df_main["glucose_controlled_endline"] = (
+        df_main["glucose_value_endline"].apply(lambda x: glucose_controlled(x)).astype("Int64")
     )
-    df_main["glucose_resulted_baseline"] = df_main["glucose_value_baseline"].apply(
-        lambda x: NO if pd.isna(x) else YES
+    df_main["glucose_resulted_baseline"] = (
+        df_main["glucose_value_baseline"]
+        .apply(lambda x: 0 if pd.isna(x) else 1)
+        .astype("Int64")
     )
-    df_main["glucose_resulted_endline"] = df_main["glucose_value_endline"].apply(
-        lambda x: NO if pd.isna(x) else YES
+    df_main["glucose_resulted_endline"] = (
+        df_main["glucose_value_endline"]
+        .apply(lambda x: 0 if pd.isna(x) else 1)
+        .astype("Int64")
     )
 
     df_main["glucose_days_to_event"] = (
         df_main.glucose_date_endline - df_main.baseline_datetime
-    ).dt.days
+    ).dt.days.astype("Int64")
 
     df_main.reset_index(drop=True, inplace=True)
     return df_main
@@ -1197,173 +1179,97 @@ def merge_in_pp_using_location_update_crf(df_main) -> pd.DataFrame:
     return df_main
 
 
-def merge_in_primary_cohort_vars(df_main) -> pd.DataFrame:
+def merge_in_primary_cohort_vars(df_main, fasting_hours: float = None) -> pd.DataFrame:
     df_main["primary_cohort"] = df_main.apply(get_primary_cohort, axis=1).astype("Int64")
     df_main["primary_cohort_str"] = df_main.apply(get_primary_cohort_as_str, axis=1)
 
-    df_main["primary_gl_endline"] = df_main[
-        (df_main.primary_cohort.isin([DM_ALONE, HTN_DM]))
-        & (df_main.glucose_fasting_duration_hours_endline >= 8.0)
-    ]["glucose_value_endline"]
-    df_main["primary_bp_sys_endline"] = df_main[
-        df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])
-    ]["bp_sys_endline"]
-    df_main["primary_bp_dia_endline"] = df_main[
-        df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])
-    ]["bp_dia_endline"]
-    df_main["primary_vl_endline"] = df_main[df_main.primary_cohort.isin([HIV_ALONE])][
-        "vl_endline"
-    ]
-    df_main["primary_controlled"] = df_main.apply(primary_controlled, axis=1).astype("Int64")
+    for suffix in ["baseline", "endline"]:
+        # glu
+        column_name = f"primary_gl_{suffix}"
+        df_main[column_name] = df_main[
+            (df_main.primary_cohort.isin([DM_ALONE, HTN_DM]))
+            & (getattr(df_main, f"glucose_fasting_duration_hours_{suffix}") >= fasting_hours)
+        ][f"glucose_value_{suffix}"].astype("Float64")
+        df_main.loc[~df_main.primary_cohort.isin([DM_ALONE, HTN_DM]), column_name] = pd.NA
+        df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
+
+        column_name = f"primary_gl_controlled_{suffix}"
+        df_main[column_name] = df_main[df_main.primary_cohort.isin([DM_ALONE, HTN_DM])][
+            f"glucose_controlled_{suffix}"
+        ].astype("Int64")
+        df_main.loc[~df_main.primary_cohort.isin([DM_ALONE, HTN_DM]), column_name] = pd.NA
+        df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
+
+        # bp
+        column_name = f"primary_bp_sys_{suffix}"
+        df_main[column_name] = df_main[df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])][
+            f"bp_sys_{suffix}"
+        ].astype("Float64")
+        df_main.loc[~df_main.primary_cohort.isin([HTN_ALONE, HTN_DM]), column_name] = pd.NA
+        df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
+
+        column_name = f"primary_bp_dia_{suffix}"
+        df_main[column_name] = df_main[df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])][
+            f"bp_dia_{suffix}"
+        ].astype("Float64")
+        df_main.loc[~df_main.primary_cohort.isin([HTN_ALONE, HTN_DM]), column_name] = pd.NA
+        df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
+
+        column_name = f"primary_bp_controlled_{suffix}"
+        df_main[column_name] = df_main[df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])][
+            f"bp_controlled_{suffix}"
+        ].astype("Int64")
+        df_main.loc[~df_main.primary_cohort.isin([HTN_ALONE, HTN_DM]), column_name] = pd.NA
+        df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
+
+        # vl
+        column_name = f"primary_vl_{suffix}"
+        df_main[column_name] = df_main[df_main.primary_cohort.isin([HIV_ALONE])][
+            f"vl_{suffix}"
+        ].astype("Float64")
+        df_main.loc[~df_main.primary_cohort.isin([HIV_ALONE]), column_name] = pd.NA
+        df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
+
+        for copies_ml in ["", "_400", "_50"]:
+            column_name = f"primary_vl_controlled_{suffix}{copies_ml}"
+            df_main[column_name] = df_main[df_main.primary_cohort.isin([HIV_ALONE])][
+                f"vl_controlled_{suffix}{copies_ml}"
+            ].astype("Float64")
+            df_main.loc[~df_main.primary_cohort.isin([HIV_ALONE]), column_name] = pd.NA
+            df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
+
+    df_main["controlled_baseline"] = df_main.apply(controlled_baseline, axis=1).astype("Int64")
+    df_main["controlled_endline"] = df_main.apply(controlled_endline, axis=1).astype("Int64")
+
+    df_main["controlled_alt_baseline"] = df_main.apply(controlled_baseline_alt, axis=1).astype(
+        "Int64"
+    )
+    df_main["controlled_alt_endline"] = df_main.apply(controlled_endline_alt, axis=1).astype(
+        "Int64"
+    )
+
+    for suffix in ["baseline", "endline"]:
+        df_main[f"primary_composite_{suffix}"] = pd.NA
+        df_main.loc[
+            df_main.primary_cohort.isin([HTN_ALONE, DM_ALONE, HTN_DM]),
+            f"primary_composite_{suffix}",
+        ] = df_main[f"controlled_{suffix}"]
+        df_main[f"primary_composite_{suffix}"] = df_main[f"primary_composite_{suffix}"].astype(
+            "Int64"
+        )
+
+        # alternative calc allowing control in one to be controlled
+        df_main[f"primary_composite_alt_{suffix}"] = pd.NA
+        df_main.loc[
+            df_main.primary_cohort.isin([HTN_ALONE, DM_ALONE, HTN_DM]),
+            f"primary_composite_alt_{suffix}",
+        ] = df_main[f"controlled_alt_{suffix}"]
+        df_main[f"primary_composite_alt_{suffix}"] = df_main[
+            f"primary_composite_alt_{suffix}"
+        ].astype("Int64")
+
     df_main.reset_index(drop=True, inplace=True)
     return df_main
-
-
-def variable_labels() -> dict:
-    return {
-        "age_in_years": "age in years",
-        "allocated_datetime": "randomization list allocation/assignment datetime",
-        "allocation": "randomization list allocation (integer)",
-        "assignment": "Intention-to-treat a=comm, b=facility",
-        "baseline_datetime": "baseline datetime (first visit date)",
-        "bmi": "Body mass index at baseline",
-        "bp_controlled_baseline": "BP controlled at baseline",
-        "bp_controlled_endline": "BP controlled at endline",
-        "bp_datetime_first": "Date for first BP measurement",
-        "bp_datetime_last": "Date for last BP measurement",
-        "bp_dia_baseline": "Endline diastolic measurement",
-        "bp_dia_endline": "Endline diastolic measurement",
-        "bp_diastolic_first": "First BP diastolic measurement",
-        "bp_diastolic_last": "Last BP diastolic measurement",
-        "bp_measured_delta": "seconds between BP baseline/endline measurements",
-        "bp_severe_htn_baseline": "Has severe hypertension at baseline",
-        "bp_severe_htn_endline": "Has severe hypertension at endline",
-        "bp_sys_baseline": "Baseline systolic measurement",
-        "bp_sys_endline": "Endline systolic measurement",
-        "bp_systolic_first": "First BP systolic measurement",
-        "bp_systolic_last": "Last BP systolic measurement",
-        "bp_visit_code_first": "Visit code for first BP measurement",
-        "bp_visit_code_last": "Visit code for last BP measurement",
-        "complication_stroke": "Stroke (See complicationsbaseline)",
-        "complication_heart_attack": (
-            "Heart attack / heart failure (See complicationsbaseline)"
-        ),
-        "complication_renal_disease": "Renal (kidney) disease (See complicationsbaseline)",
-        "complication_vision": (
-            "Vision problems (e.g. blurred vision) (See complicationsbaseline)"
-        ),
-        "complication_numbness": "Numbness / burning sensation (See complicationsbaseline)",
-        "complication_foot_ulcers": "Foot ulcers (See complicationsbaseline)",
-        "consent_datetime": "consent datetime",
-        "country": "Country",
-        "death_date": "Date of death from EoS report",
-        "death_cause": "Cause of death from death report",
-        "death_date_from_crf": "Date of death from death report",
-        "death_days_to_event": "Days to death from baseline",
-        "dm": "diabetes confirmed at baseline",
-        "dm_dx_date": "Diabetes diagnosis date",
-        "dm_only": "Diabetes diagnosis only",
-        "dm_scr": "reported diabetes at screening",
-        "dm_timedelta_dx": "time since diabetes diagnosis in seconds",
-        "dm_years_since_dx": "years since diabetes diagnosis",
-        "endline_datetime": "Endline datetime (last visit date)",
-        "endline_visit_code": "endline visit code",
-        "endline_visit_datetime": "endline datetime",
-        "gender": "gender",
-        "glucose_controlled_baseline": "Glucose controlled at baseline",
-        "glucose_controlled_endline": "Glucose controlled at endline",
-        "glucose_date_baseline": "Baseline glucose measurement date",
-        "glucose_date_delta_baseline": (
-            "Baseline glucose measurement date seconds from true baseline"
-        ),
-        "glucose_date_delta_endline": (
-            "Endline glucose measurement date seconds from true baseline"
-        ),
-        "glucose_date_endline": "Endline glucose measurement date",
-        "glucose_fasting_hours_baseline": "Baseline glucose fasting duration hours ",
-        "glucose_fasting_hours_endline": "Endline glucose fasting duration hours ",
-        "glucose_first_to_last_days": "Days between first and last glucose measurement",
-        "glucose_measured_days_baseline": (
-            "Baseline glucose measured in days from true baseline"
-        ),
-        "glucose_measured_days_endline": "Endline glucose measured in days from true baseline",
-        "glucose_resulted_baseline": "Glucose result available at baseline",
-        "glucose_resulted_endline": "Glucose result available at endline",
-        "glucose_units_baseline": "Baseline glucose measurement units",
-        "glucose_units_endline": "Endline glucose measurement units",
-        "glucose_value_baseline": "Baseline glucose measurement value",
-        "glucose_value_endline": "Endline glucose measurement value",
-        "group_identifier": "unique group identifier",
-        "height": "Height in centimeters",
-        "hiv": "HIV confirmed at baseline",
-        "hiv_dx_date": "HIV diagnosis date",
-        "hiv_only": "HIV only confirmed at baseline",
-        "hiv_scr": "reported HIV at screening",
-        "hiv_timedelta_dx": "time since HIV diagnosis in seconds",
-        "hiv_years_since_dx": "years since HIV diagnosis",
-        "htn": "hypertension confirmed at baseline",
-        "htn_and_dm": "Hypertension and diabetes confirmed at baseline",
-        "hiv_and_htn_and_dm": "HIV and hypertension and diabetes confirmed at baseline",
-        "htn_dx_date": "Hypertension diagnosis date",
-        "htn_only": "Hypertension diagnosis only",
-        "htn_scr": "reported hypertension at screening",
-        "htn_timedelta_dx": "time since hypertension diagnosis in seconds",
-        "htn_years_since_dx": "years since hypertension diagnosis",
-        "ltfu_date": "Date lost to follow up",
-        "ncd": "NCD only confirmed at baseline",
-        "offstudy_datetime": "Off study datetime",
-        "offstudy_reason": "Off study reason",
-        "onstudy_days": "Number of days on study",
-        "patient_log_identifier": (
-            "screening log unique subject/potential participant identifier"
-        ),
-        "pp": "Per protocol assignment a=comm, b=facility",
-        "randomization_list_id": "randomization list id/pk (group)",
-        "screening_identifier": "subject screening unique identifier",
-        "screening_refusal_reason": "screening refusal reason",
-        "screening_refusal_reason_other": "screening refusal reason other",
-        "sid": "randomzation list SID (group)",
-        "site": "site name",
-        "site_id": "site code",
-        "stable": "6m stable in care",
-        "subject_identifier": "subject/participant unique identifier",
-        "transfer_date": "Date transferred",
-        "vl_baseline": "Baseline viral load (copies/ml)",
-        "vl_baseline_date": "Baseline viral load date",
-        "vl_baseline_log10": "Baseline viral load (log10)",
-        "vl_baseline_suppressed": "VL supressed at baseline <1000",
-        "vl_endline": "Endline viral load (copies/ml)",
-        "vl_endline_date": "Endline viral load date",
-        "vl_endline_log10": "Endline viral load (log10)",
-        "vl_controlled_endline": "VL supressed at endline <1000",
-        "vl_controlled_endline_400": "VL supressed at endline <400",
-        "vl_controlled_endline_50": "VL supressed at endline <50",
-        "willing_to_screen": "willing to screen",
-        "primary_cohort": "1=DM_ALONE,2=HTN_ALONE,3=DM+HTN,4=HIV_ALONE,-1=UNDEFINED",
-        "endline": "1/0 where 1=Included in endline calculations (See EoS)",
-        "primary_cohort_str": "primary_cohort string representation",
-        "primary_gl_endline": (
-            "Endline glucose for cohort DM_ALONE (1) and DM in cohort HTN_DM (3)"
-        ),
-        "primary_bp_dia_endline": (
-            "Endline BP dia for cohort HTN_ALONE (2) and HTN in cohort HTN_DM (3)"
-        ),
-        "primary_bp_sys_endline": (
-            "Endline BP sys for cohort HTN_ALONE (2) and HTN in cohort HTN_DM (3)"
-        ),
-        "primary_vl_endline": "Endline VL sys for cohort HIV_ALONE (4)",
-        "primary_controlled": (
-            "Controlled VL/BP+GL composite. See SAP primary endpoint criteria"
-        ),
-        "employment_status": "Employment status (See otherbaselinedata)",
-        "education": (
-            "How much formal education does the patient have? (See otherbaselinedata)"
-        ),
-        "marital_status": "Personal/marital status? (See otherbaselinedata)",
-        "smoking_status": "Which of these options describes you? (See otherbaselinedata)",
-        "alcohol_consumption": "Do you drink alcohol? How often? (See otherbaselinedata)",
-        "weight": "Weight in kg",
-    }
 
 
 def categorical_columns():

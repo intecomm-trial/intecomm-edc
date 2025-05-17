@@ -1,3 +1,5 @@
+import warnings
+
 import pandas as pd
 from edc_constants.constants import NO, YES
 from great_tables import GT, html, loc, style
@@ -137,10 +139,16 @@ def get_cells_for_categorical(
             df[(df[col].notna())][col].value_counts(normalize=True, dropna=False) * 100
         )
 
-    cells = [
-        f"{counts.get(category, 0)} ({percentages.get(category, 0):.1f}%)"
-        for category in (categories or df[df[col].notna()][col].unique().tolist())
-    ]
+    cells = []
+    for category in categories or df[df[col].notna()][col].unique().tolist():
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", FutureWarning)
+            cells.append(f"{counts.get(category, 0)} ({percentages.get(category, 0):.1f}%)")
+    # cells = [
+    #     f"{counts.get(category, 0)} ({percentages.get(category, 0):.1f}%)"
+    #     for category in (categories or df[df[col].notna()][col].unique().tolist())
+    # ]
     return [n, *cells]
 
 
@@ -472,6 +480,28 @@ def get_great_table(df, group_row_headers, title: str, source_notes: str | None 
         )
     )
     return great_tbl
+
+
+def get_composite(df1, col, cond, label):
+    df1.loc[cond, col] = df1.loc[cond, col].fillna(-1)
+    tbl_dct = get_primary_cohorts_by_categorical_column(df1[cond], col)
+    dftbl = pd.DataFrame(tbl_dct)
+    mapping = {"n": "n", -1: "Missing", 1: label, 0: "Uncontrolled"}
+    dftbl["Statistics"] = dftbl["Statistics"].map(mapping)
+    dftbl["Statistics"] = pd.Categorical(
+        dftbl["Statistics"], categories=["n", label, "Uncontrolled", "Missing"], ordered=True
+    )
+    dftbl = dftbl.sort_values(by=["Statistics"], ascending=True)
+    dftbl = dftbl.reset_index(drop=True)
+    for col in ["Community Ncd", "Facility Ncd"]:
+        value = dftbl.loc[1, col].split(" ")
+        value = [value[0], "/", str(dftbl.loc[0, col]), " ", value[1]]
+        value = "".join(value)
+        dftbl.loc[1, col] = value
+    dftbl.replace("0 (0.0%)", "NA", inplace=True)
+    dftbl = dftbl.drop(0)
+    dftbl = dftbl.reset_index(drop=True)
+    return dftbl
 
 
 def get_bp(df1, col, cond, label):
