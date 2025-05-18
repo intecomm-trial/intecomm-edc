@@ -1,4 +1,44 @@
-def to_stata(df_main, path):
+import pandas as pd
+
+
+def check_col_length_for_stata(df) -> None:
+    if long_colnames := [col for col in df.columns if len(col) > 32]:
+        raise ValueError(f"Column labels must be 32 characters or less. Got {long_colnames}")
+
+
+def check_desc_length_for_stata(stata_labels: dict[str, str]) -> None:
+    for label, description in stata_labels.items():
+        if len(description) > 80:
+            raise ValueError(
+                "Label description must be 80 characters or fewer. "
+                f"Got `{label}` is {len(description)} chars."
+            )
+
+
+def convert_col_dtypes(df_main: pd.DataFrame) -> pd.DataFrame:
+    for col in df_main.select_dtypes(
+        include=["datetime", "datetime64", "datetime64[ns]", "datetime64[ns, UTC]"]
+    ):
+        df_main[col] = df_main[col].dt.tz_localize(None).astype("datetime64[ns]")
+    for col in df_main.select_dtypes(include="timedelta"):
+        df_main[col] = df_main[col].dt.total_seconds()
+    for col in df_main.select_dtypes(include="int"):
+        df_main[col] = df_main[col].astype("Int64")
+    for col in df_main.select_dtypes(include="float"):
+        df_main[col] = df_main[col].astype("Float64")
+    return df_main
+
+
+def convert_id_cols(df_main: pd.DataFrame) -> pd.DataFrame:
+    for col in df_main.select_dtypes(include="object"):
+        if col.endswith("_id"):
+            df_main[col] = df_main[col].astype(str)
+    return df_main
+
+
+def to_stata(
+    df_main, path, filename: str | None = None, stata_labels: dict[str, str] | None = None
+):
     """Export to STATA.
 
     For example:
@@ -8,103 +48,124 @@ def to_stata(df_main, path):
     Once created, open the DTA in STATA and run the commands from the
     printed output of this func.
     """
-    df_main["randomization_list_id"] = df_main["randomization_list_id"].astype(str)
-    df_main["vl_baseline"] = df_main["vl_baseline"].astype("Int64")
-    df_main["vl_endline"] = df_main["vl_endline"].astype("Int64")
-    df_main["vl_baseline_log10"] = df_main["vl_baseline_log10"].astype("Float64")
-    df_main["vl_endline_log10"] = df_main["vl_endline_log10"].astype("Float64")
-    df_main["primary_vl_endline"] = df_main["primary_vl_endline"].astype("Int64")
-    df_main = (
-        df_main.rename(
-            columns={
-                "glucose_fasting_duration_hours_baseline": "glucose_fasting_hours_baseline",
-                "primary_vl_controlled_baseline_400": "primary_vl_cntrl_baseline_400",
-                "primary_vl_controlled_baseline_50": "primary_vl_cntrl_baseline_50",
-                "primary_vl_controlled_endline_400": "primary_vl_cntrl_endline_400",
-                "primary_vl_controlled_endline_50": "primary_vl_cntrl_endline_50",
-                "glucose_fasting_duration_hours_endline": "glucose_fasting_hours_endline",
-            }
-        )
-        .drop(
-            columns=[
-                "screening_refusal_reason_other",
-                "glucose_fasting_duration_delta_baseline",
-                "glucose_fasting_duration_delta_endline",
-            ]
-        )
-        .reset_index(drop=True)
+    filename = filename or "df_main_1858.dta"
+    stata_labels = stata_labels or df_main_variable_labels()
+
+    check_col_length_for_stata(df_main)
+    check_desc_length_for_stata(stata_labels)
+
+    df_main = convert_col_dtypes(df_main)
+
+    df_main = convert_id_cols(df_main)
+
+    # if "randomization_list_id" in df_main.columns:
+    #     df_main["randomization_list_id"] = df_main["randomization_list_id"].astype(str)
+    # if "subject_visit_id" in df_main.columns:
+    #     df_main["randomization_list_id"] = df_main["randomization_list_id"].astype(str)
+    # if "vl_baseline" in df_main.columns:
+    #     df_main["vl_baseline"] = df_main["vl_baseline"].astype("Int64")
+    # if "vl_endline" in df_main.columns:
+    #     df_main["vl_endline"] = df_main["vl_endline"].astype("Int64")
+    # if "vl_baseline_log10" in df_main.columns:
+    #     df_main["vl_baseline_log10"] = df_main["vl_baseline_log10"].astype("Float64")
+    # if "vl_endline_log10" in df_main.columns:
+    #     df_main["vl_endline_log10"] = df_main["vl_endline_log10"].astype("Float64")
+    # if "primary_vl_endline" in df_main.columns:
+    #     df_main["primary_vl_endline"] = df_main["primary_vl_endline"].astype("Int64")
+    df_main = df_main.rename(
+        columns={
+            "glucose_fasting_duration_hours_baseline": "glucose_fasting_hours_baseline",
+            "primary_vl_controlled_baseline_400": "primary_vl_cntrl_baseline_400",
+            "primary_vl_controlled_baseline_50": "primary_vl_cntrl_baseline_50",
+            "primary_vl_controlled_endline_400": "primary_vl_cntrl_endline_400",
+            "primary_vl_controlled_endline_50": "primary_vl_cntrl_endline_50",
+            "glucose_fasting_duration_hours_endline": "glucose_fasting_hours_endline",
+        }
     )
 
-    # convert date to formatted str
-    df_main["consent_datetime"] = (
-        df_main["consent_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["allocated_datetime"] = (
-        df_main["allocated_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
+    if "screening_refusal_reason_other" in df_main.columns:
+        df_main = df_main.drop(columns=["screening_refusal_reason_other"])
+    if "glucose_fasting_duration_delta_baseline" in df_main.columns:
+        df_main = df_main.drop(columns=["glucose_fasting_duration_delta_baseline"])
+    if "glucose_fasting_duration_delta_endline" in df_main.columns:
+        df_main = df_main.drop(columns=["glucose_fasting_duration_delta_endline"])
+    df_main = df_main.reset_index(drop=True)
 
-    df_main["baseline_datetime"] = (
-        df_main["baseline_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-
-    df_main["endline_visit_datetime"] = (
-        df_main["endline_visit_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-
-    df_main["htn_dx_date"] = (
-        df_main["htn_dx_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["vl_baseline_date"] = (
-        df_main["vl_baseline_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["dm_dx_date"] = df_main["dm_dx_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    df_main["vl_endline_date"] = (
-        df_main["vl_endline_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-
-    df_main["offstudy_datetime"] = (
-        df_main["offstudy_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["endline_datetime"] = (
-        df_main["endline_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["bp_datetime_first"] = (
-        df_main["bp_datetime_first"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["bp_datetime_last"] = (
-        df_main["bp_datetime_last"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["glucose_date_baseline"] = (
-        df_main["glucose_date_baseline"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["hiv_dx_date"] = (
-        df_main["hiv_dx_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-    df_main["glucose_date_endline"] = (
-        df_main["glucose_date_endline"].dt.tz_localize(None).astype("datetime64[ns]")
-    )
-
-    # convert timedeltas to seconds
-    df_main["hiv_timedelta_dx"] = df_main["hiv_timedelta_dx"].dt.total_seconds()
-    df_main["htn_timedelta_dx"] = df_main["htn_timedelta_dx"].dt.total_seconds()
-    df_main["dm_timedelta_dx"] = df_main["dm_timedelta_dx"].dt.total_seconds()
-    df_main["bp_measured_delta"] = df_main["bp_measured_delta"].dt.total_seconds()
-    df_main["glucose_date_delta_baseline"] = df_main[
-        "glucose_date_delta_baseline"
-    ].dt.total_seconds()
-    df_main["glucose_date_delta_endline"] = df_main[
-        "glucose_date_delta_endline"
-    ].dt.total_seconds()
+    # # convert date to formatted str
+    # if "consent_datetime" in df_main.columns:
+    #     df_main["consent_datetime"] = (
+    #         df_main["consent_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
+    #     )
+    # if "allocated_datetime" in df_main.columns:
+    #     df_main["allocated_datetime"] = (
+    #         df_main["allocated_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
+    #     )
+    #
+    # if "baseline_datetime" in df_main.columns:
+    #     df_main["baseline_datetime"] = (
+    #         df_main["baseline_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
+    #     )
+    #
+    # if "endline_visit_datetime" in df_main.columns:
+    #     df_main["endline_visit_datetime"] = (
+    #         df_main["endline_visit_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
+    #     )
+    #
+    # df_main["htn_dx_date"] = (
+    #     df_main["htn_dx_date"].dt.tz_localize(None).astype("datetime64[ns]")
+    # )
+    # df_main["vl_baseline_date"] = (
+    #     df_main["vl_baseline_date"].dt.tz_localize(None).astype("datetime64[ns]")
+    # )
+    # df_main["dm_dx_date"] = df_main["dm_dx_date"].dt.tz_localize(None).
+    # astype("datetime64[ns]")
+    # df_main["vl_endline_date"] = (
+    #     df_main["vl_endline_date"].dt.tz_localize(None).astype("datetime64[ns]")
+    # )
+    #
+    # df_main["offstudy_datetime"] = (
+    #     df_main["offstudy_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
+    # )
+    # df_main["endline_datetime"] = (
+    #     df_main["endline_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
+    # )
+    # df_main["bp_datetime_first"] = (
+    #     df_main["bp_datetime_first"].dt.tz_localize(None).astype("datetime64[ns]")
+    # )
+    # df_main["bp_datetime_last"] = (
+    #     df_main["bp_datetime_last"].dt.tz_localize(None).astype("datetime64[ns]")
+    # )
+    # df_main["glucose_date_baseline"] = (
+    #     df_main["glucose_date_baseline"].dt.tz_localize(None).astype("datetime64[ns]")
+    # )
+    # df_main["hiv_dx_date"] = (
+    #     df_main["hiv_dx_date"].dt.tz_localize(None).astype("datetime64[ns]")
+    # )
+    # df_main["glucose_date_endline"] = (
+    #     df_main["glucose_date_endline"].dt.tz_localize(None).astype("datetime64[ns]")
+    # )
+    #
+    # # convert timedeltas to seconds
+    # df_main["hiv_timedelta_dx"] = df_main["hiv_timedelta_dx"].dt.total_seconds()
+    # df_main["htn_timedelta_dx"] = df_main["htn_timedelta_dx"].dt.total_seconds()
+    # df_main["dm_timedelta_dx"] = df_main["dm_timedelta_dx"].dt.total_seconds()
+    # df_main["bp_measured_delta"] = df_main["bp_measured_delta"].dt.total_seconds()
+    # df_main["glucose_date_delta_baseline"] = df_main[
+    #     "glucose_date_delta_baseline"
+    # ].dt.total_seconds()
+    # df_main["glucose_date_delta_endline"] = df_main[
+    #     "glucose_date_delta_endline"
+    # ].dt.total_seconds()
 
     df_main.to_stata(
-        path=path / "df_main_1858.dta",
-        variable_labels=variable_labels(),
+        path=path / filename,
+        variable_labels=stata_labels,
         version=118,
         write_index=False,
     )
 
 
-def variable_labels() -> dict:
+def df_main_variable_labels() -> dict:
     labels = {
         "age_in_years": "age in years",
         "allocated_datetime": "randomization list allocation/assignment datetime",
