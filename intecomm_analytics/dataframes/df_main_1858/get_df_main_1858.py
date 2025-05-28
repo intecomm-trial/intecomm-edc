@@ -3,21 +3,19 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from django_pandas.io import read_frame
 from edc_constants.constants import NEVER, NO, OTHER, YES
 from edc_model import duration_to_date
 from edc_model_to_dataframe import read_frame_edc
 from edc_pdutils.dataframes import get_crf, get_subject_visit
 from edc_pdutils.utils import convert_numbers_to_nullable_dtype
 from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
-from intecomm_rando.models import RandomizationList
 from pandas._libs.missing import NAType
 from pandas._libs.tslibs.nattype import NaTType
 
 from intecomm_ae.models import DeathReport
 from intecomm_prn.models import EndOfStudy
 
-from ..constants import (
+from ...constants import (
     DM_ALONE,
     HIV_ALONE,
     HTN_ALONE,
@@ -25,18 +23,17 @@ from ..constants import (
     UNDEFINED,
     primary_cohort_mapping,
 )
-from ..notebooks.primary.glucose import (
+from ...notebooks.primary.glucose import (
     get_all_glucose_results,
     get_glucose_first,
     get_glucose_last,
 )
-from .get_patientlog_df import get_patientlog_df
-from .get_vl_summary import VlSummary2
+from ..get_vl_summary import VlSummary2
+from .get_df_main_1858_pre import BASELINE_VISIT_CODE, get_df_main_1858_pre
 
 __all__ = ["get_df_main_1858", "treatment_arm_labels"]
 
 treatment_arm_labels = {COMMUNITY_ARM: "Community", FACILITY_ARM: "Facility"}
-BASELINE_VISIT_CODE = 1000.0
 
 
 def get_df_main_1858(
@@ -46,22 +43,7 @@ def get_df_main_1858(
 
     Removes 107-208-0014-2 (who was incorrectly registered).
     """
-
-    # start with `patient log`
-    # using patient_log is one way to link group_identifier and subject_identifier
-    df_main = get_patientlog_df()
-
-    # exclude those in patient_log that were not added to a group
-    df_main = df_main[(df_main.group_identifier.notna())]
-
-    # exclude those added to a group but never consented
-    df_main = df_main[(df_main.consent_datetime.notna())]
-
-    assert len(df_main) == 1864  # nosec B101
-
-    # rename conditions reported at screening to distinguish from those
-    # confirmed later at baseline
-    df_main.rename(columns={"hiv": "hiv_scr", "htn": "htn_scr", "dm": "dm_scr"}, inplace=True)
+    df_main = get_df_main_1858_pre()
 
     # merge with df_visit
     # this merge leaves us with only the subjects who presented for the
@@ -69,10 +51,6 @@ def get_df_main_1858(
     df_main = merge_in_visit(df_main)
 
     assert len(df_main) == 1858  # nosec B101
-
-    # 1858 subjects
-    df_main = merge_in_rando(df_main)
-
     assert len(df_main[df_main.assignment == "a"]) == 932  # nosec B101
     assert len(df_main[df_main.assignment == "b"]) == 926  # nosec B101
     assert len(df_main[df_main.allocation == "1"]) == 932  # nosec B101
@@ -111,6 +89,8 @@ def get_df_main_1858(
     df_main = merge_in_glucose(df_main, fasting_hours=fasting_hours)
 
     df_main["country"] = df_main.apply(get_country, axis=1)
+
+    # df_main = merge_in_location_update_crf(df_main)
 
     df_main = merge_in_pp_using_location_update_crf(df_main)
 
@@ -413,43 +393,7 @@ def merge_in_visit(df_main: pd.DataFrame) -> pd.DataFrame:
         df_main,
         on="subject_identifier",
         how="left",
-    )
-    df_main.reset_index(drop=True, inplace=True)
-    return df_main
-
-
-def merge_in_rando(df_main: pd.DataFrame) -> pd.DataFrame:
-    """Add assignment, etc. from merge with RandomizationList.
-
-    Note: unit of randomization is the group, not the subject."""
-    df_rando = read_frame(
-        RandomizationList.objects.values(
-            "id",
-            "sid",
-            "group_identifier",
-            "assignment",
-            "allocation",
-            "allocated_datetime",
-        ).filter(group_identifier__isnull=False)
-    )
-    df_rando = df_rando[df_rando.group_identifier.notna()]
-    df_rando.rename(columns={"id": "randomization_list_id"}, inplace=True)
-    df_rando.reset_index(drop=True, inplace=True)
-    df_main = df_main.merge(
-        df_rando[
-            [
-                "randomization_list_id",
-                "group_identifier",
-                "sid",
-                "assignment",
-                "allocation",
-                "allocated_datetime",
-            ]
-        ],
-        on="group_identifier",
-        how="left",
-    )
-    df_main.reset_index(drop=True, inplace=True)
+    ).reset_index(drop=True)
     return df_main
 
 
@@ -794,8 +738,9 @@ def merge_in_vitals(df_main: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
     )
     df_weight.columns = ["subject_identifier", "weight"]
-    df_main = df_main.merge(df_weight, on="subject_identifier", how="left")
-    df_main.reset_index(drop=True, inplace=True)
+    df_main = df_main.merge(df_weight, on="subject_identifier", how="left").reset_index(
+        drop=True
+    )
 
     df_height = df_vitals.sort_values(by=["subject_identifier", "visit_datetime"])
     df_height = (
@@ -1102,12 +1047,14 @@ def get_location_update(df_main: pd.DataFrame) -> pd.DataFrame:
     df_location_update["location"] = df_location_update["location"].map(
         {"community": COMMUNITY_ARM, "clinic": FACILITY_ARM, OTHER: OTHER}
     )
-    # was subject expected to return to community. Even though often replied
-    # NO, subject still returned. Can ignore this column
-    df_location_update.rename(columns={"next_location": "returning"}, inplace=True)
+    # Was the subject expected to return to the community? Even
+    # though often replied `NO`, the subject still returned. Can
+    # ignore this column.
+    df_location_update = df_location_update.rename(columns={"next_location": "returning"})
+
     # merge in vars from df_main
     df_location_update = df_location_update.merge(
-        df_main[["subject_identifier", "assignment", "hiv", "dm", "htn", "country"]],
+        df_main[["subject_identifier", "assignment"]],
         how="left",
         on="subject_identifier",
     )
@@ -1121,14 +1068,14 @@ def get_location_update(df_main: pd.DataFrame) -> pd.DataFrame:
     ].copy()
     # baseline and endline visit are at facility regardless of assignment
     # remove them
-    df_location_update = df_location_update[
-        (df_location_update.visit_code > 1000.0) & (df_location_update.visit_code < 1120.0)
-    ].copy()
-
-    df_location_update.sort_values(
-        by=["subject_identifier", "visit_code"], ascending=[True, True], inplace=True
+    df_location_update = (
+        df_location_update[
+            (df_location_update.visit_code > 1000.0) & (df_location_update.visit_code < 1120.0)
+        ]
+        .copy()
+        .sort_values(by=["subject_identifier", "visit_code"], ascending=[True, True])
+        .reset_index(drop=True)
     )
-    df_location_update.reset_index(drop=True, inplace=True)
     return df_location_update
 
 
@@ -1140,28 +1087,30 @@ def merge_in_pp_using_location_update_crf(df_main) -> pd.DataFrame:
     df_main["pp"] = df_main["assignment"]
 
     # filter for all visits if any 6m changes from a->b
-    df = df_location_update[
-        (
-            df_location_update.subject_identifier.isin(
-                df_location_update[
-                    (df_location_update.direction == "a->b")
-                    & (df_location_update.visit_code == 1060.0)
-                ].subject_identifier
+    df = (
+        df_location_update[
+            (
+                df_location_update.subject_identifier.isin(
+                    df_location_update[
+                        (df_location_update.direction == "a->b")
+                        & (df_location_update.visit_code == 1060.0)
+                    ].subject_identifier
+                )
             )
-        )
-        & (df_location_update.visit_code >= 1060.0)
-    ].copy()
-    df.sort_values(
-        by=["subject_identifier", "visit_code"], ascending=[True, True], inplace=True
+            & (df_location_update.visit_code >= 1060.0)
+        ]
+        .copy()
+        .sort_values(by=["subject_identifier", "visit_code"], ascending=[True, True])
+        .reset_index(drop=True)
     )
-    df.reset_index(drop=True, inplace=True)
 
     # of those, is there more than one visit beyond 6m?
-    df = df.groupby(by=["subject_identifier"]).filter(lambda x: len(x) > 1)
-    df.sort_values(
-        by=["subject_identifier", "visit_code"], ascending=[True, True], inplace=True
+    df = (
+        df.groupby(by=["subject_identifier"])
+        .filter(lambda x: len(x) > 1)
+        .sort_values(by=["subject_identifier", "visit_code"], ascending=[True, True])
+        .reset_index(drop=True)
     )
-    df.reset_index(drop=True, inplace=True)
     df_main.loc[df_main.subject_identifier.isin(df.subject_identifier), "pp"] = "b"
 
     # now look before 6m, and update any with all 5 visits are a->b
@@ -1174,8 +1123,7 @@ def merge_in_pp_using_location_update_crf(df_main) -> pd.DataFrame:
     df_main.loc[
         df_main.subject_identifier.isin(df[df.visit_code >= 5].subject_identifier), "pp"
     ] = "b"
-
-    df_main.reset_index(drop=True, inplace=True)
+    df_main = df_main.reset_index(drop=True)
     return df_main
 
 

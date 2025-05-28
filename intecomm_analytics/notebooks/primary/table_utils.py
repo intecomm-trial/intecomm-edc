@@ -5,8 +5,8 @@ from edc_constants.constants import NO, YES
 from great_tables import GT, html, loc, style
 from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 
-from intecomm_analytics.constants import DM_ALONE, HIV_ALONE, HTN_ALONE, HTN_DM
-from intecomm_analytics.dataframes import treatment_arm_labels as treatment_arm
+from ...constants import DM_ALONE, HIV_ALONE, HTN_ALONE, HTN_DM
+from ...dataframes import treatment_arm_labels as treatment_arm
 
 __all__ = [
     "get_cells_for_continuous_var",
@@ -141,14 +141,9 @@ def get_cells_for_categorical(
 
     cells = []
     for category in categories or df[df[col].notna()][col].unique().tolist():
-
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", FutureWarning)
             cells.append(f"{counts.get(category, 0)} ({percentages.get(category, 0):.1f}%)")
-    # cells = [
-    #     f"{counts.get(category, 0)} ({percentages.get(category, 0):.1f}%)"
-    #     for category in (categories or df[df[col].notna()][col].unique().tolist())
-    # ]
     return [n, *cells]
 
 

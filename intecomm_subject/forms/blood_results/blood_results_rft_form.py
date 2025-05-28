@@ -5,7 +5,7 @@ from edc_crf.crf_form_validator import CrfFormValidator
 from edc_crf.modelform_mixins import CrfModelFormMixin
 from edc_lab_panel.panels import rft_panel
 from edc_lab_results.form_validator_mixins import BloodResultsFormValidatorMixin
-from edc_reportable import BmiFormValidatorMixin
+from edc_vitals.form_validators import BmiFormValidatorMixin
 
 from ...models import BloodResultsRft
 

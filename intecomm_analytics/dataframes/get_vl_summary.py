@@ -4,8 +4,9 @@ from django_pandas.io import read_frame
 from edc_utils import get_utcnow
 from edc_visit_schedule.models import SubjectScheduleHistory
 
-from intecomm_analytics.dataframes import get_baseline_diagnoses_df
 from intecomm_reports.utils import update_diagnoses_model
+
+from .get_baseline_diagnoses_df import get_baseline_diagnoses_df
 
 __all__ = ["VlSummary", "VlSummary2", "get_vl_summary_df"]
 
