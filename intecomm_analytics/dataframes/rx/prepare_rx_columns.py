@@ -60,6 +60,7 @@ def prepare_rx_columns(
         how="left",
     )
     df_crf["rx_changed"] = 0
+    df_crf["rx_changed"] = df_crf["rx_changed"].astype("Int64")
     df_crf.loc[
         (df_crf["rx_first"].notna())
         & (df_crf["rx_last"].notna())

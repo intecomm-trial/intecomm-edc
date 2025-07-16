@@ -1,6 +1,5 @@
 from .get_all_scheduled import get_all_scheduled
 from .get_all_unscheduled import get_all_unscheduled
-from .get_appt_df import get_appt_df
 from .get_community_who_visited_facility import get_community_who_visited_facility
 from .get_drug_refills_unscheduled import get_drug_refills_unscheduled
 from .get_referrals import get_referrals

@@ -1,16 +1,11 @@
-from edc_reportable import GRADE3, GRADE4, site_reportables
-from edc_reportable.grading_data.daids_july_2017 import chemistries, dummies, hematology
-from edc_reportable.normal_data.africa import normal_data
+from edc_reportable.data import africa, daids_july_2017
 
 grading_data = {}
-grading_data.update(**dummies)
-grading_data.update(**chemistries)
-grading_data.update(**hematology)
+grading_data.update(**daids_july_2017.dummies)
+grading_data.update(**daids_july_2017.chemistries)
+grading_data.update(**daids_july_2017.hematology)
 
-site_reportables.register(
-    name="intecomm",
-    normal_data=normal_data,
-    grading_data=grading_data,
-    reportable_grades=[GRADE3, GRADE4],
-    reportable_grades_exceptions=None,
-)
+collection_name = "intecomm"
+normal_data = africa.normal_data
+reportable_grades = [3, 4]
+reportable_grades_exceptions = {}

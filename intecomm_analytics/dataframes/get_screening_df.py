@@ -3,7 +3,7 @@ from django.contrib.sites.models import Site
 from django_pandas.io import read_frame
 from edc_model import duration_to_date
 
-from intecomm_analytics.notebooks.primary.table_utils import get_ineligible_reason
+from intecomm_analytics.utils import get_ineligible_reason
 from intecomm_screening.models import PatientLog, SubjectScreening
 from intecomm_subject.models import SubjectVisit
 

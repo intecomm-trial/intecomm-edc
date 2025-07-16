@@ -5,8 +5,8 @@ from edc_constants.constants import NO, YES
 from great_tables import GT, html, loc, style
 from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 
-from ...constants import DM_ALONE, HIV_ALONE, HTN_ALONE, HTN_DM
-from ...dataframes import treatment_arm_labels as treatment_arm
+from ..constants import DM_ALONE, HIV_ALONE, HTN_ALONE, HTN_DM
+from ..dataframes import treatment_arm_labels as treatment_arm
 
 __all__ = [
     "get_cells_for_continuous_var",
@@ -590,6 +590,7 @@ def get_columns_for_days_to_event(
     drop_first: bool | None = None,
 ) -> pd.DataFrame:
 
+    labels = labels or []
     set_zero_to_na = set_zero_to_na or []
     bins = bins or [0, 181, 269, 364, 539, 1000]
     df1["days_to_event_bins"] = pd.cut(

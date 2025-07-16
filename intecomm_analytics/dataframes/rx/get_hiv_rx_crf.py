@@ -1,4 +1,5 @@
 import pandas as pd
+from edc_analytics.stata import get_stata_labels_from_model
 from edc_pdutils.constants import SYSTEM_COLUMNS
 from edc_pdutils.dataframes import get_crf
 
@@ -81,3 +82,26 @@ def get_hiv_rx_crf():
         .reset_index(drop=True)
     )
     return df_crf
+
+
+def get_hiv_rx_variable_labels(df: pd.DataFrame) -> dict[str:str]:
+    variable_labels = {}
+    suffix = "hiv"
+    variable_labels.update(
+        **get_stata_labels_from_model(df, "intecomm_subject.drugrefillhiv", suffix)
+    )
+    variable_labels.update(
+        {
+            f"{suffix}_rx": "HIV regimens",
+            f"{suffix}_rx_changed": (
+                "True if change between first and last rx, not considering interim reports"
+            ),
+            f"{suffix}_rx_first": f"First reported {suffix} medication",
+            f"{suffix}_rx_last": f"Last reported {suffix} medication",
+            f"{suffix}_rx_suppl": f"Supplemental meds reported on {suffix} medication report",
+            f"{suffix}_rx_concomitant": (
+                f"Concomitant meds reported on {suffix} medication report"
+            ),
+        }
+    )
+    return variable_labels

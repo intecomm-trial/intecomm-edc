@@ -3,7 +3,7 @@ _extensions/
 *.csv
 *.png
 *.dot
-*.ipynb
+# *.ipynb
 jupyter/*
 docs/.~lock*
 get_data.sh

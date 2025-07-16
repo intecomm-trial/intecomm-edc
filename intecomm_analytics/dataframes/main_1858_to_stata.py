@@ -51,9 +51,6 @@ def to_stata(
     filename = filename or "df_main_1858.dta"
     stata_labels = stata_labels or df_main_variable_labels()
 
-    check_col_length_for_stata(df_main)
-    check_desc_length_for_stata(stata_labels)
-
     df_main = convert_col_dtypes(df_main)
 
     df_main = convert_id_cols(df_main)
@@ -72,16 +69,16 @@ def to_stata(
     #     df_main["vl_endline_log10"] = df_main["vl_endline_log10"].astype("Float64")
     # if "primary_vl_endline" in df_main.columns:
     #     df_main["primary_vl_endline"] = df_main["primary_vl_endline"].astype("Int64")
-    df_main = df_main.rename(
-        columns={
-            "glucose_fasting_duration_hours_baseline": "glucose_fasting_hours_baseline",
-            "primary_vl_controlled_baseline_400": "primary_vl_cntrl_baseline_400",
-            "primary_vl_controlled_baseline_50": "primary_vl_cntrl_baseline_50",
-            "primary_vl_controlled_endline_400": "primary_vl_cntrl_endline_400",
-            "primary_vl_controlled_endline_50": "primary_vl_cntrl_endline_50",
-            "glucose_fasting_duration_hours_endline": "glucose_fasting_hours_endline",
-        }
-    )
+    # df_main = df_main.rename(
+    #     columns={
+    #         "glucose_fasting_duration_hours_baseline": "glucose_fasting_hours_baseline",
+    #         "primary_vl_controlled_baseline_400": "primary_vl_cntrl_baseline_400",
+    #         "primary_vl_controlled_baseline_50": "primary_vl_cntrl_baseline_50",
+    #         "primary_vl_controlled_endline_400": "primary_vl_cntrl_endline_400",
+    #         "primary_vl_controlled_endline_50": "primary_vl_cntrl_endline_50",
+    #         "glucose_fasting_duration_hours_endline": "glucose_fasting_hours_endline",
+    #     }
+    # )
 
     if "screening_refusal_reason_other" in df_main.columns:
         df_main = df_main.drop(columns=["screening_refusal_reason_other"])
@@ -156,6 +153,9 @@ def to_stata(
     # df_main["glucose_date_delta_endline"] = df_main[
     #     "glucose_date_delta_endline"
     # ].dt.total_seconds()
+
+    check_col_length_for_stata(df_main)
+    check_desc_length_for_stata(stata_labels)
 
     df_main.to_stata(
         path=path / filename,
@@ -265,6 +265,10 @@ def df_main_variable_labels() -> dict:
         ),
         "pp": "Per protocol assignment a=comm, b=facility",
         "randomization_list_id": "randomization list id/pk (group)",
+        "referral": "referred or self-referred to facility at least once",
+        "retained_6m": "attended visit 1060 and onstudy_days>=182d",
+        "retained_9m": "attended visit 1090",
+        "retained_12m": "attended visit 1120",
         "screening_identifier": "subject screening unique identifier",
         "screening_refusal_reason": "screening refusal reason",
         "screening_refusal_reason_other": "screening refusal reason other",
@@ -323,10 +327,10 @@ def df_main_variable_labels() -> dict:
         "primary_vl_controlled_baseline": (
             "1/0 for VL<1000 copies/ml at baseline for cohort HIV_ALONE (4)"
         ),
-        "primary_vl_controlled_baseline_400": (
+        "primary_vl_cntrl_baseline_400": (
             "1/0 for VL<400 copies/ml at baseline for cohort HIV_ALONE (4)"
         ),
-        "primary_vl_controlled_baseline_50": (
+        "primary_vl_cntrl_baseline_50": (
             "1/0 for VL<50 copies/ml at baseline for cohort HIV_ALONE (4)"
         ),
         "primary_gl_controlled_endline": (

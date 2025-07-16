@@ -3,8 +3,6 @@ from edc_constants.constants import OTHER
 from edc_pdutils.dataframes import get_crf
 from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 
-from .df_main_1858 import get_df_main_1858_pre
-
 mappings = {
     (
         "to get her medication now need fingerprints and physical "
@@ -110,6 +108,8 @@ def get_location_update(df_main: pd.DataFrame | None = None) -> pd.DataFrame:
         return 0
 
     if not isinstance(df_main, pd.DataFrame):
+        from .df_main_1858 import get_df_main_1858_pre
+
         df_main = get_df_main_1858_pre()
 
     # location update CRF was completed when appt_type did not match assignment

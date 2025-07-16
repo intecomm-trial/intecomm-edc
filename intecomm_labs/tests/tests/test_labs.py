@@ -1,11 +1,16 @@
 from django.test import TestCase
 from edc_lab.models import Panel
 from edc_lab.site_labs import site_labs
+from edc_reportable.utils import load_all_reference_ranges
 
 from intecomm_labs.lab_profiles import subject_lab_profile
 
 
 class TestLabs(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        load_all_reference_ranges()
+
     def setUp(self):
         site_labs._registry = {}
         site_labs.loaded = False

@@ -12,10 +12,9 @@ from edc_adverse_event.constants import (
     AE_INITIAL_ACTION,
     DEATH_REPORT_ACTION,
 )
-from edc_constants.constants import DEAD, HIGH_PRIORITY, YES
+from edc_constants.constants import DEAD, GRADE5, HIGH_PRIORITY, YES
 from edc_ltfu.constants import LOST_TO_FOLLOWUP
 from edc_notification.utils import get_email_contacts
-from edc_reportable import GRADE5
 from edc_visit_schedule.utils import get_offschedule_models
 from intecomm_rando.constants import COMMUNITY_ARM, FACILITY_ARM
 

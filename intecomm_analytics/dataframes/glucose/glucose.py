@@ -221,14 +221,12 @@ def get_glucose_last(
 ) -> pd.DataFrame:
     """Return a dataframe with the last glucose measurement."""
     endline_lower_bound = endline_lower_bound or default_endline_lower_bound
-    df_last = df[
-        (df.glucose_date - df.baseline_datetime) >= timedelta(days=endline_lower_bound)
-    ].copy()
-
-    df_last.sort_values(
-        by=["subject_identifier", "glucose_date"], ascending=True, inplace=True
+    df_last = (
+        df[(df.glucose_date - df.baseline_datetime) >= timedelta(days=endline_lower_bound)]
+        .copy()
+        .sort_values(by=["subject_identifier", "glucose_date"], ascending=True)
+        .reset_index(drop=True)
     )
-    df_last.reset_index(drop=True, inplace=True)
     df_last = (
         df_last[
             [

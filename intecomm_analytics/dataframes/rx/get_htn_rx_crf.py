@@ -1,4 +1,5 @@
 import pandas as pd
+from edc_analytics.stata import get_stata_labels_from_model
 from edc_pdutils.dataframes import get_crf
 
 from .prepare_rx_columns import prepare_rx_columns
@@ -20,6 +21,7 @@ def get_htn_rx_crf(suffix: str) -> pd.DataFrame:
         .sort_values(["subject_identifier", "visit_code"])
         .reset_index(drop=True)
     )
+
     mappings = {
         "telmistan hydrochlorothiazide": "telmisartan_h",
         "telmisartan.h": "telmisartan_h",
@@ -79,3 +81,29 @@ def get_htn_rx_crf(suffix: str) -> pd.DataFrame:
     }
     df_crf = prepare_rx_columns(df_crf, suffix, mappings, model_name)
     return df_crf
+
+
+def get_htn_rx_variable_labels(df):
+    variable_labels = {}
+    suffix = "htn"
+    variable_labels.update(
+        **get_stata_labels_from_model(df, "intecomm_subject.drugrefillhtn", suffix)
+    )
+    variable_labels.update(
+        {
+            f"{suffix}_rx": "HTN medications",
+            f"{suffix}_rx_changed": (
+                "True if change between first and last rx, not considering interim reports"
+            ),
+            f"{suffix}_rx_first": f"First reported {suffix} medication",
+            f"{suffix}_rx_last": f"Last reported {suffix} medication",
+            f"{suffix}_rx_suppl": f"Supplemental meds reported on {suffix} medication report",
+            f"{suffix}_rx_concomitant": (
+                f"Concomitant meds reported on {suffix} medication report"
+            ),
+            f"{suffix}_rx_days": (
+                f"Days prescribed counting from day of {suffix} medication report"
+            ),
+        }
+    )
+    return variable_labels
