@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 version_file = "_version.py"
 
 [tool.black]
-line-length = 95
+line-length = 88
 target-version = ["py312"]
 extend-exclude = '''^(.*\/)*\b(migrations)\b($|\/.*$)'''
 

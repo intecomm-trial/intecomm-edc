@@ -1,5 +1,6 @@
 from .table_utils import (
     get_bp,
+    get_bp_high,
     get_cells_for_continuous_var,
     get_cells_for_yes_no,
     get_cells_for_yes_no_missing,

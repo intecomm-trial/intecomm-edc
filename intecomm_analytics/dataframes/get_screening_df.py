@@ -9,10 +9,12 @@ from intecomm_subject.models import SubjectVisit
 
 
 def duration_to_date_by_row(row: pd.Series, col: str = None):
-    return duration_to_date(duration_text=row[col], reference_date=row["report_datetime"])
+    return duration_to_date(
+        duration_text=row[col], reference_date=row["report_datetime"]
+    )
 
 
-def get_screening_df(df: pd.DataFrame | None = None) -> pd.DataFrame:
+def get_screening_df(df: pd.DataFrame = None) -> pd.DataFrame:
     df = pd.DataFrame() if not hasattr(df, "empty") else df
     if df.empty:
         exclude = [
@@ -31,7 +33,9 @@ def get_screening_df(df: pd.DataFrame | None = None) -> pd.DataFrame:
             "subject_identifier_as_pk",
         ]
         fldnames = [
-            fld.name for fld in SubjectScreening._meta.get_fields() if fld.name not in exclude
+            fld.name
+            for fld in SubjectScreening._meta.get_fields()
+            if fld.name not in exclude
         ]
         qs_screening = SubjectScreening.objects.values(*fldnames).all()
         df = read_frame(qs_screening)
@@ -65,7 +69,12 @@ def get_screening_df(df: pd.DataFrame | None = None) -> pd.DataFrame:
     df[cols] = df[cols].apply(pd.to_numeric)
 
     # convert to datetime
-    cols = ["report_datetime", "eligibility_datetime", "real_eligibility_datetime", "created"]
+    cols = [
+        "report_datetime",
+        "eligibility_datetime",
+        "real_eligibility_datetime",
+        "created",
+    ]
     df[cols] = df[cols].apply(pd.to_datetime)
 
     # calc duration fields
@@ -73,7 +82,9 @@ def get_screening_df(df: pd.DataFrame | None = None) -> pd.DataFrame:
     for col in cols:
         new_col = col.replace("ago", "date")
         df[new_col] = pd.NaT
-        df[new_col] = df[df[col].notna()].apply(duration_to_date_by_row, axis=1, col=col)
+        df[new_col] = df[df[col].notna()].apply(
+            duration_to_date_by_row, axis=1, col=col
+        )
     df["in_care_duration_as_date"] = pd.NaT
     df["in_care_duration_as_date"] = df[df["in_care_duration"].notna()].apply(
         duration_to_date_by_row, axis=1, col="in_care_duration"
@@ -90,7 +101,9 @@ def get_screening_df(df: pd.DataFrame | None = None) -> pd.DataFrame:
         "screening_refusal_reason_other",
     ).all()
     df_patientlog = read_frame(qs_patientlog)
-    df = df.merge(df_patientlog, on="screening_identifier", how="left", suffixes=("", "_y"))
+    df = df.merge(
+        df_patientlog, on="screening_identifier", how="left", suffixes=("", "_y")
+    )
 
     # attended baseline visit
     qs_subjectvisit = SubjectVisit.objects.values(
@@ -100,10 +113,14 @@ def get_screening_df(df: pd.DataFrame | None = None) -> pd.DataFrame:
     df_subjectvisit = df_subjectvisit.rename(
         columns={"appointment__subject_identifier": "subject_identifier"}
     )
-    df = df.merge(df_subjectvisit, on="subject_identifier", how="left", suffixes=("", "_y"))
+    df = df.merge(
+        df_subjectvisit, on="subject_identifier", how="left", suffixes=("", "_y")
+    )
 
     # convert datetimes to date
-    date_cols = list(df.select_dtypes(include=["datetime64", "datetime64[ns, UTC]"]).columns)
+    date_cols = list(
+        df.select_dtypes(include=["datetime64", "datetime64[ns, UTC]"]).columns
+    )
     for col in date_cols:
         df[col] = df[col].dt.normalize()
     return df

@@ -1,4 +1,4 @@
-|pypi| |actions| |codecov| |downloads|
+|pypi| |actions| |codecov| |downloads| |clinicedc|
 
 intecomm-edc
 ------------
@@ -25,7 +25,14 @@ Basic install
     git clone https://github.com/intecomm-trial/intecomm-edc.git ~/apps
     cd ~/apps
     pip install -U .
+
+    # changed during analysis, you'll get a compatability warning
+    # but it can be ignored.
+    pip install -U edc==1.1.2
+    pip install -U edc-analytics==1.0.2
+
     python manage.py migrate --settings=intecomm_edc.settings.live  # or uat
+
 
 Randomization
 -------------
@@ -63,3 +70,7 @@ leaves most of the work to the class ``RandomizeGroup``. ``RandomizeGroup`` call
 
 .. |downloads| image:: https://pepy.tech/badge/intecomm-edc
    :target: https://pepy.tech/project/intecomm-edc
+
+.. |clinicedc| image:: https://img.shields.io/badge/framework-Clinic_EDC-green
+   :alt:Made with clinicedc
+   :target: https://github.com/clinicedc

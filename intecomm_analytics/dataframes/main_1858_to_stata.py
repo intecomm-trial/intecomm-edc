@@ -3,7 +3,9 @@ import pandas as pd
 
 def check_col_length_for_stata(df) -> None:
     if long_colnames := [col for col in df.columns if len(col) > 32]:
-        raise ValueError(f"Column labels must be 32 characters or less. Got {long_colnames}")
+        raise ValueError(
+            f"Column labels must be 32 characters or less. Got {long_colnames}"
+        )
 
 
 def check_desc_length_for_stata(stata_labels: dict[str, str]) -> None:
@@ -37,7 +39,10 @@ def convert_id_cols(df_main: pd.DataFrame) -> pd.DataFrame:
 
 
 def to_stata(
-    df_main, path, filename: str | None = None, stata_labels: dict[str, str] | None = None
+    df_main,
+    path,
+    filename: str | None = None,
+    stata_labels: dict[str, str] | None = None,
 ):
     """Export to STATA.
 
@@ -55,31 +60,6 @@ def to_stata(
 
     df_main = convert_id_cols(df_main)
 
-    # if "randomization_list_id" in df_main.columns:
-    #     df_main["randomization_list_id"] = df_main["randomization_list_id"].astype(str)
-    # if "subject_visit_id" in df_main.columns:
-    #     df_main["randomization_list_id"] = df_main["randomization_list_id"].astype(str)
-    # if "vl_baseline" in df_main.columns:
-    #     df_main["vl_baseline"] = df_main["vl_baseline"].astype("Int64")
-    # if "vl_endline" in df_main.columns:
-    #     df_main["vl_endline"] = df_main["vl_endline"].astype("Int64")
-    # if "vl_baseline_log10" in df_main.columns:
-    #     df_main["vl_baseline_log10"] = df_main["vl_baseline_log10"].astype("Float64")
-    # if "vl_endline_log10" in df_main.columns:
-    #     df_main["vl_endline_log10"] = df_main["vl_endline_log10"].astype("Float64")
-    # if "primary_vl_endline" in df_main.columns:
-    #     df_main["primary_vl_endline"] = df_main["primary_vl_endline"].astype("Int64")
-    # df_main = df_main.rename(
-    #     columns={
-    #         "glucose_fasting_duration_hours_baseline": "glucose_fasting_hours_baseline",
-    #         "primary_vl_controlled_baseline_400": "primary_vl_cntrl_baseline_400",
-    #         "primary_vl_controlled_baseline_50": "primary_vl_cntrl_baseline_50",
-    #         "primary_vl_controlled_endline_400": "primary_vl_cntrl_endline_400",
-    #         "primary_vl_controlled_endline_50": "primary_vl_cntrl_endline_50",
-    #         "glucose_fasting_duration_hours_endline": "glucose_fasting_hours_endline",
-    #     }
-    # )
-
     if "screening_refusal_reason_other" in df_main.columns:
         df_main = df_main.drop(columns=["screening_refusal_reason_other"])
     if "glucose_fasting_duration_delta_baseline" in df_main.columns:
@@ -87,72 +67,6 @@ def to_stata(
     if "glucose_fasting_duration_delta_endline" in df_main.columns:
         df_main = df_main.drop(columns=["glucose_fasting_duration_delta_endline"])
     df_main = df_main.reset_index(drop=True)
-
-    # # convert date to formatted str
-    # if "consent_datetime" in df_main.columns:
-    #     df_main["consent_datetime"] = (
-    #         df_main["consent_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    #     )
-    # if "allocated_datetime" in df_main.columns:
-    #     df_main["allocated_datetime"] = (
-    #         df_main["allocated_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    #     )
-    #
-    # if "baseline_datetime" in df_main.columns:
-    #     df_main["baseline_datetime"] = (
-    #         df_main["baseline_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    #     )
-    #
-    # if "endline_visit_datetime" in df_main.columns:
-    #     df_main["endline_visit_datetime"] = (
-    #         df_main["endline_visit_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    #     )
-    #
-    # df_main["htn_dx_date"] = (
-    #     df_main["htn_dx_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    # )
-    # df_main["vl_baseline_date"] = (
-    #     df_main["vl_baseline_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    # )
-    # df_main["dm_dx_date"] = df_main["dm_dx_date"].dt.tz_localize(None).
-    # astype("datetime64[ns]")
-    # df_main["vl_endline_date"] = (
-    #     df_main["vl_endline_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    # )
-    #
-    # df_main["offstudy_datetime"] = (
-    #     df_main["offstudy_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    # )
-    # df_main["endline_datetime"] = (
-    #     df_main["endline_datetime"].dt.tz_localize(None).astype("datetime64[ns]")
-    # )
-    # df_main["bp_datetime_first"] = (
-    #     df_main["bp_datetime_first"].dt.tz_localize(None).astype("datetime64[ns]")
-    # )
-    # df_main["bp_datetime_last"] = (
-    #     df_main["bp_datetime_last"].dt.tz_localize(None).astype("datetime64[ns]")
-    # )
-    # df_main["glucose_date_baseline"] = (
-    #     df_main["glucose_date_baseline"].dt.tz_localize(None).astype("datetime64[ns]")
-    # )
-    # df_main["hiv_dx_date"] = (
-    #     df_main["hiv_dx_date"].dt.tz_localize(None).astype("datetime64[ns]")
-    # )
-    # df_main["glucose_date_endline"] = (
-    #     df_main["glucose_date_endline"].dt.tz_localize(None).astype("datetime64[ns]")
-    # )
-    #
-    # # convert timedeltas to seconds
-    # df_main["hiv_timedelta_dx"] = df_main["hiv_timedelta_dx"].dt.total_seconds()
-    # df_main["htn_timedelta_dx"] = df_main["htn_timedelta_dx"].dt.total_seconds()
-    # df_main["dm_timedelta_dx"] = df_main["dm_timedelta_dx"].dt.total_seconds()
-    # df_main["bp_measured_delta"] = df_main["bp_measured_delta"].dt.total_seconds()
-    # df_main["glucose_date_delta_baseline"] = df_main[
-    #     "glucose_date_delta_baseline"
-    # ].dt.total_seconds()
-    # df_main["glucose_date_delta_endline"] = df_main[
-    #     "glucose_date_delta_endline"
-    # ].dt.total_seconds()
 
     check_col_length_for_stata(df_main)
     check_desc_length_for_stata(stata_labels)
@@ -194,11 +108,15 @@ def df_main_variable_labels() -> dict:
         "complication_heart_attack": (
             "Heart attack / heart failure (See complicationsbaseline)"
         ),
-        "complication_renal_disease": "Renal (kidney) disease (See complicationsbaseline)",
+        "complication_renal_disease": (
+            "Renal (kidney) disease (See complicationsbaseline)"
+        ),
         "complication_vision": (
             "Vision problems (e.g. blurred vision) (See complicationsbaseline)"
         ),
-        "complication_numbness": "Numbness / burning sensation (See complicationsbaseline)",
+        "complication_numbness": (
+            "Numbness / burning sensation (See complicationsbaseline)"
+        ),
         "complication_foot_ulcers": "Foot ulcers (See complicationsbaseline)",
         "consent_datetime": "consent datetime",
         "country": "Country",
@@ -232,7 +150,9 @@ def df_main_variable_labels() -> dict:
         "glucose_measured_days_baseline": (
             "Baseline glucose measured in days from true baseline"
         ),
-        "glucose_measured_days_endline": "Endline glucose measured in days from true baseline",
+        "glucose_measured_days_endline": (
+            "Endline glucose measured in days from true baseline"
+        ),
         "glucose_resulted_baseline": "1/0 Glucose result available at baseline",
         "glucose_resulted_endline": "1/0 Glucose result available at endline",
         "glucose_units_baseline": "Baseline glucose measurement units",
@@ -266,9 +186,12 @@ def df_main_variable_labels() -> dict:
         "pp": "Per protocol assignment a=comm, b=facility",
         "randomization_list_id": "randomization list id/pk (group)",
         "referral": "referred or self-referred to facility at least once",
-        "retained_6m": "attended visit 1060 and onstudy_days>=182d",
-        "retained_9m": "attended visit 1090",
-        "retained_12m": "attended visit 1120",
+        "retained_6m": "1/0, in follow-up >= 6m",
+        "retained_12m": (
+            "1/0, in follow-up >= 11m and visit code >= 1120.0, "
+            "used for all endline calculations"
+        ),
+        "retained_months": "months between endline and baseline",
         "screening_identifier": "subject screening unique identifier",
         "screening_refusal_reason": "screening refusal reason",
         "screening_refusal_reason_other": "screening refusal reason other",
@@ -305,7 +228,8 @@ def df_main_variable_labels() -> dict:
         ),
         "primary_vl_endline": "Endline VL sys for cohort HIV_ALONE (4)",
         "primary_controlled_endline": (
-            "Controlled VL/BP+GL composite at endline. See SAP primary endpoint criteria"
+            "Controlled VL/BP+GL composite at endline. "
+            "See SAP primary endpoint criteria"
         ),
         "primary_gl_baseline": (
             "Baseline glucose for cohort DM_ALONE (1) and DM in cohort HTN_DM (3)"
@@ -313,7 +237,9 @@ def df_main_variable_labels() -> dict:
         "primary_gl_controlled_baseline": (
             "1/0 for cohort DM_ALONE (1) and DM in cohort HTN_DM (3)"
         ),
-        "primary_gl_cntrl_baseline": "1/0 for cohort DM_ALONE (1) and DM in cohort HTN_DM (3)",
+        "primary_gl_cntrl_baseline": (
+            "1/0 for cohort DM_ALONE (1) and DM in cohort HTN_DM (3)"
+        ),
         "primary_bp_sys_baseline": (
             "Baseline BP sys for cohort HTN_ALONE (2) and HTN in cohort HTN_DM (3)"
         ),
@@ -334,10 +260,12 @@ def df_main_variable_labels() -> dict:
             "1/0 for VL<50 copies/ml at baseline for cohort HIV_ALONE (4)"
         ),
         "primary_gl_controlled_endline": (
-            "1/0 for glucose at baseline for cohort DM_ALONE (1) and DM in cohort HTN_DM (3)"
+            "1/0 for glucose at baseline for cohort DM_ALONE (1) "
+            "and DM in cohort HTN_DM (3)"
         ),
         "primary_bp_controlled_endline": (
-            "1/0 for BP at baseline for cohort HTN_ALONE (1) and HTN in cohort HTN_DM (3)"
+            "1/0 for BP at baseline for cohort HTN_ALONE (1) and "
+            "HTN in cohort HTN_DM (3)"
         ),
         "primary_vl_controlled_endline": (
             "1/0 for VL<1000 copies/ml at endline for cohort HIV_ALONE (4)"
@@ -371,8 +299,12 @@ def df_main_variable_labels() -> dict:
             "How much formal education does the patient have? (See otherbaselinedata)"
         ),
         "marital_status": "Personal/marital status? (See otherbaselinedata)",
-        "smoking_status": "Which of these options describes you? (See otherbaselinedata)",
-        "alcohol_consumption": "Do you drink alcohol? How often? (See otherbaselinedata)",
+        "smoking_status": (
+            "Which of these options describes you? (See otherbaselinedata)"
+        ),
+        "alcohol_consumption": (
+            "Do you drink alcohol? How often? (See otherbaselinedata)"
+        ),
         "weight": "Weight in kg",
     }
     for label, description in labels.items():

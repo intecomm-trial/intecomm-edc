@@ -54,7 +54,10 @@ def get_df_main_1858(
     assert len(df_main[df_main.allocation == "1"]) == 932  # nosec B101
     assert len(df_main[df_main.allocation == "2"]) == 926  # nosec B101
 
-    df_main["onstudy_days"] = (df_main.endline_datetime - df_main.baseline_datetime).dt.days
+    df_main["onstudy_days"] = (
+        df_main.endline_datetime - df_main.baseline_datetime
+    ).dt.days
+
     df_main = merge_in_retention(df_main)
 
     # merge in baseline conditions. Conditions (hiv, dm, htn) are confirmed at baseline.
@@ -121,8 +124,12 @@ def get_df_main_1858(
     df_main["htn"] = df_main["htn"].astype("Int64")
     df_main["dm"] = df_main["dm"].astype("Int64")
     df_main["vl_endline"] = df_main["vl_endline"].astype("Float64")
-    df_main["glucose_value_baseline"] = df_main["glucose_value_baseline"].astype("Float64")
-    df_main["glucose_value_endline"] = df_main["glucose_value_endline"].astype("Float64")
+    df_main["glucose_value_baseline"] = df_main["glucose_value_baseline"].astype(
+        "Float64"
+    )
+    df_main["glucose_value_endline"] = df_main["glucose_value_endline"].astype(
+        "Float64"
+    )
 
     # rename for varibale name length > 32
     df_main = df_main.rename(
@@ -385,9 +392,9 @@ def categorize_offstudy_reason_freetext(df_main: pd.DataFrame) -> pd.DataFrame:
         df_main.offstudy_reason_raw.str.startswith(pregnant_reason), "offstudy_reason"
     ] = "pregnant"
     for reason in reasons:
-        df_main.loc[df_main.offstudy_reason_raw.str.startswith(reason), "offstudy_reason"] = (
-            "transferred"
-        )
+        df_main.loc[
+            df_main.offstudy_reason_raw.str.startswith(reason), "offstudy_reason"
+        ] = "transferred"
     df_main.reset_index(drop=True, inplace=True)
     return df_main
 
@@ -422,44 +429,40 @@ def merge_in_visit(df_main: pd.DataFrame) -> pd.DataFrame:
 
 
 def merge_in_retention(df_main: pd.DataFrame) -> pd.DataFrame:
-    """Retention"""
-    df_appt = get_subject_visit("intecomm_subject.subjectvisit").query(
-        "appt_timing!='missed' and subject_identifier!='107-208-0014-2'"
-    )
+    """Retention columns.
 
+    Calculate:
+    * number of months on study, endline-baseline;
+    * retained for at least 6 months (1/0), duration only,
+      no visit code;
+    * retained for at least 12 months (1/0), duration (11m)
+      and visit code == 1120.0.
+
+    """
+    # number of months retained on study (endline-baseline)
+    df_main["retained_months"] = 0
+    df_main["retained_months"] = df_main["endline_datetime"].dt.to_period("M").astype(
+        int
+    ) - df_main["baseline_datetime"].dt.to_period("M").astype(int)
+
+    # binary: retained 6m
+    # cannot use visit code since 6m/1060 was not a study define
+    # timepoint in both arms
+    df_main["retained_6m"] = 0
+    df_main.loc[df_main["retained_months"] >= 6, "retained_6m"] = 1
+    df_main["retained_6m"] = df_main["retained_6m"].astype(int)
+
+    # binary: retained 12m
+    # using visit_code as well since both arms scheduled the 1120
+    # chose 11m since the lower bound of the window period for
+    # 1120 was 15 days.
     df_main["retained_12m"] = 0
     df_main.loc[
-        df_main["subject_identifier"].isin(
-            df_appt.query("endline_visit_code>=1120.0").subject_identifier.unique()
-        ),
+        (df_main.retained_months >= 11) & (df_main.endline_visit_code >= 1120.0),
         "retained_12m",
     ] = 1
+    df_main["retained_12m"] = df_main["retained_12m"].astype(int)
 
-    df_main["retained_9m"] = 0
-    df_main.loc[
-        df_main["subject_identifier"].isin(
-            df_appt.query("endline_visit_code>=1090.0").subject_identifier.unique()
-        ),
-        "retained_9m",
-    ] = 1
-
-    df_main["retained_6m"] = 0
-    df_main.loc[
-        df_main["subject_identifier"].isin(
-            df_appt.query("endline_visit_code>=1060.0").subject_identifier.unique()
-        ),
-        "retained_6m",
-    ] = 1
-
-    # adjust for 6m in days
-    df_main.loc[
-        (df_main["retained_6m"]) & (df_main["onstudy_days"] < six_months), "retained_6m"
-    ] = 0
-
-    df_main["retained"] = pd.NA
-    df_main.loc[(df_main["retained_6m"] == 1), "retained"] = "6m"
-    df_main.loc[(df_main["retained_9m"] == 1), "retained"] = "9m"
-    df_main.loc[(df_main["retained_12m"] == 1), "retained"] = "12m"
     return df_main
 
 
@@ -473,7 +476,9 @@ def merge_in_referrals(df_main: pd.DataFrame) -> pd.DataFrame:
         "or reason_unscheduled=='patient_unwell_outpatient')"
     )
     df_main.loc[
-        df_main.subject_identifier.isin(df_appt.query(cond).subject_identifier.unique()),
+        df_main.subject_identifier.isin(
+            df_appt.query(cond).subject_identifier.unique()
+        ),
         "referral",
     ] = 1
 
@@ -482,7 +487,9 @@ def merge_in_referrals(df_main: pd.DataFrame) -> pd.DataFrame:
         "reason_unscheduled=='patient_unwell_outpatient'"
     )
     df_main.loc[
-        df_main.subject_identifier.isin(df_appt.query(cond).subject_identifier.unique()),
+        df_main.subject_identifier.isin(
+            df_appt.query(cond).subject_identifier.unique()
+        ),
         "referral",
     ] = 1
 
@@ -492,7 +499,10 @@ def merge_in_referrals(df_main: pd.DataFrame) -> pd.DataFrame:
 def merge_death_report(df_main: pd.DataFrame) -> pd.DataFrame:
     df = read_frame_edc(DeathReport.objects.all(), read_frame_verbose=False)
     df.rename(
-        columns={"death_datetime": "death_date_from_crf", "cause_of_death": "death_cause"},
+        columns={
+            "death_datetime": "death_date_from_crf",
+            "cause_of_death": "death_cause",
+        },
         inplace=True,
     )
     df["death_date_from_crf"] = df["death_date_from_crf"].astype("datetime64[ns]")
@@ -544,9 +554,9 @@ def merge_in_eos(df_main: pd.DataFrame) -> pd.DataFrame:
         "completed_followup"
     )
 
-    df_main.loc[df_main.offstudy_reason == "transferred", "transferred_days_to_event"] = (
-        df_main.transfer_date - df_main.baseline_datetime
-    ).dt.days
+    df_main.loc[
+        df_main.offstudy_reason == "transferred", "transferred_days_to_event"
+    ] = (df_main.transfer_date - df_main.baseline_datetime).dt.days
 
     df_main.loc[df_main.offstudy_reason == "LTFU", "ltfu_days_to_event"] = (
         df_main.ltfu_date - df_main.baseline_datetime
@@ -557,7 +567,10 @@ def merge_in_eos(df_main: pd.DataFrame) -> pd.DataFrame:
 
 def merge_in_vl(df_main: pd.DataFrame) -> pd.DataFrame:
     vl = VlSummary2(
-        offset_by="days", baseline_upper=61, endline_upper=six_months, skip_update_dx=True
+        offset_by="days",
+        baseline_upper=61,
+        endline_upper=six_months,
+        skip_update_dx=True,
     )
     df_vl = vl.to_dataframe()
 
@@ -612,10 +625,14 @@ def merge_in_vl(df_main: pd.DataFrame) -> pd.DataFrame:
             .astype("Int64")
         )
         df_main[f"vl_{timepoint}_log10"] = (
-            getattr(df_main, f"vl_{timepoint}").apply(lambda x: np.log10(x)).astype("Float64")
+            getattr(df_main, f"vl_{timepoint}")
+            .apply(lambda x: np.log10(x))
+            .astype("Float64")
         )
 
-    df_main["vl_days_to_event"] = (df_main.vl_endline_date - df_main.baseline_datetime).dt.days
+    df_main["vl_days_to_event"] = (
+        df_main.vl_endline_date - df_main.baseline_datetime
+    ).dt.days
     df_main["vl_baseline"] = df_main["vl_baseline"].astype("Float64")
     df_main["vl_endline"] = df_main["vl_endline"].astype("Float64")
     df_main = df_main.reset_index(drop=True)
@@ -730,9 +747,13 @@ def get_diastolic(s) -> int | float | NAType:
     measurement one, use that.
     """
     if pd.notna(get_systolic(s)):
-        if pd.notna(s["dia_blood_pressure_one"]) and pd.notna(s["dia_blood_pressure_two"]):
+        if pd.notna(s["dia_blood_pressure_one"]) and pd.notna(
+            s["dia_blood_pressure_two"]
+        ):
             return s["dia_blood_pressure_avg"]
-        elif pd.notna(s["dia_blood_pressure_one"]) and pd.isna(s["dia_blood_pressure_two"]):
+        elif pd.notna(s["dia_blood_pressure_one"]) and pd.isna(
+            s["dia_blood_pressure_two"]
+        ):
             return s["dia_blood_pressure_one"]
     return pd.NA
 
@@ -804,7 +825,10 @@ def get_bp_measured_interval(s) -> datetime | NaTType:
 
 
 def get_bp_sys_baseline(s) -> int | float | NAType:
-    if pd.notna(s["bp_visit_code_first"]) and s["bp_visit_code_first"] == BASELINE_VISIT_CODE:
+    if (
+        pd.notna(s["bp_visit_code_first"])
+        and s["bp_visit_code_first"] == BASELINE_VISIT_CODE
+    ):
         return s["bp_systolic_first"]
     return pd.NA
 
@@ -818,7 +842,10 @@ def get_bp_sys_endline(s) -> int | float | NAType:
 
 
 def get_bp_dia_baseline(s) -> int | float | NAType:
-    if pd.notna(s["bp_visit_code_first"]) and s["bp_visit_code_first"] == BASELINE_VISIT_CODE:
+    if (
+        pd.notna(s["bp_visit_code_first"])
+        and s["bp_visit_code_first"] == BASELINE_VISIT_CODE
+    ):
         return s["bp_diastolic_first"]
     return pd.NA
 
@@ -834,7 +861,8 @@ def get_bp_dia_endline(s) -> int | float | NAType:
 def merge_in_vitals(df_main: pd.DataFrame) -> pd.DataFrame:
 
     df_vitals = get_crf(
-        model="intecomm_subject.vitals", subject_visit_model="intecomm_subject.subjectvisit"
+        model="intecomm_subject.vitals",
+        subject_visit_model="intecomm_subject.subjectvisit",
     )
     df_vitals = convert_numbers_to_nullable_dtype(df_vitals)
     df_weight = df_vitals.sort_values(by=["subject_identifier", "visit_datetime"])
@@ -934,14 +962,18 @@ def merge_in_other_baseline_data(df_main: pd.DataFrame) -> pd.DataFrame:
 
 def merge_in_bp(df_main: pd.DataFrame) -> pd.DataFrame:
     """Need to consider duration between measurements!"""
-    # TODO: Need to consider duration between measurements! what qualifies as first and last
+    # TODO: Need to consider duration between measurements!
+    #  what qualifies as first and last
 
     df_vitals = get_crf(
-        model="intecomm_subject.vitals", subject_visit_model="intecomm_subject.subjectvisit"
+        model="intecomm_subject.vitals",
+        subject_visit_model="intecomm_subject.subjectvisit",
     )
     df_vitals = convert_numbers_to_nullable_dtype(df_vitals)
     df_vitals["bp_systolic"] = df_vitals.apply(get_systolic, axis=1).astype("Float64")
-    df_vitals["bp_measured"] = df_vitals.apply(get_bp_measured, axis=1).astype("Float64")
+    df_vitals["bp_measured"] = df_vitals.apply(get_bp_measured, axis=1).astype(
+        "Float64"
+    )
     df_vitals["bp_diastolic"] = df_vitals.apply(get_diastolic, axis=1).astype("Float64")
     df_vitals = df_vitals.sort_values(by=["subject_identifier", "visit_datetime"])
     df_vitals.rename(
@@ -987,22 +1019,30 @@ def merge_in_bp(df_main: pd.DataFrame) -> pd.DataFrame:
     df_vitals_first_last.reset_index(drop=True, inplace=True)
     df_main = df_main.merge(df_vitals_first_last, on="subject_identifier", how="left")
     df_main.reset_index(drop=True)
-    df_main["bp_sys_baseline"] = df_main.apply(get_bp_sys_baseline, axis=1).astype("Float64")
-    df_main["bp_dia_baseline"] = df_main.apply(get_bp_dia_baseline, axis=1).astype("Float64")
-    df_main["bp_sys_endline"] = df_main.apply(get_bp_sys_endline, axis=1).astype("Float64")
-    df_main["bp_dia_endline"] = df_main.apply(get_bp_dia_endline, axis=1).astype("Float64")
+    df_main["bp_sys_baseline"] = df_main.apply(get_bp_sys_baseline, axis=1).astype(
+        "Float64"
+    )
+    df_main["bp_dia_baseline"] = df_main.apply(get_bp_dia_baseline, axis=1).astype(
+        "Float64"
+    )
+    df_main["bp_sys_endline"] = df_main.apply(get_bp_sys_endline, axis=1).astype(
+        "Float64"
+    )
+    df_main["bp_dia_endline"] = df_main.apply(get_bp_dia_endline, axis=1).astype(
+        "Float64"
+    )
     df_main["bp_controlled_baseline"] = df_main.apply(
         get_bp_controlled_baseline, axis=1
     ).astype("Int64")
-    df_main["bp_controlled_endline"] = df_main.apply(get_bp_controlled_endline, axis=1).astype(
-        "Int64"
-    )
+    df_main["bp_controlled_endline"] = df_main.apply(
+        get_bp_controlled_endline, axis=1
+    ).astype("Int64")
     df_main["bp_severe_htn_baseline"] = df_main.apply(
         get_bp_severe_htn_baseline, axis=1
     ).astype("Int64")
-    df_main["bp_severe_htn_endline"] = df_main.apply(get_bp_severe_htn_endline, axis=1).astype(
-        "Int64"
-    )
+    df_main["bp_severe_htn_endline"] = df_main.apply(
+        get_bp_severe_htn_endline, axis=1
+    ).astype("Int64")
 
     df_main["bp_days_to_event"] = (
         df_main.bp_datetime_last - df_main.baseline_datetime
@@ -1102,7 +1142,9 @@ def merge_in_glucose(
         .astype("Int64")
     )
     df_main["glucose_controlled_endline"] = (
-        df_main["glucose_value_endline"].apply(lambda x: glucose_controlled(x)).astype("Int64")
+        df_main["glucose_value_endline"]
+        .apply(lambda x: glucose_controlled(x))
+        .astype("Int64")
     )
     df_main["glucose_resulted_baseline"] = (
         df_main["glucose_value_baseline"]
@@ -1161,7 +1203,9 @@ def get_location_update(df_main: pd.DataFrame) -> pd.DataFrame:
     # Was the subject expected to return to the community? Even
     # though often replied `NO`, the subject still returned. Can
     # ignore this column.
-    df_location_update = df_location_update.rename(columns={"next_location": "returning"})
+    df_location_update = df_location_update.rename(
+        columns={"next_location": "returning"}
+    )
 
     # merge in vars from df_main
     df_location_update = df_location_update.merge(
@@ -1172,7 +1216,9 @@ def get_location_update(df_main: pd.DataFrame) -> pd.DataFrame:
     # create new column 'direction' a->a, b->b or a->b
     df_location_update["direction"] = df_location_update.apply(get_direction, axis=1)
     # was the location update CRF submitted on or before 6m
-    df_location_update[f"<{six_months}"] = df_location_update.apply(is_before_6m, axis=1)
+    df_location_update[f"<{six_months}"] = df_location_update.apply(
+        is_before_6m, axis=1
+    )
     # get rid of "a->a", "b->b", "OTHER", CRF should not have been completed
     df_location_update = df_location_update[
         ~df_location_update.direction.isin(["a->a", "b->b", "OTHER"])
@@ -1181,7 +1227,8 @@ def get_location_update(df_main: pd.DataFrame) -> pd.DataFrame:
     # remove them
     df_location_update = (
         df_location_update[
-            (df_location_update.visit_code > 1000.0) & (df_location_update.visit_code < 1120.0)
+            (df_location_update.visit_code > 1000.0)
+            & (df_location_update.visit_code < 1120.0)
         ]
         .copy()
         .sort_values(by=["subject_identifier", "visit_code"], ascending=[True, True])
@@ -1239,7 +1286,9 @@ def merge_in_pp_using_location_update_crf(df_main) -> pd.DataFrame:
 
 
 def merge_in_primary_cohort_vars(df_main, fasting_hours: float = None) -> pd.DataFrame:
-    df_main["primary_cohort"] = df_main.apply(get_primary_cohort, axis=1).astype("Int64")
+    df_main["primary_cohort"] = df_main.apply(get_primary_cohort, axis=1).astype(
+        "Int64"
+    )
     df_main["primary_cohort_str"] = df_main.apply(get_primary_cohort_as_str, axis=1)
 
     for suffix in ["baseline", "endline"]:
@@ -1247,38 +1296,51 @@ def merge_in_primary_cohort_vars(df_main, fasting_hours: float = None) -> pd.Dat
         column_name = f"primary_gl_{suffix}"
         df_main[column_name] = df_main[
             (df_main.primary_cohort.isin([DM_ALONE, HTN_DM]))
-            & (getattr(df_main, f"glucose_fasting_duration_hours_{suffix}") >= fasting_hours)
+            & (
+                getattr(df_main, f"glucose_fasting_duration_hours_{suffix}")
+                >= fasting_hours
+            )
         ][f"glucose_value_{suffix}"].astype("Float64")
-        df_main.loc[~df_main.primary_cohort.isin([DM_ALONE, HTN_DM]), column_name] = pd.NA
+        df_main.loc[~df_main.primary_cohort.isin([DM_ALONE, HTN_DM]), column_name] = (
+            pd.NA
+        )
         df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
 
         column_name = f"primary_gl_controlled_{suffix}"
         df_main[column_name] = df_main[df_main.primary_cohort.isin([DM_ALONE, HTN_DM])][
             f"glucose_controlled_{suffix}"
         ].astype("Int64")
-        df_main.loc[~df_main.primary_cohort.isin([DM_ALONE, HTN_DM]), column_name] = pd.NA
+        df_main.loc[~df_main.primary_cohort.isin([DM_ALONE, HTN_DM]), column_name] = (
+            pd.NA
+        )
         df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
 
         # bp
         column_name = f"primary_bp_sys_{suffix}"
-        df_main[column_name] = df_main[df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])][
-            f"bp_sys_{suffix}"
-        ].astype("Float64")
-        df_main.loc[~df_main.primary_cohort.isin([HTN_ALONE, HTN_DM]), column_name] = pd.NA
+        df_main[column_name] = df_main[
+            df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])
+        ][f"bp_sys_{suffix}"].astype("Float64")
+        df_main.loc[~df_main.primary_cohort.isin([HTN_ALONE, HTN_DM]), column_name] = (
+            pd.NA
+        )
         df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
 
         column_name = f"primary_bp_dia_{suffix}"
-        df_main[column_name] = df_main[df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])][
-            f"bp_dia_{suffix}"
-        ].astype("Float64")
-        df_main.loc[~df_main.primary_cohort.isin([HTN_ALONE, HTN_DM]), column_name] = pd.NA
+        df_main[column_name] = df_main[
+            df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])
+        ][f"bp_dia_{suffix}"].astype("Float64")
+        df_main.loc[~df_main.primary_cohort.isin([HTN_ALONE, HTN_DM]), column_name] = (
+            pd.NA
+        )
         df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
 
         column_name = f"primary_bp_controlled_{suffix}"
-        df_main[column_name] = df_main[df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])][
-            f"bp_controlled_{suffix}"
-        ].astype("Int64")
-        df_main.loc[~df_main.primary_cohort.isin([HTN_ALONE, HTN_DM]), column_name] = pd.NA
+        df_main[column_name] = df_main[
+            df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])
+        ][f"bp_controlled_{suffix}"].astype("Int64")
+        df_main.loc[~df_main.primary_cohort.isin([HTN_ALONE, HTN_DM]), column_name] = (
+            pd.NA
+        )
         df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
 
         # vl
@@ -1297,15 +1359,19 @@ def merge_in_primary_cohort_vars(df_main, fasting_hours: float = None) -> pd.Dat
             df_main.loc[~df_main.primary_cohort.isin([HIV_ALONE]), column_name] = pd.NA
             df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
 
-    df_main["controlled_baseline"] = df_main.apply(controlled_baseline, axis=1).astype("Int64")
-    df_main["controlled_endline"] = df_main.apply(controlled_endline, axis=1).astype("Int64")
+    df_main["controlled_baseline"] = df_main.apply(controlled_baseline, axis=1).astype(
+        "Int64"
+    )
+    df_main["controlled_endline"] = df_main.apply(controlled_endline, axis=1).astype(
+        "Int64"
+    )
 
-    df_main["controlled_alt_baseline"] = df_main.apply(controlled_baseline_alt, axis=1).astype(
-        "Int64"
-    )
-    df_main["controlled_alt_endline"] = df_main.apply(controlled_endline_alt, axis=1).astype(
-        "Int64"
-    )
+    df_main["controlled_alt_baseline"] = df_main.apply(
+        controlled_baseline_alt, axis=1
+    ).astype("Int64")
+    df_main["controlled_alt_endline"] = df_main.apply(
+        controlled_endline_alt, axis=1
+    ).astype("Int64")
 
     for suffix in ["baseline", "endline"]:
         df_main[f"primary_composite_{suffix}"] = pd.NA
@@ -1313,9 +1379,9 @@ def merge_in_primary_cohort_vars(df_main, fasting_hours: float = None) -> pd.Dat
             df_main.primary_cohort.isin([HTN_ALONE, DM_ALONE, HTN_DM]),
             f"primary_composite_{suffix}",
         ] = df_main[f"controlled_{suffix}"]
-        df_main[f"primary_composite_{suffix}"] = df_main[f"primary_composite_{suffix}"].astype(
-            "Int64"
-        )
+        df_main[f"primary_composite_{suffix}"] = df_main[
+            f"primary_composite_{suffix}"
+        ].astype("Int64")
 
         # alternative calc allowing control in one to be controlled
         df_main[f"primary_composite_alt_{suffix}"] = pd.NA

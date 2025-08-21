@@ -38,7 +38,9 @@ def get_primary_cohorts_cells_for_continuous_var(
     return stat
 
 
-def get_primary_cohorts_for_continuous_var(df: pd.DataFrame, col: str, statistics: list[str]):
+def get_primary_cohorts_for_continuous_var(
+    df: pd.DataFrame, col: str, statistics: list[str]
+):
     """Returns 5 columns by primary cohorts of NCDS, HIV alone.
 
     Statistics, Comm NCD, Facility NCD, Comm HIV alone, Facility HIV alone.
@@ -99,12 +101,16 @@ def get_cells_for_continuous_var(df) -> list[str]:
     ]
 
 
-def get_cells_for_yes_no(df: pd.DataFrame, col: str, arm: str | None = None) -> list[str]:
+def get_cells_for_yes_no(
+    df: pd.DataFrame, col: str, arm: str | None = None
+) -> list[str]:
     if arm:
         n = len(df[(df["assignment"] == arm) & (df[col].notna())])
         counts = df[(df["assignment"] == arm) & (df[col].notna())][col].value_counts()
         percentages = (
-            df[(df["assignment"] == arm) & (df[col].notna())][col].value_counts(normalize=True)
+            df[(df["assignment"] == arm) & (df[col].notna())][col].value_counts(
+                normalize=True
+            )
             * 100
         )
     else:
@@ -143,7 +149,9 @@ def get_cells_for_categorical(
     for category in categories or df[df[col].notna()][col].unique().tolist():
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", FutureWarning)
-            cells.append(f"{counts.get(category, 0)} ({percentages.get(category, 0):.1f}%)")
+            cells.append(
+                f"{counts.get(category, 0)} ({percentages.get(category, 0):.1f}%)"
+            )
     return [n, *cells]
 
 
@@ -154,7 +162,9 @@ def get_cells_for_yes_no_missing(
         n = len(df[(df["assignment"] == arm) & (df[col].notna())])
         counts = df[(df["assignment"] == arm) & (df[col].notna())][col].value_counts()
         percentages = (
-            df[(df["assignment"] == arm) & (df[col].notna())][col].value_counts(normalize=True)
+            df[(df["assignment"] == arm) & (df[col].notna())][col].value_counts(
+                normalize=True
+            )
             * 100
         )
     else:
@@ -183,7 +193,16 @@ def get_formatted_rows_yes_no(
         rows.update(
             {
                 "Timepoint": ["Baseline", "", "", "", "Endline", "", "", ""],
-                "Statistics": ["n", "Yes", "No", "Missing", "n", "Yes", "No", "Missing"],
+                "Statistics": [
+                    "n",
+                    "Yes",
+                    "No",
+                    "Missing",
+                    "n",
+                    "Yes",
+                    "No",
+                    "Missing",
+                ],
             }
         )
     else:
@@ -298,7 +317,9 @@ def get_formatted_rows_by_country(
     baseline_tz_a = df_tz_base[(df_tz_base["assignment"] == COMMUNITY_ARM)][
         col_baseline
     ].describe()
-    baseline_a = df_base[df_base["assignment"] == COMMUNITY_ARM][col_baseline].describe()
+    baseline_a = df_base[df_base["assignment"] == COMMUNITY_ARM][
+        col_baseline
+    ].describe()
 
     baseline_ug_b = df_ug_base[(df_ug_base["assignment"] == FACILITY_ARM)][
         col_baseline
@@ -314,19 +335,34 @@ def get_formatted_rows_by_country(
     df_tz_end = df[(df.country == "TZ") & (df["onstudy_days"] >= 182)].copy()
     df_end = df[(df["onstudy_days"] >= 182)].copy()
 
-    endline_ug_a = df_ug_end[df_ug_end["assignment"] == COMMUNITY_ARM][col_endline].describe()
-    endline_tz_a = df_tz_end[df_tz_end["assignment"] == COMMUNITY_ARM][col_endline].describe()
+    endline_ug_a = df_ug_end[df_ug_end["assignment"] == COMMUNITY_ARM][
+        col_endline
+    ].describe()
+    endline_tz_a = df_tz_end[df_tz_end["assignment"] == COMMUNITY_ARM][
+        col_endline
+    ].describe()
     endline_a = df_end[df_end["assignment"] == COMMUNITY_ARM][col_endline].describe()
 
-    endline_ug_b = df_ug_end[df_ug_end["assignment"] == FACILITY_ARM][col_endline].describe()
-    endline_tz_b = df_tz_end[df_tz_end["assignment"] == FACILITY_ARM][col_endline].describe()
+    endline_ug_b = df_ug_end[df_ug_end["assignment"] == FACILITY_ARM][
+        col_endline
+    ].describe()
+    endline_tz_b = df_tz_end[df_tz_end["assignment"] == FACILITY_ARM][
+        col_endline
+    ].describe()
     endline_b = df_end[df_end["assignment"] == FACILITY_ARM][col_endline].describe()
 
     endline_all = df_end[col_endline].describe()
 
     return {
         "Timepoint": ["Baseline", "", "", "Endline", "", ""],
-        "Statistics": ["n", "Mean(sd)", "Median(min-max)", "n", "Mean(sd)", "Median(min-max)"],
+        "Statistics": [
+            "n",
+            "Mean(sd)",
+            "Median(min-max)",
+            "n",
+            "Mean(sd)",
+            "Median(min-max)",
+        ],
         f"{treatment_arm[COMMUNITY_ARM]} UG": [
             *get_cells_for_continuous_var(baseline_ug_a),
             *get_cells_for_continuous_var(endline_ug_a),
@@ -373,7 +409,9 @@ def get_formatted_rows_by_country_single(
     baseline_tz_a = df_tz_base[(df_tz_base["assignment"] == COMMUNITY_ARM)][
         col_baseline
     ].describe()
-    baseline_a = df_base[df_base["assignment"] == COMMUNITY_ARM][col_baseline].describe()
+    baseline_a = df_base[df_base["assignment"] == COMMUNITY_ARM][
+        col_baseline
+    ].describe()
 
     baseline_ug_b = df_ug_base[(df_ug_base["assignment"] == FACILITY_ARM)][
         col_baseline
@@ -440,7 +478,9 @@ def get_great_table(df, group_row_headers, title: str, source_notes: str | None 
                 "Community Ncd": html(
                     f"Community<BR>(n={df.loc[0, ['Community Ncd']].sum()})"
                 ),
-                "Facility Ncd": html(f"Facility<br>(n={df.loc[0, ['Facility Ncd']].sum()})"),
+                "Facility Ncd": html(
+                    f"Facility<br>(n={df.loc[0, ['Facility Ncd']].sum()})"
+                ),
                 "Community Hiv only": html(
                     f"Community<br>(n={df.loc[0, ['Community Hiv only']].sum()})"
                 ),
@@ -484,7 +524,9 @@ def get_composite(df1, col, cond, label):
     mapping = {"n": "n", -1: "Missing", 1: label, 0: "Uncontrolled"}
     dftbl["Statistics"] = dftbl["Statistics"].map(mapping)
     dftbl["Statistics"] = pd.Categorical(
-        dftbl["Statistics"], categories=["n", label, "Uncontrolled", "Missing"], ordered=True
+        dftbl["Statistics"],
+        categories=["n", label, "Uncontrolled", "Missing"],
+        ordered=True,
     )
     dftbl = dftbl.sort_values(by=["Statistics"], ascending=True)
     dftbl = dftbl.reset_index(drop=True)
@@ -507,7 +549,9 @@ def get_bp(df1, col, cond, label):
     mapping = {"n": "n", -1: "Missing", 1: label, 0: "Uncontrolled"}
     dftbl["Statistics"] = dftbl["Statistics"].map(mapping)
     dftbl["Statistics"] = pd.Categorical(
-        dftbl["Statistics"], categories=["n", label, "Uncontrolled", "Missing"], ordered=True
+        dftbl["Statistics"],
+        categories=["n", label, "Uncontrolled", "Missing"],
+        ordered=True,
     )
     dftbl = dftbl.sort_values(by=["Statistics"], ascending=True)
     dftbl = dftbl.reset_index(drop=True)
@@ -522,6 +566,56 @@ def get_bp(df1, col, cond, label):
     return dftbl
 
 
+def get_bp_high(df1, col, cond, label):
+    col = col or "bp_severe_htn_endline"
+    df1.loc[cond, col] = df1.loc[cond, col].fillna(-1)
+    tbl_dct = get_primary_cohorts_by_categorical_column(df1[cond], col)
+    dftbl = pd.DataFrame(tbl_dct)
+    mapping = {"n": "n", -1: "Missing", 1: label}
+    dftbl["Statistics"] = dftbl["Statistics"].map(mapping)
+    dftbl["Statistics"] = pd.Categorical(
+        dftbl["Statistics"],
+        categories=["n", label, "Missing"],
+        ordered=True,
+    )
+    dftbl = dftbl.sort_values(by=["Statistics"], ascending=True)
+    dftbl = dftbl.reset_index(drop=True)
+    for col in ["Community Ncd", "Facility Ncd"]:
+        value = dftbl.loc[1, col].split(" ")
+        value = [value[0], "/", str(dftbl.loc[0, col]), " ", value[1]]
+        value = "".join(value)
+        dftbl.loc[1, col] = value
+    dftbl = dftbl.replace("0 (0.0%)", "NA")
+    dftbl = dftbl.drop(0)
+    dftbl = dftbl.reset_index(drop=True)
+    return dftbl
+
+
+def get_systolic_mean(df1, col, cond, label):
+    col = col or "bp_sys_endline"
+    df1.loc[cond, col] = df1.loc[cond, col].fillna(-1)
+    tbl_dct = get_primary_cohorts_for_continuous_var(df1[cond], col, ["mean"])
+    dftbl = pd.DataFrame(tbl_dct)
+    mapping = {"n": "n", -1: "Missing", 1: label}
+    dftbl["Statistics"] = dftbl["Statistics"].map(mapping)
+    dftbl["Statistics"] = pd.Categorical(
+        dftbl["Statistics"],
+        categories=["n", label, "Missing"],
+        ordered=True,
+    )
+    dftbl = dftbl.sort_values(by=["Statistics"], ascending=True)
+    dftbl = dftbl.reset_index(drop=True)
+    for col in ["Community Ncd", "Facility Ncd"]:
+        value = dftbl.loc[1, col].split(" ")
+        value = [value[0], "/", str(dftbl.loc[0, col]), " ", value[1]]
+        value = "".join(value)
+        dftbl.loc[1, col] = value
+    dftbl = dftbl.replace("0 (0.0%)", "NA")
+    dftbl = dftbl.drop(0)
+    dftbl = dftbl.reset_index(drop=True)
+    return dftbl
+
+
 def get_glucose(df1, col, cond, label):
     col = col or "glucose_controlled_endline"
     df1.loc[cond, col] = df1.loc[cond, col].fillna(-1)
@@ -530,7 +624,9 @@ def get_glucose(df1, col, cond, label):
     mapping = {"n": "n", -1: "Missing", 1: label, 0: "Uncontrolled"}
     dftbl["Statistics"] = dftbl["Statistics"].map(mapping)
     dftbl["Statistics"] = pd.Categorical(
-        dftbl["Statistics"], categories=["n", label, "Uncontrolled", "Missing"], ordered=True
+        dftbl["Statistics"],
+        categories=["n", label, "Uncontrolled", "Missing"],
+        ordered=True,
     )
     dftbl = dftbl.sort_values(by=["Statistics"], ascending=True)
     dftbl = dftbl.reset_index(drop=True)
@@ -546,14 +642,16 @@ def get_glucose(df1, col, cond, label):
 
 
 def get_vl(df1, col, cond, label):
-    col = col or "vl_controlled_endline"
-    df1.loc[cond, "vl_controlled_endline"] = df1.loc[cond, "vl_controlled_endline"].fillna(-1)
-    tbl_dct = get_primary_cohorts_by_categorical_column(df1[cond], "vl_controlled_endline")
+    # col = col or "vl_controlled_endline"
+    df1.loc[cond, col] = df1.loc[cond, col].fillna(-1)
+    tbl_dct = get_primary_cohorts_by_categorical_column(df1[cond], col)
     dftbl = pd.DataFrame(tbl_dct)
     mapping = {"n": "n", -1: "Missing", 1: label, 0: "Uncontrolled"}
     dftbl["Statistics"] = dftbl["Statistics"].map(mapping)
     dftbl["Statistics"] = pd.Categorical(
-        dftbl["Statistics"], categories=["n", label, "Uncontrolled", "Missing"], ordered=True
+        dftbl["Statistics"],
+        categories=["n", label, "Uncontrolled", "Missing"],
+        ordered=True,
     )
     dftbl = dftbl.sort_values(by=["Statistics"], ascending=True)
     dftbl = dftbl.reset_index(drop=True)
