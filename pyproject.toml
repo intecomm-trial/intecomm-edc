@@ -91,3 +91,8 @@ commands =
     pip freeze
     pre-commit run --all-files
 """
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+]

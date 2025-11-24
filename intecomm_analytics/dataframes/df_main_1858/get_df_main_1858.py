@@ -34,6 +34,13 @@ treatment_arm_labels = {COMMUNITY_ARM: "Community", FACILITY_ARM: "Facility"}
 six_months = 182
 
 
+def zero_or_null(s):
+    if pd.notna(s):
+        return 0
+    else:
+        return pd.NA
+
+
 def get_df_main_1858(
     export_folder: Path | None, fasting_hours: float | None = None
 ) -> pd.DataFrame:
@@ -61,8 +68,8 @@ def get_df_main_1858(
     df_main = merge_in_retention(df_main)
 
     # merge in baseline conditions. Conditions (hiv, dm, htn) are confirmed at baseline.
-    # There is a slight difference in that reported at screening (hiv_scr, dm_scr, htn_scr)
-    # from what was confirmed at baseline.
+    # There is a slight difference in that reported at screening
+    # (hiv_scr, dm_scr, htn_scr) from what was confirmed at baseline.
     # also note, for a condition must be diagnosed more than 6m ago
     df_main = merge_in_baseline_conditions(df_main)
 
@@ -105,20 +112,6 @@ def get_df_main_1858(
 
     df_main = merge_in_referrals(df_main)
 
-    # flag rows for endline analysis
-    # df_main["endline"] = 0
-    # df_main.loc[
-    #     (df_main.offstudy_reason == "completed_followup")
-    #     & (df_main.primary_cohort != UNDEFINED),
-    #     "endline",
-    # ] = 1
-    #
-    # # for simplicity, clear out endline cols values where endline==0
-    # datecols = df_main.dtypes[df_main.dtypes == "datetime64[ns]"].index.tolist()
-    # cols = df_main.dtypes[df_main.dtypes != "datetime64[ns]"].index.tolist()
-    # df_main.loc[df_main.endline == 0, [col for col in datecols if "endline" in col]] = pd.NaT
-    # df_main.loc[df_main.endline == 0, [col for col in cols if "endline" in col]] = pd.NA
-
     # dtype fixes
     df_main["hiv"] = df_main["hiv"].astype("Int64")
     df_main["htn"] = df_main["htn"].astype("Int64")
@@ -146,8 +139,9 @@ def get_df_main_1858(
     assert len(df_main) == 1858  # nosec B101
 
     if export_folder:
+        timestamp = datetime.now().strftime("%Y%m%d%H%M")
         df_main.to_csv(
-            Path(export_folder) / "df_main_1858.csv",
+            Path(export_folder) / f"df_main_1858_{timestamp}.csv",
             index=False,
         )
     return df_main
@@ -611,17 +605,17 @@ def merge_in_vl(df_main: pd.DataFrame) -> pd.DataFrame:
     for timepoint in ["baseline", "endline"]:
         df_main[f"vl_controlled_{timepoint}"] = (
             getattr(df_main, f"vl_{timepoint}")
-            .apply(lambda x: 1 if x < 1000 else 0)
+            .apply(lambda x: 1 if x < 1000 else zero_or_null(x))
             .astype("Int64")
         )
         df_main[f"vl_controlled_{timepoint}_400"] = (
             getattr(df_main, f"vl_{timepoint}")
-            .apply(lambda x: 1 if x < 400 else 0)
+            .apply(lambda x: 1 if x < 400 else zero_or_null(x))
             .astype("Int64")
         )
         df_main[f"vl_controlled_{timepoint}_50"] = (
             getattr(df_main, f"vl_{timepoint}")
-            .apply(lambda x: 1 if x < 50 else 0)
+            .apply(lambda x: 1 if x < 50 else zero_or_null(x))
             .astype("Int64")
         )
         df_main[f"vl_{timepoint}_log10"] = (
@@ -1079,8 +1073,12 @@ def merge_in_glucose(
             "glucose_date_first": "glucose_date_baseline",
             "glucose_value_first": "glucose_value_baseline",
             "glucose_units_first": "glucose_units_baseline",
-            "glucose_fasting_duration_delta_first": "glucose_fasting_duration_delta_baseline",
-            "glucose_fasting_duration_hours_first": "glucose_fasting_duration_hours_baseline",
+            "glucose_fasting_duration_delta_first": (
+                "glucose_fasting_duration_delta_baseline"
+            ),
+            "glucose_fasting_duration_hours_first": (
+                "glucose_fasting_duration_hours_baseline"
+            ),
             "glucose_date_delta_first": "glucose_date_delta_baseline",
         },
         inplace=True,
@@ -1090,8 +1088,12 @@ def merge_in_glucose(
             "glucose_date_last": "glucose_date_endline",
             "glucose_value_last": "glucose_value_endline",
             "glucose_units_last": "glucose_units_endline",
-            "glucose_fasting_duration_delta_last": "glucose_fasting_duration_delta_endline",
-            "glucose_fasting_duration_hours_last": "glucose_fasting_duration_hours_endline",
+            "glucose_fasting_duration_delta_last": (
+                "glucose_fasting_duration_delta_endline"
+            ),
+            "glucose_fasting_duration_hours_last": (
+                "glucose_fasting_duration_hours_endline"
+            ),
             "glucose_date_delta_last": "glucose_date_delta_endline",
         },
         inplace=True,
@@ -1292,7 +1294,7 @@ def merge_in_primary_cohort_vars(df_main, fasting_hours: float = None) -> pd.Dat
     df_main["primary_cohort_str"] = df_main.apply(get_primary_cohort_as_str, axis=1)
 
     for suffix in ["baseline", "endline"]:
-        # glu
+        # primary_gl_xxx from glucose_value_xxx if fasted for x hours (8)
         column_name = f"primary_gl_{suffix}"
         df_main[column_name] = df_main[
             (df_main.primary_cohort.isin([DM_ALONE, HTN_DM]))
@@ -1315,7 +1317,7 @@ def merge_in_primary_cohort_vars(df_main, fasting_hours: float = None) -> pd.Dat
         )
         df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
 
-        # bp
+        # primary_bp_sys_xxx from bp_sys_xxx
         column_name = f"primary_bp_sys_{suffix}"
         df_main[column_name] = df_main[
             df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])
@@ -1325,6 +1327,7 @@ def merge_in_primary_cohort_vars(df_main, fasting_hours: float = None) -> pd.Dat
         )
         df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
 
+        # primary_bp_dia_xxx from bp_dia_xxx
         column_name = f"primary_bp_dia_{suffix}"
         df_main[column_name] = df_main[
             df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])
@@ -1334,6 +1337,7 @@ def merge_in_primary_cohort_vars(df_main, fasting_hours: float = None) -> pd.Dat
         )
         df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
 
+        # primary_bp_controlled_xxx from bp_controlled_xxx
         column_name = f"primary_bp_controlled_{suffix}"
         df_main[column_name] = df_main[
             df_main.primary_cohort.isin([HTN_ALONE, HTN_DM])
@@ -1343,7 +1347,7 @@ def merge_in_primary_cohort_vars(df_main, fasting_hours: float = None) -> pd.Dat
         )
         df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
 
-        # vl
+        # primary_vl_xxx from vl_xxx
         column_name = f"primary_vl_{suffix}"
         df_main[column_name] = df_main[df_main.primary_cohort.isin([HIV_ALONE])][
             f"vl_{suffix}"
@@ -1351,6 +1355,7 @@ def merge_in_primary_cohort_vars(df_main, fasting_hours: float = None) -> pd.Dat
         df_main.loc[~df_main.primary_cohort.isin([HIV_ALONE]), column_name] = pd.NA
         df_main.loc[df_main[column_name].isna(), column_name] = pd.NA
 
+        # primary_vl_controlled_xxx from vl_controlled_xxx for 1000, 400, 50 copies/ml
         for copies_ml in ["", "_400", "_50"]:
             column_name = f"primary_vl_controlled_{suffix}{copies_ml}"
             df_main[column_name] = df_main[df_main.primary_cohort.isin([HIV_ALONE])][

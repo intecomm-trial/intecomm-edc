@@ -19,7 +19,9 @@ def format_df(df: pd.DataFrame) -> pd.DataFrame:
         "repeat_instrument",
         "repeat_instance",
     ]
-    df = df.copy().rename(columns={col: col.replace(" ", "_").lower() for col in df.columns})
+    df = df.copy().rename(
+        columns={col: col.replace(" ", "_").lower() for col in df.columns}
+    )
     df = (
         df.drop(columns=[col for col in del_cols if col in df.columns])
         .rename(
@@ -49,7 +51,9 @@ def get_tz_map() -> folium.Map:
     tz_map = folium.Map(location=[-6.7039, 39.0406], zoom_start=10)
 
     rows = list(
-        df_coordinates.query("location_type=='community' and country=='tanzania'").iterrows()
+        df_coordinates.query(
+            "location_type=='community' and country=='tanzania'"
+        ).iterrows()
     )
     for index, row in rows:
         folium.Marker(
@@ -59,14 +63,16 @@ def get_tz_map() -> folium.Map:
         ).add_to(tz_map)
 
     rows = list(
-        df_coordinates.query("location_type=='facility' and country=='tanzania'").iterrows()
+        df_coordinates.query(
+            "location_type=='facility' and country=='tanzania'"
+        ).iterrows()
     )
     for index, row in rows:
         location = [row["lat"], row["lon"]]
         folium.Marker(
             location=location,
             popup=row["name"],
-            icon=folium.Icon(color="red", icon="hospital", prefix="fa"),
+            icon=folium.Icon(color="red", icon="square-h", prefix="fa"),
         ).add_to(tz_map)
         folium.Circle(
             location=location,
@@ -83,17 +89,22 @@ def get_ug_map() -> folium.Map:
     ug_map = folium.Map(location=[0.4044, 32.4594], zoom_start=11)
 
     rows = list(
-        df_coordinates.query("location_type=='community' and country=='uganda'").iterrows()
+        df_coordinates.query(
+            "location_type=='community' and country=='uganda'"
+        ).iterrows()
     )
     for index, row in rows:
         folium.Marker(
+            radius=5,
             location=[row["lat"], row["lon"]],
             popup=f'{row["name"]} [{row["facility"]}]',
-            icon=folium.Icon(color="blue", icon="users-rectangle", prefix="fa"),
+            icon=folium.Icon(color="blue", icon="square-plus", prefix="fa"),
         ).add_to(ug_map)
 
     rows = list(
-        df_coordinates.query("location_type=='facility' and country=='uganda'").iterrows()
+        df_coordinates.query(
+            "location_type=='facility' and country=='uganda'"
+        ).iterrows()
     )
     for index, row in rows:
         location = [row["lat"], row["lon"]]
@@ -105,9 +116,10 @@ def get_ug_map() -> folium.Map:
             fill_opacity=0.1,
         ).add_to(ug_map)
         folium.Marker(
+            radius=8,
             location=location,
             popup=row["name"],
-            icon=folium.Icon(color="red", icon="hospital", prefix="fa"),
+            icon=folium.Icon(color="red", icon="square-h", prefix="fa"),
         ).add_to(ug_map)
     return ug_map
 

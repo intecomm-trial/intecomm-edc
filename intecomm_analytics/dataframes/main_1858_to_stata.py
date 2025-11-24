@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pandas as pd
 
 
@@ -53,7 +55,9 @@ def to_stata(
     Once created, open the DTA in STATA and run the commands from the
     printed output of this func.
     """
-    filename = filename or "df_main_1858.dta"
+
+    timestamp = datetime.now().strftime("%Y%m%d%H%M")
+    filename = filename or f"df_main_1858_{timestamp}.dta"
     stata_labels = stata_labels or df_main_variable_labels()
 
     df_main = convert_col_dtypes(df_main)
@@ -188,8 +192,7 @@ def df_main_variable_labels() -> dict:
         "referral": "referred or self-referred to facility at least once",
         "retained_6m": "1/0, in follow-up >= 6m",
         "retained_12m": (
-            "1/0, in follow-up >= 11m and visit code >= 1120.0, "
-            "used for all endline calculations"
+            "1/0, in follow-up>=11m and visit code>=1120.0, " "used for endline calcs"
         ),
         "retained_months": "months between endline and baseline",
         "screening_identifier": "subject screening unique identifier",
