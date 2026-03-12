@@ -12,10 +12,10 @@ http://www.isrctn.com/ISRCTN15319595
 
 This research was funded by the NIHR (Global Health Policy and Systems Research Programme grant NIHR131273) using UK international development funding from the UK Government to support global health research.
 
-See also https://github.com/clinicedc/edc
+See also https://github.com/clinicedc
 
 * Django 5.1+ / python 3.12+
-* ClinicEDC (see setup.cfg for version)
+* Clinic EDC (see setup.cfg for version)
 * nginx/gunicorn/mysql 8.1
 
 **FINAL LIVE VERSION: 0.2.36**
