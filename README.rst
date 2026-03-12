@@ -10,6 +10,8 @@ University College London (UCL)
 
 http://www.isrctn.com/ISRCTN15319595
 
+This research was funded by the NIHR (Global Health Policy and Systems Research Programme grant NIHR131273) using UK international development funding from the UK Government to support global health research.
+
 See also https://github.com/clinicedc/edc
 
 * Django 5.1+ / python 3.12+
