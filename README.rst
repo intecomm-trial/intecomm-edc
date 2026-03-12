@@ -51,17 +51,6 @@ The analytics require newer edc- versions
     pip install -U edc==1.1.2
     pip install -U edc-analytics==1.0.2
 
-uv install (December 2025 -)
-----------------------------
-Later additional updates were applied during analysis at which time we switched projects to uv.
-
-.. code-block:: bash
-
-    git clone https://github.com/intecomm-trial/intecomm-edc.git ~/apps
-    cd ~/apps
-    uv sync --upgrade --no-sources --no-dev
-    uv run --no-sources --no-dev manage.py migrate --settings=meta_edc.settings.uat
-
 
 .. |pypi| image:: https://img.shields.io/pypi/v/intecomm-edc.svg
     :target: https://pypi.python.org/pypi/intecomm-edc
